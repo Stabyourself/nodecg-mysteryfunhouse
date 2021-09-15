@@ -1,0 +1,120 @@
+{
+  "name": "mysteryfunhouse",
+  "version": "0.0.0",
+  "description": "",
+  "homepage": "",
+  "author": {
+    "name": "Maurice",
+    "email": "maurice@guegan.de",
+    "url": ""
+  },
+  "scripts": {
+    "start": "node ../..",
+    "webpack": "webpack",
+    "watch": "webpack watch"
+  },
+  "files": [
+    "dashboard",
+    "graphics",
+    "extension"
+  ],
+  "keywords": [
+    "",
+    "nodecg-bundle"
+  ],
+  "nodecg": {
+    "compatibleRange": "^1.1.1",
+    "dashboardPanels": [
+      {
+        "name": "general",
+        "title": "General",
+        "width": 3,
+        "file": "general.html"
+      },
+      {
+        "name": "timer",
+        "title": "Timer",
+        "width": 3,
+        "file": "timer.html"
+      },
+      {
+        "name": "player-1",
+        "title": "Player 1",
+        "width": 3,
+        "file": "player1.html",
+        "headerColor": "#D32F2F"
+      },
+      {
+        "name": "player-2",
+        "title": "Player 2",
+        "width": 3,
+        "file": "player2.html",
+        "headerColor": "#1976D2"
+      },
+      {
+        "name": "player-3",
+        "title": "Player 3",
+        "width": 3,
+        "file": "player3.html",
+        "headerColor": "#FBC02D"
+      },
+      {
+        "name": "player-4",
+        "title": "Player 4",
+        "width": 3,
+        "file": "player4.html",
+        "headerColor": "#388E3C"
+      },
+      {
+        "name": "stream-cropping",
+        "title": "Stream Cropping",
+        "file": "cropping.html",
+        "fullbleed": true
+      }
+    ],
+    "graphics": [
+      {
+        "file": "2player.html",
+        "width": 1920,
+        "height": 1080
+      }
+    ],
+    "assetCategories": [
+      {
+        "name": "playerpopover",
+        "title": "Player Popover",
+        "allowedTypes": [
+          "jpg",
+          "jpeg",
+          "gif",
+          "png"
+        ]
+      }
+    ],
+    "mount": [
+      {
+        "directory": "shared",
+        "endpoint": "shared"
+      }
+    ]
+  },
+  "repository": "https://github.com/nodecg/nodecg.git",
+  "license": "MIT",
+  "devDependencies": {
+    "deepmerge": "^4.2.2",
+    "sass": "~1.32",
+    "sass-loader": "^12.1.0",
+    "vue-loader": "^15.9.8",
+    "vue-template-compiler": "^2.6.14",
+    "webpack": "^5.52.1",
+    "webpack-cli": "^4.8.0"
+  },
+  "dependencies": {
+    "css-loader": "^6.2.0",
+    "livesplit-core": "^0.10.2",
+    "style-loader": "^3.2.1",
+    "vue": "^2.6.14",
+    "vue-style-loader": "^4.1.3",
+    "vuetify": "^2.5.8"
+  }
+}
