@@ -1,30 +1,28 @@
 <template>
     <v-app>
-        <v-theme-provider dark>
-            <v-main>
-                <v-container>
-                    <v-text-field
-                        v-model="game"
-                        label="Game name"
-                    ></v-text-field>
+        <v-main>
+            <v-container>
+                <v-text-field
+                    v-model="game"
+                    label="Game name"
+                ></v-text-field>
 
-                    <v-text-field
-                        v-model="goal"
-                        label="Goal"
-                    ></v-text-field>
+                <v-text-field
+                    v-model="goal"
+                    label="Goal"
+                ></v-text-field>
 
-                    <v-text-field
-                        v-model="platform"
-                        label="Platform"
-                    ></v-text-field>
+                <v-text-field
+                    v-model="platform"
+                    label="Platform"
+                ></v-text-field>
 
-                    <v-text-field
-                        v-model="submitter"
-                        label="Submitter"
-                    ></v-text-field>
-                </v-container>
-            </v-main>
-        </v-theme-provider>
+                <v-text-field
+                    v-model="submitter"
+                    label="Submitter"
+                ></v-text-field>
+            </v-container>
+        </v-main>
     </v-app>
 </template>
 

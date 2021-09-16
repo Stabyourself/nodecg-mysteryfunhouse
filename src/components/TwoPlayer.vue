@@ -1,21 +1,16 @@
 <template>
-    <v-app>
-        <v-main>
-            <v-container>
-                <ul>
-                    <li>{{ game }}</li>
-                    <li>{{ goal }}</li>
-                    <li>{{ platform }}</li>
-                    <li>{{ submitter }}</li>
-                    <li>{{ player1pronouns }}</li>
-                    <li>{{ player2pronouns }}</li>
-                    <li>{{ player1volume }}</li>
-                    <li>{{ timer }}</li>
-                    <li>{{ player1done.toString() }}</li>
-                </ul>
-            </v-container>
-        </v-main>
-    </v-app>
+    <ul>
+        <li>{{ game }}</li>
+        <li>{{ goal }}</li>
+        <li>{{ platform }}</li>
+        <li>{{ submitter }}</li>
+        <li>{{ player1pronouns }}</li>
+        <li>{{ player2pronouns }}</li>
+        <li>{{ player1volume }}</li>
+        <li>{{ timer }}</li>
+        <li>{{ player1done.toString() }}</li>
+        <li>{{ player1finalTime }}</li>
+    </ul>
 </template>
 
 <script>
@@ -32,6 +27,7 @@ export default {
         bindReplicant.call(this, "player1volume")
         bindReplicant.call(this, "timer")
         bindReplicant.call(this, "player1done")
+        bindReplicant.call(this, "player1finalTime")
     },
 
     data() {
@@ -45,6 +41,7 @@ export default {
             player1volume: 0,
             timer: 0,
             player1done: false,
+            player1finalTime: false,
         }
     }
 };

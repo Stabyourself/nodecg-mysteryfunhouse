@@ -1,3 +1,6 @@
 {
-    "/shared/main.js": "/shared/main.js"
+    "/graphics/js/graphics.js": "/graphics/js/graphics.js",
+    "/dashboard/js/dashboard.js": "/dashboard/js/dashboard.js",
+    "/dashboard/css/dashboard.css": "/dashboard/css/dashboard.css",
+    "/graphics/css/graphics.css": "/graphics/css/graphics.css"
 }
