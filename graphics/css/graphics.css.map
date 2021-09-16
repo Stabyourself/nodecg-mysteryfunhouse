@@ -1,0 +1,1 @@
+{"version":3,"file":"graphics/css/graphics.css","mappings":"AAAA,KAEI,wCACA,sBAFA,QAGJ,C","sources":["webpack://mysteryfunhouse/./src/graphics/graphics.scss"],"sourcesContent":["body {\r\n    margin: 0;\r\n    background: url(\"../img/back_2player.png\");\r\n    background-size: cover;\r\n}\r\n"],"names":[],"sourceRoot":""}

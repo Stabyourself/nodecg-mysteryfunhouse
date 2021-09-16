@@ -84,8 +84,8 @@
     ],
     "assetCategories": [
       {
-        "name": "playerpopover",
-        "title": "Player Popover",
+        "name": "boxart",
+        "title": "Game Boxart",
         "allowedTypes": [
           "jpg",
           "jpeg",

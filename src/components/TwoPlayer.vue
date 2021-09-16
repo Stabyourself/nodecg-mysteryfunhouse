@@ -4,6 +4,7 @@
         <li>{{ goal }}</li>
         <li>{{ platform }}</li>
         <li>{{ submitter }}</li>
+        <li><img :src="boxartUrl" style="max-width: 200px; max-height: 200px;"></li>
         <li>{{ player1pronouns }}</li>
         <li>{{ player2pronouns }}</li>
         <li>{{ player1volume }}</li>
@@ -22,6 +23,7 @@ export default {
         bindReplicant.call(this, "goal")
         bindReplicant.call(this, "platform")
         bindReplicant.call(this, "submitter")
+        bindReplicant.call(this, "boxartUrl")
         bindReplicant.call(this, "player1pronouns")
         bindReplicant.call(this, "player2pronouns")
         bindReplicant.call(this, "player1volume")
@@ -36,6 +38,7 @@ export default {
             goal: "",
             platform: "",
             submitter: "",
+            boxartUrl: "",
             player1pronouns: "",
             player2pronouns: "",
             player1volume: 0,
