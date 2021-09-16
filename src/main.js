@@ -3,11 +3,15 @@
 import Vue from 'vue'
 import vuetify from './plugins/vuetify' // path to vuetify export
 
-Vue.component("GeneralOptions", () => import("./components/GeneralOptions.vue"))
-Vue.component("TimerOptions", () => import("./components/TimerOptions.vue"))
-Vue.component("PlayerOptions", () => import("./components/PlayerOptions.vue"))
+import GeneralOptions from './components/GeneralOptions.vue';
+Vue.component("GeneralOptions", GeneralOptions)
+import TimerOptions from './components/TimerOptions.vue';
+Vue.component("TimerOptions", TimerOptions)
+import PlayerOptions from './components/PlayerOptions.vue';
+Vue.component("PlayerOptions", PlayerOptions)
 
-Vue.component("TwoPlayer", () => import("./components/TwoPlayer.vue"))
+import TwoPlayer from './components/TwoPlayer.vue';
+Vue.component("TwoPlayer", TwoPlayer)
 
 new Vue({
   vuetify,

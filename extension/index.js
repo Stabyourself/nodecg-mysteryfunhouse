@@ -1,0 +1,7 @@
+const ctx = require('./nodecg');
+
+module.exports = function (nodecg) {
+    ctx.set(nodecg)
+
+    require('./timer');
+}
