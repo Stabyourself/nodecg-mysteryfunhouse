@@ -80,5 +80,5 @@ function updateRep() {
     }
 }
 
-setInterval(tick, 10);
+setInterval(tick, 11);
 

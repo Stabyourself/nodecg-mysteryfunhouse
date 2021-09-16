@@ -24,17 +24,23 @@
 
                 <v-select
                     v-model="boxartUrl"
-                    :items="boxarts"
+                    :items="boxartWithEmpty"
                     label="Boxart"
                     dense
                     item-text="name"
                     item-value="url"
                 >
                 <template v-slot:selection="{ item }">
-                    <img class="select-img" :src="item.url">{{ item.name }}
+                    <div class="select-img-wrap">
+                        <img class="select-img" :src="item.url">
+                    </div>
+                    {{ item.name }}
                 </template>
                 <template v-slot:item="{ item }">
-                    <img class="select-img" :src="item.url">{{ item.name }}
+                    <div class="select-img-wrap">
+                        <img class="select-img" :src="item.url">
+                    </div>
+                    {{ item.name }}
                 </template>
                 </v-select>
             </v-container>
@@ -51,8 +57,32 @@ export default {
         bindReplicant.call(this, "goal")
         bindReplicant.call(this, "platform")
         bindReplicant.call(this, "submitter")
-        bindReplicant.call(this, "boxarts", "assets:boxart")
         bindReplicant.call(this, "boxartUrl")
+
+        // ???
+        // bindReplicant.call(this, "boxart", "assets:boxart")
+        const replicant = nodecg.Replicant("assets:boxart")
+
+        NodeCG.waitForReplicants(replicant).then(() => {
+            replicant.on('change', (newValue) => {
+                this.boxart = JSON.parse(JSON.stringify(newValue))
+            })
+        })
+    },
+
+    computed: {
+        boxartWithEmpty () {
+            let modifiedBoxArts = JSON.parse(JSON.stringify(this.boxart))
+
+            modifiedBoxArts.push({
+                name:"None",
+                url: "",
+            })
+
+            modifiedBoxArts.reverse()
+
+            return modifiedBoxArts
+        }
     },
 
     data() {
@@ -61,7 +91,7 @@ export default {
             goal: "",
             platform: "",
             submitter: "",
-            boxarts: [],
+            boxart: [],
             boxartUrl: "",
         }
     }
