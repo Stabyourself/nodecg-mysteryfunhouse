@@ -1,9 +1,48 @@
+@font-face {
+    font-family: 'Regen';
+      src:  url('../font/Regen.ttf.woff') format('woff'),
+      url('../font/Regen.ttf.svg#Regen') format('svg'),
+      url('../font/Regen.ttf.eot'),
+      url('../font/Regen.eot?#iefix') format('embedded-opentype');
+      font-weight: normal;
+      font-style: normal;
+}
+
+.mt-font {
+    color: white;
+    font-family: "Regen";
+    text-shadow: -2px 0 1px #000000, 0 2px 1px #000000, 2px 0 1px #000000, 0 -2px 1px #000000;
+}
+
 body {
     margin: 0;
     position: absolute;
     background: url("../img/back_2player.png");
-    background-size: cover;
+    background-size: 1920px 1080px;
     width: 1920px;
     height: 1080px;
     overflow: hidden;
+}
+
+.player-name {
+    font-size: 2rem;
+    position: absolute;
+
+    &.right {
+        text-align: right;
+    }
+
+    .pronouns {
+        height: 20px;
+    }
+
+    .name {
+        overflow-wrap: break-word;
+        height: 115px;
+        line-height: 115px;
+
+        span {
+            width: 100%;
+        }
+    }
 }
