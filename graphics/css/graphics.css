@@ -4,6 +4,13 @@
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: "Digital-7 Mono";
+  src: url("../font/Digital-7Mono.eot");
+  src: url("../font/Digital-7Mono.eot?#iefix") format("embedded-opentype"), url("../font/Digital-7Mono.woff") format("woff"), url("../font/Digital-7Mono.svg#Digital-7Mono") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
 .mt-font {
   color: white;
   font-family: "Regen";
@@ -27,14 +34,44 @@ body {
 .player-name.right {
   text-align: right;
 }
-.player-name .pronouns {
-  height: 20px;
-}
 .player-name .name {
   overflow-wrap: break-word;
-  height: 115px;
-  line-height: 115px;
 }
 .player-name .name span {
   width: 100%;
+}
+
+.player-done-slider {
+  position: absolute;
+  overflow: hidden;
+  height: 95px;
+}
+.player-done-slider .timer {
+  font-size: 4rem;
+  transform: translateY(-95px);
+  transition: transform 0.3s;
+}
+.player-done-slider.active .timer {
+  transform: translateY(0px);
+}
+.player-done-slider.done .timer {
+  color: lightgreen;
+}
+.player-done-slider.forfeit .timer {
+  color: lightcoral;
+}
+
+.timer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: "Digital-7 Mono";
+  font-size: 6rem;
+  color: grey;
+  font-variant-numeric: tabular-nums lining-nums;
+  transition: color 0.4s;
+}
+.timer.active {
+  color: white;
 }

@@ -15,7 +15,7 @@ export function bindReplicant(vueName, replicantName = vueName) {
     })
 }
 
-export function formatTimer(time) {
+export function formatTimer(time, includeMs = true) {
     let out = ""
 
     out += ('0' + time.h).slice(-2)
@@ -23,8 +23,11 @@ export function formatTimer(time) {
     out += ('0' + time.m).slice(-2)
     out += ":"
     out += ('0' + time.s).slice(-2)
-    out += "."
-    out += ('00' + time.ms).slice(-3)
+
+    if (includeMs) {
+        out += "."
+        out += ('00' + time.ms).slice(-3)
+    }
 
     return out;
 }

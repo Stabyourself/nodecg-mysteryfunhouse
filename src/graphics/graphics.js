@@ -11,6 +11,9 @@ Vue.component("PlayerName", PlayerName)
 import FitText from '../plugins/vue-fit-text/index.js';
 Vue.use(FitText);
 
+import Timer from '../components/Timer.vue';
+Vue.component("Timer", Timer)
+
 new Vue({
 
 }).$mount('#app')

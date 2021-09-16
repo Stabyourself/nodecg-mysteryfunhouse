@@ -104,7 +104,7 @@ export default {
             this.done = true
             this.forfeit = false
             nodecg.readReplicant("timer", timer => {
-                this.finalTime = formatTimer(timer.time)
+                this.finalTime = formatTimer(timer.time, false)
             })
         },
 
@@ -113,7 +113,7 @@ export default {
             this.forfeit = true
 
             nodecg.readReplicant("timer", timer => {
-                this.finalTime = formatTimer(timer.time)
+                this.finalTime = formatTimer(timer.time, false)
             })
         },
 
