@@ -5,9 +5,9 @@
                 <v-text-field
                     class="timer"
                     v-model="timerText"
-                    :hint="timer.paused ? 'Press enter to apply' : ''"
+                    :hint="timerPaused ? 'Press enter to apply' : ''"
                     @keydown.enter="applyTime"
-                    :readonly="!timer.paused"
+                    :readonly="!timerPaused"
                 >
                 </v-text-field>
 
@@ -18,7 +18,7 @@
                             elevation="2"
                             @click="play"
                             block
-                            :disabled="!timer.paused"
+                            :disabled="!timerPaused"
                         >
                             <v-icon dark>
                                 mdi-play
@@ -32,7 +32,7 @@
                             elevation="2"
                             @click="pause"
                             block
-                            :disabled="timer.paused"
+                            :disabled="timerPaused"
                         >
                             <v-icon dark>
                                 mdi-pause
@@ -46,7 +46,7 @@
                             elevation="2"
                             @click="reset"
                             block
-                            :disabled="timer.timeMs == 0"
+                            :disabled="timerTime == 0"
                         >
                             <v-icon dark>
                                 mdi-undo
@@ -83,19 +83,15 @@ export default {
     },
 
     mounted() {
-        bindReplicant.call(this, "timer")
+        bindReplicant.call(this, "timerTime")
+        bindReplicant.call(this, "timerPaused")
     },
 
     computed: {
         timerText: {
             get() {
-                if (this.timer.time) {
-                    return formatTimer(this.timer.time)
-                } else {
-                    return "??:??:??.???"
-                }
+                return formatTimer(this.timerTime)
             },
-
             set(newValue) {
                 this.newTime = newValue
             }
@@ -104,7 +100,8 @@ export default {
 
     data() {
         return {
-            timer: {},
+            timerTime: 0,
+            timerPaused: true,
             newTime: null,
         };
     },

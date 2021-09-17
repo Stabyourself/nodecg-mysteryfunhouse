@@ -1,12 +1,13 @@
 const ctx = require('./nodecg')
 const nodecg = ctx.get()
 
-const timerRep = nodecg.Replicant("timer")
+const timeRep = nodecg.Replicant("timerTime")
+const pausedRep = nodecg.Replicant("timerPaused")
+
 const { Timer } = require('timer-node');
 let timer = new Timer();
 let paused = true
 
-let time
 updateRep()
 
 nodecg.listenFor("timerPlay",() => {
@@ -70,14 +71,8 @@ function tick() {
 }
 
 function updateRep() {
-    time = timer.time()
-    timeMs = timer.ms()
-
-    timerRep.value = {
-        time: time,
-        timeMs: timeMs,
-        paused: !timer.isStarted() || timer.isStopped() || timer.isPaused() || paused,
-    }
+    timeRep.value = timer.ms()
+    pausedRep.value = !timer.isStarted() || timer.isStopped() || timer.isPaused() || paused
 }
 
 setInterval(tick, 11);

@@ -1,14 +1,21 @@
 export function bindReplicant(vueName, replicantName = vueName) {
-    var updatingVueValue = false;
     const replicant = nodecg.Replicant(replicantName)
+    let preventSend = false;
 
     NodeCG.waitForReplicants(replicant).then(() => {
         replicant.on('change', (newValue) => {
             this[vueName] = newValue
+
+            preventSend = true;
+            this.$nextTick(() => {
+                console.log("Retrieving")
+                preventSend = false;
+            })
         })
 
         this.$watch(vueName, (newValue) => {
-            if (!updatingVueValue) {
+            if (!preventSend) {
+                console.log("Sending")
                 replicant.value = newValue
             }
         });
@@ -18,17 +25,22 @@ export function bindReplicant(vueName, replicantName = vueName) {
 export function formatTimer(time, includeMs = true, alwaysIncludeHours = true) {
     let out = ""
 
-    if (alwaysIncludeHours || time.h > 0) {
-        out += ('0' + time.h).slice(-2)
+    var ms = Math.floor(time % 1000),
+    s = Math.floor((time / 1000) % 60),
+    m = Math.floor((time / (1000 * 60)) % 60),
+    h = Math.floor((time / (1000 * 60 * 60)) % 24)
+
+    if (alwaysIncludeHours || h > 0) {
+        out += ('0' + h).slice(-2)
         out += ":"
     }
-    out += ('0' + time.m).slice(-2)
+    out += ('0' + m).slice(-2)
     out += ":"
-    out += ('0' + time.s).slice(-2)
+    out += ('0' + s).slice(-2)
 
     if (includeMs) {
         out += "."
-        out += ('00' + time.ms).slice(-3)
+        out += ('00' + ms).slice(-3)
     }
 
     return out;

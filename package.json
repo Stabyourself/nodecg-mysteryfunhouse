@@ -117,6 +117,7 @@
     "webpack-cli": "^4.8.0"
   },
   "dependencies": {
+    "clone": "^2.1.2",
     "css-loader": "^6.2.0",
     "style-loader": "^3.2.1",
     "timer-node": "^5.0.5",
