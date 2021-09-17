@@ -2,5 +2,19 @@
     "/graphics/js/graphics.js": "/graphics/js/graphics.js",
     "/dashboard/js/dashboard.js": "/dashboard/js/dashboard.js",
     "/dashboard/css/dashboard.css": "/dashboard/css/dashboard.css",
-    "/graphics/css/graphics.css": "/graphics/css/graphics.css"
+    "/graphics/css/graphics.css": "/graphics/css/graphics.css",
+    "/graphics/css/font/Digital-7Mono.eot": "/graphics/css/font/Digital-7Mono.eot",
+    "/graphics/css/font/Digital-7Mono.svg": "/graphics/css/font/Digital-7Mono.svg",
+    "/graphics/css/font/Digital-7Mono.woff": "/graphics/css/font/Digital-7Mono.woff",
+    "/graphics/css/font/Regen.ttf.eot": "/graphics/css/font/Regen.ttf.eot",
+    "/graphics/css/font/Regen.ttf.svg": "/graphics/css/font/Regen.ttf.svg",
+    "/graphics/css/font/Regen.ttf.woff": "/graphics/css/font/Regen.ttf.woff",
+    "/graphics/2player.html": "/graphics/2player.html",
+    "/dashboard/cropping.html": "/dashboard/cropping.html",
+    "/dashboard/general.html": "/dashboard/general.html",
+    "/dashboard/player1.html": "/dashboard/player1.html",
+    "/dashboard/player2.html": "/dashboard/player2.html",
+    "/dashboard/player3.html": "/dashboard/player3.html",
+    "/dashboard/player4.html": "/dashboard/player4.html",
+    "/dashboard/timer.html": "/dashboard/timer.html"
 }

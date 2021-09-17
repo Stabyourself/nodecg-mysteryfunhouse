@@ -7,7 +7,14 @@ import 'vuetify/dist/vuetify.min.css'
 Vue.use(Vuetify)
 
 const opts = {
-   theme: { dark: true }
+   theme: {
+      dark: true,
+      themes: {
+         dark: {
+            primary: "#00BEBE"
+         }
+      }
+   }
 }
 
 export default new Vuetify(opts)

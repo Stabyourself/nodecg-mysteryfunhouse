@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <v-main>
-            <v-tabs v-model="tab">
+            <v-tabs v-model="tab" centered class="mt-3 mb-3">
                 <v-tabs-slider color="primary"></v-tabs-slider>
 
                 <v-tab
