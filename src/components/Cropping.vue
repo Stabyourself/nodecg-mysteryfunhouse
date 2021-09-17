@@ -12,17 +12,9 @@
             </v-tabs>
 
             <v-tabs-items v-model="tab">
-                <v-tab-item :key="1">
-                    <player-cropping :player="1"></player-cropping>
-                </v-tab-item>
-                <v-tab-item :key="2">
-                    <player-cropping :player="2"></player-cropping>
-                </v-tab-item>
-                <v-tab-item :key="3">
-                    <player-cropping :player="3"></player-cropping>
-                </v-tab-item>
-                <v-tab-item :key="4">
-                    <player-cropping :player="4"></player-cropping>
+                <v-tab-item
+                    v-for="i in 4" :key="i">
+                    <player-cropping :player="i"></player-cropping>
                 </v-tab-item>
             </v-tabs-items>
         </v-main>

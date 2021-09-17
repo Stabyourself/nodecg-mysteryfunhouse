@@ -35,14 +35,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -4019,35 +4011,14 @@ var render = function() {
                 expression: "tab"
               }
             },
-            [
-              _c(
+            _vm._l(4, function(i) {
+              return _c(
                 "v-tab-item",
-                { key: 1 },
-                [_c("player-cropping", { attrs: { player: 1 } })],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-tab-item",
-                { key: 2 },
-                [_c("player-cropping", { attrs: { player: 2 } })],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-tab-item",
-                { key: 3 },
-                [_c("player-cropping", { attrs: { player: 3 } })],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-tab-item",
-                { key: 4 },
-                [_c("player-cropping", { attrs: { player: 4 } })],
+                { key: i },
+                [_c("player-cropping", { attrs: { player: i } })],
                 1
               )
-            ],
+            }),
             1
           )
         ],
