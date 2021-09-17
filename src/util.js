@@ -1,8 +1,13 @@
 var clone = require("clone")
+var _ = require("lodash")
 
 export function bindReplicant(vueName, replicantName = vueName) {
     const replicant = nodecg.Replicant(replicantName)
     let preventSend = false;
+
+    let sendValue = _.debounce(function(newValue) {
+        replicant.value = newValue
+    }, 500);
 
     NodeCG.waitForReplicants(replicant).then(() => {
         replicant.on('change', (newValue) => {
@@ -16,7 +21,7 @@ export function bindReplicant(vueName, replicantName = vueName) {
 
         this.$watch(vueName, (newValue) => {
             if (!preventSend) {
-                replicant.value = newValue
+                sendValue(newValue)
             }
         });
     })
