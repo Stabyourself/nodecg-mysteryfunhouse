@@ -7,21 +7,6 @@
                     label="Game name"
                 ></v-text-field>
 
-                <v-text-field
-                    v-model="goal"
-                    label="Goal"
-                ></v-text-field>
-
-                <v-text-field
-                    v-model="platform"
-                    label="Platform"
-                ></v-text-field>
-
-                <v-text-field
-                    v-model="submitter"
-                    label="Submitter"
-                ></v-text-field>
-
                 <v-select
                     v-model="boxartUrl"
                     :items="boxartWithEmpty"
@@ -43,6 +28,21 @@
                     {{ item.name }}
                 </template>
                 </v-select>
+
+                <v-text-field
+                    v-model="goal"
+                    label="Goal"
+                ></v-text-field>
+
+                <v-text-field
+                    v-model="platform"
+                    label="Platform"
+                ></v-text-field>
+
+                <v-text-field
+                    v-model="submitter"
+                    label="Submitter"
+                ></v-text-field>
             </v-container>
         </v-main>
     </v-app>
@@ -61,13 +61,6 @@ export default {
 
         // ???
         bindReplicant.call(this, "boxart", "assets:boxart")
-        // const replicant = nodecg.Replicant("assets:boxart")
-
-        // NodeCG.waitForReplicants(replicant).then(() => {
-        //     replicant.on('change', (newValue) => {
-        //         this.boxart = JSON.parse(JSON.stringify(newValue))
-        //     })
-        // })
     },
 
     computed: {
