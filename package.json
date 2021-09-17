@@ -119,6 +119,7 @@
   "dependencies": {
     "clone": "^2.1.2",
     "css-loader": "^6.2.0",
+    "lodash": "^4.17.21",
     "style-loader": "^3.2.1",
     "timer-node": "^5.0.5",
     "vue": "^2.6.14",

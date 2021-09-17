@@ -1,10 +1,12 @@
+var clone = require("clone")
+
 export function bindReplicant(vueName, replicantName = vueName) {
     const replicant = nodecg.Replicant(replicantName)
     let preventSend = false;
 
     NodeCG.waitForReplicants(replicant).then(() => {
         replicant.on('change', (newValue) => {
-            this[vueName] = newValue
+            this[vueName] = clone(newValue)
 
             preventSend = true;
             this.$nextTick(() => {

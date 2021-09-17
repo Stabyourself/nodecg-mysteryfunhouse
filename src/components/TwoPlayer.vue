@@ -63,7 +63,7 @@
 
         <timer
             style="top: 842px;"
-            :class="{active: !timer.paused }">
+            :class="{active: !timerPaused }">
             {{ timerText }}
         </timer>
 
@@ -106,7 +106,8 @@ export default {
         bindReplicant.call(this, "submitter")
         bindReplicant.call(this, "boxartUrl")
 
-        bindReplicant.call(this, "timer")
+        bindReplicant.call(this, "timerTime")
+        bindReplicant.call(this, "timerPaused")
 
         bindReplicant.call(this, "player1name")
         bindReplicant.call(this, "player1pronouns")
@@ -127,11 +128,7 @@ export default {
 
     computed: {
         timerText() {
-            if (this.timer.time) {
-                return formatTimer(this.timer.time, false, false)
-            } else {
-                return ""
-            }
+            return formatTimer(this.timerTime, false, false)
         }
     },
 
@@ -194,7 +191,8 @@ export default {
             player2volume: 0,
             player2finalTime: false,
 
-            timer: {},
+            timerTime: 0,
+            timerPaused: true,
         }
     }
 };

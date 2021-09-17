@@ -60,14 +60,14 @@ export default {
         bindReplicant.call(this, "boxartUrl")
 
         // ???
-        // bindReplicant.call(this, "boxart", "assets:boxart")
-        const replicant = nodecg.Replicant("assets:boxart")
+        bindReplicant.call(this, "boxart", "assets:boxart")
+        // const replicant = nodecg.Replicant("assets:boxart")
 
-        NodeCG.waitForReplicants(replicant).then(() => {
-            replicant.on('change', (newValue) => {
-                this.boxart = JSON.parse(JSON.stringify(newValue))
-            })
-        })
+        // NodeCG.waitForReplicants(replicant).then(() => {
+        //     replicant.on('change', (newValue) => {
+        //         this.boxart = JSON.parse(JSON.stringify(newValue))
+        //     })
+        // })
     },
 
     computed: {

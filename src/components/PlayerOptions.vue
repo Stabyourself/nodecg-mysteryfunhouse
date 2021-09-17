@@ -103,8 +103,8 @@ export default {
         makeDone() {
             this.done = true
             this.forfeit = false
-            nodecg.readReplicant("timer", timer => {
-                this.finalTime = formatTimer(timer.time, false, false)
+            nodecg.readReplicant("timerTime", timerTime => {
+                this.finalTime = formatTimer(timerTime, false, false)
             })
         },
 
@@ -112,8 +112,8 @@ export default {
             this.done = false
             this.forfeit = true
 
-            nodecg.readReplicant("timer", timer => {
-                this.finalTime = formatTimer(timer.time, false, false)
+            nodecg.readReplicant("timerTime", timerTime => {
+                this.finalTime = formatTimer(timerTime, false, false)
             })
         },
 
