@@ -1,9 +1,23 @@
 <template>
     <div>
+        <div
+            id="player1twitch"
+            style="position: absolute; top: 150px; left: 15px; width: 930px; height:698px"
+        ></div>
+
+        <div
+            id="player2twitch"
+            style="position: absolute; top: 150px; left: 975px; width: 930px; height:698px"
+        ></div>
+
+
+
+
+
         <player-name
             pronoun-h="20"
             name-h="115"
-            style="top: 15px; left: 15px; width: 930px; height: 135px">
+            style="top: 15px; left: 20px; width: 925px; height: 135px">
             <template v-slot:pronouns>
                 {{ player1pronouns }}
             </template>
@@ -17,7 +31,7 @@
             class="right"
             pronoun-h="20"
             name-h="115"
-            style="top: 15px; left: 975px; width: 930px; height: 135px">
+            style="top: 15px; left: 975px; width: 925px; height: 135px">
             <template v-slot:pronouns>
                 {{ player2pronouns }}
             </template>
@@ -25,6 +39,27 @@
                 {{ player2name }}
             </template>
         </player-name>
+
+
+
+
+
+        <div class="game-box mt-font"
+            style="top: 863px; left: 15px;">
+            <div class="boxart">
+                <img :src="boxartUrl">
+            </div>
+
+            <div class="text">
+                <div class="game">{{ game }}</div>
+                <div class="goal">{{ goal }}</div>
+                <div class="submitter">Submitted by {{ submitter }}</div>
+            </div>
+        </div>
+
+
+
+
 
         <timer
             style="top: 842px;"
@@ -53,6 +88,15 @@
 <script>
 import { bindReplicant, formatTimer } from "../util.js"
 
+let twitchOptions = {
+    width: 930,
+    height: 698,
+    channel: null,
+    autoplay: true,
+    muted: false
+}
+let player1, player2
+
 export default {
     created() {
         bindReplicant.call(this, "game")
@@ -65,6 +109,7 @@ export default {
 
         bindReplicant.call(this, "player1name")
         bindReplicant.call(this, "player1pronouns")
+        bindReplicant.call(this, "player1twitch")
         bindReplicant.call(this, "player1done")
         bindReplicant.call(this, "player1forfeit")
         bindReplicant.call(this, "player1finalTime")
@@ -72,6 +117,7 @@ export default {
 
         bindReplicant.call(this, "player2name")
         bindReplicant.call(this, "player2pronouns")
+        bindReplicant.call(this, "player2twitch")
         bindReplicant.call(this, "player2done")
         bindReplicant.call(this, "player2forfeit")
         bindReplicant.call(this, "player2finalTime")
@@ -81,10 +127,45 @@ export default {
     computed: {
         timerText() {
             if (this.timer.time) {
-                return formatTimer(this.timer.time, false)
+                return formatTimer(this.timer.time, false, false)
             } else {
-                return "??:??:??"
+                return ""
             }
+        }
+    },
+
+    watch: {
+        player1twitch(newValue) {
+            const el = document.getElementById("player1twitch");
+            el.innerHTML = '';
+
+            twitchOptions.channel = newValue
+            player1 = new Twitch.Player("player1twitch", twitchOptions)
+            player1.addEventListener(Twitch.Embed.VIDEO_READY, () => {
+                console.log(this.player1volume/100)
+                player1.setMuted(false);
+                player1.setVolume(this.player1volume/100);
+            });
+        },
+
+        player2twitch(newValue) {
+            const el = document.getElementById("player2twitch");
+            el.innerHTML = '';
+
+            twitchOptions.channel = newValue
+            player2 = new Twitch.Player("player2twitch", twitchOptions)
+            player2.addEventListener(Twitch.Embed.VIDEO_READY, () => {
+                player2.setMuted(false);
+                player2.setVolume(this.player2volume/100);
+            });
+        },
+
+        player1volume(newValue) {
+            player1.setVolume(newValue/100);
+        },
+
+        player2volume(newValue) {
+            player2.setVolume(newValue/100);
         }
     },
 
@@ -98,6 +179,7 @@ export default {
 
             player1name: "",
             player1pronouns: "",
+            player1twitch: "",
             player1done: "",
             player1forfeit: "",
             player1volume: 0,
@@ -105,6 +187,7 @@ export default {
 
             player2name: "",
             player2pronouns: "",
+            player2twitch: "",
             player2done: "",
             player2forfeit: "",
             player2volume: 0,

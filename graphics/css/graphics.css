@@ -13,6 +13,7 @@
 }
 .mt-font {
   color: white;
+  line-height: 1.2;
   font-family: "Regen";
   text-shadow: -2px 0 1px #000000, 0 2px 1px #000000, 2px 0 1px #000000, 0 -2px 1px #000000;
 }
@@ -67,6 +68,7 @@ body {
   right: 0;
   text-align: center;
   font-family: "Digital-7 Mono";
+  text-shadow: 3px 0 0 #000, 0 -3px 0 #000, 0 3px 0 #000, -3px 0 0 #000;
   font-size: 6rem;
   color: grey;
   font-variant-numeric: tabular-nums lining-nums;
@@ -74,4 +76,24 @@ body {
 }
 .timer.active {
   color: white;
+}
+
+.game-box {
+  position: absolute;
+  display: flex;
+  align-items: flex-end;
+  font-size: 3rem;
+}
+.game-box .boxart {
+  margin-right: 15px;
+}
+.game-box .boxart img {
+  margin: 0 auto;
+  max-height: 203px;
+}
+.game-box .text {
+  margin-bottom: 10px;
+}
+.game-box .text .submitter {
+  font-size: 0.6em;
 }

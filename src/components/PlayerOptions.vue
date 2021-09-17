@@ -34,7 +34,7 @@
                         style="width: 45px"
                         min="0"
                         max="100"
-                        step="10"
+                        step="5"
                         ></v-text-field>
                     </template>
                 </v-slider>
@@ -104,7 +104,7 @@ export default {
             this.done = true
             this.forfeit = false
             nodecg.readReplicant("timer", timer => {
-                this.finalTime = formatTimer(timer.time, false)
+                this.finalTime = formatTimer(timer.time, false, false)
             })
         },
 
@@ -113,7 +113,7 @@ export default {
             this.forfeit = true
 
             nodecg.readReplicant("timer", timer => {
-                this.finalTime = formatTimer(timer.time, false)
+                this.finalTime = formatTimer(timer.time, false, false)
             })
         },
 

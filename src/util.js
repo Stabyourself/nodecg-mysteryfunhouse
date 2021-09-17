@@ -15,11 +15,13 @@ export function bindReplicant(vueName, replicantName = vueName) {
     })
 }
 
-export function formatTimer(time, includeMs = true) {
+export function formatTimer(time, includeMs = true, alwaysIncludeHours = true) {
     let out = ""
 
-    out += ('0' + time.h).slice(-2)
-    out += ":"
+    if (alwaysIncludeHours || time.h > 0) {
+        out += ('0' + time.h).slice(-2)
+        out += ":"
+    }
     out += ('0' + time.m).slice(-2)
     out += ":"
     out += ('0' + time.s).slice(-2)
