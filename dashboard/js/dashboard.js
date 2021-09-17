@@ -405,8 +405,6 @@ __webpack_require__.r(__webpack_exports__);
       nodecg.sendMessage("timerReset");
     },
     applyTime: function applyTime(event) {
-      console.log(this.newTime);
-
       if (this.newTime) {
         nodecg.sendMessage("timerSet", this.newTime);
       }
