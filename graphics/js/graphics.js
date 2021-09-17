@@ -410,7 +410,6 @@ function bindReplicant(vueName) {
 
   var sendValue = _.debounce(function (newValue) {
     replicant.value = newValue;
-    console.log("sending!");
   }, 300);
 
   NodeCG.waitForReplicants(replicant).then(function () {
