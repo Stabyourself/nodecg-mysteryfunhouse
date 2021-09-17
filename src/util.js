@@ -7,7 +7,7 @@ export function bindReplicant(vueName, replicantName = vueName) {
 
     let sendValue = _.debounce(function(newValue) {
         replicant.value = newValue
-    }, 500);
+    }, 100);
 
     NodeCG.waitForReplicants(replicant).then(() => {
         replicant.on('change', (newValue) => {
