@@ -9,4 +9,5 @@ mix
     .vue()
     .options({
         processCssUrls: false
-    });
+    })
+    .disableNotifications();

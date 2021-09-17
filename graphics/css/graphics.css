@@ -23,6 +23,7 @@ body {
   position: absolute;
   background: url("../img/back_2player.png");
   background-size: 1920px 1080px;
+  background-repeat: no-repeat;
   width: 1920px;
   height: 1080px;
   overflow: hidden;
@@ -83,13 +84,16 @@ body {
   display: flex;
   align-items: flex-end;
   font-size: 3rem;
+  height: 200px;
+  max-width: 900px;
 }
 .game-box .boxart {
   margin-right: 15px;
 }
 .game-box .boxart img {
   margin: 0 auto;
-  max-height: 203px;
+  height: 200px;
+  max-width: 500px;
 }
 .game-box .text {
   margin-bottom: 10px;

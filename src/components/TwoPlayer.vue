@@ -45,7 +45,7 @@
 
 
         <div class="game-box mt-font"
-            style="top: 863px; left: 15px;">
+            style="top: 875px; left: 15px;">
             <div class="boxart">
                 <img :src="boxartUrl">
             </div>
