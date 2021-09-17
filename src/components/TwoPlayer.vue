@@ -94,7 +94,7 @@ let twitchOptions = {
     channel: null,
     autoplay: true,
     muted: false,
-    parent: ["nodecg.guegan.de"]
+    parent: ["nodecg.guegan.de:9090"]
 }
 let player1, player2
 
