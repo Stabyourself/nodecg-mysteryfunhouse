@@ -77,6 +77,7 @@ export default {
         },
 
         applyTime(event) {
+            console.log(this.newTime)
             if (this.newTime) {
                 nodecg.sendMessage("timerSet", this.newTime)
             }
