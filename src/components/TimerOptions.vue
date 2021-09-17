@@ -77,7 +77,9 @@ export default {
         },
 
         applyTime(event) {
-            nodecg.sendMessage("timerSet", this.newTime)
+            if (this.newTime) {
+                nodecg.sendMessage("timerSet", this.newTime)
+            }
             event.target.blur()
         }
     },
