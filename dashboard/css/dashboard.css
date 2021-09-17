@@ -24,3 +24,7 @@ body {
   width: 100px;
   margin-right: 1em;
 }
+
+.theme--dark.v-tabs-items {
+  background-color: transparent !important;
+}

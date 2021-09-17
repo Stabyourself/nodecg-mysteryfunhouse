@@ -1,7 +1,7 @@
 // src/main.js
 
 import Vue from 'vue'
-import vuetify from '../plugins/vuetify' // path to vuetify export
+import vuetify from './plugins/vuetify' // path to vuetify export
 
 import GeneralOptions from '../components/GeneralOptions.vue';
 Vue.component("GeneralOptions", GeneralOptions)
