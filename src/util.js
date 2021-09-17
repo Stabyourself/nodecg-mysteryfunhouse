@@ -8,14 +8,12 @@ export function bindReplicant(vueName, replicantName = vueName) {
 
             preventSend = true;
             this.$nextTick(() => {
-                console.log("Retrieving")
                 preventSend = false;
             })
         })
 
         this.$watch(vueName, (newValue) => {
             if (!preventSend) {
-                console.log("Sending")
                 replicant.value = newValue
             }
         });
