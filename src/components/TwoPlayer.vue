@@ -93,7 +93,8 @@ let twitchOptions = {
     height: 698,
     channel: null,
     autoplay: true,
-    muted: false
+    muted: false,
+    parent: ["nodecg.guegan.de"]
 }
 let player1, player2
 
