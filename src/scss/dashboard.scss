@@ -15,15 +15,19 @@ body {
 }
 
 .select-img {
-    max-height: 100px;
-    max-width: 100px;
+    max-height: 200px;
+    max-width: 200px;
     margin: 0 auto;
     display: block;
 }
 
 .select-img-wrap {
-    width: 100px;
-    margin-right: 1em;
+    width: 200px;
+    height: 200px;
+    border: 2px solid #00BEBE;
+    display: flex;
+    align-items: center;
+    box-sizing: content-box;
 }
 
 .theme--dark.v-tabs-items {

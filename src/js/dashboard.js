@@ -13,6 +13,8 @@ import Cropping from '../components/Cropping.vue';
 Vue.component("Cropping", Cropping)
 import PlayerCropping from '../components/PlayerCropping.vue';
 Vue.component("PlayerCropping", PlayerCropping)
+import ImageSelector from '../components/ImageSelector.vue';
+Vue.component("ImageSelector", ImageSelector)
 
 new Vue({
   vuetify,

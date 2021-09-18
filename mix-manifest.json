@@ -16,5 +16,6 @@
     "/dashboard/player2.html": "/dashboard/player2.html",
     "/dashboard/player3.html": "/dashboard/player3.html",
     "/dashboard/player4.html": "/dashboard/player4.html",
-    "/dashboard/timer.html": "/dashboard/timer.html"
+    "/dashboard/timer.html": "/dashboard/timer.html",
+    "/dashboard/boxart.html": "/dashboard/boxart.html"
 }

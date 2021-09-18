@@ -73,6 +73,13 @@
         "title": "Stream Cropping",
         "file": "cropping.html",
         "fullbleed": true
+      },
+      {
+        "name": "boxart-select",
+        "title": "Select Boxart",
+        "file": "boxart.html",
+        "width": 8,
+        "dialog": true
       }
     ],
     "graphics": [

@@ -1,12 +1,17 @@
 const ctx = require('./nodecg')
 const nodecg = ctx.get()
 
-const timeRep = nodecg.Replicant("timerTime")
-const pausedRep = nodecg.Replicant("timerPaused")
+const timerRep = nodecg.Replicant("timer")
 
 const { Timer } = require('timer-node');
 let timer = new Timer();
-let paused = true
+let state = "stopped"
+
+let timerObj = {
+    ms: 0,
+    pausedMs: 0,
+    state: "stopped",
+}
 
 updateRep()
 
@@ -18,17 +23,21 @@ nodecg.listenFor("timerPlay",() => {
         timer.resume()
     }
 
-    paused = false
+    state = "playing"
 })
 
 nodecg.listenFor("timerPause",() => {
-    paused = true;
+    state = "paused"
     updateRep()
 })
 
 nodecg.listenFor("timerReset",() => {
     timer = new Timer()
-    paused = true
+    state = "stopped"
+
+    timerObj.ms = timer.ms()
+    timerObj.pausedMs = timer.ms()
+
     updateRep()
 })
 
@@ -57,7 +66,10 @@ nodecg.listenFor("timerSet", (input) => {
         startTimestamp: timestamp
     });
     timer.pause()
-    paused = true;
+
+    state = "stopped"
+    timerObj.ms = timer.ms()
+    timerObj.pausedMs = timer.ms()
 
     updateRep()
 })
@@ -65,14 +77,20 @@ nodecg.listenFor("timerSet", (input) => {
 
 
 function tick() {
-    if (!paused) {
+    if (state == "playing" || state == "paused") {
+        timerObj.pausedMs = timer.ms()
+        if (state == "playing") {
+            timerObj.ms = timer.ms()
+        }
+
         updateRep()
     }
 }
 
 function updateRep() {
-    timeRep.value = timer.ms()
-    pausedRep.value = !timer.isStarted() || timer.isStopped() || timer.isPaused() || paused
+    timerObj.state = state
+
+    timerRep.value = timerObj
 }
 
 setInterval(tick, 11);

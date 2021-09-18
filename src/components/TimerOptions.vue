@@ -5,9 +5,9 @@
                 <v-text-field
                     class="timer"
                     v-model="timerText"
-                    :hint="timerPaused ? 'Press enter to apply' : ''"
+                    :hint="timer.state != 'playing' ? 'Press enter to apply' : ''"
                     @keydown.enter="applyTime"
-                    :readonly="!timerPaused"
+                    :readonly="timer.state == 'playing'"
                 >
                 </v-text-field>
 
@@ -18,7 +18,7 @@
                             elevation="2"
                             @click="play"
                             block
-                            :disabled="!timerPaused"
+                            :disabled="timer.state == 'playing'"
                         >
                             <v-icon dark>
                                 mdi-play
@@ -32,11 +32,16 @@
                             elevation="2"
                             @click="pause"
                             block
-                            :disabled="timerPaused"
+                            :disabled="timer.state != 'playing'"
+
                         >
-                            <v-icon dark>
+                            <v-icon dark v-if="timer.state != 'paused'">
                                 mdi-pause
                             </v-icon>
+
+                            <span v-else style="font-size: 0.9em">
+                                {{ pausedTimerText }}
+                            </span>
                         </v-btn>
                     </v-col>
 
@@ -46,7 +51,7 @@
                             elevation="2"
                             @click="reset"
                             block
-                            :disabled="timerTime == 0"
+                            :disabled="timer.ms == 0"
                         >
                             <v-icon dark>
                                 mdi-undo
@@ -84,26 +89,28 @@ export default {
         }
     },
 
-    mounted() {
-        bindReplicant.call(this, "timerTime")
-        bindReplicant.call(this, "timerPaused")
+    created() {
+        bindReplicant.call(this, "timer")
     },
 
     computed: {
         timerText: {
             get() {
-                return formatTimer(this.timerTime)
+                return formatTimer(this.timer.ms)
             },
             set(newValue) {
                 this.newTime = newValue
             }
+        },
+
+        pausedTimerText() {
+            return formatTimer(this.timer.pausedMs)
         }
     },
 
     data() {
         return {
-            timerTime: 0,
-            timerPaused: true,
+            timer: 0,
             newTime: null,
         };
     },

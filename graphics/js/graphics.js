@@ -167,8 +167,7 @@ var player1, player2;
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "platform");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "submitter");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "boxartUrl");
-    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "timerTime");
-    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "timerPaused");
+    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "timer");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player1name");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player1pronouns");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player1twitch");
@@ -186,7 +185,7 @@ var player1, player2;
   },
   computed: {
     timerText: function timerText() {
-      return (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.formatTimer)(this.timerTime, false, false);
+      return (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.formatTimer)(this.timer.ms, false, false);
     }
   },
   watch: {
@@ -243,8 +242,9 @@ var player1, player2;
       player2forfeit: "",
       player2volume: 0,
       player2finalTime: false,
-      timerTime: 0,
-      timerPaused: true
+      timer: {
+        ms: 0
+      }
     };
   }
 });
@@ -20370,7 +20370,10 @@ var render = function() {
       _vm._v(" "),
       _c(
         "timer",
-        { class: { active: !_vm.timerPaused }, staticStyle: { top: "842px" } },
+        {
+          class: { active: _vm.timer.state == "playing" },
+          staticStyle: { top: "842px" }
+        },
         [_vm._v("\n        " + _vm._s(_vm.timerText) + "\n    ")]
       ),
       _vm._v(" "),

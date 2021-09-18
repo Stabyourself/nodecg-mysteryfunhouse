@@ -29,6 +29,15 @@
                 </template>
                 </v-select>
 
+
+                <v-btn
+                    nodecg-dialog="boxart-select"
+                    color="error"
+                    elevation="2"
+                >
+                Woah!
+                </v-btn>
+
                 <v-text-field
                     v-model="goal"
                     label="Goal"
