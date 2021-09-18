@@ -10,12 +10,12 @@
     "/graphics/css/font/Regen.ttf.svg": "/graphics/css/font/Regen.ttf.svg",
     "/graphics/css/font/Regen.ttf.woff": "/graphics/css/font/Regen.ttf.woff",
     "/graphics/2player.html": "/graphics/2player.html",
+    "/dashboard/boxart.html": "/dashboard/boxart.html",
     "/dashboard/cropping.html": "/dashboard/cropping.html",
     "/dashboard/general.html": "/dashboard/general.html",
     "/dashboard/player1.html": "/dashboard/player1.html",
     "/dashboard/player2.html": "/dashboard/player2.html",
     "/dashboard/player3.html": "/dashboard/player3.html",
     "/dashboard/player4.html": "/dashboard/player4.html",
-    "/dashboard/timer.html": "/dashboard/timer.html",
-    "/dashboard/boxart.html": "/dashboard/boxart.html"
+    "/dashboard/timer.html": "/dashboard/timer.html"
 }

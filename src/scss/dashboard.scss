@@ -28,11 +28,12 @@ body {
 
     &:hover .select-img-border {
         border-width: 1px;
-        border-color: #00BEBE;
+        border-color: white;
     }
 
     &.active .select-img-border {
-        border-width: 8px;
+        border-width: 4px;
+        border-color: #00BEBE;
     }
 }
 
@@ -45,7 +46,7 @@ body {
 
     border: 1px solid rgba(255, 255, 255, 0.7);
 
-    transition: all 0.2s;
+    transition: all 0.1s;
 }
 
 .select-img {

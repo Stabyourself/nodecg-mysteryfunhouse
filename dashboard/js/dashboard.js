@@ -600,14 +600,19 @@ function bindReplicant(vueName) {
     replicant.value = newValue;
   }, debounceWait);
 
-  NodeCG.waitForReplicants(replicant).then(function () {
-    replicant.on('change', function (newValue) {
-      _this[vueName] = clone(newValue);
-      preventSend = true;
+  var readValue = function readValue(newValue) {
+    _this[vueName] = clone(newValue);
+    preventSend = true;
 
-      _this.$nextTick(function () {
-        preventSend = false;
-      });
+    _this.$nextTick(function () {
+      preventSend = false;
+    });
+  };
+
+  NodeCG.waitForReplicants(replicant).then(function () {
+    readValue(replicant.value);
+    replicant.on('change', function (newValue) {
+      readValue(newValue);
     });
 
     _this.$watch(vueName, function (newValue) {

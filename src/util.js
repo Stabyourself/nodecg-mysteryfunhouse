@@ -9,14 +9,20 @@ export function bindReplicant(vueName, replicantName = vueName, debounceWait = 3
         replicant.value = newValue
     }, debounceWait);
 
-    NodeCG.waitForReplicants(replicant).then(() => {
-        replicant.on('change', (newValue) => {
-            this[vueName] = clone(newValue)
+    let readValue = (newValue) => {
+        this[vueName] = clone(newValue)
 
-            preventSend = true;
-            this.$nextTick(() => {
-                preventSend = false;
-            })
+        preventSend = true;
+        this.$nextTick(() => {
+            preventSend = false;
+        })
+    }
+
+    NodeCG.waitForReplicants(replicant).then(() => {
+        readValue(replicant.value)
+
+        replicant.on('change', (newValue) => {
+            readValue(newValue)
         })
 
         this.$watch(vueName, (newValue) => {
