@@ -51,6 +51,74 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/TwitchPlayer.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/TwitchPlayer.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+var twitchOptions = {
+  width: 930,
+  height: 698,
+  channel: null,
+  autoplay: true,
+  muted: false,
+  parent: ["nodecg.guegan.de"]
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  created: function created() {
+    var _this = this;
+
+    nodecg.listenFor("stream".concat(this.playerNumber, "reload"), function () {
+      _this.createPlayer();
+    });
+  },
+  mounted: function mounted() {
+    if (this.url) {
+      this.createPlayer();
+    }
+  },
+  methods: {
+    createPlayer: function createPlayer() {
+      var _this2 = this;
+
+      this.$el.innerHTML = '';
+      twitchOptions.channel = this.url;
+      this.player = new Twitch.Player(this.$el, twitchOptions);
+      this.player.addEventListener(Twitch.Embed.VIDEO_READY, function () {
+        _this2.player.setMuted(false);
+
+        _this2.player.setVolume(_this2.volume / 100);
+      });
+    }
+  },
+  watch: {
+    url: function url() {
+      this.createPlayer();
+    },
+    volume: function volume(newValue) {
+      this.player.setVolume(newValue / 100);
+    }
+  },
+  props: ["url", "volume", "playerNumber"],
+  data: function data() {
+    return {
+      player: null
+    };
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/TwoPlayer.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/TwoPlayer.vue?vue&type=script&lang=js& ***!
@@ -150,16 +218,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
-var twitchOptions = {
-  width: 930,
-  height: 698,
-  channel: null,
-  autoplay: true,
-  muted: false,
-  parent: ["nodecg.guegan.de"]
-};
-var player1, player2;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "game");
@@ -171,54 +237,23 @@ var player1, player2;
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player1name");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player1pronouns");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player1twitch");
+    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player1volume");
+    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player1streamHidden");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player1done");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player1forfeit");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player1finalTime");
-    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player1volume");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player2name");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player2pronouns");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player2twitch");
+    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player2volume");
+    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player2streamHidden");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player2done");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player2forfeit");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player2finalTime");
-    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player2volume");
   },
   computed: {
     timerText: function timerText() {
       return (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.formatTimer)(this.timer.ms, false, false);
-    }
-  },
-  watch: {
-    player1twitch: function player1twitch(newValue) {
-      var _this = this;
-
-      var el = document.getElementById("player1twitch");
-      el.innerHTML = '';
-      twitchOptions.channel = newValue;
-      player1 = new Twitch.Player("player1twitch", twitchOptions);
-      player1.addEventListener(Twitch.Embed.VIDEO_READY, function () {
-        console.log(_this.player1volume / 100);
-        player1.setMuted(false);
-        player1.setVolume(_this.player1volume / 100);
-      });
-    },
-    player2twitch: function player2twitch(newValue) {
-      var _this2 = this;
-
-      var el = document.getElementById("player2twitch");
-      el.innerHTML = '';
-      twitchOptions.channel = newValue;
-      player2 = new Twitch.Player("player2twitch", twitchOptions);
-      player2.addEventListener(Twitch.Embed.VIDEO_READY, function () {
-        player2.setMuted(false);
-        player2.setVolume(_this2.player2volume / 100);
-      });
-    },
-    player1volume: function player1volume(newValue) {
-      player1.setVolume(newValue / 100);
-    },
-    player2volume: function player2volume(newValue) {
-      player2.setVolume(newValue / 100);
     }
   },
   data: function data() {
@@ -231,16 +266,18 @@ var player1, player2;
       player1name: "",
       player1pronouns: "",
       player1twitch: "",
+      player1volume: 0,
+      player1streamHidden: false,
       player1done: "",
       player1forfeit: "",
-      player1volume: 0,
       player1finalTime: false,
       player2name: "",
       player2pronouns: "",
       player2twitch: "",
+      player2volume: 0,
+      player2streamHidden: false,
       player2done: "",
       player2forfeit: "",
-      player2volume: 0,
       player2finalTime: false,
       timer: {
         ms: 0
@@ -348,6 +385,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_PlayerName_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/PlayerName.vue */ "./src/components/PlayerName.vue");
 /* harmony import */ var _plugins_vue_fit_text_index_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./plugins/vue-fit-text/index.js */ "./src/js/plugins/vue-fit-text/index.js");
 /* harmony import */ var _components_Timer_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Timer.vue */ "./src/components/Timer.vue");
+/* harmony import */ var _components_TwitchPlayer_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/TwitchPlayer.vue */ "./src/components/TwitchPlayer.vue");
 // src/main.js
 
 
@@ -358,6 +396,8 @@ vue__WEBPACK_IMPORTED_MODULE_1__["default"].component("PlayerName", _components_
 vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(_plugins_vue_fit_text_index_js__WEBPACK_IMPORTED_MODULE_3__["default"]);
 
 vue__WEBPACK_IMPORTED_MODULE_1__["default"].component("Timer", _components_Timer_vue__WEBPACK_IMPORTED_MODULE_4__["default"]);
+
+vue__WEBPACK_IMPORTED_MODULE_1__["default"].component("TwitchPlayer", _components_TwitchPlayer_vue__WEBPACK_IMPORTED_MODULE_5__["default"]);
 new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({}).$mount('#app');
 
 /***/ }),
@@ -20072,6 +20112,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/components/TwitchPlayer.vue?vue&type=script&lang=js&":
+/*!******************************************************************!*\
+  !*** ./src/components/TwitchPlayer.vue?vue&type=script&lang=js& ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TwitchPlayer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TwitchPlayer.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/TwitchPlayer.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TwitchPlayer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./src/components/TwoPlayer.vue?vue&type=script&lang=js&":
 /*!***************************************************************!*\
   !*** ./src/components/TwoPlayer.vue?vue&type=script&lang=js& ***!
@@ -20134,6 +20190,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Timer_vue_vue_type_template_id_1c1a6e76___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Timer_vue_vue_type_template_id_1c1a6e76___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Timer.vue?vue&type=template&id=1c1a6e76& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/Timer.vue?vue&type=template&id=1c1a6e76&");
+
+
+/***/ }),
+
+/***/ "./src/components/TwitchPlayer.vue?vue&type=template&id=7476d6c4&":
+/*!************************************************************************!*\
+  !*** ./src/components/TwitchPlayer.vue?vue&type=template&id=7476d6c4& ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TwitchPlayer_vue_vue_type_template_id_7476d6c4___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TwitchPlayer_vue_vue_type_template_id_7476d6c4___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TwitchPlayer_vue_vue_type_template_id_7476d6c4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TwitchPlayer.vue?vue&type=template&id=7476d6c4& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/TwitchPlayer.vue?vue&type=template&id=7476d6c4&");
 
 
 /***/ }),
@@ -20241,6 +20314,31 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/TwitchPlayer.vue?vue&type=template&id=7476d6c4&":
+/*!***************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/TwitchPlayer.vue?vue&type=template&id=7476d6c4& ***!
+  \***************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "twitch-player" })
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/TwoPlayer.vue?vue&type=template&id=03d52c66&":
 /*!************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./src/components/TwoPlayer.vue?vue&type=template&id=03d52c66& ***!
@@ -20260,27 +20358,39 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("div", {
-        staticStyle: {
-          position: "absolute",
-          top: "150px",
-          left: "15px",
-          width: "930px",
-          height: "698px"
-        },
-        attrs: { id: "player1twitch" }
-      }),
+      !_vm.player1streamHidden
+        ? _c("twitch-player", {
+            staticStyle: {
+              position: "absolute",
+              top: "150px",
+              left: "15px",
+              width: "930px",
+              height: "698px"
+            },
+            attrs: {
+              playerNumber: 1,
+              url: _vm.player1twitch,
+              volume: _vm.player1volume
+            }
+          })
+        : _vm._e(),
       _vm._v(" "),
-      _c("div", {
-        staticStyle: {
-          position: "absolute",
-          top: "150px",
-          left: "975px",
-          width: "930px",
-          height: "698px"
-        },
-        attrs: { id: "player2twitch" }
-      }),
+      !_vm.player2streamHidden
+        ? _c("twitch-player", {
+            staticStyle: {
+              position: "absolute",
+              top: "150px",
+              left: "975px",
+              width: "930px",
+              height: "698px"
+            },
+            attrs: {
+              playerNumber: 2,
+              url: _vm.player2twitch,
+              volume: _vm.player2volume
+            }
+          })
+        : _vm._e(),
       _vm._v(" "),
       _c("player-name", {
         staticStyle: {
@@ -32693,6 +32803,45 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 /* hot reload */
 if (false) { var api; }
 component.options.__file = "src/components/Timer.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./src/components/TwitchPlayer.vue":
+/*!*****************************************!*\
+  !*** ./src/components/TwitchPlayer.vue ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _TwitchPlayer_vue_vue_type_template_id_7476d6c4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TwitchPlayer.vue?vue&type=template&id=7476d6c4& */ "./src/components/TwitchPlayer.vue?vue&type=template&id=7476d6c4&");
+/* harmony import */ var _TwitchPlayer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TwitchPlayer.vue?vue&type=script&lang=js& */ "./src/components/TwitchPlayer.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _TwitchPlayer_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _TwitchPlayer_vue_vue_type_template_id_7476d6c4___WEBPACK_IMPORTED_MODULE_0__.render,
+  _TwitchPlayer_vue_vue_type_template_id_7476d6c4___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "src/components/TwitchPlayer.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),

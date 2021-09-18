@@ -14,6 +14,9 @@ Vue.use(FitText);
 import Timer from '../components/Timer.vue';
 Vue.component("Timer", Timer)
 
+import TwitchPlayer from '../components/TwitchPlayer.vue';
+Vue.component("TwitchPlayer", TwitchPlayer)
+
 new Vue({
 
 }).$mount('#app')

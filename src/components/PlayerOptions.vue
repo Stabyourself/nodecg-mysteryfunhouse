@@ -14,6 +14,8 @@
                     hint="This is also a free input"
                 ></v-combobox>
 
+                <v-divider class="my-7"></v-divider>
+
                 <v-text-field
                     v-model="twitch"
                     label="Twitch"
@@ -39,19 +41,28 @@
                     </template>
                 </v-slider>
 
-                <v-text-field
-                    v-model="finalTime"
-                    label="Final time"
-                ></v-text-field>
-
                 <v-row>
                     <v-col>
-                        <v-switch v-model="done" label="Is done"></v-switch>
+                        <v-btn :color="streamHidden ? 'success' : 'error'" elevation="2" block class="mb-3" @click="streamHidden = !streamHidden">
+                            {{ streamHidden ? "Show Stream" : "Hide Stream" }}
+                            <v-icon right dark>
+                            {{ streamHidden ? "mdi-eye" : "mdi-eye-off" }}
+                            </v-icon>
+                        </v-btn>
                     </v-col>
+
                     <v-col>
-                        <v-switch v-model="forfeit" label="Has forfeited"></v-switch>
+                        <v-btn color="error" elevation="2" block class="mb-3" @click="reloadStream">
+                            Reload Stream
+                            <v-icon right dark>
+                                mdi-refresh
+                            </v-icon>
+                        </v-btn>
                     </v-col>
                 </v-row>
+
+
+                <v-divider class="my-7"></v-divider>
 
                 <v-btn color="success" elevation="2" block class="mb-3" @click="makeDone"
                 :disabled="done">
@@ -76,6 +87,20 @@
                         mdi-undo
                     </v-icon>
                 </v-btn>
+
+                <v-row>
+                    <v-col>
+                        <v-switch v-model="done" label="Is done"></v-switch>
+                    </v-col>
+                    <v-col>
+                        <v-switch v-model="forfeit" label="Has forfeited"></v-switch>
+                    </v-col>
+                </v-row>
+
+                <v-text-field
+                    v-model="finalTime"
+                    label="Final time"
+                ></v-text-field>
             </v-container>
         </v-main>
     </v-app>
@@ -88,11 +113,15 @@ export default {
     created() {
         bindReplicant.call(this, "name", this.makeName("name"))
         bindReplicant.call(this, "pronouns", this.makeName("pronouns"))
+
         bindReplicant.call(this, "twitch", this.makeName("twitch"), 1000)
         bindReplicant.call(this, "volume", this.makeName("volume"))
+        bindReplicant.call(this, "streamHidden", this.makeName("streamHidden"), 0)
+
         bindReplicant.call(this, "done", this.makeName("done"), 0)
         bindReplicant.call(this, "forfeit", this.makeName("forfeit"), 0)
         bindReplicant.call(this, "finalTime", this.makeName("finalTime"), 0)
+
     },
 
     methods: {
@@ -120,6 +149,10 @@ export default {
         makeUndone() {
             this.done = false
             this.forfeit = false
+        },
+
+        reloadStream() {
+            nodecg.sendMessage(`stream${this.playerNumber}reload`)
         }
     },
 
@@ -131,8 +164,11 @@ export default {
         return {
             name: "",
             pronouns: "",
+
             twitch: "",
             volume: 0,
+            streamHidden: false,
+
             done: false,
             forfeit: false,
             finalTime: "00:00:00.000",

@@ -1,14 +1,22 @@
 <template>
     <div>
-        <div
-            id="player1twitch"
+        <twitch-player
+            v-if="!player1streamHidden"
             style="position: absolute; top: 150px; left: 15px; width: 930px; height:698px"
-        ></div>
 
-        <div
-            id="player2twitch"
+            :playerNumber="1"
+            :url="player1twitch"
+            :volume="player1volume"
+        ></twitch-player>
+
+        <twitch-player
+            v-if="!player2streamHidden"
             style="position: absolute; top: 150px; left: 975px; width: 930px; height:698px"
-        ></div>
+
+            :playerNumber="2"
+            :url="player2twitch"
+            :volume="player2volume"
+        ></twitch-player>
 
 
 
@@ -25,7 +33,6 @@
                 {{ player1name }}
             </template>
         </player-name>
-
 
         <player-name
             class="right"
@@ -88,16 +95,6 @@
 <script>
 import { bindReplicant, formatTimer } from "../util.js"
 
-let twitchOptions = {
-    width: 930,
-    height: 698,
-    channel: null,
-    autoplay: true,
-    muted: false,
-    parent: ["nodecg.guegan.de"]
-}
-let player1, player2
-
 export default {
     created() {
         bindReplicant.call(this, "game")
@@ -110,59 +107,30 @@ export default {
 
         bindReplicant.call(this, "player1name")
         bindReplicant.call(this, "player1pronouns")
+
         bindReplicant.call(this, "player1twitch")
+        bindReplicant.call(this, "player1volume")
+        bindReplicant.call(this, "player1streamHidden")
+
         bindReplicant.call(this, "player1done")
         bindReplicant.call(this, "player1forfeit")
         bindReplicant.call(this, "player1finalTime")
-        bindReplicant.call(this, "player1volume")
 
         bindReplicant.call(this, "player2name")
         bindReplicant.call(this, "player2pronouns")
+
         bindReplicant.call(this, "player2twitch")
+        bindReplicant.call(this, "player2volume")
+        bindReplicant.call(this, "player2streamHidden")
+
         bindReplicant.call(this, "player2done")
         bindReplicant.call(this, "player2forfeit")
         bindReplicant.call(this, "player2finalTime")
-        bindReplicant.call(this, "player2volume")
     },
 
     computed: {
         timerText() {
             return formatTimer(this.timer.ms, false, false)
-        }
-    },
-
-    watch: {
-        player1twitch(newValue) {
-            const el = document.getElementById("player1twitch");
-            el.innerHTML = '';
-
-            twitchOptions.channel = newValue
-            player1 = new Twitch.Player("player1twitch", twitchOptions)
-            player1.addEventListener(Twitch.Embed.VIDEO_READY, () => {
-                console.log(this.player1volume/100)
-                player1.setMuted(false);
-                player1.setVolume(this.player1volume/100);
-            });
-        },
-
-        player2twitch(newValue) {
-            const el = document.getElementById("player2twitch");
-            el.innerHTML = '';
-
-            twitchOptions.channel = newValue
-            player2 = new Twitch.Player("player2twitch", twitchOptions)
-            player2.addEventListener(Twitch.Embed.VIDEO_READY, () => {
-                player2.setMuted(false);
-                player2.setVolume(this.player2volume/100);
-            });
-        },
-
-        player1volume(newValue) {
-            player1.setVolume(newValue/100);
-        },
-
-        player2volume(newValue) {
-            player2.setVolume(newValue/100);
         }
     },
 
@@ -176,18 +144,24 @@ export default {
 
             player1name: "",
             player1pronouns: "",
+
             player1twitch: "",
+            player1volume: 0,
+            player1streamHidden: false,
+
             player1done: "",
             player1forfeit: "",
-            player1volume: 0,
             player1finalTime: false,
 
             player2name: "",
             player2pronouns: "",
+
             player2twitch: "",
+            player2volume: 0,
+            player2streamHidden: false,
+
             player2done: "",
             player2forfeit: "",
-            player2volume: 0,
             player2finalTime: false,
 
             timer: {

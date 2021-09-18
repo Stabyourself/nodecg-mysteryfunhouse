@@ -361,6 +361,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
@@ -368,6 +393,7 @@ __webpack_require__.r(__webpack_exports__);
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "pronouns", this.makeName("pronouns"));
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "twitch", this.makeName("twitch"), 1000);
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "volume", this.makeName("volume"));
+    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "streamHidden", this.makeName("streamHidden"), 0);
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "done", this.makeName("done"), 0);
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "forfeit", this.makeName("forfeit"), 0);
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "finalTime", this.makeName("finalTime"), 0);
@@ -397,6 +423,9 @@ __webpack_require__.r(__webpack_exports__);
     makeUndone: function makeUndone() {
       this.done = false;
       this.forfeit = false;
+    },
+    reloadStream: function reloadStream() {
+      nodecg.sendMessage("stream".concat(this.playerNumber, "reload"));
     }
   },
   props: ["player-number"],
@@ -406,6 +435,7 @@ __webpack_require__.r(__webpack_exports__);
       pronouns: "",
       twitch: "",
       volume: 0,
+      streamHidden: false,
       done: false,
       forfeit: false,
       finalTime: "00:00:00.000",
@@ -21683,6 +21713,8 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
+              _c("v-divider", { staticClass: "my-7" }),
+              _vm._v(" "),
               _c("v-text-field", {
                 attrs: { label: "Twitch", prefix: "twitch.tv/" },
                 model: {
@@ -21732,33 +21764,47 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _c("v-text-field", {
-                attrs: { label: "Final time" },
-                model: {
-                  value: _vm.finalTime,
-                  callback: function($$v) {
-                    _vm.finalTime = $$v
-                  },
-                  expression: "finalTime"
-                }
-              }),
-              _vm._v(" "),
               _c(
                 "v-row",
                 [
                   _c(
                     "v-col",
                     [
-                      _c("v-switch", {
-                        attrs: { label: "Is done" },
-                        model: {
-                          value: _vm.done,
-                          callback: function($$v) {
-                            _vm.done = $$v
+                      _c(
+                        "v-btn",
+                        {
+                          staticClass: "mb-3",
+                          attrs: {
+                            color: _vm.streamHidden ? "success" : "error",
+                            elevation: "2",
+                            block: ""
                           },
-                          expression: "done"
-                        }
-                      })
+                          on: {
+                            click: function($event) {
+                              _vm.streamHidden = !_vm.streamHidden
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        " +
+                              _vm._s(
+                                _vm.streamHidden ? "Show Stream" : "Hide Stream"
+                              ) +
+                              "\n                        "
+                          ),
+                          _c("v-icon", { attrs: { right: "", dark: "" } }, [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(
+                                  _vm.streamHidden ? "mdi-eye" : "mdi-eye-off"
+                                ) +
+                                "\n                        "
+                            )
+                          ])
+                        ],
+                        1
+                      )
                     ],
                     1
                   ),
@@ -21766,22 +21812,33 @@ var render = function() {
                   _c(
                     "v-col",
                     [
-                      _c("v-switch", {
-                        attrs: { label: "Has forfeited" },
-                        model: {
-                          value: _vm.forfeit,
-                          callback: function($$v) {
-                            _vm.forfeit = $$v
-                          },
-                          expression: "forfeit"
-                        }
-                      })
+                      _c(
+                        "v-btn",
+                        {
+                          staticClass: "mb-3",
+                          attrs: { color: "error", elevation: "2", block: "" },
+                          on: { click: _vm.reloadStream }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        Reload Stream\n                        "
+                          ),
+                          _c("v-icon", { attrs: { right: "", dark: "" } }, [
+                            _vm._v(
+                              "\n                            mdi-refresh\n                        "
+                            )
+                          ])
+                        ],
+                        1
+                      )
                     ],
                     1
                   )
                 ],
                 1
               ),
+              _vm._v(" "),
+              _c("v-divider", { staticClass: "my-7" }),
               _vm._v(" "),
               _c(
                 "v-btn",
@@ -21845,7 +21902,58 @@ var render = function() {
                   ])
                 ],
                 1
-              )
+              ),
+              _vm._v(" "),
+              _c(
+                "v-row",
+                [
+                  _c(
+                    "v-col",
+                    [
+                      _c("v-switch", {
+                        attrs: { label: "Is done" },
+                        model: {
+                          value: _vm.done,
+                          callback: function($$v) {
+                            _vm.done = $$v
+                          },
+                          expression: "done"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-col",
+                    [
+                      _c("v-switch", {
+                        attrs: { label: "Has forfeited" },
+                        model: {
+                          value: _vm.forfeit,
+                          callback: function($$v) {
+                            _vm.forfeit = $$v
+                          },
+                          expression: "forfeit"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("v-text-field", {
+                attrs: { label: "Final time" },
+                model: {
+                  value: _vm.finalTime,
+                  callback: function($$v) {
+                    _vm.finalTime = $$v
+                  },
+                  expression: "finalTime"
+                }
+              })
             ],
             1
           )
@@ -35432,12 +35540,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuetify/lib/components/VGrid */ "./node_modules/vuetify/lib/components/VGrid/VCol.js");
 /* harmony import */ var vuetify_lib_components_VCombobox__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuetify/lib/components/VCombobox */ "./node_modules/vuetify/lib/components/VCombobox/VCombobox.js");
 /* harmony import */ var vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vuetify/lib/components/VGrid */ "./node_modules/vuetify/lib/components/VGrid/VContainer.js");
-/* harmony import */ var vuetify_lib_components_VIcon__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vuetify/lib/components/VIcon */ "./node_modules/vuetify/lib/components/VIcon/VIcon.js");
-/* harmony import */ var vuetify_lib_components_VMain__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vuetify/lib/components/VMain */ "./node_modules/vuetify/lib/components/VMain/VMain.js");
-/* harmony import */ var vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vuetify/lib/components/VGrid */ "./node_modules/vuetify/lib/components/VGrid/VRow.js");
-/* harmony import */ var vuetify_lib_components_VSlider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! vuetify/lib/components/VSlider */ "./node_modules/vuetify/lib/components/VSlider/VSlider.js");
-/* harmony import */ var vuetify_lib_components_VSwitch__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! vuetify/lib/components/VSwitch */ "./node_modules/vuetify/lib/components/VSwitch/VSwitch.js");
-/* harmony import */ var vuetify_lib_components_VTextField__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! vuetify/lib/components/VTextField */ "./node_modules/vuetify/lib/components/VTextField/VTextField.js");
+/* harmony import */ var vuetify_lib_components_VDivider__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vuetify/lib/components/VDivider */ "./node_modules/vuetify/lib/components/VDivider/VDivider.js");
+/* harmony import */ var vuetify_lib_components_VIcon__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vuetify/lib/components/VIcon */ "./node_modules/vuetify/lib/components/VIcon/VIcon.js");
+/* harmony import */ var vuetify_lib_components_VMain__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vuetify/lib/components/VMain */ "./node_modules/vuetify/lib/components/VMain/VMain.js");
+/* harmony import */ var vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! vuetify/lib/components/VGrid */ "./node_modules/vuetify/lib/components/VGrid/VRow.js");
+/* harmony import */ var vuetify_lib_components_VSlider__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! vuetify/lib/components/VSlider */ "./node_modules/vuetify/lib/components/VSlider/VSlider.js");
+/* harmony import */ var vuetify_lib_components_VSwitch__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! vuetify/lib/components/VSwitch */ "./node_modules/vuetify/lib/components/VSwitch/VSwitch.js");
+/* harmony import */ var vuetify_lib_components_VTextField__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! vuetify/lib/components/VTextField */ "./node_modules/vuetify/lib/components/VTextField/VTextField.js");
 
 
 
@@ -35469,7 +35578,8 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 
 
 
-_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default()(component, {VApp: vuetify_lib_components_VApp__WEBPACK_IMPORTED_MODULE_4__["default"],VBtn: vuetify_lib_components_VBtn__WEBPACK_IMPORTED_MODULE_5__["default"],VCol: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_6__["default"],VCombobox: vuetify_lib_components_VCombobox__WEBPACK_IMPORTED_MODULE_7__["default"],VContainer: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_8__["default"],VIcon: vuetify_lib_components_VIcon__WEBPACK_IMPORTED_MODULE_9__["default"],VMain: vuetify_lib_components_VMain__WEBPACK_IMPORTED_MODULE_10__["default"],VRow: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_11__["default"],VSlider: vuetify_lib_components_VSlider__WEBPACK_IMPORTED_MODULE_12__["default"],VSwitch: vuetify_lib_components_VSwitch__WEBPACK_IMPORTED_MODULE_13__["default"],VTextField: vuetify_lib_components_VTextField__WEBPACK_IMPORTED_MODULE_14__["default"]})
+
+_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default()(component, {VApp: vuetify_lib_components_VApp__WEBPACK_IMPORTED_MODULE_4__["default"],VBtn: vuetify_lib_components_VBtn__WEBPACK_IMPORTED_MODULE_5__["default"],VCol: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_6__["default"],VCombobox: vuetify_lib_components_VCombobox__WEBPACK_IMPORTED_MODULE_7__["default"],VContainer: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_8__["default"],VDivider: vuetify_lib_components_VDivider__WEBPACK_IMPORTED_MODULE_9__["default"],VIcon: vuetify_lib_components_VIcon__WEBPACK_IMPORTED_MODULE_10__["default"],VMain: vuetify_lib_components_VMain__WEBPACK_IMPORTED_MODULE_11__["default"],VRow: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_12__["default"],VSlider: vuetify_lib_components_VSlider__WEBPACK_IMPORTED_MODULE_13__["default"],VSwitch: vuetify_lib_components_VSwitch__WEBPACK_IMPORTED_MODULE_14__["default"],VTextField: vuetify_lib_components_VTextField__WEBPACK_IMPORTED_MODULE_15__["default"]})
 
 
 /* hot reload */
