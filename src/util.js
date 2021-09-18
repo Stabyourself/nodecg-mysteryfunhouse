@@ -2,7 +2,7 @@ var clone = require("clone")
 var _ = require("lodash")
 
 export function bindReplicant(vueName, replicantName = vueName, debounceWait = 300) {
-    const replicant = nodecg.Replicant(replicantName)
+    const replicant = nodecg.Replicant(replicantName, {defaultValue: this[vueName]})
     let preventSend = false;
 
     let sendValue = _.debounce(function(newValue) {

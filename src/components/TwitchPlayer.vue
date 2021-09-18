@@ -1,11 +1,15 @@
 <template>
-    <div class="twitch-player"></div>
+    <div class="twitch-player"
+    :style="cropStyles"></div>
 </template>
 
 <script>
+const width = 930
+const height = 698
+
 let twitchOptions = {
-    width: 930,
-    height: 698,
+    width: width,
+    height: height,
     channel: null,
     autoplay: true,
     muted: false,
@@ -38,6 +42,39 @@ export default {
         }
     },
 
+    computed: {
+        cropStyles() {
+            var left = this.crop[0]
+            var top = this.crop[1]
+            var right = left + this.crop[2]
+            var bottom = top + this.crop[3]
+
+            var hScale = width/this.crop[2]
+            var vScale = height/this.crop[3]
+
+            var translateX = width/2 - left - this.crop[2]/2;
+            var translateY = height/2 - top - this.crop[3]/2;
+
+            var transformOriginX = left + this.crop[2]/2
+            var transformOriginY = top + this.crop[3]/2
+
+            var scale = Math.min(hScale, vScale)
+
+            var styles = {
+                "clip": `rect(
+                            ${top}px,
+                            ${right}px,
+                            ${bottom}px,
+                            ${left}px
+                        )`,
+                "transform-origin": `${transformOriginX}px ${transformOriginY}px`,
+                "transform": `translate(${translateX}px, ${translateY}px) scale(${scale})`,
+            }
+
+            return styles
+        }
+    },
+
     watch: {
         url() {
             this.createPlayer()
@@ -51,7 +88,8 @@ export default {
     props: [
         "url",
         "volume",
-        "playerNumber"
+        "playerNumber",
+        "crop"
     ],
 
     data() {

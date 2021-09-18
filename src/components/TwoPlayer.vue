@@ -1,12 +1,19 @@
 <template>
     <div>
         <twitch-player
+            style="
+                position: absolute;
+                top: 150px;
+                left: 15px;
+                width: 930px;
+                height:698px;
+            "
             v-if="!player1streamHidden"
-            style="position: absolute; top: 150px; left: 15px; width: 930px; height:698px"
 
             :playerNumber="1"
             :url="player1twitch"
             :volume="player1volume"
+            :crop="player1crop"
         ></twitch-player>
 
         <twitch-player
@@ -16,6 +23,7 @@
             :playerNumber="2"
             :url="player2twitch"
             :volume="player2volume"
+            :crop="player2crop"
         ></twitch-player>
 
 
@@ -52,7 +60,7 @@
 
 
         <div class="game-box mt-font"
-            style="top: 875px; left: 15px;">
+            style="top: 865px; left: 15px;">
             <div class="boxart" v-if="currentBoxart">
                 <img :src="currentBoxart.url">
             </div>
@@ -116,6 +124,8 @@ export default {
         bindReplicant.call(this, "player1forfeit")
         bindReplicant.call(this, "player1finalTime")
 
+        bindReplicant.call(this, "player1crop")
+
         bindReplicant.call(this, "player2name")
         bindReplicant.call(this, "player2pronouns")
 
@@ -126,6 +136,8 @@ export default {
         bindReplicant.call(this, "player2done")
         bindReplicant.call(this, "player2forfeit")
         bindReplicant.call(this, "player2finalTime")
+
+        bindReplicant.call(this, "player2crop")
     },
 
     computed: {
@@ -153,6 +165,8 @@ export default {
             player1forfeit: "",
             player1finalTime: false,
 
+            player1crop: [0, 0, 930, 698],
+
             player2name: "",
             player2pronouns: "",
 
@@ -163,6 +177,8 @@ export default {
             player2done: "",
             player2forfeit: "",
             player2finalTime: false,
+
+            player2crop: [0, 0, 930, 698],
 
             timer: {
                 ms: 0

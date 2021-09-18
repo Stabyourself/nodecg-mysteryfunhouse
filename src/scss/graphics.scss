@@ -98,7 +98,7 @@ $boxartSize: 200px;
 .game-box {
     position: absolute;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     font-size: 3rem;
     height: $boxartSize;
     max-width: 900px;
@@ -106,15 +106,14 @@ $boxartSize: 200px;
     .boxart {
         margin-right: 15px;
         img {
+            display: block;
             margin: 0 auto;
             height: $boxartSize;
-            max-width: 500px;
+            max-width: 380px;
         }
     }
 
     .text {
-        margin-bottom: 10px;
-
         .submitter {
             font-size: 0.6em;
         }

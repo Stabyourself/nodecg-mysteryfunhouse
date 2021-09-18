@@ -81,7 +81,7 @@ body {
 .game-box {
   position: absolute;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   font-size: 3rem;
   height: 200px;
   max-width: 900px;
@@ -90,12 +90,10 @@ body {
   margin-right: 15px;
 }
 .game-box .boxart img {
+  display: block;
   margin: 0 auto;
   height: 200px;
-  max-width: 500px;
-}
-.game-box .text {
-  margin-bottom: 10px;
+  max-width: 380px;
 }
 .game-box .text .submitter {
   font-size: 0.6em;

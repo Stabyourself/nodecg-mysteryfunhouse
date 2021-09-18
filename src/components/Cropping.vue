@@ -1,6 +1,7 @@
 <template>
     <v-app>
         <v-main>
+            <v-container>
             <v-tabs v-model="tab" centered class="mt-3 mb-3" background-color="transparent">
                 <v-tabs-slider color="primary"></v-tabs-slider>
 
@@ -17,6 +18,7 @@
                     <player-cropping :player="i"></player-cropping>
                 </v-tab-item>
             </v-tabs-items>
+            </v-container>
         </v-main>
     </v-app>
 </template>

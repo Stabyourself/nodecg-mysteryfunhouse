@@ -52,3 +52,7 @@ body {
 .theme--dark.v-tabs-items {
   background-color: transparent !important;
 }
+
+.crop-input-holder {
+  max-width: 300px;
+}

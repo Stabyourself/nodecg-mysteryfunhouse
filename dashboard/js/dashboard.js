@@ -35,6 +35,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -251,16 +253,54 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
 //
 //
 //
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  created: function created() {
+    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "crop", "player".concat(this.player, "crop"), 0);
+  },
   props: ["player"],
+  computed: {
+    cropConcat: {
+      get: function get() {
+        return "[".concat(this.crop.join(","), "]");
+      },
+      set: function set(newValue) {
+        var parts = newValue.slice(1, -1).split(",");
+
+        for (var i = 0; i < 4; i++) {
+          this.$set(this.crop, i, parseInt(parts[i]));
+        }
+      }
+    }
+  },
   data: function data() {
-    return {};
+    return {
+      crop: [0, 0, 930, 698],
+      inputs: ["left", "top", "width", "height"]
+    };
   }
 });
 
@@ -623,7 +663,9 @@ function bindReplicant(vueName) {
 
   var replicantName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : vueName;
   var debounceWait = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 300;
-  var replicant = nodecg.Replicant(replicantName);
+  var replicant = nodecg.Replicant(replicantName, {
+    defaultValue: this[vueName]
+  });
   var preventSend = false;
 
   var sendValue = _.debounce(function (newValue) {
@@ -21368,51 +21410,59 @@ var render = function() {
         "v-main",
         [
           _c(
-            "v-tabs",
-            {
-              staticClass: "mt-3 mb-3",
-              attrs: { centered: "", "background-color": "transparent" },
-              model: {
-                value: _vm.tab,
-                callback: function($$v) {
-                  _vm.tab = $$v
-                },
-                expression: "tab"
-              }
-            },
+            "v-container",
             [
-              _c("v-tabs-slider", { attrs: { color: "primary" } }),
-              _vm._v(" "),
-              _vm._l(4, function(i) {
-                return _c("v-tab", { key: i }, [
-                  _vm._v(
-                    "\n                Player " + _vm._s(i) + "\n            "
-                  )
-                ])
-              })
-            ],
-            2
-          ),
-          _vm._v(" "),
-          _c(
-            "v-tabs-items",
-            {
-              model: {
-                value: _vm.tab,
-                callback: function($$v) {
-                  _vm.tab = $$v
+              _c(
+                "v-tabs",
+                {
+                  staticClass: "mt-3 mb-3",
+                  attrs: { centered: "", "background-color": "transparent" },
+                  model: {
+                    value: _vm.tab,
+                    callback: function($$v) {
+                      _vm.tab = $$v
+                    },
+                    expression: "tab"
+                  }
                 },
-                expression: "tab"
-              }
-            },
-            _vm._l(4, function(i) {
-              return _c(
-                "v-tab-item",
-                { key: i },
-                [_c("player-cropping", { attrs: { player: i } })],
+                [
+                  _c("v-tabs-slider", { attrs: { color: "primary" } }),
+                  _vm._v(" "),
+                  _vm._l(4, function(i) {
+                    return _c("v-tab", { key: i }, [
+                      _vm._v(
+                        "\n                Player " +
+                          _vm._s(i) +
+                          "\n            "
+                      )
+                    ])
+                  })
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _c(
+                "v-tabs-items",
+                {
+                  model: {
+                    value: _vm.tab,
+                    callback: function($$v) {
+                      _vm.tab = $$v
+                    },
+                    expression: "tab"
+                  }
+                },
+                _vm._l(4, function(i) {
+                  return _c(
+                    "v-tab-item",
+                    { key: i },
+                    [_c("player-cropping", { attrs: { player: i } })],
+                    1
+                  )
+                }),
                 1
               )
-            }),
+            ],
             1
           )
         ],
@@ -21651,9 +21701,61 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticStyle: { "text-align": "center" } }, [
-    _vm._v("\n    Something about Player " + _vm._s(_vm.player) + "\n")
-  ])
+  return _c(
+    "div",
+    { staticStyle: { "text-align": "center" } },
+    [
+      _c(
+        "v-row",
+        { staticClass: "crop-input-holder" },
+        [
+          _vm._l(_vm.inputs, function(input, i) {
+            return _c(
+              "v-col",
+              { key: i, attrs: { cols: "3" } },
+              [
+                _c("v-text-field", {
+                  attrs: { label: input, type: "number" },
+                  model: {
+                    value: _vm.crop[i],
+                    callback: function($$v) {
+                      _vm.$set(_vm.crop, i, _vm._n($$v))
+                    },
+                    expression: "crop[i]"
+                  }
+                })
+              ],
+              1
+            )
+          }),
+          _vm._v(" "),
+          _c(
+            "v-col",
+            [
+              _c("v-text-field", {
+                attrs: { label: "For copypaste :)" },
+                on: {
+                  click: function($event) {
+                    return $event.target.select()
+                  }
+                },
+                model: {
+                  value: _vm.cropConcat,
+                  callback: function($$v) {
+                    _vm.cropConcat = _vm._n($$v)
+                  },
+                  expression: "cropConcat"
+                }
+              })
+            ],
+            1
+          )
+        ],
+        2
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -35327,12 +35429,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../node_modules/vuetify-loader/lib/runtime/installComponents.js */ "./node_modules/vuetify-loader/lib/runtime/installComponents.js");
 /* harmony import */ var _node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var vuetify_lib_components_VApp__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuetify/lib/components/VApp */ "./node_modules/vuetify/lib/components/VApp/VApp.js");
-/* harmony import */ var vuetify_lib_components_VMain__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuetify/lib/components/VMain */ "./node_modules/vuetify/lib/components/VMain/VMain.js");
-/* harmony import */ var vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuetify/lib/components/VTabs */ "./node_modules/vuetify/lib/components/VTabs/VTab.js");
-/* harmony import */ var vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuetify/lib/components/VTabs */ "./node_modules/vuetify/lib/components/VTabs/VTabItem.js");
-/* harmony import */ var vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vuetify/lib/components/VTabs */ "./node_modules/vuetify/lib/components/VTabs/VTabs.js");
-/* harmony import */ var vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vuetify/lib/components/VTabs */ "./node_modules/vuetify/lib/components/VTabs/VTabsItems.js");
-/* harmony import */ var vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vuetify/lib/components/VTabs */ "./node_modules/vuetify/lib/components/VTabs/VTabsSlider.js");
+/* harmony import */ var vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuetify/lib/components/VGrid */ "./node_modules/vuetify/lib/components/VGrid/VContainer.js");
+/* harmony import */ var vuetify_lib_components_VMain__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuetify/lib/components/VMain */ "./node_modules/vuetify/lib/components/VMain/VMain.js");
+/* harmony import */ var vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuetify/lib/components/VTabs */ "./node_modules/vuetify/lib/components/VTabs/VTab.js");
+/* harmony import */ var vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vuetify/lib/components/VTabs */ "./node_modules/vuetify/lib/components/VTabs/VTabItem.js");
+/* harmony import */ var vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vuetify/lib/components/VTabs */ "./node_modules/vuetify/lib/components/VTabs/VTabs.js");
+/* harmony import */ var vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vuetify/lib/components/VTabs */ "./node_modules/vuetify/lib/components/VTabs/VTabsItems.js");
+/* harmony import */ var vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vuetify/lib/components/VTabs */ "./node_modules/vuetify/lib/components/VTabs/VTabsSlider.js");
 
 
 
@@ -35360,7 +35463,8 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 
 
 
-_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default()(component, {VApp: vuetify_lib_components_VApp__WEBPACK_IMPORTED_MODULE_4__["default"],VMain: vuetify_lib_components_VMain__WEBPACK_IMPORTED_MODULE_5__["default"],VTab: vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_6__["default"],VTabItem: vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_7__["default"],VTabs: vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_8__["default"],VTabsItems: vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_9__["default"],VTabsSlider: vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_10__["default"]})
+
+_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default()(component, {VApp: vuetify_lib_components_VApp__WEBPACK_IMPORTED_MODULE_4__["default"],VContainer: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_5__["default"],VMain: vuetify_lib_components_VMain__WEBPACK_IMPORTED_MODULE_6__["default"],VTab: vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_7__["default"],VTabItem: vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_8__["default"],VTabs: vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_9__["default"],VTabsItems: vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_10__["default"],VTabsSlider: vuetify_lib_components_VTabs__WEBPACK_IMPORTED_MODULE_11__["default"]})
 
 
 /* hot reload */
@@ -35494,6 +35598,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _PlayerCropping_vue_vue_type_template_id_9032529a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PlayerCropping.vue?vue&type=template&id=9032529a& */ "./src/components/PlayerCropping.vue?vue&type=template&id=9032529a&");
 /* harmony import */ var _PlayerCropping_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PlayerCropping.vue?vue&type=script&lang=js& */ "./src/components/PlayerCropping.vue?vue&type=script&lang=js&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../node_modules/vuetify-loader/lib/runtime/installComponents.js */ "./node_modules/vuetify-loader/lib/runtime/installComponents.js");
+/* harmony import */ var _node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuetify/lib/components/VGrid */ "./node_modules/vuetify/lib/components/VGrid/VCol.js");
+/* harmony import */ var vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuetify/lib/components/VGrid */ "./node_modules/vuetify/lib/components/VGrid/VRow.js");
+/* harmony import */ var vuetify_lib_components_VTextField__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuetify/lib/components/VTextField */ "./node_modules/vuetify/lib/components/VTextField/VTextField.js");
 
 
 
@@ -35511,6 +35620,14 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null
   
 )
+
+/* vuetify-loader */
+;
+
+
+
+_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default()(component, {VCol: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_4__["default"],VRow: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_5__["default"],VTextField: vuetify_lib_components_VTextField__WEBPACK_IMPORTED_MODULE_6__["default"]})
+
 
 /* hot reload */
 if (false) { var api; }

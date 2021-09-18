@@ -66,9 +66,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+var width = 930;
+var height = 698;
 var twitchOptions = {
-  width: 930,
-  height: 698,
+  width: width,
+  height: height,
   channel: null,
   autoplay: true,
   muted: false,
@@ -101,6 +104,27 @@ var twitchOptions = {
       });
     }
   },
+  computed: {
+    cropStyles: function cropStyles() {
+      var left = this.crop[0];
+      var top = this.crop[1];
+      var right = left + this.crop[2];
+      var bottom = top + this.crop[3];
+      var hScale = width / this.crop[2];
+      var vScale = height / this.crop[3];
+      var translateX = width / 2 - left - this.crop[2] / 2;
+      var translateY = height / 2 - top - this.crop[3] / 2;
+      var transformOriginX = left + this.crop[2] / 2;
+      var transformOriginY = top + this.crop[3] / 2;
+      var scale = Math.min(hScale, vScale);
+      var styles = {
+        "clip": "rect(\n                            ".concat(top, "px,\n                            ").concat(right, "px,\n                            ").concat(bottom, "px,\n                            ").concat(left, "px\n                        )"),
+        "transform-origin": "".concat(transformOriginX, "px ").concat(transformOriginY, "px"),
+        "transform": "translate(".concat(translateX, "px, ").concat(translateY, "px) scale(").concat(scale, ")")
+      };
+      return styles;
+    }
+  },
   watch: {
     url: function url() {
       this.createPlayer();
@@ -109,7 +133,7 @@ var twitchOptions = {
       this.player.setVolume(newValue / 100);
     }
   },
-  props: ["url", "volume", "playerNumber"],
+  props: ["url", "volume", "playerNumber", "crop"],
   data: function data() {
     return {
       player: null
@@ -225,6 +249,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
@@ -242,6 +274,7 @@ __webpack_require__.r(__webpack_exports__);
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player1done");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player1forfeit");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player1finalTime");
+    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player1crop");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player2name");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player2pronouns");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player2twitch");
@@ -250,6 +283,7 @@ __webpack_require__.r(__webpack_exports__);
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player2done");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player2forfeit");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player2finalTime");
+    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player2crop");
   },
   computed: {
     timerText: function timerText() {
@@ -271,6 +305,7 @@ __webpack_require__.r(__webpack_exports__);
       player1done: "",
       player1forfeit: "",
       player1finalTime: false,
+      player1crop: [0, 0, 930, 698],
       player2name: "",
       player2pronouns: "",
       player2twitch: "",
@@ -279,6 +314,7 @@ __webpack_require__.r(__webpack_exports__);
       player2done: "",
       player2forfeit: "",
       player2finalTime: false,
+      player2crop: [0, 0, 930, 698],
       timer: {
         ms: 0
       }
@@ -446,7 +482,9 @@ function bindReplicant(vueName) {
 
   var replicantName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : vueName;
   var debounceWait = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 300;
-  var replicant = nodecg.Replicant(replicantName);
+  var replicant = nodecg.Replicant(replicantName, {
+    defaultValue: this[vueName]
+  });
   var preventSend = false;
 
   var sendValue = _.debounce(function (newValue) {
@@ -20330,7 +20368,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "twitch-player" })
+  return _c("div", { staticClass: "twitch-player", style: _vm.cropStyles })
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -20370,7 +20408,8 @@ var render = function() {
             attrs: {
               playerNumber: 1,
               url: _vm.player1twitch,
-              volume: _vm.player1volume
+              volume: _vm.player1volume,
+              crop: _vm.player1crop
             }
           })
         : _vm._e(),
@@ -20387,7 +20426,8 @@ var render = function() {
             attrs: {
               playerNumber: 2,
               url: _vm.player2twitch,
-              volume: _vm.player2volume
+              volume: _vm.player2volume,
+              crop: _vm.player2crop
             }
           })
         : _vm._e(),
@@ -20465,7 +20505,7 @@ var render = function() {
         "div",
         {
           staticClass: "game-box mt-font",
-          staticStyle: { top: "875px", left: "15px" }
+          staticStyle: { top: "865px", left: "15px" }
         },
         [
           _vm.currentBoxart
