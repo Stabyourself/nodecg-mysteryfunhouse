@@ -1,5 +1,8 @@
 <template>
-    <v-item-group>
+    <v-item-group
+        v-model="selected"
+        @change="select"
+        active-class="active">
         <v-container>
             <v-row align="center">
                 <v-col
@@ -7,12 +10,13 @@
                 :key="image.url"
                 >
                     <v-item v-slot="{ active, toggle }">
-                        <div class="select-img-wrap">
+                        <div class="select-img-wrap" @click="toggle">
                             <img
+                                :class="{active: active}"
                                 class="select-img"
                                 :src="image.url"
-                                @click="toggle"
                             >
+                            <div class="select-img-border"></div>
                         </div>
                     </v-item>
                 </v-col>
@@ -26,16 +30,49 @@ import { bindReplicant } from "../util.js"
 
 export default {
     props: [
-        "assetName"
+        "assetName",
+        "destinationReplicant"
     ],
 
     created() {
         bindReplicant.call(this, "images", "assets:" + this.assetName)
+        bindReplicant.call(this, "value", this.destinationReplicant, 0)
+    },
+
+    watch: {
+        images() {
+            this.updateSelection()
+        },
+
+        value() {
+            this.updateSelection()
+        }
+    },
+
+    methods: {
+        select() {
+            this.value = this.images[this.selected]
+        },
+
+        updateSelection() {
+            if (this.value != null) {
+                for (var [i, image] of this.images.entries()) {
+                    if (image.url == this.value.url) {
+                        this.selected = i
+                        return
+                    }
+                }
+            }
+
+            this.selected = null
+        }
     },
 
     data() {
         return {
             images: [],
+            selected: null,
+            value: "",
         }
     }
 };

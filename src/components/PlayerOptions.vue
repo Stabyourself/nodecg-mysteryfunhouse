@@ -88,11 +88,11 @@ export default {
     created() {
         bindReplicant.call(this, "name", this.makeName("name"))
         bindReplicant.call(this, "pronouns", this.makeName("pronouns"))
-        bindReplicant.call(this, "twitch", this.makeName("twitch"))
+        bindReplicant.call(this, "twitch", this.makeName("twitch"), 1000)
         bindReplicant.call(this, "volume", this.makeName("volume"))
-        bindReplicant.call(this, "done", this.makeName("done"))
-        bindReplicant.call(this, "forfeit", this.makeName("forfeit"))
-        bindReplicant.call(this, "finalTime", this.makeName("finalTime"))
+        bindReplicant.call(this, "done", this.makeName("done"), 0)
+        bindReplicant.call(this, "forfeit", this.makeName("forfeit"), 0)
+        bindReplicant.call(this, "finalTime", this.makeName("finalTime"), 0)
     },
 
     methods: {
@@ -103,8 +103,8 @@ export default {
         makeDone() {
             this.done = true
             this.forfeit = false
-            nodecg.readReplicant("timerTime", timerTime => {
-                this.finalTime = formatTimer(timerTime, false, false)
+            nodecg.readReplicant("timer", timer => {
+                this.finalTime = formatTimer(timer.ms, false, false)
             })
         },
 
@@ -112,8 +112,8 @@ export default {
             this.done = false
             this.forfeit = true
 
-            nodecg.readReplicant("timerTime", timerTime => {
-                this.finalTime = formatTimer(timerTime, false, false)
+            nodecg.readReplicant("timer", timer => {
+                this.finalTime = formatTimer(timer.ms, false, false)
             })
         },
 

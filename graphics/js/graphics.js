@@ -166,7 +166,7 @@ var player1, player2;
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "goal");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "platform");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "submitter");
-    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "boxartUrl");
+    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "currentBoxart");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "timer");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player1name");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "player1pronouns");
@@ -227,7 +227,7 @@ var player1, player2;
       goal: "",
       platform: "",
       submitter: "",
-      boxartUrl: "",
+      currentBoxart: "",
       player1name: "",
       player1pronouns: "",
       player1twitch: "",
@@ -405,12 +405,13 @@ function bindReplicant(vueName) {
   var _this = this;
 
   var replicantName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : vueName;
+  var debounceWait = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 300;
   var replicant = nodecg.Replicant(replicantName);
   var preventSend = false;
 
   var sendValue = _.debounce(function (newValue) {
     replicant.value = newValue;
-  }, 300);
+  }, debounceWait);
 
   NodeCG.waitForReplicants(replicant).then(function () {
     replicant.on('change', function (newValue) {
@@ -20352,9 +20353,11 @@ var render = function() {
           staticStyle: { top: "875px", left: "15px" }
         },
         [
-          _c("div", { staticClass: "boxart" }, [
-            _c("img", { attrs: { src: _vm.boxartUrl } })
-          ]),
+          _vm.currentBoxart
+            ? _c("div", { staticClass: "boxart" }, [
+                _c("img", { attrs: { src: _vm.currentBoxart.url } })
+              ])
+            : _vm._e(),
           _vm._v(" "),
           _c("div", { staticClass: "text" }, [
             _c("div", { staticClass: "game" }, [_vm._v(_vm._s(_vm.game))]),

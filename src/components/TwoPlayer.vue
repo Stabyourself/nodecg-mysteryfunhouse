@@ -46,8 +46,8 @@
 
         <div class="game-box mt-font"
             style="top: 875px; left: 15px;">
-            <div class="boxart">
-                <img :src="boxartUrl">
+            <div class="boxart" v-if="currentBoxart">
+                <img :src="currentBoxart.url">
             </div>
 
             <div class="text">
@@ -104,7 +104,7 @@ export default {
         bindReplicant.call(this, "goal")
         bindReplicant.call(this, "platform")
         bindReplicant.call(this, "submitter")
-        bindReplicant.call(this, "boxartUrl")
+        bindReplicant.call(this, "currentBoxart")
 
         bindReplicant.call(this, "timer")
 
@@ -172,7 +172,7 @@ export default {
             goal: "",
             platform: "",
             submitter: "",
-            boxartUrl: "",
+            currentBoxart: "",
 
             player1name: "",
             player1pronouns: "",

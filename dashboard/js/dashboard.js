@@ -95,27 +95,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
@@ -123,7 +102,7 @@ __webpack_require__.r(__webpack_exports__);
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "goal");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "platform");
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "submitter");
-    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "boxartUrl"); // ???
+    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "currentBoxart"); // ???
 
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "boxart", "assets:boxart");
   },
@@ -145,7 +124,7 @@ __webpack_require__.r(__webpack_exports__);
       platform: "",
       submitter: "",
       boxart: [],
-      boxartUrl: ""
+      currentBoxart: {}
     };
   }
 });
@@ -164,6 +143,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
+//
+//
+//
 //
 //
 //
@@ -189,13 +186,54 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["assetName"],
+  props: ["assetName", "destinationReplicant"],
   created: function created() {
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "images", "assets:" + this.assetName);
+    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "value", this.destinationReplicant, 0);
+  },
+  watch: {
+    images: function images() {
+      this.updateSelection();
+    },
+    value: function value() {
+      this.updateSelection();
+    }
+  },
+  methods: {
+    select: function select() {
+      this.value = this.images[this.selected];
+    },
+    updateSelection: function updateSelection() {
+      if (this.value != null) {
+        var _iterator = _createForOfIteratorHelper(this.images.entries()),
+            _step;
+
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var _step$value = _slicedToArray(_step.value, 2),
+                i = _step$value[0],
+                image = _step$value[1];
+
+            if (image.url == this.value.url) {
+              this.selected = i;
+              return;
+            }
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
+      }
+
+      this.selected = null;
+    }
   },
   data: function data() {
     return {
-      images: []
+      images: [],
+      selected: null,
+      value: ""
     };
   }
 });
@@ -328,11 +366,11 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "name", this.makeName("name"));
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "pronouns", this.makeName("pronouns"));
-    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "twitch", this.makeName("twitch"));
+    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "twitch", this.makeName("twitch"), 1000);
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "volume", this.makeName("volume"));
-    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "done", this.makeName("done"));
-    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "forfeit", this.makeName("forfeit"));
-    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "finalTime", this.makeName("finalTime"));
+    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "done", this.makeName("done"), 0);
+    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "forfeit", this.makeName("forfeit"), 0);
+    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "finalTime", this.makeName("finalTime"), 0);
   },
   methods: {
     makeName: function makeName(name) {
@@ -343,8 +381,8 @@ __webpack_require__.r(__webpack_exports__);
 
       this.done = true;
       this.forfeit = false;
-      nodecg.readReplicant("timerTime", function (timerTime) {
-        _this.finalTime = (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.formatTimer)(timerTime, false, false);
+      nodecg.readReplicant("timer", function (timer) {
+        _this.finalTime = (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.formatTimer)(timer.ms, false, false);
       });
     },
     makeForfeit: function makeForfeit() {
@@ -352,8 +390,8 @@ __webpack_require__.r(__webpack_exports__);
 
       this.done = false;
       this.forfeit = true;
-      nodecg.readReplicant("timerTime", function (timerTime) {
-        _this2.finalTime = (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.formatTimer)(timerTime, false, false);
+      nodecg.readReplicant("timer", function (timer) {
+        _this2.finalTime = (0,_util_js__WEBPACK_IMPORTED_MODULE_0__.formatTimer)(timer.ms, false, false);
       });
     },
     makeUndone: function makeUndone() {
@@ -554,12 +592,13 @@ function bindReplicant(vueName) {
   var _this = this;
 
   var replicantName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : vueName;
+  var debounceWait = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 300;
   var replicant = nodecg.Replicant(replicantName);
   var preventSend = false;
 
   var sendValue = _.debounce(function (newValue) {
     replicant.value = newValue;
-  }, 300);
+  }, debounceWait);
 
   NodeCG.waitForReplicants(replicant).then(function () {
     replicant.on('change', function (newValue) {
@@ -21391,73 +21430,29 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _c("v-select", {
-                attrs: {
-                  items: _vm.boxartWithEmpty,
-                  label: "Boxart",
-                  dense: "",
-                  "item-text": "name",
-                  "item-value": "url"
+              _c(
+                "label",
+                {
+                  staticClass: "v-label v-label--active theme--dark",
+                  staticStyle: { "font-size": "12px" }
                 },
-                scopedSlots: _vm._u([
-                  {
-                    key: "selection",
-                    fn: function(ref) {
-                      var item = ref.item
-                      return [
-                        _c("div", { staticClass: "select-img-wrap" }, [
-                          _c("img", {
-                            staticClass: "select-img",
-                            attrs: { src: item.url }
-                          })
-                        ]),
-                        _vm._v(
-                          "\n                " +
-                            _vm._s(item.name) +
-                            "\n            "
-                        )
-                      ]
-                    }
-                  },
-                  {
-                    key: "item",
-                    fn: function(ref) {
-                      var item = ref.item
-                      return [
-                        _c("div", { staticClass: "select-img-wrap" }, [
-                          _c("img", {
-                            staticClass: "select-img",
-                            attrs: { src: item.url }
-                          })
-                        ]),
-                        _vm._v(
-                          "\n                " +
-                            _vm._s(item.name) +
-                            "\n            "
-                        )
-                      ]
-                    }
-                  }
-                ]),
-                model: {
-                  value: _vm.boxartUrl,
-                  callback: function($$v) {
-                    _vm.boxartUrl = $$v
-                  },
-                  expression: "boxartUrl"
-                }
-              }),
+                [_vm._v("Boxart")]
+              ),
               _vm._v(" "),
               _c(
-                "v-btn",
+                "div",
                 {
-                  attrs: {
-                    "nodecg-dialog": "boxart-select",
-                    color: "error",
-                    elevation: "2"
-                  }
+                  staticClass: "select-img-wrap",
+                  attrs: { "nodecg-dialog": "boxart-select" }
                 },
-                [_vm._v("\n            Woah!\n            ")]
+                [
+                  _c("img", {
+                    staticClass: "select-img",
+                    attrs: { src: _vm.currentBoxart.url }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "select-img-border" })
+                ]
               ),
               _vm._v(" "),
               _c("v-text-field", {
@@ -21527,6 +21522,17 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-item-group",
+    {
+      attrs: { "active-class": "active" },
+      on: { change: _vm.select },
+      model: {
+        value: _vm.selected,
+        callback: function($$v) {
+          _vm.selected = $$v
+        },
+        expression: "selected"
+      }
+    },
     [
       _c(
         "v-container",
@@ -21548,13 +21554,24 @@ var render = function() {
                             var active = ref.active
                             var toggle = ref.toggle
                             return [
-                              _c("div", { staticClass: "select-img-wrap" }, [
-                                _c("img", {
-                                  staticClass: "select-img",
-                                  attrs: { src: image.url },
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "select-img-wrap",
                                   on: { click: toggle }
-                                })
-                              ])
+                                },
+                                [
+                                  _c("img", {
+                                    staticClass: "select-img",
+                                    class: { active: active },
+                                    attrs: { src: image.url }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("div", {
+                                    staticClass: "select-img-border"
+                                  })
+                                ]
+                              )
                             ]
                           }
                         }
@@ -35257,11 +35274,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../node_modules/vuetify-loader/lib/runtime/installComponents.js */ "./node_modules/vuetify-loader/lib/runtime/installComponents.js");
 /* harmony import */ var _node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var vuetify_lib_components_VApp__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuetify/lib/components/VApp */ "./node_modules/vuetify/lib/components/VApp/VApp.js");
-/* harmony import */ var vuetify_lib_components_VBtn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuetify/lib/components/VBtn */ "./node_modules/vuetify/lib/components/VBtn/VBtn.js");
-/* harmony import */ var vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuetify/lib/components/VGrid */ "./node_modules/vuetify/lib/components/VGrid/VContainer.js");
-/* harmony import */ var vuetify_lib_components_VMain__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuetify/lib/components/VMain */ "./node_modules/vuetify/lib/components/VMain/VMain.js");
-/* harmony import */ var vuetify_lib_components_VSelect__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vuetify/lib/components/VSelect */ "./node_modules/vuetify/lib/components/VSelect/VSelect.js");
-/* harmony import */ var vuetify_lib_components_VTextField__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vuetify/lib/components/VTextField */ "./node_modules/vuetify/lib/components/VTextField/VTextField.js");
+/* harmony import */ var vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuetify/lib/components/VGrid */ "./node_modules/vuetify/lib/components/VGrid/VContainer.js");
+/* harmony import */ var vuetify_lib_components_VMain__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuetify/lib/components/VMain */ "./node_modules/vuetify/lib/components/VMain/VMain.js");
+/* harmony import */ var vuetify_lib_components_VTextField__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuetify/lib/components/VTextField */ "./node_modules/vuetify/lib/components/VTextField/VTextField.js");
 
 
 
@@ -35286,9 +35301,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 
 
 
-
-
-_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default()(component, {VApp: vuetify_lib_components_VApp__WEBPACK_IMPORTED_MODULE_4__["default"],VBtn: vuetify_lib_components_VBtn__WEBPACK_IMPORTED_MODULE_5__["default"],VContainer: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_6__["default"],VMain: vuetify_lib_components_VMain__WEBPACK_IMPORTED_MODULE_7__["default"],VSelect: vuetify_lib_components_VSelect__WEBPACK_IMPORTED_MODULE_8__["default"],VTextField: vuetify_lib_components_VTextField__WEBPACK_IMPORTED_MODULE_9__["default"]})
+_node_modules_vuetify_loader_lib_runtime_installComponents_js__WEBPACK_IMPORTED_MODULE_3___default()(component, {VApp: vuetify_lib_components_VApp__WEBPACK_IMPORTED_MODULE_4__["default"],VContainer: vuetify_lib_components_VGrid__WEBPACK_IMPORTED_MODULE_5__["default"],VMain: vuetify_lib_components_VMain__WEBPACK_IMPORTED_MODULE_6__["default"],VTextField: vuetify_lib_components_VTextField__WEBPACK_IMPORTED_MODULE_7__["default"]})
 
 
 /* hot reload */

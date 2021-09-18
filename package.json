@@ -79,7 +79,13 @@
         "title": "Select Boxart",
         "file": "boxart.html",
         "width": 8,
-        "dialog": true
+        "dialog": true,
+        "dialogButtons": [
+          {
+            "name": "done",
+            "type": "confirm"
+          }
+        ]
       }
     ],
     "graphics": [
@@ -99,12 +105,6 @@
           "gif",
           "png"
         ]
-      }
-    ],
-    "mount": [
-      {
-        "directory": "shared",
-        "endpoint": "shared"
       }
     ]
   },

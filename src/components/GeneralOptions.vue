@@ -7,36 +7,15 @@
                     label="Game name"
                 ></v-text-field>
 
-                <v-select
-                    v-model="boxartUrl"
-                    :items="boxartWithEmpty"
-                    label="Boxart"
-                    dense
-                    item-text="name"
-                    item-value="url"
-                >
-                <template v-slot:selection="{ item }">
-                    <div class="select-img-wrap">
-                        <img class="select-img" :src="item.url">
-                    </div>
-                    {{ item.name }}
-                </template>
-                <template v-slot:item="{ item }">
-                    <div class="select-img-wrap">
-                        <img class="select-img" :src="item.url">
-                    </div>
-                    {{ item.name }}
-                </template>
-                </v-select>
-
-
-                <v-btn
-                    nodecg-dialog="boxart-select"
-                    color="error"
-                    elevation="2"
-                >
-                Woah!
-                </v-btn>
+                <label class="v-label v-label--active theme--dark" style="font-size:12px">Boxart</label>
+                <div class="select-img-wrap"
+                    nodecg-dialog="boxart-select">
+                    <img
+                        class="select-img"
+                        :src="currentBoxart.url"
+                    >
+                    <div class="select-img-border"></div>
+                </div>
 
                 <v-text-field
                     v-model="goal"
@@ -66,7 +45,7 @@ export default {
         bindReplicant.call(this, "goal")
         bindReplicant.call(this, "platform")
         bindReplicant.call(this, "submitter")
-        bindReplicant.call(this, "boxartUrl")
+        bindReplicant.call(this, "currentBoxart")
 
         // ???
         bindReplicant.call(this, "boxart", "assets:boxart")
@@ -94,7 +73,7 @@ export default {
             platform: "",
             submitter: "",
             boxart: [],
-            boxartUrl: "",
+            currentBoxart: {},
         }
     }
 };
