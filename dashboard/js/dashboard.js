@@ -367,6 +367,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
@@ -23388,6 +23390,8 @@ var render = function() {
               _c("vue-drag-resize", {
                 ref: "cropper",
                 attrs: {
+                  parentW: 930,
+                  parentH: 698,
                   isActive: true,
                   preventActiveBehavior: true,
                   isDraggable: true,

@@ -11,6 +11,8 @@
                 <div style="width: 930px; height:698px; position: absolute; top: 0px; left: 0px;"></div>
 
                 <vue-drag-resize
+                    :parentW="930"
+                    :parentH="698"
                     :isActive="true"
                     :preventActiveBehavior="true"
                     :isDraggable="true"
