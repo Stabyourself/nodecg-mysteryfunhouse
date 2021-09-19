@@ -1,13 +1,7 @@
 <template>
     <div>
         <twitch-player
-            style="
-                position: absolute;
-                top: 150px;
-                left: 15px;
-                width: 930px;
-                height:698px;
-            "
+            style="position: absolute; top: 150px; left: 15px; width: 930px; height:698px;"
             v-if="!player1streamHidden"
 
             :playerNumber="1"

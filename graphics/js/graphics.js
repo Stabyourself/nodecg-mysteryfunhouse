@@ -66,12 +66,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-var width = 930;
-var height = 698;
+var playerWidth = 930;
+var playerHeight = 698;
 var twitchOptions = {
-  width: width,
-  height: height,
+  width: playerWidth,
+  height: playerHeight,
   channel: null,
   autoplay: true,
   muted: false,
@@ -90,6 +89,10 @@ var twitchOptions = {
       this.createPlayer();
     }
   },
+  unmounted: function unmounted() {
+    console.log("destroying.");
+    this.$el.innerHTML = '';
+  },
   methods: {
     createPlayer: function createPlayer() {
       var _this2 = this;
@@ -106,23 +109,29 @@ var twitchOptions = {
   },
   computed: {
     cropStyles: function cropStyles() {
-      var left = this.crop[0];
-      var top = this.crop[1];
-      var right = left + this.crop[2];
-      var bottom = top + this.crop[3];
-      var hScale = width / this.crop[2];
-      var vScale = height / this.crop[3];
-      var translateX = width / 2 - left - this.crop[2] / 2;
-      var translateY = height / 2 - top - this.crop[3] / 2;
-      var transformOriginX = left + this.crop[2] / 2;
-      var transformOriginY = top + this.crop[3] / 2;
-      var scale = Math.min(hScale, vScale);
-      var styles = {
-        "clip": "rect(\n                            ".concat(top, "px,\n                            ").concat(right, "px,\n                            ").concat(bottom, "px,\n                            ").concat(left, "px\n                        )"),
-        "transform-origin": "".concat(transformOriginX, "px ").concat(transformOriginY, "px"),
-        "transform": "translate(".concat(translateX, "px, ").concat(translateY, "px) scale(").concat(scale, ")")
-      };
-      return styles;
+      if (this.crop) {
+        var left = this.crop[0];
+        var right = this.crop[1];
+        var top = this.crop[2];
+        var bottom = this.crop[3];
+        var width = playerWidth - left - right;
+        var height = playerHeight - top - bottom;
+        var hScale = playerWidth / width;
+        var vScale = playerHeight / height;
+        var translateX = playerWidth / 2 - left - width / 2;
+        var translateY = playerHeight / 2 - top - height / 2;
+        var transformOriginX = left + width / 2;
+        var transformOriginY = top + height / 2;
+        var scale = Math.min(hScale, vScale);
+        var styles = {
+          "clip": "rect(\n                                ".concat(top, "px,\n                                ").concat(playerWidth - right, "px,\n                                ").concat(playerHeight - bottom, "px,\n                                ").concat(left, "px\n                            )"),
+          "transform-origin": "".concat(transformOriginX, "px ").concat(transformOriginY, "px"),
+          "transform": "translate(".concat(translateX, "px, ").concat(translateY, "px) scale(").concat(scale, ")")
+        };
+        return styles;
+      } else {
+        return {};
+      }
     }
   },
   watch: {
@@ -155,12 +164,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util.js */ "./src/util.js");
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -20368,7 +20371,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "twitch-player", style: _vm.cropStyles })
+  return _c("div", { style: _vm.cropStyles })
 }
 var staticRenderFns = []
 render._withStripped = true

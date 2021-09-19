@@ -14,7 +14,7 @@
                 <v-row>
                     <v-col>
                         <v-btn
-                            color="success"
+                            color="green"
                             elevation="2"
                             @click="play"
                             block
@@ -28,7 +28,7 @@
 
                     <v-col>
                         <v-btn
-                            color="warning"
+                            color="orange"
                             elevation="2"
                             @click="pause"
                             block
@@ -47,7 +47,7 @@
 
                     <v-col>
                         <v-btn
-                            color="error"
+                            color="red"
                             elevation="2"
                             @click="reset"
                             block

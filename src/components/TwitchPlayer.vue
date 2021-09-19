@@ -1,15 +1,14 @@
 <template>
-    <div class="twitch-player"
-    :style="cropStyles"></div>
+    <div :style="cropStyles"></div>
 </template>
 
 <script>
-const width = 930
-const height = 698
+const playerWidth = 930
+const playerHeight = 698
 
 let twitchOptions = {
-    width: width,
-    height: height,
+    width: playerWidth,
+    height: playerHeight,
     channel: null,
     autoplay: true,
     muted: false,
@@ -29,6 +28,11 @@ export default {
         }
     },
 
+    unmounted() {
+        console.log("destroying.")
+        this.$el.innerHTML = '';
+    },
+
     methods: {
         createPlayer() {
             this.$el.innerHTML = '';
@@ -44,34 +48,41 @@ export default {
 
     computed: {
         cropStyles() {
-            var left = this.crop[0]
-            var top = this.crop[1]
-            var right = left + this.crop[2]
-            var bottom = top + this.crop[3]
+            if (this.crop) {
+                let left = this.crop[0]
+                let right = this.crop[1]
+                let top = this.crop[2]
+                let bottom = this.crop[3]
 
-            var hScale = width/this.crop[2]
-            var vScale = height/this.crop[3]
+                let width = playerWidth - left - right
+                let height = playerHeight - top - bottom
 
-            var translateX = width/2 - left - this.crop[2]/2;
-            var translateY = height/2 - top - this.crop[3]/2;
+                let hScale = playerWidth/width
+                let vScale = playerHeight/height
 
-            var transformOriginX = left + this.crop[2]/2
-            var transformOriginY = top + this.crop[3]/2
+                let translateX = playerWidth/2 - left - width/2;
+                let translateY = playerHeight/2 - top - height/2;
 
-            var scale = Math.min(hScale, vScale)
+                let transformOriginX = left + width/2
+                let transformOriginY = top + height/2
 
-            var styles = {
-                "clip": `rect(
-                            ${top}px,
-                            ${right}px,
-                            ${bottom}px,
-                            ${left}px
-                        )`,
-                "transform-origin": `${transformOriginX}px ${transformOriginY}px`,
-                "transform": `translate(${translateX}px, ${translateY}px) scale(${scale})`,
+                let scale = Math.min(hScale, vScale)
+
+                let styles = {
+                    "clip": `rect(
+                                ${top}px,
+                                ${playerWidth-right}px,
+                                ${playerHeight-bottom}px,
+                                ${left}px
+                            )`,
+                    "transform-origin": `${transformOriginX}px ${transformOriginY}px`,
+                    "transform": `translate(${translateX}px, ${translateY}px) scale(${scale})`,
+                }
+
+                return styles
+            } else {
+                return {}
             }
-
-            return styles
         }
     },
 

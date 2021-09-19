@@ -133,6 +133,7 @@
     "style-loader": "^3.2.1",
     "timer-node": "^5.0.5",
     "vue": "^2.6.14",
+    "vue-drag-resize": "^1.5.4",
     "vue-style-loader": "^4.1.3",
     "vuetify": "^2.5.8",
     "vuetifyjs-mix-extension": "^0.0.20"

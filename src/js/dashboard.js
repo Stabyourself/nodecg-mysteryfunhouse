@@ -16,6 +16,12 @@ Vue.component("PlayerCropping", PlayerCropping)
 import ImageSelector from '../components/ImageSelector.vue';
 Vue.component("ImageSelector", ImageSelector)
 
+import TwitchPlayer from '../components/TwitchPlayer.vue';
+Vue.component("TwitchPlayer", TwitchPlayer)
+
+import VueDragResize from '../components/vue-drag-resize/vue-drag-resize.vue';
+Vue.component("VueDragResize", VueDragResize)
+
 new Vue({
   vuetify,
 }).$mount('#app')
