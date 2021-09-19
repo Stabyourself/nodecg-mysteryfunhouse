@@ -372,7 +372,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
-    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "crop", "player".concat(this.player, "crop"));
+    _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "crop", "player".concat(this.player, "crop"), 0);
     _util_js__WEBPACK_IMPORTED_MODULE_0__.bindReplicant.call(this, "url", "player".concat(this.player, "twitch"), 0);
   },
   props: ["player"],
