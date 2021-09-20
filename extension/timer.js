@@ -100,7 +100,6 @@ const player3forfeitRep = nodecg.Replicant("player3forfeit")
 const player4forfeitRep = nodecg.Replicant("player4forfeit")
 
 function checkForPause(changed) {
-    console.log(changed)
     if (stopTimerWhenDoneRep.value) {
         let donePlayers = 0
 
