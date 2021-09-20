@@ -1,27 +1,37 @@
 // src/main.js
 
+const _ = require("lodash")
 import Vue from 'vue'
 import vuetify from './plugins/vuetify' // path to vuetify export
 
-import GeneralOptions from '../components/GeneralOptions.vue';
-Vue.component("GeneralOptions", GeneralOptions)
-import TimerOptions from '../components/TimerOptions.vue';
-Vue.component("TimerOptions", TimerOptions)
-import PlayerOptions from '../components/PlayerOptions.vue';
-Vue.component("PlayerOptions", PlayerOptions)
-import Cropping from '../components/Cropping.vue';
-Vue.component("Cropping", Cropping)
-import PlayerCropping from '../components/PlayerCropping.vue';
-Vue.component("PlayerCropping", PlayerCropping)
-import ImageSelector from '../components/ImageSelector.vue';
-Vue.component("ImageSelector", ImageSelector)
 
-import TwitchPlayer from '../components/TwitchPlayer.vue';
-Vue.component("TwitchPlayer", TwitchPlayer)
+const requireComponent = require.context('./', true, /\.vue$/i)
 
-import VueDragResize from '../components/vue-drag-resize/vue-drag-resize.vue';
-Vue.component("VueDragResize", VueDragResize)
+requireComponent.keys().forEach(fileName => {
+    // Get component config
+    const componentConfig = requireComponent(fileName)
+
+    // Get PascalCase name of component
+    const componentName = _.upperFirst(
+        _.camelCase(
+        // Gets the file name regardless of folder depth
+        fileName
+            .split('/')
+            .pop()
+            .replace(/\.\w+$/, '')
+        )
+    )
+
+    // Register component globally
+    Vue.component(
+        componentName,
+        componentConfig.default || componentConfig
+    )
+})
+
+import FitText from './plugins/vue-fit-text/index.js';
+Vue.use(FitText);
 
 new Vue({
-  vuetify,
+    vuetify,
 }).$mount('#app')

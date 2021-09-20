@@ -13,7 +13,7 @@ mix
     .copy('src/html/dashboard', "dashboard")
 
 
-    // .sourceMaps()
+    .sourceMaps()
     .vuetify('vuetify-loader', 'src/scss/vuetify-variables.scss')
     .vue()
     .options({
