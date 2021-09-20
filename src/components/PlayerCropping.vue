@@ -8,7 +8,17 @@
                     :volume="0"
                 ></twitch-player>
 
-                <div style="width: 930px; height:698px; position: absolute; top: 0px; left: 0px;"></div>
+                <twitch-player
+                    style="position: absolute; top: 0px; left: 945px; width: 930px; height:698px;"
+                    class="checkerboard"
+
+                    :playerNumber="1"
+                    :volume="0"
+                    :url="url"
+                    :crop="crop"
+                ></twitch-player>
+
+                <div style="width: 100%; height: 100%; position: absolute; top: 0px; left: 0px;"></div>
 
                 <vue-drag-resize
                     :parentW="930"
@@ -121,7 +131,7 @@
     }
 
     .crop-wrapper {
-        width: 930px;
+        width: 1875px;
         height:698px;
         margin: 3px auto;
         position: relative;
