@@ -10,6 +10,25 @@
     </div>
 </template>
 
+<style scoped lang="scss">
+.player-name {
+    font-size: 2rem;
+    position: absolute;
+
+    &.right {
+        text-align: right;
+    }
+
+    .name {
+        overflow-wrap: break-word;
+
+        span {
+            width: 100%;
+        }
+    }
+}
+</style>
+
 <script>
 export default {
     props: [

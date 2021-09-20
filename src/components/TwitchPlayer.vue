@@ -1,6 +1,18 @@
 <template>
-    <div :style="cropStyles"></div>
+    <div class="player-backdrop">
+        <div class="player-wrapper" :style="cropStyles" ref="player"></div>
+    </div>
 </template>
+
+<style scope lang="scss">
+    .player-backdrop {
+        background-color: black;
+    }
+
+    .player-wrapper {
+        position: absolute;
+    }
+</style>
 
 <script>
 const playerWidth = 930
@@ -29,16 +41,15 @@ export default {
     },
 
     unmounted() {
-        console.log("destroying.")
-        this.$el.innerHTML = '';
+        this.$refs.player.innerHTML = '';
     },
 
     methods: {
         createPlayer() {
-            this.$el.innerHTML = '';
+            this.$refs.player.innerHTML = '';
 
             twitchOptions.channel = this.url
-            this.player = new Twitch.Player(this.$el, twitchOptions)
+            this.player = new Twitch.Player(this.$refs.player, twitchOptions)
             this.player.addEventListener(Twitch.Embed.VIDEO_READY, () => {
                 this.player.setMuted(false);
                 this.player.setVolume(this.volume/100);

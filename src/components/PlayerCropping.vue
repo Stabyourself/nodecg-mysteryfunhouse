@@ -111,6 +111,28 @@
     </div>
 </template>
 
+<style scoped>
+    .crop-input-holder {
+        max-width: 930px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .crop-wrapper {
+        width: 930px;
+        height:698px;
+        margin: 3px auto;
+        position: relative;
+    }
+
+    .crop-input.v-input {
+        flex: 0 0 100px;
+        padding-right: 15px;
+    }
+</style>
+
 <script>
 import { bindReplicant } from "../util.js"
 

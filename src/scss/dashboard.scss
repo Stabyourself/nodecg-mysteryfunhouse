@@ -21,6 +21,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0 auto;
 
     &:hover {
         cursor: pointer;
@@ -57,26 +58,4 @@ body {
 
 .theme--dark.v-tabs-items {
     background-color: transparent !important;
-}
-
-
-
-.crop-input-holder {
-    max-width: 930px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.crop-wrapper {
-    width: 930px;
-    height:698px;
-    margin: 3px auto;
-    position: relative;
-}
-
-.crop-input.v-input {
-    flex: 0 0 100px;
-    padding-right: 15px;
 }

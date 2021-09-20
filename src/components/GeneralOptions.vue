@@ -12,7 +12,7 @@
                     nodecg-dialog="boxart-select">
                     <img
                         class="select-img"
-                        :src="currentBoxart.url"
+                        :src="currentBoxart?currentBoxart.url:''"
                     >
                     <div class="select-img-border"></div>
                 </div>

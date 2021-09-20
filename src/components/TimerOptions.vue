@@ -59,6 +59,19 @@
                         </v-btn>
                     </v-col>
                 </v-row>
+
+
+                <v-switch v-model="stopTimerWhenDone"
+                    class="d-inline-block"></v-switch>
+                Halt timer after
+                <v-select
+                    v-model="stopTimerWhenDoneCount"
+                    :items="playerCounts"
+                    class="d-inline-block"
+                    style="width: 45px"
+                    dense
+                ></v-select>
+                {{ stopTimerWhenDoneCount==1?"player is done":"players are done"}}
             </v-container>
         </v-main>
     </v-app>
@@ -91,6 +104,8 @@ export default {
 
     created() {
         bindReplicant.call(this, "timer")
+        bindReplicant.call(this, "stopTimerWhenDone")
+        bindReplicant.call(this, "stopTimerWhenDoneCount")
     },
 
     computed: {
@@ -112,6 +127,9 @@ export default {
         return {
             timer: 0,
             newTime: null,
+            playerCounts: [1, 2, 3, 4],
+            stopTimerWhenDone: true,
+            stopTimerWhenDoneCount: 2,
         };
     },
 };

@@ -2,6 +2,8 @@ const ctx = require('./nodecg')
 const nodecg = ctx.get()
 
 const timerRep = nodecg.Replicant("timer")
+const stopTimerWhenDoneRep = nodecg.Replicant("stopTimerWhenDone")
+const stopTimerWhenDoneCountRep = nodecg.Replicant("stopTimerWhenDoneCount")
 
 const { Timer } = require('timer-node');
 let timer = new Timer();
@@ -15,7 +17,9 @@ let timerObj = {
 
 updateRep()
 
-nodecg.listenFor("timerPlay",() => {
+
+
+function play() {
     if (timer.isStopped() || !timer.isStarted()) {
         timer.start()
     }
@@ -24,14 +28,20 @@ nodecg.listenFor("timerPlay",() => {
     }
 
     state = "playing"
-})
+}
+nodecg.listenFor("timerPlay", play)
 
-nodecg.listenFor("timerPause",() => {
+
+
+function pause() {
     state = "paused"
     updateRep()
-})
+}
+nodecg.listenFor("timerPause", pause)
 
-nodecg.listenFor("timerReset",() => {
+
+
+function reset() {
     timer = new Timer()
     state = "stopped"
 
@@ -39,9 +49,12 @@ nodecg.listenFor("timerReset",() => {
     timerObj.pausedMs = timer.ms()
 
     updateRep()
-})
+}
+nodecg.listenFor("timerReset", reset)
 
-nodecg.listenFor("timerSet", (input) => {
+
+
+function set(input) {
     let parts = input.split(':')
     let parts2 = parts.at(-1).split('.')
 
@@ -72,7 +85,44 @@ nodecg.listenFor("timerSet", (input) => {
     timerObj.pausedMs = timer.ms()
 
     updateRep()
-})
+}
+nodecg.listenFor("timerSet", set)
+
+
+// this is good code, I promise.
+const player1doneRep = nodecg.Replicant("player1done")
+const player2doneRep = nodecg.Replicant("player2done")
+const player3doneRep = nodecg.Replicant("player3done")
+const player4doneRep = nodecg.Replicant("player4done")
+const player1forfeitRep = nodecg.Replicant("player1forfeit")
+const player2forfeitRep = nodecg.Replicant("player2forfeit")
+const player3forfeitRep = nodecg.Replicant("player3forfeit")
+const player4forfeitRep = nodecg.Replicant("player4forfeit")
+
+function checkForPause(changed) {
+    console.log(changed)
+    if (stopTimerWhenDoneRep.value) {
+        let donePlayers = 0
+
+        if (player1doneRep.value || player1forfeitRep.value || changed == 1) {
+            donePlayers++;
+        }
+        if (player2doneRep.value || player2forfeitRep.value || changed == 2) {
+            donePlayers++;
+        }
+        if (player3doneRep.value || player3forfeitRep.value || changed == 3) {
+            donePlayers++;
+        }
+        if (player4doneRep.value || player4forfeitRep.value || changed == 4) {
+            donePlayers++;
+        }
+
+        if (state == "playing" && donePlayers >= stopTimerWhenDoneCountRep.value) {
+            pause()
+        }
+    }
+}
+nodecg.listenFor("playerStatusChanged", checkForPause)
 
 
 
@@ -86,12 +136,10 @@ function tick() {
         updateRep()
     }
 }
+setInterval(tick, 11);
 
 function updateRep() {
     timerObj.state = state
 
     timerRep.value = timerObj
 }
-
-setInterval(tick, 11);
-

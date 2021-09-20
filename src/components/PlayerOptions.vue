@@ -132,9 +132,12 @@ export default {
         makeDone() {
             this.done = true
             this.forfeit = false
+
             nodecg.readReplicant("timer", timer => {
                 this.finalTime = formatTimer(timer.ms, false, false)
             })
+
+            nodecg.sendMessage("playerStatusChanged", this.playerNumber)
         },
 
         makeForfeit() {
@@ -144,6 +147,8 @@ export default {
             nodecg.readReplicant("timer", timer => {
                 this.finalTime = formatTimer(timer.ms, false, false)
             })
+
+            nodecg.sendMessage("playerStatusChanged", this.playerNumber)
         },
 
         makeUndone() {

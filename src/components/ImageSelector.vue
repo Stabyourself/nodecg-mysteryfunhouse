@@ -6,7 +6,7 @@
         <v-container>
             <v-row align="center">
                 <v-col
-                v-for="image in images"
+                v-for="image in imagesReversed"
                 :key="image.url"
                 >
                     <v-item v-slot="{ active, toggle }">
@@ -46,6 +46,12 @@ export default {
 
         value() {
             this.updateSelection()
+        }
+    },
+
+    computed: {
+        imagesReversed() {
+            return this.images.reverse()
         }
     },
 

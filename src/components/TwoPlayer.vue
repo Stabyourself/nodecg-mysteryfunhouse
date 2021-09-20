@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <v-app>
         <twitch-player
             style="position: absolute; top: 150px; left: 15px; width: 930px; height:698px;"
             v-if="!player1streamHidden"
@@ -52,22 +52,18 @@
 
 
 
+        <game-box
+            style="top: 865px; left: 15px;"
 
-        <div class="game-box mt-font"
-            style="top: 865px; left: 15px;">
-            <div class="boxart" v-if="currentBoxart">
-                <img :src="currentBoxart.url">
-            </div>
+            :img-url="currentBoxart?currentBoxart.url:''"
+            :name="game"
+            :goal="goal"
+            :submitter="submitter">
+        </game-box>
 
-            <div class="text">
-                <div class="game">{{ game }}</div>
-                <div class="goal">{{ goal }}</div>
-                <div class="submitter">Submitted by {{ submitter }}</div>
-            </div>
-        </div>
-
-
-
+        <rainwave
+            style="top: 975px; left: 1521px; width: 444px; height: 124px">
+        </rainwave>
 
 
         <timer
@@ -76,22 +72,19 @@
             {{ timerText }}
         </timer>
 
-        <div class="player-done-slider"
+        <player-done-slider
+            :finalTime="player1finalTime"
             style="top: 848px; left: 15px; width: 930px;"
             :class="{active: player1done || player1forfeit, done: player1done, forfeit: player1forfeit }">
-            <timer>
-                {{ player1finalTime }}
-            </timer>
-        </div>
+        </player-done-slider>
 
-        <div class="player-done-slider"
-            :class="{active: player2done || player2forfeit, done: player2done, forfeit: player2forfeit }"
-            style="top: 848px; left: 975px; width: 930px;">
-            <timer>
-                {{ player2finalTime }}
-            </timer>
-        </div>
-    </div>
+
+        <player-done-slider
+            :finalTime="player2finalTime"
+            style="top: 848px; left: 975px; width: 930px;"
+            :class="{active: player2done || player2forfeit, done: player2done, forfeit: player2forfeit }">
+        </player-done-slider>
+    </v-app>
 </template>
 
 <script>
