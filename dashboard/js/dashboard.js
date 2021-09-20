@@ -23761,6 +23761,7 @@ var render = function() {
             _c(
               "v-btn",
               {
+                staticStyle: { width: "192px" },
                 attrs: {
                   color: _vm.assistantActive ? "red" : "green",
                   elevation: "2",

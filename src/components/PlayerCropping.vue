@@ -101,7 +101,7 @@
             </v-col>
 
             <v-col>
-                <v-btn :color="assistantActive?'red':'green'" elevation="2" block @click="assistantActive = !assistantActive">
+                <v-btn style="width: 192px" :color="assistantActive?'red':'green'" elevation="2" block @click="assistantActive = !assistantActive">
                     {{ assistantActive?"Finish Cropping":"Start Cropping" }}
                     <v-icon right dark>
                         mdi-arrow-right
