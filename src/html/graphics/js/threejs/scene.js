@@ -5,7 +5,7 @@ import { Water } from './Water.js';
 import { Sky } from './Sky.js';
 
 let camera, scene, renderer;
-let water, sun;
+let water, sun, sky;
 let clock, delta;
 let ghost;
 
@@ -73,6 +73,18 @@ const parameters = {
     azimuth: 215,
 };
 
+function updateSun() {
+    const phi = THREE.MathUtils.degToRad( 90 - parameters.elevation );
+    const theta = THREE.MathUtils.degToRad( parameters.azimuth );
+
+    sun.setFromSphericalCoords( 1, phi, theta );
+
+    sky.material.uniforms[ 'sunPosition' ].value.copy( sun );
+    water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize();
+
+    // scene.environment = pmremGenerator.fromScene( sky ).texture;
+}
+
 export function init(container) {
     //
 
@@ -106,6 +118,11 @@ export function init(container) {
         ghost.rotateX(-Math.PI*.5)
         ghost.scale.set(5, 5, 5);
         scene.add(ghost)
+
+        parameters.azimuth = 135;
+        parameters.elevation = 5
+        updateSun()
+        scene.environment = pmremGenerator.fromScene( sky ).texture;
     })
 
     // Water
@@ -288,7 +305,7 @@ export function init(container) {
 
     // Skybox
 
-    const sky = new Sky();
+    sky = new Sky();
     sky.scale.setScalar( 10000 );
     scene.add( sky );
 
@@ -315,18 +332,10 @@ export function init(container) {
             ghost.rotation.z = timer*.5
         }
 
-        parameters.azimuth = -timer%360;
-        parameters.elevation = (Math.sin(timer*0.1)+1)/2 * 12-2
+        parameters.azimuth = -timer*10%360;
+        parameters.elevation = (Math.sin(timer*0.3)+1)/2 * 6-2
 
-        const phi = THREE.MathUtils.degToRad( 90 - parameters.elevation );
-        const theta = THREE.MathUtils.degToRad( parameters.azimuth );
-
-        sun.setFromSphericalCoords( 1, phi, theta );
-
-        sky.material.uniforms[ 'sunPosition' ].value.copy( sun );
-        water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize();
-
-        scene.environment = pmremGenerator.fromScene( sky ).texture;
+        updateSun()
 
         render();
     }
