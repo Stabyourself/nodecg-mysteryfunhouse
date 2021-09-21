@@ -76,7 +76,7 @@ const parameters = {
 export function init(container) {
     //
 
-    renderer = new THREE.WebGLRenderer({antialias: false});
+    renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( 1920, 1080 );
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
