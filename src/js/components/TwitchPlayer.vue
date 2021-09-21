@@ -15,6 +15,8 @@
 </style>
 
 <script>
+import { bindReplicant } from "../util.js"
+
 const playerWidth = 930
 const playerHeight = 698
 
@@ -24,7 +26,8 @@ let twitchOptions = {
     channel: null,
     autoplay: true,
     muted: false,
-    parent: ["nodecg.guegan.de"]
+    parent: ["nodecg.guegan.de"],
+    quality: "auto"
 }
 
 export default {
@@ -32,6 +35,7 @@ export default {
         nodecg.listenFor(`stream${this.playerNumber}reload`,() => {
             this.createPlayer()
         })
+        bindReplicant.call(this, "qualities", `player${this.playerNumber}qualities`)
     },
 
     mounted() {
@@ -53,6 +57,10 @@ export default {
             this.player.addEventListener(Twitch.Embed.VIDEO_READY, () => {
                 this.player.setMuted(false);
                 this.player.setVolume(this.volume/100);
+
+                setInterval(() => {
+                    this.qualities = this.player.getQualities()
+                }, 5000)
             });
         }
     },
@@ -104,6 +112,10 @@ export default {
 
         volume(newValue) {
             this.player.setVolume(newValue/100)
+        },
+
+        quality(newValue) {
+            // this.player.setQuality(newValue)
         }
     },
 
@@ -111,12 +123,14 @@ export default {
         "url",
         "volume",
         "playerNumber",
-        "crop"
+        "crop",
+        "quality",
     ],
 
     data() {
         return {
-            player: null
+            player: null,
+            qualities: [],
         }
     }
 };

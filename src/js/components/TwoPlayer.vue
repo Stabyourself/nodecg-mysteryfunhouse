@@ -6,6 +6,7 @@
 
             :playerNumber="1"
             :url="player1twitch"
+            :quality="player1quality ? player1quality : 'auto'"
             :volume="player1volume"
             :crop="player1crop"
         ></twitch-player>
@@ -16,6 +17,7 @@
 
             :playerNumber="2"
             :url="player2twitch"
+            :quality="player2quality ? player2quality : 'auto'"
             :volume="player2volume"
             :crop="player2crop"
         ></twitch-player>
@@ -104,6 +106,7 @@ export default {
         bindReplicant.call(this, "player1pronouns")
 
         bindReplicant.call(this, "player1twitch")
+        // bindReplicant.call(this, "player1quality")
         bindReplicant.call(this, "player1volume")
         bindReplicant.call(this, "player1streamHidden")
 
@@ -117,6 +120,7 @@ export default {
         bindReplicant.call(this, "player2pronouns")
 
         bindReplicant.call(this, "player2twitch")
+        // bindReplicant.call(this, "player2quality")
         bindReplicant.call(this, "player2volume")
         bindReplicant.call(this, "player2streamHidden")
 
@@ -145,6 +149,7 @@ export default {
             player1pronouns: "",
 
             player1twitch: "",
+            player1quality: null,
             player1volume: 0,
             player1streamHidden: false,
 
@@ -158,6 +163,7 @@ export default {
             player2pronouns: "",
 
             player2twitch: "",
+            player2quality: null,
             player2volume: 0,
             player2streamHidden: false,
 

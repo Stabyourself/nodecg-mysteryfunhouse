@@ -22,6 +22,17 @@
                     prefix="twitch.tv/"
                 ></v-text-field>
 
+                <!--
+                <v-select
+                    label="Quality"
+                    v-model="quality"
+                    :items="qualities"
+                    item-text="name"
+                    item-value="group"
+                ></v-select>
+                -->
+
+
                 <v-slider
                     v-model="volume"
                     label="Volume"
@@ -115,6 +126,8 @@ export default {
         bindReplicant.call(this, "pronouns", this.makeName("pronouns"))
 
         bindReplicant.call(this, "twitch", this.makeName("twitch"), 1000)
+        // bindReplicant.call(this, "qualities", this.makeName("qualities"))
+        //bindReplicant.call(this, "quality", this.makeName("quality"))
         bindReplicant.call(this, "volume", this.makeName("volume"))
         bindReplicant.call(this, "streamHidden", this.makeName("streamHidden"), 0)
 
@@ -171,12 +184,14 @@ export default {
             pronouns: "",
 
             twitch: "",
+            // qualities: [],
+            //quality: null,
             volume: 0,
             streamHidden: false,
 
             done: false,
             forfeit: false,
-            finalTime: "00:00:00.000",
+            finalTime: "",
 
             pronounOptions: ["", "He/Him", "She/Her", "They/Them"],
         }

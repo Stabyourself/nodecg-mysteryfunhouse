@@ -29,16 +29,16 @@
     "compatibleRange": "^1.1.1",
     "dashboardPanels": [
       {
-        "name": "timer",
-        "title": "Timer",
-        "width": 2,
-        "file": "timer.html"
-      },
-      {
         "name": "general",
         "title": "General",
         "width": 2,
         "file": "general.html"
+      },
+      {
+        "name": "timer",
+        "title": "Timer",
+        "width": 2,
+        "file": "timer.html"
       },
       {
         "name": "player-1",
@@ -118,29 +118,29 @@
   "devDependencies": {
     "browser-sync": "^2.27.5",
     "browser-sync-webpack-plugin": "^2.3.0",
+    "clone": "^2.1.2",
     "cross-env": "^7.0.3",
+    "css-loader": "^6.2.0",
     "deepmerge": "^4.2.2",
     "laravel-mix": "^6.0.31",
+    "lodash": "^4.17.21",
     "node-sass": "^6.0.1",
     "resolve-url-loader": "^4.0.0",
     "sass": "~1.32",
     "sass-loader": "^12.1.0",
+    "style-loader": "^3.2.1",
+    "vue": "^2.6.14",
+    "vue-drag-resize": "^1.5.4",
     "vue-loader": "^15.9.8",
+    "vue-style-loader": "^4.1.3",
     "vue-template-compiler": "^2.6.14",
+    "vuetify": "^2.5.8",
     "vuetify-loader": "^1.7.2",
+    "vuetifyjs-mix-extension": "^0.0.20",
     "webpack": "^5.52.1",
     "webpack-cli": "^4.8.0"
   },
   "dependencies": {
-    "clone": "^2.1.2",
-    "css-loader": "^6.2.0",
-    "lodash": "^4.17.21",
-    "style-loader": "^3.2.1",
-    "timer-node": "^5.0.5",
-    "vue": "^2.6.14",
-    "vue-drag-resize": "^1.5.4",
-    "vue-style-loader": "^4.1.3",
-    "vuetify": "^2.5.8",
-    "vuetifyjs-mix-extension": "^0.0.20"
+    "timer-node": "^5.0.5"
   }
 }
