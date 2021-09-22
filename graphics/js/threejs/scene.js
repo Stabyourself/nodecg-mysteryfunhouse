@@ -10,7 +10,7 @@ let stats;
 let camera, scene, renderer;
 let water, sun, sky, pmremGenerator, starMaterial, starMesh;
 let clock, delta;
-let ghost;
+let ghost, ghostMeme;
 
 const waves = {
     A: { direction: 0, steepness: 0.1, wavelength: 60 },
@@ -18,62 +18,9 @@ const waves = {
     C: { direction: 60, steepness: 0.1, wavelength: 15 },
 };
 
-function getWaveInfo( x, z, time ) {
-
-    const pos = new THREE.Vector3();
-    const tangent = new THREE.Vector3( 1, 0, 0 );
-    const binormal = new THREE.Vector3( 0, 0, 1 );
-    Object.keys( waves ).forEach( ( wave ) => {
-
-        const w = waves[ wave ];
-        const k = ( Math.PI * 2 ) / w.wavelength;
-        const c = Math.sqrt( 9.8 / k );
-        const d = new THREE.Vector2(
-            Math.sin( ( w.direction * Math.PI ) / 180 ),
-            - Math.cos( ( w.direction * Math.PI ) / 180 )
-        );
-        const f = k * ( d.dot( new THREE.Vector2( x, z ) ) - c * time );
-        const a = w.steepness / k;
-
-        pos.x += d.y * ( a * Math.cos( f ) );
-        pos.y += a * Math.sin( f );
-        pos.z += d.x * ( a * Math.cos( f ) );
-
-        tangent.x += - d.x * d.x * ( w.steepness * Math.sin( f ) );
-        tangent.y += d.x * ( w.steepness * Math.cos( f ) );
-        tangent.z += - d.x * d.y * ( w.steepness * Math.sin( f ) );
-
-        binormal.x += - d.x * d.y * ( w.steepness * Math.sin( f ) );
-        binormal.y += d.y * ( w.steepness * Math.cos( f ) );
-        binormal.z += - d.y * d.y * ( w.steepness * Math.sin( f ) );
-
-    } );
-
-    const normal = binormal.cross( tangent ).normalize();
-
-    return { position: pos, normal: normal };
-
-}
-
-// function updateBoxes( delta ) {
-
-//     const t = water.material.uniforms[ 'time' ].value;
-//     boxes.forEach( ( b ) => {
-
-//         const waveInfo = getWaveInfo( b.position.x, b.position.z, t );
-//         // b.position.y = waveInfo.position.y;
-//         const quat = new THREE.Quaternion().setFromEuler(
-//             new THREE.Euler( waveInfo.normal.x, waveInfo.normal.y, waveInfo.normal.z )
-//         );
-//         b.quaternion.rotateTowards( quat, delta * 0.5 );
-
-//     } );
-
-// }
-
 const parameters = {
-    elevation: 2,
-    azimuth: 215,
+    elevation: 135,
+    azimuth: 5,
 };
 
 function updateSun() {
@@ -120,23 +67,23 @@ export function init(container) {
     const loader = new GLTFLoader();
 
     // ghost
-    let path = "model/ghost.gltf"
-
-    if (Math.random() < 5/100) {
-        path = "model/ghost_missing_pixel.gltf"
-    }
-
-    loader.load(path, function (gltf) {
+    loader.load("model/ghost.gltf", function (gltf) {
         ghost = gltf.scene
         ghost.scale.set(5, 5, 5);
         scene.add(ghost)
-
-        parameters.azimuth = 135;
-        parameters.elevation = 5
     })
 
+    loader.load("model/ghost_missing_pixel.gltf", function (gltf) {
+        ghostMeme = gltf.scene
+        ghostMeme.scale.set(5, 5, 5);
+        ghostMeme.visible = false
+        scene.add(ghostMeme)
+    })
+
+
+
     let lawnmower, lawnmixer;
-    // ghost
+    // lawnmower
     loader.load("model/lawnmower/scene.gltf", function (gltf) {
         lawnmower = gltf.scene
         lawnmower.rotateY(-Math.PI*.5)
@@ -341,7 +288,7 @@ export function init(container) {
     skyUniforms[ 'mieCoefficient' ].value = 0.005;
     skyUniforms[ 'mieDirectionalG' ].value = 0.8;
 
-    pmremGenerator = new THREE.PMREMGenerator( renderer );
+
 
     clock = new THREE.Clock();
 
@@ -350,6 +297,7 @@ export function init(container) {
     parameters.azimuth = 135;
     parameters.elevation = 5
     updateSun()
+    pmremGenerator = new THREE.PMREMGenerator( renderer );
     scene.environment = pmremGenerator.fromScene( sky ).texture;
 
 
@@ -358,39 +306,20 @@ export function init(container) {
     var texLoader = new THREE.TextureLoader();
     texLoader.load(
         "./img/sky.png",
-            (texture) => {
+        (texture) => {
+            var geometry = new THREE.PlaneBufferGeometry( 3000, 3000 );
+            geometry.translate(0, 300, -1000)
 
-                // var objGeometry = new THREE.SphereGeometry(100, 60, 60);
-                // var objMaterial = new THREE.MeshPhongMaterial({
-                // map: texture,
-                //     shading: THREE.FlatShading
-                // });
-                // objMaterial.side = THREE.BackSide;
-                // var earthMesh = new THREE.Mesh(objGeometry, objMaterial);
-
-                // scene.add(earthMesh);
+            starMaterial = new THREE.MeshBasicMaterial( { map: texture, transparent: true } );
+            starMesh = new THREE.Mesh( geometry, starMaterial );
+            scene.add( starMesh );
+        }
+    );
 
 
 
-
-                var geometry = new THREE.PlaneBufferGeometry( 3000, 3000 );
-                geometry.translate(0, 300, -1000)
-
-                starMaterial = new THREE.MeshBasicMaterial( { map: texture, transparent: true } );
-                starMesh = new THREE.Mesh( geometry, starMaterial );
-                scene.add( starMesh );
-            }
-        );
-
-
-
-
-
-    // const light = new THREE.HemisphereLight( 0xffffff, 0x666666, 1 );
-    // scene.add( light );
-
-
-
+    const light = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.5 );
+    scene.add( light );
 
 
 
@@ -400,8 +329,31 @@ export function init(container) {
         delta = clock.getDelta();
         timer += delta;
         water.material.uniforms[ 'time' ].value += delta;
-        if (ghost) {
-            ghost.rotation.y = timer*.5
+        if (ghost && ghostMeme) {
+            let oldRotation = ghost.rotation.y
+
+            ghost.rotation.y = (timer*.3) % Math.PI*2
+            ghostMeme.rotation.y = (timer*.3) % Math.PI*2
+
+            if (ghost.rotation.y >= Math.PI*1.5 && oldRotation < Math.PI*1.5) {
+                // swap?
+                let swap = false
+
+                if (ghost.visible) {
+                    // maybe swap
+                    if (Math.random() < 5/100) {
+                        swap = true
+                    }
+                } else {
+                    //swap
+                    swap = true
+                }
+
+                if (swap) {
+                    ghost.visible = !ghost.visible
+                    ghostMeme.visible = !ghostMeme.visible
+                }
+            }
         }
 
         if (lawnmower) {
@@ -423,6 +375,8 @@ export function init(container) {
             starMaterial.opacity = 1-Math.min(1, rise*3)
             starMesh.rotateZ(delta*0.02)
         }
+
+        light.intensity = rise
 
 
         updateSun()
