@@ -120,7 +120,13 @@ export function init(container) {
     const loader = new GLTFLoader();
 
     // ghost
-    loader.load("model/ghost.gltf", function (gltf) {
+    let path = "model/ghost.gltf"
+
+    if (Math.random() < 5/100) {
+        path = "model/ghost_missing_pixel.gltf"
+    }
+
+    loader.load(path, function (gltf) {
         ghost = gltf.scene
         ghost.scale.set(5, 5, 5);
         scene.add(ghost)
