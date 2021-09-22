@@ -367,7 +367,7 @@ export function init(container) {
             }
         }
 
-        parameters.azimuth = -timer*10%360;
+        parameters.azimuth = -(timer-5)*10%360;
         let rise = ((Math.sin(timer*0.3)+1)/2)
         parameters.elevation = rise * 6 - 3
 
