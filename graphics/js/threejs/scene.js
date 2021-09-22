@@ -362,7 +362,7 @@ export function init(container) {
 
             lawnmower.rotation.y = Math.sin(timer*3)*0.3 - Math.PI/2
 
-            if (lawnmower.position.x > 3000) {
+            if (lawnmower.position.x > 10000) {
                 lawnmower.position.x = -500
             }
         }
