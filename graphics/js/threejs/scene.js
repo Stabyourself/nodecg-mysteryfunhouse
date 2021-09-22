@@ -1,11 +1,14 @@
 import * as THREE from './three.module.js';
 import { GLTFLoader } from './GLTFLoader';
 
+import Stats from './stats.module.js';
+
 import { Water } from './Water.js';
 import { Sky } from './Sky.js';
 
+let stats;
 let camera, scene, renderer;
-let water, sun, sky;
+let water, sun, sky, pmremGenerator;
 let clock, delta;
 let ghost;
 
@@ -93,6 +96,10 @@ export function init(container) {
     renderer.setSize( 1920, 1080 );
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     container.appendChild( renderer.domElement );
+
+
+    stats = new Stats();
+    container.appendChild( stats.dom );
 
     //
 
@@ -316,7 +323,7 @@ export function init(container) {
     skyUniforms[ 'mieCoefficient' ].value = 0.005;
     skyUniforms[ 'mieDirectionalG' ].value = 0.8;
 
-    const pmremGenerator = new THREE.PMREMGenerator( renderer );
+    pmremGenerator = new THREE.PMREMGenerator( renderer );
 
     clock = new THREE.Clock();
 
@@ -338,6 +345,7 @@ export function init(container) {
         updateSun()
 
         render();
+        stats.update();
     }
 
     function render() {
