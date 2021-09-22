@@ -150,7 +150,7 @@ Sky.SkyShader = {
 		const float rayleighZenithLength = 8.4E3;
 		const float mieZenithLength = 1.25E3;
 		// 66 arc seconds -> degrees, and the cosine of that
-		const float sunAngularDiameterCos = 0.999956676946448443553574619906976478926848692873900859324;
+		const float sunAngularDiameterCos = 0.999656676946448443553574619906976478926848692873900859324;
 
 		// 3.0 / ( 16.0 * pi )
 		const float THREE_OVER_SIXTEENPI = 0.05968310365946075;

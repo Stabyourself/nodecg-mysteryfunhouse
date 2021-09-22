@@ -8,7 +8,7 @@ import { Sky } from './Sky.js';
 
 let stats;
 let camera, scene, renderer;
-let water, sun, sky, pmremGenerator;
+let water, sun, sky, pmremGenerator, starMaterial, starMesh;
 let clock, delta;
 let ghost;
 
@@ -133,8 +133,6 @@ export function init(container) {
 
         parameters.azimuth = 135;
         parameters.elevation = 5
-        updateSun()
-        scene.environment = pmremGenerator.fromScene( sky ).texture;
     })
 
     let lawnmower, lawnmixer;
@@ -150,13 +148,6 @@ export function init(container) {
         action.play();
 
         scene.add(lawnmower)
-
-
-
-        parameters.azimuth = 135;
-        parameters.elevation = 5
-        updateSun()
-        scene.environment = pmremGenerator.fromScene( sky ).texture;
     })
 
     // Water
@@ -356,6 +347,54 @@ export function init(container) {
 
     let timer = 160
 
+    parameters.azimuth = 135;
+    parameters.elevation = 5
+    updateSun()
+    scene.environment = pmremGenerator.fromScene( sky ).texture;
+
+
+
+
+    var texLoader = new THREE.TextureLoader();
+    texLoader.load(
+        "./img/sky.png",
+            (texture) => {
+
+                // var objGeometry = new THREE.SphereGeometry(100, 60, 60);
+                // var objMaterial = new THREE.MeshPhongMaterial({
+                // map: texture,
+                //     shading: THREE.FlatShading
+                // });
+                // objMaterial.side = THREE.BackSide;
+                // var earthMesh = new THREE.Mesh(objGeometry, objMaterial);
+
+                // scene.add(earthMesh);
+
+
+
+
+                var geometry = new THREE.PlaneBufferGeometry( 3000, 3000 );
+                geometry.translate(0, 0, -1000)
+
+                starMaterial = new THREE.MeshBasicMaterial( { map: texture, transparent: true } );
+                starMesh = new THREE.Mesh( geometry, starMaterial );
+                scene.add( starMesh );
+            }
+        );
+
+
+
+
+
+    // const light = new THREE.HemisphereLight( 0xffffff, 0x666666, 1 );
+    // scene.add( light );
+
+
+
+
+
+
+
     function animate() {
         requestAnimationFrame( animate );
         delta = clock.getDelta();
@@ -370,15 +409,21 @@ export function init(container) {
             lawnmower.position.x += delta*100
 
             lawnmower.rotation.y = Math.sin(timer*3)*0.3 - Math.PI/2
-            console.log(lawnmower.rotation.y)
 
-            if (lawnmower.position.x > 1000) {
+            if (lawnmower.position.x > 3000) {
                 lawnmower.position.x = -500
             }
         }
 
         parameters.azimuth = -timer*10%360;
-        parameters.elevation = (Math.sin(timer*0.3)+1)/2 * 6-2
+        let rise = ((Math.sin(timer*0.3)+1)/2)
+        parameters.elevation = rise * 6 - 3
+
+        if (starMesh) {
+            starMaterial.opacity = 1-Math.min(1, rise*3)
+            starMesh.rotateZ(delta*0.02)
+        }
+
 
         updateSun()
 
