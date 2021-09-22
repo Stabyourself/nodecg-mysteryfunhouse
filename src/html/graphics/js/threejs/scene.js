@@ -341,7 +341,7 @@ export function init(container) {
 
                 if (ghost.visible) {
                     // maybe swap
-                    if (Math.random() < 5/100) {
+                    if (Math.random() < 2/100) {
                         swap = true
                     }
                 } else {
