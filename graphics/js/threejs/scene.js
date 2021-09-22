@@ -374,7 +374,7 @@ export function init(container) {
 
 
                 var geometry = new THREE.PlaneBufferGeometry( 3000, 3000 );
-                geometry.translate(0, 0, -1000)
+                geometry.translate(0, 300, -1000)
 
                 starMaterial = new THREE.MeshBasicMaterial( { map: texture, transparent: true } );
                 starMesh = new THREE.Mesh( geometry, starMaterial );
