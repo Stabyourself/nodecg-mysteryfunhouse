@@ -117,14 +117,37 @@ export function init(container) {
     //
 
     sun = new THREE.Vector3();
+    const loader = new GLTFLoader();
 
     // ghost
-    const loader = new GLTFLoader();
-    loader.load("model/ghost.gltf", function (gltf) {
-        ghost = gltf.scene
-        ghost.rotateX(-Math.PI*.5)
-        ghost.scale.set(5, 5, 5);
-        scene.add(ghost)
+    // loader.load("model/ghost.gltf", function (gltf) {
+    //     ghost = gltf.scene
+    //     ghost.rotateX(-Math.PI*.5)
+    //     ghost.scale.set(5, 5, 5);
+    //     scene.add(ghost)
+
+    //     parameters.azimuth = 135;
+    //     parameters.elevation = 5
+    //     updateSun()
+    //     scene.environment = pmremGenerator.fromScene( sky ).texture;
+    // })
+
+    let lawnmower, mixer;
+    // ghost
+    loader.load("model/lawnmower/scene.gltf", function (gltf) {
+        lawnmower = gltf.scene
+        lawnmower.rotateY(-Math.PI*.5)
+        lawnmower.scale.set(0.1, 0.1, 0.1);
+
+        console.log("!")
+        mixer = new THREE.AnimationMixer( gltf.scene );
+        console.log(mixer)
+        var action = mixer.clipAction( gltf.animations[ 0 ] );
+        action.play();
+
+        scene.add(lawnmower)
+
+
 
         parameters.azimuth = 135;
         parameters.elevation = 5
@@ -335,8 +358,12 @@ export function init(container) {
         timer += delta;
         water.material.uniforms[ 'time' ].value += delta;
         // updateBoxes( delta );
-        if (ghost) {
-            ghost.rotation.z = timer*.5
+        // if (ghost) {
+        //     ghost.rotation.z = timer*.5
+        // }
+        if (lawnmower) {
+            lawnmower.rotation.y = timer*.5
+            mixer.update( delta );
         }
 
         parameters.azimuth = -timer*10%360;
