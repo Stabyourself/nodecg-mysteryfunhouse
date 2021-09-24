@@ -1,22 +1,47 @@
 <template>
     <v-app align="center">
         <v-container>
-            <p>Enter a challonge match ID to import those racers. The match ID is on the left of each pairing. This will override the current names and stuff!</p>
-            <p>Where to find this ID:</p>
-            <img style="align-self: center" src="img/challonge_match.png">
+            <p>
+                Enter a challonge match ID to import those racers.
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-icon
+                        color="primary"
+                        dark
+                        v-bind="attrs"
+                        v-on="on"
+                        >
+                        mdi-help-circle-outline
+                        </v-icon>
+                    </template>
+                    <span>The match ID of any race is the tiny number left of it!</span>
+                </v-tooltip>
+            </p>
 
-            <v-row style="width:330px; margin: 1em auto 0 auto">
+            <p class="warning--text mt-2">
+                This will reset game options, the timer, and the selected players!
+            </p>
+
+            <v-row style="margin: 0 auto">
                 <v-col>
                     <v-text-field
                         v-model="matchId"
-                        style="flex: 0 1 auto;"
                         label="Match ID"
                     >
                     </v-text-field>
                 </v-col>
 
                 <v-col>
-                    <v-btn color="green" style="margin-top: 13px;" @click="loadMatch" :loading="loading">Load Match</v-btn>
+                    <v-select
+                        v-model="matchNumber"
+                        :items="matchSelectOptions"
+                        label="Which match"
+                    >
+                    </v-select>
+                </v-col>
+
+                <v-col>
+                    <v-btn color="green" style="margin-top: 13px;" block @click="loadMatch" :loading="loading">Load Match</v-btn>
                 </v-col>
             </v-row>
 
@@ -37,7 +62,12 @@ export default {
                 this.success = null
                 this.loading = true
 
-                nodecg.sendMessage('loadMatch', matchIdInt)
+                const options = {
+                    matchId: matchIdInt,
+                    matchNumber: this.matchNumber
+                }
+
+                nodecg.sendMessage('loadMatch', options)
                     .then((matchup) => {
                         this.loading = false
                         this.success = `Success! ${matchup}`
@@ -57,6 +87,11 @@ export default {
             loading: false,
             error: null,
             success: null,
+            matchNumber: 1,
+            matchSelectOptions: [
+                {text: "Player 1 vs 2", value: 1},
+                {text: "Player 3 vs 4", value: 2},
+            ]
         }
     }
 };
