@@ -1,12 +1,12 @@
 {
   "name": "nodecg-mysteryfunhouse",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "",
   "homepage": "",
   "author": {
     "name": "Maurice",
     "email": "maurice@guegan.de",
-    "url": ""
+    "url": "https://guegan.de"
   },
   "scripts": {
     "start": "node ../..",
@@ -22,7 +22,6 @@
     "extension"
   ],
   "keywords": [
-    "",
     "nodecg-bundle"
   ],
   "nodecg": {
@@ -114,7 +113,7 @@
       }
     ]
   },
-  "repository": "https://github.com/nodecg/nodecg.git",
+  "repository": "github:Stabyourself/nodecg-mysteryfunhouse",
   "license": "MIT",
   "devDependencies": {
     "browser-sync": "^2.27.5",

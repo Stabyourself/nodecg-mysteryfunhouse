@@ -12,12 +12,12 @@
     "/graphics/twoplayer.html": "/graphics/twoplayer.html",
     "/graphics/waitscreen.html": "/graphics/waitscreen.html",
     "/dashboard/boxart.html": "/dashboard/boxart.html",
+    "/dashboard/challonge.html": "/dashboard/challonge.html",
     "/dashboard/cropping.html": "/dashboard/cropping.html",
     "/dashboard/general.html": "/dashboard/general.html",
     "/dashboard/player1.html": "/dashboard/player1.html",
     "/dashboard/player2.html": "/dashboard/player2.html",
     "/dashboard/player3.html": "/dashboard/player3.html",
     "/dashboard/player4.html": "/dashboard/player4.html",
-    "/dashboard/timer.html": "/dashboard/timer.html",
-    "/dashboard/challonge.html": "/dashboard/challonge.html"
+    "/dashboard/timer.html": "/dashboard/timer.html"
 }
