@@ -68,24 +68,31 @@
         "file": "player4.html",
         "headerColor": "#388E3C"
       },
+
+
+
       {
         "name": "stream-cropping",
         "title": "Stream Cropping",
         "file": "cropping.html",
         "fullbleed": true
       },
+
+
+
       {
-        "name": "boxart-select",
+        "name": "boxart-select-dialog",
         "title": "Select Boxart",
         "file": "boxart.html",
         "width": 7,
-        "dialog": true,
-        "dialogButtons": [
-          {
-            "name": "done",
-            "type": "confirm"
-          }
-        ]
+        "dialog": true
+      },
+      {
+        "name": "load-challonge-dialog",
+        "title": "Import Challonge match",
+        "file": "challonge.html",
+        "width": 5,
+        "dialog": true
       }
     ],
     "graphics": [
@@ -141,6 +148,7 @@
     "webpack-cli": "^4.8.0"
   },
   "dependencies": {
+    "request": "^2.88.2",
     "timer-node": "^5.0.5"
   }
 }

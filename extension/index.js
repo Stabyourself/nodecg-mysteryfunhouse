@@ -4,4 +4,5 @@ module.exports = function (nodecg) {
     ctx.set(nodecg)
 
     require('./timer');
+    require('./challonge-loader');
 }

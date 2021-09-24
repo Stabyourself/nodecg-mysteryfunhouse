@@ -11,6 +11,11 @@
                 >
                 </v-text-field>
 
+                <div style="text-align: center;" class="grey--text">
+                    <span v-if="timer.state == 'paused'">{{ pausedTimerText }}</span>
+                    <span v-else>&nbsp;</span>
+                </div>
+
                 <v-row>
                     <v-col>
                         <v-btn
@@ -35,13 +40,9 @@
                             :disabled="timer.state != 'playing'"
 
                         >
-                            <v-icon dark v-if="timer.state != 'paused'">
+                            <v-icon dark>
                                 mdi-pause
                             </v-icon>
-
-                            <span v-else style="font-size: 0.9em">
-                                {{ pausedTimerText }}
-                            </span>
                         </v-btn>
                     </v-col>
 

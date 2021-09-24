@@ -12,12 +12,12 @@ import { bindReplicant } from "../util.js"
 
 export default {
     mounted() {
-        // bindReplicant.call(this, "player2crop")
+        bindReplicant.call(this, "racerCardInfo")
     },
 
     data() {
         return {
-
+            racerCardInfo: null
         }
     }
 };

@@ -2,6 +2,15 @@
     <v-app>
         <v-main>
             <v-container>
+                <v-btn
+                    color="green"
+                    block
+                    class="mb-3"
+                    nodecg-dialog="load-challonge-dialog"
+                    >
+                    Load from match ID
+                </v-btn>
+
                 <v-text-field
                     v-model="game"
                     label="Game name"
@@ -9,7 +18,7 @@
 
                 <label class="v-label v-label--active theme--dark" style="font-size:12px">Boxart</label>
                 <div class="select-img-wrap"
-                    nodecg-dialog="boxart-select">
+                    nodecg-dialog="boxart-select-dialog">
                     <img
                         class="select-img"
                         :src="currentBoxart?currentBoxart.url:''"
