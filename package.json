@@ -68,18 +68,12 @@
         "file": "player4.html",
         "headerColor": "#388E3C"
       },
-
-
-
       {
         "name": "stream-cropping",
         "title": "Stream Cropping",
         "file": "cropping.html",
         "fullbleed": true
       },
-
-
-
       {
         "name": "boxart-select-dialog",
         "title": "Select Boxart",
@@ -149,6 +143,7 @@
   },
   "dependencies": {
     "request": "^2.88.2",
+    "three": "^0.132.2",
     "timer-node": "^5.0.5"
   }
 }

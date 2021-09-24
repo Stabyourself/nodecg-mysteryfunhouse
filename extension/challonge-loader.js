@@ -91,7 +91,6 @@ nodecg.listenFor("loadMatch", function(options, ack) {
                 replicants[`player${playerNumber}finalTime`].value = ""
             }
 
-            // don't think I need to reset these
             replicants["game"].value = ""
             replicants["goal"].value = ""
             replicants["platform"].value = ""
