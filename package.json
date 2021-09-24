@@ -129,6 +129,7 @@
     "sass": "~1.32",
     "sass-loader": "^12.1.0",
     "style-loader": "^3.2.1",
+    "three": "^0.132.2",
     "vue": "^2.6.14",
     "vue-drag-resize": "^1.5.4",
     "vue-loader": "^15.9.8",
@@ -138,10 +139,10 @@
     "vuetify-loader": "^1.7.2",
     "vuetifyjs-mix-extension": "^0.0.20",
     "webpack": "^5.52.1",
-    "webpack-cli": "^4.8.0",
-    "three": "^0.132.2"
+    "webpack-cli": "^4.8.0"
   },
   "dependencies": {
+    "google-spreadsheet": "^3.1.15",
     "request": "^2.88.2",
     "timer-node": "^5.0.5"
   }
