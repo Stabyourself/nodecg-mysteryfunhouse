@@ -139,11 +139,11 @@
     "vuetify-loader": "^1.7.2",
     "vuetifyjs-mix-extension": "^0.0.20",
     "webpack": "^5.52.1",
-    "webpack-cli": "^4.8.0"
+    "webpack-cli": "^4.8.0",
+    "three": "^0.132.2"
   },
   "dependencies": {
     "request": "^2.88.2",
-    "three": "^0.132.2",
     "timer-node": "^5.0.5"
   }
 }
