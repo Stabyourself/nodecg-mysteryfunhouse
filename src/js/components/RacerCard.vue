@@ -24,27 +24,44 @@ export default {
                     this.ctx.fillText(this.info.challonge.participant.display_name, 80, 120);
 
                     let mtCount = 0
+                    let winPercentage = null;
+                    let bestPlacement = null;
+                    let bestPlacementMt = ""
 
                     if (this.info.career) {
-                        // get number of MTs
+                        // get number of MTs and highest placement
+
+                        function checkPlacement(str, mt) {
+                            let placement = parseInt(str.substring(0,3).replace(/\./g, ""))
+
+                            if (!bestPlacement || placement < bestPlacement) {
+                                bestPlacement = placement
+                                bestPlacementMt = mt
+                            }
+                        }
+
 
                         for (let i = 1; i <= 15; i++) {
                             if (this.info.career[`MT${i}`] && this.info.career[`MT${i}`].length > 0) {
                                 mtCount++
+                                checkPlacement(this.info.career[`MT${i}`], `MT${i}`)
                             }
                         }
 
                         if (this.info.career[`MTX`] !== "") {
                             mtCount++
+                            checkPlacement(this.info.career[`MTX`], "MTX")
                         }
 
-                        // Draw stars
-                        let x = 683
-                        for (let i = 0; i < mtCount; i++) {
-                            this.ctx.drawImage(this.card_star, x, 153, 42, 42);
+                        winPercentage = Math.floor(this.info.career["%"])
+                    }
 
-                            x -= 47;
-                        }
+                    // Draw stars
+                    let x = 683
+                    for (let i = 0; i < mtCount; i++) {
+                        this.ctx.drawImage(this.card_star, x, 153, 42, 42);
+
+                        x -= 47;
                     }
 
                     // Draw avatar
@@ -61,7 +78,7 @@ export default {
 
                     // Draw serial number
                     this.ctx.textAlign = "right"
-                    this.ctx.fillText(`MYS-016`, 727, 870);
+                    this.ctx.fillText(`MYST-0016`, 727, 870);
                     this.ctx.textAlign = "left"
 
                     // Draw class or whatever this is
@@ -70,10 +87,30 @@ export default {
 
                     let classes = ["Racer"]
 
+                    if (bestPlacement == 1) {
+                        classes.push("Champion")
+                    }
                     if (this.info.challonge.participant.seed <= 8) {
                         classes.push("Seeded")
                     }
                     this.ctx.fillText(`[${classes.join("/")}]`, 72, 925);
+
+
+                    // Draw ~lore~
+                    this.ctx.font = 'bold 23px StoneSerifRegular';
+
+
+                    let lines = [
+                        `Has a ${winPercentage}% chance to win any match.`,
+                        `Placed ${getNumberWithOrdinal(bestPlacement)} in ${bestPlacementMt}.`,
+                    ]
+
+                    let y = 955
+                    for (let i = 0; i < lines.length; i++) {
+                        console.log(lines[i])
+                        this.ctx.fillText(lines[i], 72, y);
+                        y += 30;
+                    }
 
                     // Draw win/loss
                     let wins = 0

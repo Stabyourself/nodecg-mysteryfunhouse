@@ -14,6 +14,7 @@ let clock, delta;
 let ghost, ghostMeme;
 let racerCardTextures = []
 let cards = []
+let shineTextures = []
 
 const parameters = {
     elevation: 135,
@@ -181,7 +182,7 @@ export function init(container, racerCards) {
 
         cards[i].scale.setScalar(0.6)
         cards[i].translateY(30)
-        cards[i].translateZ(35)
+        cards[i].translateZ(40)
         // cards[i].rotateX(-.2)
 
         let posX = -200
@@ -195,6 +196,28 @@ export function init(container, racerCards) {
         scene.add(cards[i])
     }
 
+    var texLoader = new THREE.TextureLoader();
+    for (let i = 0; i < 2; i++) {
+        texLoader.load(
+            "./img/shine.png",
+            (texture) => {
+                texture.offset = new THREE.Vector2(0, 0)
+
+                const geometry = new THREE.PlaneGeometry(59, 86);
+
+                let shineMaterial = new THREE.MeshBasicMaterial({
+                    map: texture,
+                    transparent: true,
+                    opacity: 0.5,
+                })
+
+                shineTextures[i] = texture
+                let shiny = new THREE.Mesh(geometry, shineMaterial);
+                shiny.position.z = 0.01
+                cards[i].add(shiny)
+            }
+        )
+    }
 
 
     function animate() {
@@ -249,12 +272,21 @@ export function init(container, racerCards) {
                 mul = -1
             }
             let posY = Math.sin(t*0.7)*3 + 30
-            let rotY = Math.sin(t)*0.3
+            let rotY = Math.sin(t)*0.2
 
             cards[i].rotation.y = rotY*mul
             cards[i].position.y = posY
         }
 
+        // shine
+        for (let i = 0; i < 2; i++) {
+            if (shineTextures[i]) {
+                shineTextures[i].offset.y = -(timer*3 + i*2)%20+1
+                console.log(shineTextures[i].offset.y)
+            }
+        }
+
+        // a sun
         parameters.azimuth = -(timer-5)*10%360;
         let rise = ((Math.sin(timer*0.3)+1)/2)
         parameters.elevation = rise * 6 - 3
@@ -286,7 +318,7 @@ export function init(container, racerCards) {
 let cardInTween, cardOutTween
 let tweenVal = {
     ghostY: 0,
-    cardX: 200,
+    cardX: 90,
     cameraX: -0.2
 }
 
@@ -308,7 +340,7 @@ cardInTween = new Tween(tweenVal)
     .onUpdate(updatePositions)
 
 cardOutTween = new Tween(tweenVal)
-    .to({ ghostY: 0, cardX: 200, cameraX: -0.2 }, 2000)
+    .to({ ghostY: 0, cardX: 90, cameraX: -0.2 }, 2000)
     .easing(Easing.Cubic.InOut)
     .onUpdate(updatePositions)
 
