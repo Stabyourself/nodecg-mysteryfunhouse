@@ -2,6 +2,8 @@ const tournamentName = "speedrunslive-mystery15"
 
 const challonge = require("./challonge")
 const googlesheet = require("./googlesheet")
+const discord = require("./discord")
+
 const _ = require("lodash")
 
 const ctx = require('./nodecg')
@@ -94,16 +96,21 @@ nodecg.listenFor("loadMatch", function(options, ack) {
         Promise.allSettled(contactPromises).then(results => {
             const playerContacts = results.map(result => result.value)
 
-            let careerPromises = []
+            let secondPromises = []
 
             for (let i = 0; i < 2; i++) {
                 if (playerContacts[i]) {
-                    careerPromises.push(googlesheet.getCareerInfo(playerContacts[i]["SRL username"]))
+                    secondPromises.push(googlesheet.getCareerInfo(playerContacts[i]["SRL username"]))
+                    secondPromises.push(discord.getAvatar(playerContacts[i]["Discord Username"]))
                 }
             }
 
-            Promise.allSettled(careerPromises).then(results => {
-                const playerCareers = results.map(result => result.value)
+
+            Promise.allSettled(secondPromises).then(results => {
+                const playerCareers = [results[0].value, results[2].value]
+                const playerAvatars = [results[1].value, results[3].value]
+
+                console.log(playerAvatars)
 
                 for (let i = 0; i < 2; i++) {
                     let playerNumber = i + 1 + (options.matchNumber == 2 ? 2 : 0)
@@ -147,11 +154,13 @@ nodecg.listenFor("loadMatch", function(options, ack) {
                         challonge: players[0],
                         matches: playerMatches[0],
                         career: playerCareers[0],
+                        avatar: playerAvatars[0],
                     },
                     {
                         challonge: players[1],
                         matches: playerMatches[1],
                         career: playerCareers[1],
+                        avatar: playerAvatars[1],
                     }
                 ]
 

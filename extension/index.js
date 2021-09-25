@@ -5,4 +5,5 @@ module.exports = function (nodecg) {
 
     require('./timer');
     require('./challonge-loader');
+    require('./discord');
 }

@@ -74,7 +74,7 @@ export default {
 
     watch: {
         info() {
-            this.img.src = this.info.challonge.participant.attached_participatable_portrait_url
+            this.img.src = this.info.avatar
             this.img.crossOrigin = "Anonymous";
         }
     },
