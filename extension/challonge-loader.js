@@ -107,10 +107,20 @@ nodecg.listenFor("loadMatch", function(options, ack) {
 
 
             Promise.allSettled(secondPromises).then(results => {
-                const playerCareers = [results[0].value, results[2].value]
-                const playerAvatars = [results[1].value, results[3].value]
-
-                console.log(playerAvatars)
+                const playerCareers = []
+                const playerAvatars = []
+                if (results[0]) {
+                    playerCareers[0] = results[0].value
+                }
+                if (results[1]) {
+                    playerAvatars[0] = results[1].value
+                }
+                if (results[2]) {
+                    playerCareers[1] = results[2].value
+                }
+                if (results[3]) {
+                    playerAvatars[1] = results[3].value
+                }
 
                 for (let i = 0; i < 2; i++) {
                     let playerNumber = i + 1 + (options.matchNumber == 2 ? 2 : 0)

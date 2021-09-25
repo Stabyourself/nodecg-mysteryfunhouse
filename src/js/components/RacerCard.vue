@@ -49,8 +49,6 @@ export default {
 
                 this.$emit("update")
             }
-
-            requestAnimationFrame(this.render)
         }
     },
 
@@ -74,8 +72,14 @@ export default {
 
     watch: {
         info() {
-            this.img.src = this.info.avatar
-            this.img.crossOrigin = "Anonymous";
+            if (this.info.avatar) {
+                this.img.src = this.info.avatar
+                this.img.crossOrigin = "Anonymous";
+
+                this.img.onload = this.render
+            } else {
+                this.img = new Image()
+            }
         }
     },
 
