@@ -8,8 +8,8 @@
             :racerCardCtx="racerCardCtx"
         ></ghost-background>
 
-        <racer-card :ctx="racerCardCtx[0]" @update="canvasUpdated" :info="racerCardInfo.players[0]"></racer-card>
-        <racer-card :ctx="racerCardCtx[1]" @update="canvasUpdated" :info="racerCardInfo.players[1]"></racer-card>
+        <racer-card :ctx="racerCardCtx[0]" @update="canvasUpdated" :info="racerCardInfo[0]"></racer-card>
+        <racer-card :ctx="racerCardCtx[1]" @update="canvasUpdated" :info="racerCardInfo[1]"></racer-card>
     </v-app>
 </template>
 

@@ -142,11 +142,18 @@ nodecg.listenFor("loadMatch", function(options, ack) {
 
 
 
-                racerCardInfoRep.value = {
-                    players,
-                    playerMatches,
-                    playerCareers,
-                }
+                racerCardInfoRep.value = [
+                    {
+                        challonge: players[0],
+                        matches: playerMatches[0],
+                        career: playerCareers[0],
+                    },
+                    {
+                        challonge: players[1],
+                        matches: playerMatches[1],
+                        career: playerCareers[1],
+                    }
+                ]
 
                 ack(null, `${players[0].participant.display_name} × ${players[1].participant.display_name}`);
             })
