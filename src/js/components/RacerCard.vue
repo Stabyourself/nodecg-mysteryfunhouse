@@ -21,7 +21,7 @@ export default {
                     // Draw name
                     this.ctx.font = '110px MatrixRegularSmallCaps';
                     this.ctx.fillStyle = '#1B1515';
-                    this.ctx.fillText(this.info.challonge.participant.display_name, 80, 120);
+                    this.ctx.fillText(this.info.name, 80, 120);
 
                     let mtCount = 0
                     let winPercentage = null
@@ -83,7 +83,7 @@ export default {
 
                     // Draw serial number
                     this.ctx.textAlign = "right"
-                    this.ctx.fillText(`MYST-${String(this.info.challonge.participant.seed).padStart(4, '0')}`, 727, 870);
+                    this.ctx.fillText(`MT16-${String(this.info.challonge.participant.seed).padStart(4, '0')}`, 727, 870);
                     this.ctx.textAlign = "left"
 
                     // Draw class or whatever this is
@@ -104,12 +104,17 @@ export default {
                     // Draw ~lore~
                     this.ctx.font = 'bold 23px StoneSerifRegular';
 
+                    let lines
 
-                    let lines = [
-                        `Has a ${winPercentage}% chance to win any match.`,
-                        `Placed ${getNumberWithOrdinal(bestPlacement)} in ${bestPlacementMt}.`,
-                        `First joined in ${firstJoined}.`,
-                    ]
+                    if (this.info.career) {
+                        lines = [
+                            `Has a ${winPercentage}% chance to win any match.`,
+                            `Placed ${getNumberWithOrdinal(bestPlacement)} in ${bestPlacementMt}.`,
+                            `First joined in ${firstJoined}.`,
+                        ]
+                    } else {
+                        lines = [`This is their first MT!`]
+                    }
 
                     let y = 955
                     for (let i = 0; i < lines.length; i++) {
@@ -122,9 +127,12 @@ export default {
                     let losses = 0
 
                     if (this.info.career) {
-                        wins = String(this.info.career["W's"]).padStart(4, '0');
-                        losses = String(this.info.career["L's"]).padStart(4, '0');
+                        wins = this.info.career["W's"]
+                        losses = this.info.career["L's"]
                     }
+
+                    wins = String(wins).padStart(4, '0')
+                    losses = String(losses).padStart(4, '0')
 
                     this.ctx.font = 'bold 38px MatrixBoldSmallCaps';
                     this.ctx.textAlign = "right"

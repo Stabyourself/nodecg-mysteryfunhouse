@@ -11,7 +11,7 @@ let stats;
 let camera, scene, renderer;
 let water, sun, sky, pmremGenerator, starMaterial, starMesh
 let clock, delta;
-let ghost, ghostMeme;
+let ghost, ghostMeme, tweenVal
 let racerCardTextures = []
 let cards = []
 let shineTextures = []
@@ -171,6 +171,22 @@ export function init(container, racerCards) {
     // scene.add( dirLight );
 
     for (let i = 0; i < 2; i++) {
+        cards[i] = new THREE.Object3D()
+        cards[i].scale.setScalar(0.6)
+        cards[i].translateY(30)
+        cards[i].translateZ(35)
+
+        let posX = -200
+
+        if (i == 1) {
+            posX *= -1;
+        }
+
+        cards[i].position.x = posX
+
+        scene.add(cards[i])
+
+        // front
         texLoader.load(
             "./img/shine.png",
             (texture) => {
@@ -226,22 +242,26 @@ export function init(container, racerCards) {
                     transparent: true,
                 });
 
-                cards[i] = new THREE.Mesh(geometry, material);
+                let mesh = new THREE.Mesh(geometry, material);
+                cards[i].add(mesh)
+            }
+        )
+    }
 
-                cards[i].scale.setScalar(0.6)
-                cards[i].translateY(30)
-                cards[i].translateZ(35)
-                // cards[i].rotateX(-.2)
+    // back
+    for (let i = 0; i < 2; i++) {
+        texLoader.load(
+            "./img/card_back.png",
+            (texture) => {
+                const geometry = new THREE.PlaneGeometry(59, 86);
+                let material = new THREE.MeshStandardMaterial( {
+                    map: texture,
+                    transparent: true,
+                } );
 
-                let posX = -200
-
-                if (i == 1) {
-                    posX *= -1;
-                }
-
-                cards[i].position.x = posX
-
-                scene.add(cards[i])
+                let mesh = new THREE.Mesh(geometry, material);
+                mesh.rotateY(Math.PI)
+                cards[i].add(mesh)
             }
         )
     }
@@ -300,15 +320,25 @@ export function init(container, racerCards) {
                 rotYtimer += 1
             }
 
+            let rotY = Math.sin(rotYtimer)*0.2
 
             if (cards[i]) {
                 let posY = Math.sin(timer*0.7)*3 + 29.5
-                let rotY = Math.sin(rotYtimer)*0.2
 
-                cards[i].rotation.y = rotY
+                if (racerCardUniforms[i]) {
+                    racerCardUniforms[i].lightness.value = (1-Math.abs(rotY)) * Math.max(rise, 0.85)
+                }
+
+                let rotYspinning = rotY
+
+                if (i == 0) {
+                    rotYspinning += tweenVal.rotateYadd
+                } else {
+                    rotYspinning -= tweenVal.rotateYadd
+                }
+
+                cards[i].rotation.y = rotYspinning
                 cards[i].position.y = posY
-
-                racerCardUniforms[i].lightness.value = (1-Math.abs(cards[i].rotation.y-0.2)) * Math.max(rise, 0.8)
             }
 
             // shine
@@ -321,7 +351,7 @@ export function init(container, racerCards) {
                 }
 
                 if (update) {
-                    racerCardUniforms[i].offsetY.value = cards[i].rotation.y * 20
+                    racerCardUniforms[i].offsetY.value = rotY * 20
                 }
             }
         }
@@ -355,10 +385,11 @@ export function init(container, racerCards) {
 }
 
 let cardInTween, cardOutTween
-let tweenVal = {
+tweenVal = {
     ghostY: 0,
     cardX: 90,
-    cameraX: -0.2
+    cameraX: -0.2,
+    rotateYadd: Math.PI*2
 }
 
 function updatePositions() {
@@ -376,12 +407,12 @@ function updatePositions() {
 }
 
 cardInTween = new Tween(tweenVal)
-    .to({ ghostY: 100, cardX: 25, cameraX: 0 }, 2000)
+    .to({ ghostY: -100, cardX: 25, cameraX: 0, rotateYadd: 0 }, 2000)
     .easing(Easing.Cubic.InOut)
     .onUpdate(updatePositions)
 
 cardOutTween = new Tween(tweenVal)
-    .to({ ghostY: 0, cardX: 90, cameraX: -0.2 }, 2000)
+    .to({ ghostY: 0, cardX: 90, cameraX: -0.2, rotateYadd: Math.PI*2 }, 2000)
     .easing(Easing.Cubic.InOut)
     .onUpdate(updatePositions)
 

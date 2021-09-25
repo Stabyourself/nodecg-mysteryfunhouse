@@ -100,8 +100,21 @@ nodecg.listenFor("loadMatch", function(options, ack) {
 
             for (let i = 0; i < 2; i++) {
                 if (playerContacts[i]) {
+                    if (!playerContacts[i]["SRL username"]) {
+                        ack(new Error(`SRL username for player "${players[i].participant.display_name}" is missing on the Contact Sheet.`))
+                        return
+                    }
                     secondPromises.push(googlesheet.getCareerInfo(playerContacts[i]["SRL username"]))
+
+
+                    if (!playerContacts[i]["Discord Username"]) {
+                        ack(new Error(`Discord username for player "${players[i].participant.display_name}" is missing on the Contact Sheet.`))
+                        return
+                    }
                     secondPromises.push(discord.getAvatar(playerContacts[i]["Discord Username"]))
+                } else {
+                    ack(new Error(`Couldn't find Challonge username "${players[i].participant.display_name}" on the Contact Sheet.`))
+                    return
                 }
             }
 
@@ -109,17 +122,32 @@ nodecg.listenFor("loadMatch", function(options, ack) {
             Promise.allSettled(secondPromises).then(results => {
                 const playerCareers = []
                 const playerAvatars = []
-                if (results[0]) {
+                if (results[0].status == "fulfilled") {
                     playerCareers[0] = results[0].value
+                } else {
+                    ack(new Error(results[0].reason))
+                    return
                 }
-                if (results[1]) {
+
+                if (results[1].status == "fulfilled") {
                     playerAvatars[0] = results[1].value
+                } else {
+                    ack(new Error(results[1].reason))
+                    return
                 }
-                if (results[2]) {
+
+                if (results[2].status == "fulfilled") {
                     playerCareers[1] = results[2].value
+                } else {
+                    ack(new Error(results[2].reason))
+                    return
                 }
-                if (results[3]) {
+
+                if (results[3].status == "fulfilled") {
                     playerAvatars[1] = results[3].value
+                } else {
+                    ack(new Error(results[3].reason))
+                    return
                 }
 
                 for (let i = 0; i < 2; i++) {
@@ -158,15 +186,16 @@ nodecg.listenFor("loadMatch", function(options, ack) {
                 // Filter data for size reasons maybe?
 
 
-
                 racerCardInfoRep.value = [
                     {
+                        name: playerContacts[0]["Discord Username"].split("#")[0],
                         challonge: players[0],
                         matches: playerMatches[0],
                         career: playerCareers[0],
                         avatar: playerAvatars[0],
                     },
                     {
+                        name: playerContacts[1]["Discord Username"].split("#")[0],
                         challonge: players[1],
                         matches: playerMatches[1],
                         career: playerCareers[1],
@@ -174,7 +203,7 @@ nodecg.listenFor("loadMatch", function(options, ack) {
                     }
                 ]
 
-                ack(null, `${players[0].participant.display_name} × ${players[1].participant.display_name}`);
+                ack(null, `${racerCardInfoRep.value[0].name}  vs  ${racerCardInfoRep.value[1].name}`);
             })
         })
     })

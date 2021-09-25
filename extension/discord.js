@@ -24,6 +24,8 @@ exports.getAvatar = function(nickname) {
 
             if (member) {
                 resolve(member.user.avatarURL({size: 1024}))
+            } else {
+                reject(`Couldn't find "${nickname}" in the Mystery Discord server.`)
             }
         })
     })

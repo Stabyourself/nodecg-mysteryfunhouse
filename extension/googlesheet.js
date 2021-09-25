@@ -33,7 +33,7 @@ exports.getContactInfo = function(challongeName) {
             if (row) {
                 resolve(Object.assign({}, row, {_sheet: undefined}))
             } else {
-                reject("Couldn't find this player on the contact sheet.")
+                reject(`Couldn't find challonge username "${challongeName}" on the Contact Sheet.`)
             }
         })
     })
@@ -49,7 +49,7 @@ exports.getCareerInfo = function(SRLName) {
             if (row) {
                 resolve(Object.assign({}, row, {_sheet: undefined}))
             } else {
-                reject("Couldn't find this player on the contact sheet.")
+                reject(`Couldn't find SRL username "${SRLName}" on the Career Sheet.`)
             }
         })
     })
