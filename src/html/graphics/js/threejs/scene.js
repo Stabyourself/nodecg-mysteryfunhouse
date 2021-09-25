@@ -1,4 +1,5 @@
 import * as THREE from "three/build/three.module.js"
+import { Easing, Tween } from "@tweenjs/tween.js"
 import { GLTFLoader } from './GLTFLoader';
 
 import Stats from './stats.module.js';
@@ -180,15 +181,16 @@ export function init(container, racerCards) {
 
         cards[i].scale.setScalar(0.6)
         cards[i].translateY(30)
+        cards[i].translateZ(35)
         // cards[i].rotateX(-.2)
 
-        let translateX = -30
+        let posX = -200
 
         if (i == 1) {
-            translateX *= -1;
+            posX *= -1;
         }
 
-        cards[i].translateX(translateX)
+        cards[i].position.x = posX
 
         scene.add(cards[i])
     }
@@ -248,10 +250,8 @@ export function init(container, racerCards) {
             }
             let posY = Math.sin(t*0.7)*3 + 30
             let rotY = Math.sin(t)*0.3
-            let rotZ = Math.sin(t)*0.05
 
             cards[i].rotation.y = rotY*mul
-            // cards[i].rotation.z = rotZ*mul
             cards[i].position.y = posY
         }
 
@@ -269,6 +269,9 @@ export function init(container, racerCards) {
 
         updateSun()
 
+        cardInTween.update(void 0, false)
+        cardOutTween.update(void 0, false)
+
         render();
         stats.update();
     }
@@ -278,6 +281,43 @@ export function init(container, racerCards) {
     }
 
     animate()
+}
+
+let cardInTween, cardOutTween
+let tweenVal = {
+    ghostY: 0,
+    cardX: 200,
+    cameraX: -0.2
+}
+
+function updatePositions() {
+    if (ghost && ghostMeme) {
+        ghost.position.y = tweenVal.ghostY
+        ghostMeme.position.y = tweenVal.ghostY
+    }
+
+    cards[0].position.x = -tweenVal.cardX
+    cards[1].position.x = tweenVal.cardX
+
+    camera.rotation.x = tweenVal.cameraX
+}
+
+cardInTween = new Tween(tweenVal)
+    .to({ ghostY: 100, cardX: 25, cameraX: 0 }, 2000)
+    .easing(Easing.Cubic.InOut)
+    .onUpdate(updatePositions)
+
+cardOutTween = new Tween(tweenVal)
+    .to({ ghostY: 0, cardX: 200, cameraX: -0.2 }, 2000)
+    .easing(Easing.Cubic.InOut)
+    .onUpdate(updatePositions)
+
+export function toRacerCards() {
+    cardInTween.start();
+}
+
+export function toGhost() {
+    cardOutTween.start();
 }
 
 export function racerCardUpdated() {
