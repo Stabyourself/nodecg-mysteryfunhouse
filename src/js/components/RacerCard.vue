@@ -24,15 +24,21 @@ export default {
                     this.ctx.fillText(this.info.challonge.participant.display_name, 80, 120);
 
                     let mtCount = 0
-                    let winPercentage = null;
-                    let bestPlacement = null;
+                    let winPercentage = null
+                    let bestPlacement = null
                     let bestPlacementMt = ""
+                    let firstJoined = null
 
                     if (this.info.career) {
                         // get number of MTs and highest placement
 
                         function checkPlacement(str, mt) {
+                            mtCount++
                             let placement = parseInt(str.substring(0,3).replace(/\./g, ""))
+
+                            if (!firstJoined) {
+                                firstJoined = mt
+                            }
 
                             if (!bestPlacement || placement < bestPlacement) {
                                 bestPlacement = placement
@@ -43,7 +49,7 @@ export default {
 
                         for (let i = 1; i <= 15; i++) {
                             if (this.info.career[`MT${i}`] && this.info.career[`MT${i}`].length > 0) {
-                                mtCount++
+
                                 checkPlacement(this.info.career[`MT${i}`], `MT${i}`)
                             }
                         }
@@ -103,13 +109,14 @@ export default {
                     let lines = [
                         `Has a ${winPercentage}% chance to win any match.`,
                         `Placed ${getNumberWithOrdinal(bestPlacement)} in ${bestPlacementMt}.`,
+                        `First joined in ${firstJoined}.`,
                     ]
 
                     let y = 955
                     for (let i = 0; i < lines.length; i++) {
                         console.log(lines[i])
                         this.ctx.fillText(lines[i], 72, y);
-                        y += 30;
+                        y += 32;
                     }
 
                     // Draw win/loss

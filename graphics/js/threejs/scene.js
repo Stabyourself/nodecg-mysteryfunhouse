@@ -159,13 +159,13 @@ export function init(container, racerCards) {
 
 
     // Light
-    const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.5 );
+    const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.2 );
     scene.add( hemiLight );
 
 
 
 
-    const dirLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+    const dirLight = new THREE.DirectionalLight( 0xffffff, 0.8 );
     dirLight.position.set(1, 1, 1)
     scene.add( dirLight );
 
@@ -281,8 +281,7 @@ export function init(container, racerCards) {
         // shine
         for (let i = 0; i < 2; i++) {
             if (shineTextures[i]) {
-                shineTextures[i].offset.y = -(timer*3 + i*2)%20+1
-                console.log(shineTextures[i].offset.y)
+                shineTextures[i].offset.y = cards[i].rotation.y * 30
             }
         }
 
