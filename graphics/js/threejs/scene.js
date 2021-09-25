@@ -15,6 +15,7 @@ let ghost, ghostMeme;
 let racerCardTextures = []
 let cards = []
 let shineTextures = []
+let racerCardUniforms = []
 
 const parameters = {
     elevation: 135,
@@ -147,7 +148,7 @@ export function init(container, racerCards) {
             var geometry = new THREE.PlaneBufferGeometry( 3000, 3000 );
             geometry.translate(0, 300, -1000)
 
-            starMaterial = new THREE.MeshBasicMaterial( {
+            starMaterial = new THREE.MeshStandardMaterial( {
                 map: texture,
                 transparent: true,
             } );
@@ -159,62 +160,88 @@ export function init(container, racerCards) {
 
 
     // Light
-    const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.2 );
+    const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.5 );
     scene.add( hemiLight );
 
 
 
 
-    const dirLight = new THREE.DirectionalLight( 0xffffff, 0.8 );
-    dirLight.position.set(1, 1, 1)
-    scene.add( dirLight );
+    // const dirLight = new THREE.DirectionalLight( 0xffffff, 0.8 );
+    // dirLight.position.set(1, 1, 1)
+    // scene.add( dirLight );
 
-    // Cards
-    for (let i = 0; i < 2; i++) {
-        const geometry = new THREE.PlaneGeometry(59, 86);
-        racerCardTextures[i] = new THREE.CanvasTexture(racerCards[i].canvas);
-        const material = new THREE.MeshPhongMaterial({
-            map: racerCardTextures[i],
-            transparent: true,
-            emissive: 0x111111
-        });
-        cards[i] = new THREE.Mesh(geometry, material);
-
-        cards[i].scale.setScalar(0.6)
-        cards[i].translateY(30)
-        cards[i].translateZ(40)
-        // cards[i].rotateX(-.2)
-
-        let posX = -200
-
-        if (i == 1) {
-            posX *= -1;
-        }
-
-        cards[i].position.x = posX
-
-        scene.add(cards[i])
-    }
-
-    var texLoader = new THREE.TextureLoader();
     for (let i = 0; i < 2; i++) {
         texLoader.load(
             "./img/shine.png",
             (texture) => {
-                texture.offset = new THREE.Vector2(0, 0)
+                shineTextures[i] = texture
+                shineTextures[i].offset = new THREE.Vector2(0, 0.5)
+
+                let vertShader = `
+                    varying vec2 vUv;
+                    void main()
+                    {
+                        vUv = uv;
+                        vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+                        gl_Position = projectionMatrix * mvPosition;
+                    }
+                `
+
+                let fragShader = `
+                    #ifdef GL_ES
+                    precision highp float;
+                    #endif
+
+                    uniform sampler2D tOne;
+                    uniform sampler2D tSec;
+                    uniform float offsetY;
+                    uniform float lightness;
+
+                    varying vec2 vUv;
+
+                    void main(void)
+                    {
+                        vec3 c;
+                        vec4 Ca = texture2D(tOne, vUv);
+                        vec4 Cb = texture2D(tSec, vec2(vUv.x, vUv.y+offsetY));
+                        gl_FragColor= vec4( mix( Ca.rgb*lightness, Cb.rgb, Cb.a*0.5 ), Ca.a );
+                    }
+                `
 
                 const geometry = new THREE.PlaneGeometry(59, 86);
+                racerCardTextures[i] = new THREE.CanvasTexture(racerCards[i].canvas);
 
-                let shineMaterial = new THREE.MeshBasicMaterial({
-                    map: texture,
+                racerCardUniforms[i] = {    // custom uniforms (your textures)
+                    tOne: { type: "t", value: racerCardTextures[i] },
+                    tSec: { type: "t", value: shineTextures[i] },
+                    offsetY: { type: "f", value: 1},
+                    lightness: { type: "f", value: 1},
+                };
+
+                let material = new THREE.ShaderMaterial({
+                    uniforms: racerCardUniforms[i],
+                    // attributes: attributes,
+                    vertexShader: vertShader,
+                    fragmentShader: fragShader,
                     transparent: true,
-                    opacity: 0.5,
-                })
+                });
 
-                shineTextures[i] = texture
-                let shiny = new THREE.Mesh(geometry, shineMaterial);
-                shiny.position.z = 0.01
-                cards[i].add(shiny)
+                cards[i] = new THREE.Mesh(geometry, material);
+
+                cards[i].scale.setScalar(0.6)
+                cards[i].translateY(30)
+                cards[i].translateZ(35)
+                // cards[i].rotateX(-.2)
+
+                let posX = -200
+
+                if (i == 1) {
+                    posX *= -1;
+                }
+
+                cards[i].position.x = posX
+
+                scene.add(cards[i])
             }
         )
     }
@@ -264,47 +291,43 @@ export function init(container, racerCards) {
         }
 
         // card wiggle
+        let rise = ((Math.sin(timer*0.3)+1)/2)
 
         for (let i = 0; i < 2; i++) {
-            let t = timer
-            let mul = 1
+            let rotYtimer = timer
+
             if (i == 0) {
-                mul = -1
+                rotYtimer += 1
             }
-            let posY = Math.sin(t*0.7)*3 + 30
-            let rotY = Math.sin(t)*0.2
 
-            cards[i].rotation.y = rotY*mul
-            cards[i].position.y = posY
-        }
 
-        // shine
-        for (let i = 0; i < 2; i++) {
+            if (cards[i]) {
+                let posY = Math.sin(timer*0.7)*3 + 29.5
+                let rotY = Math.sin(rotYtimer)*0.2
+
+                cards[i].rotation.y = rotY
+                cards[i].position.y = posY
+
+                racerCardUniforms[i].lightness.value = (1-Math.abs(cards[i].rotation.y-0.2)) * Math.max(rise, 0.8)
+            }
+
+            // shine
             if (shineTextures[i]) {
-                let t = (timer*3) % (Math.PI * 2)
+                let moduluTime = (rotYtimer) % (Math.PI * 2)
+
                 let update = false
-
-                console.log(i, t)
-
-                if (i == 0) {
-                    if (t > Math.PI*.5 &&  t < Math.PI*1.5) {
-                        update = true
-                    }
-                } else {
-                    if (t < Math.PI*.5 ||  t > Math.PI*1.5) {
-                        update = true
-                    }
+                if (moduluTime < Math.PI*.5 ||  moduluTime > Math.PI*1.5) {
+                    update = true
                 }
 
                 if (update) {
-                    shineTextures[i].offset.y = cards[i].rotation.y * 20
+                    racerCardUniforms[i].offsetY.value = cards[i].rotation.y * 20
                 }
             }
         }
 
         // a sun
         parameters.azimuth = -(timer-5)*10%360;
-        let rise = ((Math.sin(timer*0.3)+1)/2)
         parameters.elevation = rise * 6 - 3
 
         if (starMesh) {
@@ -344,8 +367,10 @@ function updatePositions() {
         ghostMeme.position.y = tweenVal.ghostY
     }
 
-    cards[0].position.x = -tweenVal.cardX
-    cards[1].position.x = tweenVal.cardX
+    if (cards[0] && cards[1]) {
+        cards[0].position.x = -tweenVal.cardX
+        cards[1].position.x = tweenVal.cardX
+    }
 
     camera.rotation.x = tweenVal.cameraX
 }

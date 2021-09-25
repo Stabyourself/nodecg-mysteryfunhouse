@@ -71,7 +71,6 @@ export default {
                     }
 
                     // Draw avatar
-                    // console.log(this.img)
                     if (this.img.complete) {
                         this.ctx.drawImage(this.img, 99, 218, 617, 617);
                     }
@@ -84,7 +83,7 @@ export default {
 
                     // Draw serial number
                     this.ctx.textAlign = "right"
-                    this.ctx.fillText(`MYST-0016`, 727, 870);
+                    this.ctx.fillText(`MYST-${String(this.info.challonge.participant.seed).padStart(4, '0')}`, 727, 870);
                     this.ctx.textAlign = "left"
 
                     // Draw class or whatever this is
@@ -114,7 +113,6 @@ export default {
 
                     let y = 955
                     for (let i = 0; i < lines.length; i++) {
-                        console.log(lines[i])
                         this.ctx.fillText(lines[i], 72, y);
                         y += 32;
                     }
