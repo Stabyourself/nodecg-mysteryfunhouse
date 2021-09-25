@@ -180,6 +180,7 @@ export function init(container, racerCards) {
 
         cards[i].scale.setScalar(0.6)
         cards[i].translateY(30)
+        // cards[i].rotateX(-.2)
 
         let translateX = -30
 
@@ -238,13 +239,20 @@ export function init(container, racerCards) {
         }
 
         // card wiggle
-        let rotY = Math.sin(timer)*0.4
-        for (let i = 0; i < 2; i++) {
-            if (i == 1) {
-                rotY *= -1;
-            }
 
-            cards[i].rotation.y = rotY
+        for (let i = 0; i < 2; i++) {
+            let t = timer
+            let mul = 1
+            if (i == 0) {
+                mul = -1
+            }
+            let posY = Math.sin(t*0.7)*3 + 30
+            let rotY = Math.sin(t)*0.3
+            let rotZ = Math.sin(t)*0.05
+
+            cards[i].rotation.y = rotY*mul
+            // cards[i].rotation.z = rotZ*mul
+            cards[i].position.y = posY
         }
 
         parameters.azimuth = -(timer-5)*10%360;
