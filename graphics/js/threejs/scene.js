@@ -281,7 +281,24 @@ export function init(container, racerCards) {
         // shine
         for (let i = 0; i < 2; i++) {
             if (shineTextures[i]) {
-                shineTextures[i].offset.y = cards[i].rotation.y * 30
+                let t = (timer*3) % (Math.PI * 2)
+                let update = false
+
+                console.log(i, t)
+
+                if (i == 0) {
+                    if (t > Math.PI*.5 &&  t < Math.PI*1.5) {
+                        update = true
+                    }
+                } else {
+                    if (t < Math.PI*.5 ||  t > Math.PI*1.5) {
+                        update = true
+                    }
+                }
+
+                if (update) {
+                    shineTextures[i].offset.y = cards[i].rotation.y * 20
+                }
             }
         }
 
@@ -295,7 +312,7 @@ export function init(container, racerCards) {
             starMesh.rotateZ(delta*0.02)
         }
 
-        hemiLight.intensity = rise
+        hemiLight.intensity = rise*.6
 
 
         updateSun()
