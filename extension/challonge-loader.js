@@ -86,56 +86,70 @@ nodecg.listenFor("loadMatch", function(options, ack) {
         })
 
 
+        let contactPromises = [
+            googlesheet.getContactInfo(players[0].participant.display_name),
+            googlesheet.getContactInfo(players[1].participant.display_name),
+        ]
 
-        let player1contactPromise = googlesheet.getPlayerInfo(players[0].participant.display_name)
-        let player2contactPromise = googlesheet.getPlayerInfo(players[1].participant.display_name)
+        Promise.allSettled(contactPromises).then(results => {
+            const playerContacts = results.map(result => result.value)
 
-        Promise.allSettled([player1contactPromise, player2contactPromise]).then(results => {
-            const playerContact = [results[0].value, results[1].value]
+            let careerPromises = []
 
             for (let i = 0; i < 2; i++) {
-                let playerNumber = i + 1 + (options.matchNumber == 2 ? 2 : 0)
+                if (playerContacts[i]) {
+                    careerPromises.push(googlesheet.getCareerInfo(playerContacts[i]["SRL username"]))
+                }
+            }
 
-                let name = players[i].participant.display_name
-                let pronouns = ""
-                let twitch = ""
+            Promise.allSettled(careerPromises).then(results => {
+                const playerCareers = results.map(result => result.value)
 
-                if (playerContact[i]) {
-                    pronouns = playerContact[i]['Preferred pronoun.']
-                    twitch = playerContact[i]['Twitch Channel']
+                for (let i = 0; i < 2; i++) {
+                    let playerNumber = i + 1 + (options.matchNumber == 2 ? 2 : 0)
+
+                    let name = players[i].participant.display_name
+                    let pronouns = ""
+                    let twitch = ""
+
+                    if (playerContacts[i]) {
+                        pronouns = playerContacts[i]['Preferred pronoun.']
+                        twitch = playerContacts[i]['Twitch Channel']
+                    }
+
+                    replicants[`player${playerNumber}name`].value = name
+                    replicants[`player${playerNumber}pronouns`].value = capitalizeWords(pronouns)
+                    replicants[`player${playerNumber}twitch`].value = twitch
+
+                    replicants[`player${playerNumber}volume`].value = 0
+                    replicants[`player${playerNumber}streamHidden`].value = false
+                    replicants[`player${playerNumber}done`].value = false
+                    replicants[`player${playerNumber}forfeit`].value = false
+                    replicants[`player${playerNumber}finalTime`].value = ""
                 }
 
-                replicants[`player${playerNumber}name`].value = name
-                replicants[`player${playerNumber}pronouns`].value = capitalizeWords(pronouns)
-                replicants[`player${playerNumber}twitch`].value = twitch
+                replicants["game"].value = ""
+                replicants["goal"].value = ""
+                replicants["platform"].value = ""
+                replicants["submitter"].value = ""
+                replicants["currentBoxart"].value = ""
 
-                replicants[`player${playerNumber}volume`].value = 0
-                replicants[`player${playerNumber}streamHidden`].value = false
-                replicants[`player${playerNumber}done`].value = false
-                replicants[`player${playerNumber}forfeit`].value = false
-                replicants[`player${playerNumber}finalTime`].value = ""
-            }
-
-            replicants["game"].value = ""
-            replicants["goal"].value = ""
-            replicants["platform"].value = ""
-            replicants["submitter"].value = ""
-            replicants["currentBoxart"].value = ""
-
-            nodecg.sendMessage("timerReset")
+                nodecg.sendMessage("timerReset")
 
 
 
-            // Filter data for size reasons maybe?
+                // Filter data for size reasons maybe?
 
 
 
-            racerCardInfoRep.value = {
-                players,
-                playerMatches,
-            }
+                racerCardInfoRep.value = {
+                    players,
+                    playerMatches,
+                    playerCareers,
+                }
 
-            ack(null, `${players[0].participant.display_name} × ${players[1].participant.display_name}`);
+                ack(null, `${players[0].participant.display_name} × ${players[1].participant.display_name}`);
+            })
         })
     })
 })

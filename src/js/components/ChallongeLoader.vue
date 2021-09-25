@@ -27,6 +27,7 @@
                     <v-text-field
                         v-model="matchId"
                         label="Match ID"
+                        @keydown.enter="loadMatch"
                     >
                     </v-text-field>
                 </v-col>

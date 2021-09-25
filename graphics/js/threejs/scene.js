@@ -8,9 +8,11 @@ import { Sky } from './Sky.js';
 
 let stats;
 let camera, scene, renderer;
-let water, sun, sky, pmremGenerator, starMaterial, starMesh;
+let water, sun, sky, pmremGenerator, starMaterial, starMesh
 let clock, delta;
 let ghost, ghostMeme;
+let racerCardTextures = []
+let cards = []
 
 const parameters = {
     elevation: 135,
@@ -27,7 +29,7 @@ function updateSun() {
     water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize();
 }
 
-export function init(container) {
+export function init(container, racerCards) {
     renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( 1920, 1080 );
@@ -143,7 +145,10 @@ export function init(container) {
             var geometry = new THREE.PlaneBufferGeometry( 3000, 3000 );
             geometry.translate(0, 300, -1000)
 
-            starMaterial = new THREE.MeshBasicMaterial( { map: texture, transparent: true } );
+            starMaterial = new THREE.MeshBasicMaterial( {
+                map: texture,
+                transparent: true,
+            } );
             starMesh = new THREE.Mesh( geometry, starMaterial );
             scene.add( starMesh );
         }
@@ -152,9 +157,40 @@ export function init(container) {
 
 
     // Light
-    const light = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.5 );
-    scene.add( light );
+    const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.5 );
+    scene.add( hemiLight );
 
+
+
+
+    const dirLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+    dirLight.position.set(1, 1, 1)
+    scene.add( dirLight );
+
+    // Cards
+    for (let i = 0; i < 2; i++) {
+        const geometry = new THREE.PlaneGeometry(59, 86);
+        racerCardTextures[i] = new THREE.CanvasTexture(racerCards[i].canvas);
+        const material = new THREE.MeshPhongMaterial({
+            map: racerCardTextures[i],
+            transparent: true,
+            emissive: 0x111111
+        });
+        cards[i] = new THREE.Mesh(geometry, material);
+
+        cards[i].scale.setScalar(0.6)
+        cards[i].translateY(30)
+
+        let translateX = -30
+
+        if (i == 1) {
+            translateX *= -1;
+        }
+
+        cards[i].translateX(translateX)
+
+        scene.add(cards[i])
+    }
 
 
 
@@ -201,6 +237,16 @@ export function init(container) {
             }
         }
 
+        // card wiggle
+        let rotY = Math.sin(timer)*0.4
+        for (let i = 0; i < 2; i++) {
+            if (i == 1) {
+                rotY *= -1;
+            }
+
+            cards[i].rotation.y = rotY
+        }
+
         parameters.azimuth = -(timer-5)*10%360;
         let rise = ((Math.sin(timer*0.3)+1)/2)
         parameters.elevation = rise * 6 - 3
@@ -210,7 +256,7 @@ export function init(container) {
             starMesh.rotateZ(delta*0.02)
         }
 
-        light.intensity = rise
+        hemiLight.intensity = rise
 
 
         updateSun()
@@ -224,4 +270,9 @@ export function init(container) {
     }
 
     animate()
+}
+
+export function racerCardUpdated() {
+    racerCardTextures[0].needsUpdate = true;
+    racerCardTextures[1].needsUpdate = true;
 }

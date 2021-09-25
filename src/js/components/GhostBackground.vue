@@ -3,11 +3,21 @@
 </template>
 
 <script>
-import { init } from "../../html/graphics/js/threejs/scene.js"
+import { init, racerCardUpdated } from "../../html/graphics/js/threejs/scene.js"
 
 export default {
+    props: [
+        "racerCardCtx"
+    ],
+
+    methods: {
+        update() {
+            racerCardUpdated()
+        }
+    },
+
     mounted() {
-        init(this.$el)
+        init(this.$el, this.racerCardCtx)
     }
 };
 </script>
