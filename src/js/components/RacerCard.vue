@@ -140,8 +140,8 @@ export default {
                         losses = this.info.career["L's"]
                     }
 
-                    wins = String(wins).padStart(4, '0')
-                    losses = String(losses).padStart(4, '0')
+                    // wins = String(wins).padStart(4, ' ')
+                    // losses = String(losses).padStart(4, ' ')
 
                     this.ctx.font = 'bold 38px MatrixBoldSmallCaps';
                     this.ctx.textAlign = "right"

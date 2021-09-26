@@ -7,10 +7,6 @@ const client = new Client({intents: ["GUILD_MEMBERS"]});
 
 client.login(nodecg.bundleConfig.discordKey);
 
-client.on("ready", () => {
-
-})
-
 exports.getMember = function(nickname) {
     return new Promise(function(resolve, reject) {
         const guild = client.guilds.cache.get('83038855732658176')
