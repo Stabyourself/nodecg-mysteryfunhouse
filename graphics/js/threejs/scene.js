@@ -2,96 +2,98 @@ import * as THREE from "three/build/three.module.js"
 import { Easing, Tween } from "@tweenjs/tween.js"
 import { GLTFLoader } from './GLTFLoader';
 
-import Stats from './stats.module.js';
+import Stats from './stats.module.js'
 
-import { FancyWater } from './FancyWater.js';
-import { Sky } from './Sky.js';
+import { FancyWater } from './FancyWater.js'
+import { Sky } from './Sky.js'
 
-let stats;
-let camera, scene, renderer;
+let stats
+let camera, scene, renderer
 let water, sun, sky, pmremGenerator, starMaterial, starMesh
-let clock, delta;
+let clock, delta
 let ghost, ghostMeme, tweenVal
 let racerCardTextures = []
 let cards = []
 let shineTextures = []
 let racerCardUniforms = []
 
+let sunTimer = 0, ghostTimer = 0, cardRotationTimer = 0, cardBobTimer = 0, lawnMowerTimer = 0
+
 const parameters = {
     elevation: 135,
     azimuth: 5,
-};
+}
 
 function updateSun() {
-    const phi = THREE.MathUtils.degToRad( 90 - parameters.elevation );
-    const theta = THREE.MathUtils.degToRad( parameters.azimuth );
+    const phi = THREE.MathUtils.degToRad( 90 - parameters.elevation )
+    const theta = THREE.MathUtils.degToRad( parameters.azimuth )
 
-    sun.setFromSphericalCoords( 1, phi, theta );
+    sun.setFromSphericalCoords( 1, phi, theta )
 
-    sky.material.uniforms[ 'sunPosition' ].value.copy( sun );
-    water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize();
+    sky.material.uniforms[ 'sunPosition' ].value.copy( sun )
+    water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize()
 }
 
 export function init(container, racerCards) {
-    renderer = new THREE.WebGLRenderer({antialias: true});
-    renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize( 1920, 1080 );
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    container.appendChild( renderer.domElement );
+    renderer = new THREE.WebGLRenderer({antialias: true})
+    renderer.setPixelRatio( window.devicePixelRatio )
+    renderer.setSize( 1920, 1080 )
+    renderer.toneMapping = THREE.ACESFilmicToneMapping
+    container.appendChild( renderer.domElement )
 
 
-    stats = new Stats();
-    container.appendChild( stats.dom );
-    sun = new THREE.Vector3();
-    const loader = new GLTFLoader();
+    stats = new Stats()
+    container.appendChild( stats.dom )
+    sun = new THREE.Vector3()
+    const loader = new GLTFLoader()
 
 
-    scene = new THREE.Scene();
+    scene = new THREE.Scene()
     // Camera
     camera = new THREE.PerspectiveCamera(
         55,
         1920 / 1080,
         1,
         20000
-    );
-    camera.position.set( 1, 30, 100 );
+    )
+    camera.position.set( 1, 30, 100 )
     camera.rotateX(-.2)
 
 
     // ghost
     loader.load("model/ghost.gltf", function (gltf) {
         ghost = gltf.scene
-        ghost.scale.set(5, 5, 5);
+        ghost.scale.set(5, 5, 5)
         scene.add(ghost)
     })
 
     loader.load("model/ghost_missing_pixel.gltf", function (gltf) {
         ghostMeme = gltf.scene
-        ghostMeme.scale.set(5, 5, 5);
+        ghostMeme.scale.set(5, 5, 5)
         ghostMeme.visible = false
         scene.add(ghostMeme)
     })
 
 
 
-    let lawnmower, lawnmixer;
+    let lawnmower, lawnmixer
     // lawnmower
     loader.load("model/lawnmower/scene.gltf", function (gltf) {
         lawnmower = gltf.scene
         lawnmower.rotateY(-Math.PI*.5)
-        lawnmower.scale.set(0.1, 0.1, 0.1);
+        lawnmower.scale.set(0.1, 0.1, 0.1)
         lawnmower.position.set(-500, -5, -200)
 
-        lawnmixer = new THREE.AnimationMixer( gltf.scene );
-        var action = lawnmixer.clipAction( gltf.animations[ 0 ] );
-        action.play();
+        lawnmixer = new THREE.AnimationMixer( gltf.scene )
+        var action = lawnmixer.clipAction( gltf.animations[ 0 ] )
+        action.play()
 
         scene.add(lawnmower)
     })
 
     // Water
 
-    const waterGeometry = new THREE.PlaneGeometry( 2048, 2048, 512, 512 );
+    const waterGeometry = new THREE.PlaneGeometry( 2048, 2048, 512, 512 )
 
     water = new FancyWater( waterGeometry, {
         textureWidth: 512,
@@ -100,7 +102,7 @@ export function init(container, racerCards) {
             'img/waternormals.jpg',
             function ( texture ) {
 
-                texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+                texture.wrapS = texture.wrapT = THREE.RepeatWrapping
 
             }
         ),
@@ -109,66 +111,64 @@ export function init(container, racerCards) {
         waterColor: 0x001e0f,
         distortionScale: 3.7,
         fog: scene.fog !== undefined,
-    } );
+    } )
 
-    scene.add( water );
+    scene.add( water )
 
     // Skybox
 
-    sky = new Sky();
-    sky.scale.setScalar( 10000 );
-    scene.add( sky );
+    sky = new Sky()
+    sky.scale.setScalar( 10000 )
+    scene.add( sky )
 
-    const skyUniforms = sky.material.uniforms;
+    const skyUniforms = sky.material.uniforms
 
-    skyUniforms[ 'turbidity' ].value = 10;
-    skyUniforms[ 'rayleigh' ].value = 2;
-    skyUniforms[ 'mieCoefficient' ].value = 0.005;
-    skyUniforms[ 'mieDirectionalG' ].value = 0.8;
+    skyUniforms[ 'turbidity' ].value = 10
+    skyUniforms[ 'rayleigh' ].value = 2
+    skyUniforms[ 'mieCoefficient' ].value = 0.005
+    skyUniforms[ 'mieDirectionalG' ].value = 0.8
 
 
 
-    clock = new THREE.Clock();
+    clock = new THREE.Clock()
 
-    let timer = 160
-
-    parameters.azimuth = 135;
+    parameters.azimuth = 135
     parameters.elevation = 5
     updateSun()
-    pmremGenerator = new THREE.PMREMGenerator( renderer );
-    scene.environment = pmremGenerator.fromScene( sky ).texture;
+    pmremGenerator = new THREE.PMREMGenerator( renderer )
+    scene.environment = pmremGenerator.fromScene( sky ).texture
 
 
 
     // Stars
-    var texLoader = new THREE.TextureLoader();
+    var texLoader = new THREE.TextureLoader()
     texLoader.load(
         "./img/sky.png",
         (texture) => {
-            var geometry = new THREE.PlaneBufferGeometry( 3000, 3000 );
+            var geometry = new THREE.PlaneBufferGeometry( 3000, 3000 )
             geometry.translate(0, 300, -1000)
 
             starMaterial = new THREE.MeshStandardMaterial( {
                 map: texture,
                 transparent: true,
-            } );
-            starMesh = new THREE.Mesh( geometry, starMaterial );
-            scene.add( starMesh );
+            } )
+            starMesh = new THREE.Mesh( geometry, starMaterial )
+            scene.add( starMesh )
         }
-    );
+    )
 
 
 
     // Light
-    const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.5 );
-    scene.add( hemiLight );
+    const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.5 )
+    scene.add( hemiLight )
 
 
 
 
-    // const dirLight = new THREE.DirectionalLight( 0xffffff, 0.8 );
+    // const dirLight = new THREE.DirectionalLight( 0xffffff, 0.8 )
     // dirLight.position.set(1, 1, 1)
-    // scene.add( dirLight );
+    // scene.add( dirLight )
 
     for (let i = 0; i < 2; i++) {
         cards[i] = new THREE.Object3D()
@@ -179,7 +179,7 @@ export function init(container, racerCards) {
         let posX = -200
 
         if (i == 1) {
-            posX *= -1;
+            posX *= -1
         }
 
         cards[i].position.x = posX
@@ -224,15 +224,15 @@ export function init(container, racerCards) {
                     }
                 `
 
-                const geometry = new THREE.PlaneGeometry(59, 86);
-                racerCardTextures[i] = new THREE.CanvasTexture(racerCards[i].canvas);
+                const geometry = new THREE.PlaneGeometry(59, 86)
+                racerCardTextures[i] = new THREE.CanvasTexture(racerCards[i].canvas)
 
                 racerCardUniforms[i] = {    // custom uniforms (your textures)
                     tOne: { type: "t", value: racerCardTextures[i] },
                     tSec: { type: "t", value: shineTextures[i] },
                     offsetY: { type: "f", value: 1},
                     lightness: { type: "f", value: 1},
-                };
+                }
 
                 let material = new THREE.ShaderMaterial({
                     uniforms: racerCardUniforms[i],
@@ -240,9 +240,9 @@ export function init(container, racerCards) {
                     vertexShader: vertShader,
                     fragmentShader: fragShader,
                     transparent: true,
-                });
+                })
 
-                let mesh = new THREE.Mesh(geometry, material);
+                let mesh = new THREE.Mesh(geometry, material)
                 cards[i].add(mesh)
             }
         )
@@ -253,13 +253,13 @@ export function init(container, racerCards) {
         texLoader.load(
             "./img/card_back.png",
             (texture) => {
-                const geometry = new THREE.PlaneGeometry(59, 86);
+                const geometry = new THREE.PlaneGeometry(59, 86)
                 let material = new THREE.MeshStandardMaterial( {
                     map: texture,
                     transparent: true,
-                } );
+                } )
 
-                let mesh = new THREE.Mesh(geometry, material);
+                let mesh = new THREE.Mesh(geometry, material)
                 mesh.rotateY(Math.PI)
                 cards[i].add(mesh)
             }
@@ -268,15 +268,21 @@ export function init(container, racerCards) {
 
 
     function animate() {
-        requestAnimationFrame( animate );
-        delta = clock.getDelta();
-        timer += delta;
-        water.material.uniforms[ 'time' ].value += delta;
+        requestAnimationFrame( animate )
+        delta = clock.getDelta()
+
+        sunTimer += delta
+        ghostTimer += delta*0.3
+        lawnMowerTimer += delta*3
+        cardRotationTimer += delta
+        cardBobTimer += delta*0.7
+
+        water.material.uniforms[ 'time' ].value += delta
         if (ghost && ghostMeme) {
             let oldRotation = ghost.rotation.y
 
-            ghost.rotation.y = (timer*.3) % Math.PI*2
-            ghostMeme.rotation.y = (timer*.3) % Math.PI*2
+            ghost.rotation.y = ghostTimer % Math.PI*2
+            ghostMeme.rotation.y = ghostTimer % Math.PI*2
 
             if (ghost.rotation.y >= Math.PI*1.5 && oldRotation < Math.PI*1.5) {
                 // swap?
@@ -300,10 +306,10 @@ export function init(container, racerCards) {
         }
 
         if (lawnmower) {
-            lawnmixer.update( delta );
+            lawnmixer.update( delta )
             lawnmower.position.x += delta*100
 
-            lawnmower.rotation.y = Math.sin(timer*3)*0.3 - Math.PI/2
+            lawnmower.rotation.y = Math.sin(lawnMowerTimer)*0.3 - Math.PI/2
 
             if (lawnmower.position.x > 10000) {
                 lawnmower.position.x = -500
@@ -311,10 +317,10 @@ export function init(container, racerCards) {
         }
 
         // card wiggle
-        let rise = ((Math.sin(timer*0.3)+1)/2)
+        let rise = ((Math.sin(sunTimer*0.3)+1)/2)
 
         for (let i = 0; i < 2; i++) {
-            let rotYtimer = timer
+            let rotYtimer = cardRotationTimer
 
             if (i == 0) {
                 rotYtimer += 1
@@ -323,7 +329,7 @@ export function init(container, racerCards) {
             let rotY = Math.sin(rotYtimer)*0.2
 
             if (cards[i]) {
-                let posY = Math.sin(timer*0.7)*3 + 29.5
+                let posY = Math.sin(cardBobTimer)*3 + 29.5
 
                 if (racerCardUniforms[i]) {
                     racerCardUniforms[i].lightness.value = (1-Math.abs(rotY)) * Math.max(rise, 0.85)
@@ -357,7 +363,7 @@ export function init(container, racerCards) {
         }
 
         // a sun
-        parameters.azimuth = -(timer-5)*10%360;
+        parameters.azimuth = -(sunTimer-5)*10%360
         parameters.elevation = rise * 6 - 3
 
         if (starMesh) {
@@ -373,12 +379,12 @@ export function init(container, racerCards) {
         cardInTween.update(void 0, false)
         cardOutTween.update(void 0, false)
 
-        render();
-        stats.update();
+        render()
+        stats.update()
     }
 
     function render() {
-        renderer.render( scene, camera );
+        renderer.render( scene, camera )
     }
 
     animate()
@@ -417,14 +423,15 @@ cardOutTween = new Tween(tweenVal)
     .onUpdate(updatePositions)
 
 export function toRacerCards() {
-    cardInTween.start();
+    cardInTween.start()
+    cardRotationTimer = 3.2
 }
 
 export function toGhost() {
-    cardOutTween.start();
+    cardOutTween.start()
 }
 
 export function racerCardUpdated() {
-    racerCardTextures[0].needsUpdate = true;
-    racerCardTextures[1].needsUpdate = true;
+    racerCardTextures[0].needsUpdate = true
+    racerCardTextures[1].needsUpdate = true
 }
