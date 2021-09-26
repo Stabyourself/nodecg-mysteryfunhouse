@@ -16,16 +16,19 @@ export default {
         render() {
             // set card color
             if (this.info) {
-                this.cardColor = gen.create(this.info.name).range(this.cardFronts.length)
             }
 
             this.ctx.clearRect(0,0,this.ctx.canvas.width, this.ctx.canvas.height);
 
-            if (this.cardFronts[this.cardColor].complete) {
-                this.ctx.drawImage(this.cardFronts[this.cardColor], 0, 0);
-            }
 
             if (this.info) {
+                this.cardColor = gen.create(this.info.name).range(this.cardFronts.length)
+                this.attribute = gen.create(this.info.name).range(6)
+
+                if (this.cardFronts[this.cardColor].complete) {
+                    this.ctx.drawImage(this.cardFronts[this.cardColor], 0, 0);
+                }
+
                 // Draw name
                 this.ctx.font = '110px MatrixRegularSmallCaps';
                 this.ctx.fillStyle = '#1B1515';
@@ -34,11 +37,23 @@ export default {
                 let name = this.info.name
                 let nameWidth = this.ctx.measureText(name).width;
 
-                let scaleX = Math.min(1, 650/nameWidth)
+                let scaleX = Math.min(1, 570/nameWidth)
 
                 this.ctx.scale(scaleX, 1);
                 this.ctx.fillText(name, 80/scaleX, 120);
                 this.ctx.scale(1/scaleX, 1);
+
+                // Draw attribute
+                if (this.cardAttributes.complete) {
+                    let x = this.attribute%3
+                    let y = Math.floor(this.attribute/3)
+
+                    console.log(x, y)
+
+                    this.ctx.drawImage(this.cardAttributes, x*80, y*80, 80, 80, 665, 56, 80, 80);
+                }
+
+                // Stat stuff
 
                 let mtCount = 0
                 let winPercentage = null
@@ -81,7 +96,7 @@ export default {
                 // Draw stars
                 let x = 683
                 for (let i = 0; i < mtCount; i++) {
-                    this.ctx.drawImage(this.card_star, x, 153, 42, 42);
+                    this.ctx.drawImage(this.cardStar, x, 153, 42, 42);
 
                     x -= 47;
                 }
@@ -192,9 +207,11 @@ export default {
         }
 
 
-        this.card_star = new Image();
-        this.card_star.onload = this.render
-        this.card_star.src = 'img/card_star.png';
+        this.cardStar.onload = this.render
+        this.cardStar.src = 'img/card_star.png';
+
+        this.cardAttributes.onload = this.render
+        this.cardAttributes.src = 'img/card_attributes.png';
 
         var f = new FontFace('MatrixRegularSmallCaps', 'url(css/font/MatrixRegularSmallCaps.ttf)');
         f.load().then(font => {
@@ -245,6 +262,8 @@ export default {
     data() {
         return {
             img: new Image(),
+            cardStar: new Image(),
+            cardAttributes: new Image(),
             cardFronts: [],
             cardColor: 1,
         }
