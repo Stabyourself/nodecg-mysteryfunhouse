@@ -43,8 +43,8 @@ export function init(container, racerCards) {
     container.appendChild( renderer.domElement )
 
 
-    stats = new Stats()
-    container.appendChild( stats.dom )
+    // stats = new Stats()
+    // container.appendChild( stats.dom )
     sun = new THREE.Vector3()
     const loader = new GLTFLoader()
 
@@ -383,7 +383,7 @@ export function init(container, racerCards) {
         }
 
         render()
-        stats.update()
+        // stats.update()
     }
 
     function render() {
