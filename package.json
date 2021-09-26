@@ -145,6 +145,7 @@
     "@tweenjs/tween.js": "^18.6.4",
     "discord.js": "^13.1.0",
     "google-spreadsheet": "^3.1.15",
+    "random-seed": "^0.3.0",
     "request": "^2.88.2",
     "timer-node": "^5.0.5"
   }

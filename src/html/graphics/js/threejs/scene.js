@@ -329,8 +329,6 @@ export function init(container, racerCards) {
             let rotY = Math.sin(rotYtimer)*0.2
 
             if (cards[i]) {
-                let posY = Math.sin(cardBobTimer)*3 + 29.5
-
                 if (racerCardUniforms[i]) {
                     racerCardUniforms[i].lightness.value = (1-Math.abs(rotY)) * Math.max(rise, 0.85)
                 }
@@ -344,7 +342,7 @@ export function init(container, racerCards) {
                 }
 
                 cards[i].rotation.y = rotYspinning
-                cards[i].position.y = posY
+                cards[i].position.y = Math.sin(cardBobTimer)*3 + 29.5
             }
 
             // shine
@@ -433,6 +431,9 @@ export function toGhost() {
 }
 
 export function racerCardUpdated() {
-    racerCardTextures[0].needsUpdate = true
-    racerCardTextures[1].needsUpdate = true
+    for (let i = 0; i < 2; i++) {
+        if (racerCardTextures[i]) {
+            racerCardTextures[i].needsUpdate = true
+        }
+    }
 }
