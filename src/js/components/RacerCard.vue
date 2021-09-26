@@ -15,8 +15,9 @@ export default {
     methods: {
         render() {
             // set card color
-            let rand = gen.create(this.info.name)
-            this.cardColor = rand.range(this.cardFronts.length)
+            if (this.info) {
+                this.cardColor = gen.create(this.info.name).range(this.cardFronts.length)
+            }
 
             this.ctx.clearRect(0,0,this.ctx.canvas.width, this.ctx.canvas.height);
 

@@ -16,6 +16,7 @@ let racerCardTextures = []
 let cards = []
 let shineTextures = []
 let racerCardUniforms = []
+let cardInTween, cardOutTween
 
 let sunTimer = 20, ghostTimer = 0, cardRotationTimer = 0, cardBobTimer = 0, lawnMowerTimer = 0
 
@@ -374,8 +375,12 @@ export function init(container, racerCards) {
 
         updateSun()
 
-        cardInTween.update(void 0, false)
-        cardOutTween.update(void 0, false)
+        if (cardInTween && cardInTween.isPlaying()) {
+            cardInTween.update(void 0, false)
+        }
+        if (cardOutTween && cardOutTween.isPlaying()) {
+            cardOutTween.update(void 0, false)
+        }
 
         render()
         stats.update()
@@ -388,7 +393,6 @@ export function init(container, racerCards) {
     animate()
 }
 
-let cardInTween, cardOutTween
 tweenVal = {
     ghostY: 0,
     cardX: 90,
@@ -410,23 +414,31 @@ function updatePositions() {
     camera.rotation.x = tweenVal.cameraX
 }
 
-cardInTween = new Tween(tweenVal)
-    .to({ ghostY: -100, cardX: 25, cameraX: 0, rotateYadd: 0 }, 2000)
-    .easing(Easing.Cubic.InOut)
-    .onUpdate(updatePositions)
-
-cardOutTween = new Tween(tweenVal)
-    .to({ ghostY: 0, cardX: 90, cameraX: -0.2, rotateYadd: Math.PI*2 }, 2000)
-    .easing(Easing.Cubic.InOut)
-    .onUpdate(updatePositions)
-
 export function toRacerCards() {
+    if (cardOutTween) {
+        cardOutTween.stop()
+    }
+
+    cardInTween = new Tween(tweenVal)
+        .to({ ghostY: -100, cardX: 25, cameraX: 0, rotateYadd: 0 }, 2000)
+        .easing(Easing.Cubic.InOut)
+        .onUpdate(updatePositions)
+
     cardInTween.start()
     cardRotationTimer = 4.2
     cardBobTimer = Math.PI*1.5
 }
 
 export function toGhost() {
+    if (cardInTween) {
+        cardInTween.stop()
+    }
+
+    cardOutTween = new Tween(tweenVal)
+        .to({ ghostY: 0, cardX: 90, cameraX: -0.2, rotateYadd: Math.PI*2 }, 2000)
+        .easing(Easing.Cubic.InOut)
+        .onUpdate(updatePositions)
+
     cardOutTween.start()
 }
 
