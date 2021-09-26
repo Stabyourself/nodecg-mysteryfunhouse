@@ -322,8 +322,8 @@ export function init(container, racerCards) {
         for (let i = 0; i < 2; i++) {
             let rotYtimer = cardRotationTimer
 
-            if (i == 0) {
-                rotYtimer += 1
+            if (i == 1) {
+                rotYtimer -= 0.5
             }
 
             let rotY = Math.sin(rotYtimer)*0.2
@@ -424,7 +424,8 @@ cardOutTween = new Tween(tweenVal)
 
 export function toRacerCards() {
     cardInTween.start()
-    cardRotationTimer = 3.2
+    cardRotationTimer = 4.2
+    cardBobTimer = Math.PI*1.5
 }
 
 export function toGhost() {
