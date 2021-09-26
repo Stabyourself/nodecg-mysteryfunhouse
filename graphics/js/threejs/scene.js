@@ -17,7 +17,7 @@ let cards = []
 let shineTextures = []
 let racerCardUniforms = []
 
-let sunTimer = 0, ghostTimer = 0, cardRotationTimer = 0, cardBobTimer = 0, lawnMowerTimer = 0
+let sunTimer = 20, ghostTimer = 0, cardRotationTimer = 0, cardBobTimer = 0, lawnMowerTimer = 0
 
 const parameters = {
     elevation: 135,
