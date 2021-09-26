@@ -22,8 +22,9 @@ export default {
 
 
             if (this.info) {
-                this.cardColor = gen.create(this.info.name).range(this.cardFronts.length)
-                this.attribute = gen.create(this.info.name).range(6)
+                let rand = gen.create(this.info.name)
+                this.cardColor = rand.range(this.cardFronts.length)
+                this.attribute = rand.range(6)
 
                 if (this.cardFronts[this.cardColor].complete) {
                     this.ctx.drawImage(this.cardFronts[this.cardColor], 0, 0);
