@@ -21,7 +21,16 @@ export default {
                     // Draw name
                     this.ctx.font = '110px MatrixRegularSmallCaps';
                     this.ctx.fillStyle = '#1B1515';
-                    this.ctx.fillText(this.info.name, 80, 120);
+
+                    // see if we need to scale the name
+                    let name = this.info.name
+                    let nameWidth = this.ctx.measureText(name).width;
+
+                    let scaleX = Math.min(1, 650/nameWidth)
+
+                    this.ctx.scale(scaleX, 1);
+                    this.ctx.fillText(name, 80/scaleX, 120);
+                    this.ctx.scale(1/scaleX, 1);
 
                     let mtCount = 0
                     let winPercentage = null
