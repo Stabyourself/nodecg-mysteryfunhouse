@@ -27,7 +27,7 @@ exports.getContactInfo = function(challongeName) {
     return new Promise(function(resolve, reject) {
         contactSheet.getRows().then(function(rows) {
             let row = rows.find(row => {
-                return row._rawData[2] == challongeName
+                return row._rawData[2].toLowerCase() == challongeName.toLowerCase()
             })
 
             if (row) {
@@ -43,7 +43,7 @@ exports.getCareerInfo = function(SRLName) {
     return new Promise(function(resolve, reject) {
         careerSheet.getRows().then(function(rows) {
             let row = rows.find(row => {
-                return row._rawData[1] == SRLName
+                return row._rawData[1].toLowerCase() == SRLName.toLowerCase()
             })
 
             if (row) {

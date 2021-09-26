@@ -81,7 +81,7 @@ export default {
 
                     // Draw avatar
                     if (this.img.complete) {
-                        this.ctx.drawImage(this.img, 99, 218, 617, 617);
+                        this.ctx.drawImage(this.img, 99, 218, 616, 616);
                     }
 
 

@@ -11,7 +11,7 @@ client.on("ready", () => {
 
 })
 
-exports.getAvatar = function(nickname) {
+exports.getMember = function(nickname) {
     return new Promise(function(resolve, reject) {
         const guild = client.guilds.cache.get('83038855732658176')
 
@@ -19,11 +19,11 @@ exports.getAvatar = function(nickname) {
             let split = nickname.split("#")
 
             let member = members.find(member => {
-                return member.user.username == split[0] && member.user.discriminator == split[1]
+                return member.user.username.toLowerCase() == split[0].toLowerCase() && member.user.discriminator == split[1]
             })
 
             if (member) {
-                resolve(member.user.avatarURL({size: 1024}))
+                resolve(member)
             } else {
                 reject(`Couldn't find "${nickname}" in the Mystery Discord server.`)
             }

@@ -111,7 +111,7 @@ nodecg.listenFor("loadMatch", function(options, ack) {
                         ack(new Error(`Discord username for player "${players[i].participant.display_name}" is missing on the Contact Sheet.`))
                         return
                     }
-                    secondPromises.push(discord.getAvatar(playerContacts[i]["Discord Username"]))
+                    secondPromises.push(discord.getMember(playerContacts[i]["Discord Username"]))
                 } else {
                     ack(new Error(`Couldn't find Challonge username "${players[i].participant.display_name}" on the Contact Sheet.`))
                     return
@@ -121,16 +121,16 @@ nodecg.listenFor("loadMatch", function(options, ack) {
 
             Promise.allSettled(secondPromises).then(results => {
                 const playerCareers = []
-                const playerAvatars = []
+                const playerDiscords = []
                 if (results[0].status == "fulfilled") {
                     playerCareers[0] = results[0].value
                 } else {
-                    ack(new Error(results[0].reason))
-                    return
+                    // ack(new Error(results[0].reason))
+                    // return
                 }
 
                 if (results[1].status == "fulfilled") {
-                    playerAvatars[0] = results[1].value
+                    playerDiscords[0] = results[1].value
                 } else {
                     ack(new Error(results[1].reason))
                     return
@@ -139,21 +139,23 @@ nodecg.listenFor("loadMatch", function(options, ack) {
                 if (results[2].status == "fulfilled") {
                     playerCareers[1] = results[2].value
                 } else {
-                    ack(new Error(results[2].reason))
-                    return
+                    // ack(new Error(results[2].reason))
+                    // return
                 }
 
                 if (results[3].status == "fulfilled") {
-                    playerAvatars[1] = results[3].value
+                    playerDiscords[1] = results[3].value
                 } else {
                     ack(new Error(results[3].reason))
                     return
                 }
 
+                const playerNames = []
+
                 for (let i = 0; i < 2; i++) {
                     let playerNumber = i + 1 + (options.matchNumber == 2 ? 2 : 0)
 
-                    let name = players[i].participant.display_name
+                    playerNames[i] = playerDiscords[i].nickname ?? playerDiscords[i].user.username
                     let pronouns = ""
                     let twitch = ""
 
@@ -162,7 +164,7 @@ nodecg.listenFor("loadMatch", function(options, ack) {
                         twitch = playerContacts[i]['Twitch Channel']
                     }
 
-                    replicants[`player${playerNumber}name`].value = name
+                    replicants[`player${playerNumber}name`].value = playerNames[i]
                     replicants[`player${playerNumber}pronouns`].value = capitalizeWords(pronouns)
                     replicants[`player${playerNumber}twitch`].value = twitch
 
@@ -188,18 +190,18 @@ nodecg.listenFor("loadMatch", function(options, ack) {
 
                 racerCardInfoRep.value = [
                     {
-                        name: playerContacts[0]["Discord Username"].split("#")[0],
+                        name: playerNames[0],
                         challonge: players[0],
                         matches: playerMatches[0],
                         career: playerCareers[0],
-                        avatar: playerAvatars[0],
+                        avatar: playerDiscords[0].user.avatarURL({size: 1024}),
                     },
                     {
-                        name: playerContacts[1]["Discord Username"].split("#")[0],
+                        name: playerNames[1],
                         challonge: players[1],
                         matches: playerMatches[1],
                         career: playerCareers[1],
-                        avatar: playerAvatars[1],
+                        avatar: playerDiscords[1].user.avatarURL({size: 1024}),
                     }
                 ]
 
