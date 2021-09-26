@@ -95,7 +95,7 @@ export default {
                     if (bestPlacement == 1) {
                         classes.push("Champion")
                     }
-                    if (this.info.challonge.participant.seed <= 8) {
+                    if (this.info.challonge.participant.seed <= 10) {
                         classes.push("Seeded")
                     }
                     this.ctx.fillText(`[${classes.join("/")}]`, 72, 925);
