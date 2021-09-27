@@ -26,18 +26,26 @@ export default {
     methods: {
         canvasUpdated() {
             this.$refs.scene.update()
+        },
+
+        updatePlayerCard() {
+            if (this.waitScreenState == "cards1") {
+                this.leftPlayerInfo = this.playerInfo[0]
+                this.rightPlayerInfo = this.playerInfo[1]
+            } else if (this.waitScreenState == "cards2") {
+                this.leftPlayerInfo = this.playerInfo[2]
+                this.rightPlayerInfo = this.playerInfo[3]
+            }
         }
     },
 
     watch: {
-        waitScreenState(newValue) {
-            if (newValue == "cards1") {
-                this.leftPlayerInfo = this.playerInfo[0]
-                this.rightPlayerInfo = this.playerInfo[1]
-            } else if (newValue == "cards2") {
-                this.leftPlayerInfo = this.playerInfo[2]
-                this.rightPlayerInfo = this.playerInfo[3]
-            }
+        playerInfo() {
+            this.updatePlayerCard()
+        },
+
+        waitScreenState() {
+            this.updatePlayerCard()
         }
     },
 

@@ -57,7 +57,7 @@ export function init(container, playerCards) {
         1,
         20000
     )
-    camera.position.set( 1, 30, 300 )
+    camera.position.set( 1, 30, 100 )
     camera.rotateX(-.2)
 
 
@@ -175,6 +175,7 @@ export function init(container, playerCards) {
         cards[i] = new THREE.Object3D()
         cards[i].scale.setScalar(0.6)
         cards[i].translateY(30)
+        cards[i].translateZ(35)
 
         let posX = -200
 
