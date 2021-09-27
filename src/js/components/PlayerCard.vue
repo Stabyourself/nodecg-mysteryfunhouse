@@ -85,7 +85,7 @@ export default {
                     }
 
 
-                    for (let i = 1; i <= 15; i++) {
+                    for (let i = 1; i <= 20; i++) {
                         if (this.info.career[`MT${i}`] && this.info.career[`MT${i}`].length > 0) {
 
                             checkPlacement(this.info.career[`MT${i}`], `MT${i}`)
