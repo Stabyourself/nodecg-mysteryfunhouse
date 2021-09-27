@@ -18,7 +18,7 @@ export default {
 
             if (this.info) {
                 // set card color and attribute
-                let rand = gen.create(this.info.name)
+                let rand = gen.create(this.info.challonge.participant.display_name)
                 this.cardColor = rand.range(this.cardFronts.length)
                 this.attribute = rand.range(6)
 
@@ -55,6 +55,9 @@ export default {
                 let bestPlacement = null
                 let bestPlacementMt = ""
                 let firstJoined = null
+                let firstJoinedPlacement = null
+                let mtsWon = []
+                let top8finishes = 0
 
                 if (this.info.career) {
                     // get highest placement and first MT
@@ -64,11 +67,20 @@ export default {
 
                         if (!firstJoined) {
                             firstJoined = mt
+                            firstJoinedPlacement = placement
                         }
 
                         if (!bestPlacement || placement < bestPlacement) {
                             bestPlacement = placement
                             bestPlacementMt = mt
+                        }
+
+                        if (placement == 1) {
+                            mtsWon.push(mt)
+                        }
+
+                        if (placement <= 16) {
+                            top8finishes++
                         }
                     }
 
@@ -84,13 +96,13 @@ export default {
                         checkPlacement(this.info.career[`MTX`], "MTX")
                     }
 
-                    winPercentage = Math.floor(this.info.career["%"])
+                    winPercentage = Math.round(this.info.career["%"])
                     mtCount = parseInt(this.info.career["MT Count"])
                 }
 
                 // Draw stars
                 let x = 683
-                for (let i = 0; i < mtCount; i++) {
+                for (let i = 0; i < top8finishes; i++) {
                     this.ctx.drawImage(this.cardStar, x, 153, 42, 42);
 
                     x -= 47;
@@ -105,11 +117,11 @@ export default {
                 // Draw edition
                 this.ctx.font = 'bold 23px StoneSerifRegular';
                 this.ctx.fillStyle = '#000809';
-                this.ctx.fillText(`${getNumberWithOrdinal(mtCount+1)} Edition`, 90, 870);
+                this.ctx.fillText(`${getNumberWithOrdinal(mtCount+1)} Edition`, 90, 873);
 
                 // Draw serial number
                 this.ctx.textAlign = "right"
-                this.ctx.fillText(`MT16-${String(this.info.challonge.participant.seed).padStart(4, '0')}`, 727, 870);
+                this.ctx.fillText(`MT16-${String(this.info.challonge.participant.seed).padStart(4, '0')}`, 727, 873);
                 this.ctx.textAlign = "left"
 
                 // Draw class or whatever this is
@@ -130,16 +142,34 @@ export default {
                 // Draw ~lore~
                 this.ctx.font = 'bold 23px StoneSerifRegular';
 
-                let lines
+                let lines = []
 
                 if (this.info.career) {
-                    lines = [
-                        `Has a ${winPercentage}% chance to win any match.`,
-                        `Placed ${getNumberWithOrdinal(bestPlacement)} in ${bestPlacementMt}.`,
-                        `First joined in ${firstJoined}.`,
-                    ]
+                    // Win rate
+                    lines.push(`Has a ${winPercentage}% win rate across all Mystery Tournaments.`)
+
+                    // Best performance(s)
+                    if (mtsWon.length > 0) {
+                        let list
+
+                        if (mtsWon.length > 1) {
+                            let mtsWonCopy = [...mtsWon]
+                            let last = mtsWonCopy.pop();
+                            list = mtsWonCopy.join(', ') + ' and ' + last;
+
+                        } else {
+                            list = mtsWon.join(", ")
+                        }
+                        lines.push(`Won ${list}.`)
+                    } else if (mtCount > 1) {
+                        lines.push(`Got a best placement of ${getNumberWithOrdinal(bestPlacement)} during ${bestPlacementMt}.`)
+                    }
+
+                    // First MT
+                    lines.push(`First joined in ${firstJoined} and finished ${getNumberWithOrdinal(firstJoinedPlacement)}.`)
                 } else {
-                    lines = [`This is their first MT!`]
+                    // No MTS
+                    lines.push(`Is participating for the first time.`)
                 }
 
                 let y = 955

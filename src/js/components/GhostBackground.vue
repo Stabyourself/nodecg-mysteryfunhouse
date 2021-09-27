@@ -13,9 +13,7 @@ export default {
     ],
 
     methods: {
-        update() {
-            playerCardUpdated()
-        },
+        update: playerCardUpdated
     },
 
     mounted() {

@@ -19,7 +19,7 @@
             </p>
 
             <p class="warning--text mt-2">
-                This will reset game options, the timer, and the selected players!
+                This will override the selected players!
             </p>
 
             <v-row style="margin: 0 auto">
@@ -90,8 +90,8 @@ export default {
             success: null,
             matchNumber: 1,
             matchSelectOptions: [
-                {text: "Player 1 vs 2", value: 1},
-                {text: "Player 3 vs 4", value: 2},
+                {text: "Players 1 vs 2", value: 1},
+                {text: "Players 3 vs 4", value: 2},
             ]
         }
     }

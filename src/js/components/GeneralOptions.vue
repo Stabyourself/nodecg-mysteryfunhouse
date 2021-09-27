@@ -11,6 +11,13 @@
                     Load from match ID
                 </v-btn>
 
+                <v-select
+                    label="Active player cards"
+                    v-model="activePlayerCards"
+                    :items="activePlayerCardsOptions"
+                >
+                </v-select>
+
                 <v-btn
                     :color="showPlayerCards ? 'red' : 'green'"
                     block
@@ -56,12 +63,18 @@ export default {
 
     created() {
         bindReplicant.call(this, "showPlayerCards", "showPlayerCards", 0)
+        bindReplicant.call(this, "activePlayerCards", "activePlayerCards", 0)
         bindReplicant.call(this, "playerInfo")
     },
 
     data() {
         return {
             showPlayerCards: false,
+            activePlayerCards: 0,
+            activePlayerCardsOptions: [
+                {text: "Players 1 and 2", value: 0},
+                {text: "Players 3 and 4", value: 1},
+            ],
             playerInfo: [],
         }
     }

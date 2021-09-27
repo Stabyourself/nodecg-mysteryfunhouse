@@ -120,7 +120,7 @@ export default {
     created() {
         bindReplicant.call(this, "timer")
         bindReplicant.call(this, "stopTimerWhenDone")
-        bindReplicant.call(this, "stopTimerWhenDoneCount")
+        bindReplicant.call(this, "stopTimerWhenDoneCount", "stopTimerWhenDoneCount", 0)
     },
 
     computed: {

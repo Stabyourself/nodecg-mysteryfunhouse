@@ -176,13 +176,13 @@ nodecg.listenFor("loadMatch", function(options, ack) {
                     replicants[`player${playerNumber}finalTime`].value = ""
                 }
 
-                replicants["game"].value = ""
-                replicants["goal"].value = ""
-                replicants["platform"].value = ""
-                replicants["submitter"].value = ""
-                replicants["currentBoxart"].value = ""
+                // replicants["game"].value = ""
+                // replicants["goal"].value = ""
+                // replicants["platform"].value = ""
+                // replicants["submitter"].value = ""
+                // replicants["currentBoxart"].value = ""
 
-                replicants["showPlayerCards"].value = false
+                // replicants["showPlayerCards"].value = false
 
                 nodecg.sendMessage("timerReset")
 

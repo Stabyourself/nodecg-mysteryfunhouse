@@ -11,12 +11,12 @@ let stats
 let camera, scene, renderer
 let water, sun, sky, pmremGenerator, starMaterial, starMesh
 let clock, delta
-let ghost, ghostMeme, tweenVal
+let ghost, ghostMeme, tweenVal, spinTweenVal
 let playerCardTextures = []
 let cards = []
 let shineTextures = []
 let playerCardUniforms = []
-let cardInTween, cardOutTween
+let cardInTween, cardOutTween, spinTween
 
 let sunTimer = 20, ghostTimer = 0, cardRotationTimer = 0, cardBobTimer = 0, lawnMowerTimer = 0
 
@@ -221,7 +221,7 @@ export function init(container, playerCards) {
                         vec3 c;
                         vec4 Ca = texture2D(tOne, vUv);
                         vec4 Cb = texture2D(tSec, vec2(vUv.x, vUv.y+offsetY));
-                        gl_FragColor= vec4( mix( Ca.rgb*lightness, Cb.rgb, Cb.a*0.5 ), Ca.a );
+                        gl_FragColor= vec4( mix( Ca.rgb*lightness, Cb.rgb, Cb.a ), Ca.a );
                     }
                 `
 
@@ -337,10 +337,12 @@ export function init(container, playerCards) {
                 let rotYspinning = rotY
 
                 if (i == 0) {
-                    rotYspinning += tweenVal.rotateYadd
+                    rotYspinning += spinTweenVal.addY
                 } else {
-                    rotYspinning -= tweenVal.rotateYadd
+                    rotYspinning -= spinTweenVal.addY
                 }
+
+                console.log(spinTweenVal)
 
                 cards[i].rotation.y = rotYspinning
                 cards[i].position.y = Math.sin(cardBobTimer)*3 + 29.5
@@ -381,6 +383,9 @@ export function init(container, playerCards) {
         if (cardOutTween && cardOutTween.isPlaying()) {
             cardOutTween.update(void 0, false)
         }
+        if (spinTween && spinTween.isPlaying()) {
+            spinTween.update(void 0, false)
+        }
 
         render()
         // stats.update()
@@ -396,8 +401,7 @@ export function init(container, playerCards) {
 tweenVal = {
     ghostY: 0,
     cardX: 90,
-    cameraX: -0.2,
-    rotateYadd: Math.PI*2
+    cameraX: -0.2
 }
 
 function updatePositions() {
@@ -420,7 +424,7 @@ export function toPlayerCards() {
     }
 
     cardInTween = new Tween(tweenVal)
-        .to({ ghostY: -100, cardX: 25, cameraX: 0, rotateYadd: 0 }, 2000)
+        .to({ ghostY: -100, cardX: 25, cameraX: 0 }, 2000)
         .easing(Easing.Cubic.InOut)
         .onUpdate(updatePositions)
 
@@ -437,7 +441,7 @@ export function toGhost() {
     }
 
     cardOutTween = new Tween(tweenVal)
-        .to({ ghostY: 0, cardX: 90, cameraX: -0.2, rotateYadd: Math.PI*2 }, 2000)
+        .to({ ghostY: 0, cardX: 90, cameraX: -0.2 }, 2000)
         .easing(Easing.Cubic.InOut)
         .onUpdate(updatePositions)
 
@@ -445,9 +449,24 @@ export function toGhost() {
 }
 
 export function playerCardUpdated() {
-    for (let i = 0; i < 2; i++) {
-        if (playerCardTextures[i]) {
-            playerCardTextures[i].needsUpdate = true
-        }
+
+    spinTweenVal = {
+        addY: Math.PI*2
     }
+
+    const duration = 2000
+
+    spinTween = new Tween(spinTweenVal)
+        .to({ addY: 0 }, duration)
+        .easing(Easing.Cubic.InOut)
+
+    spinTween.start()
+
+    setTimeout(() => {
+        for (let i = 0; i < 2; i++) {
+            if (playerCardTextures[i]) {
+                playerCardTextures[i].needsUpdate = true
+            }
+        }
+    }, duration/2)
 }
