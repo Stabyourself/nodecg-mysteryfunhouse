@@ -3,7 +3,7 @@ const { GoogleSpreadsheet } = require('google-spreadsheet');
 const ctx = require('./nodecg')
 const nodecg = ctx.get()
 
-const contactDoc = new GoogleSpreadsheet('1r_qMIhjLBhVsjfIfL_tDK2a_iDa1_yDjCwz4tfkxbHA')
+const contactDoc = new GoogleSpreadsheet(nodecg.bundleConfig.contactSheet)
 contactDoc.useApiKey(nodecg.bundleConfig.googleApiKey);
 
 let contactSheet
@@ -13,7 +13,7 @@ contactDoc.loadInfo().then(function() {
 
 
 
-const careerDoc = new GoogleSpreadsheet('1DWYq3T1w8u1N0CWWJ72tqQRv67c1eY098u0wyuiMEmA')
+const careerDoc = new GoogleSpreadsheet(nodecg.bundleConfig.careerSheet)
 careerDoc.useApiKey(nodecg.bundleConfig.googleApiKey);
 
 let careerSheet
