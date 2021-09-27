@@ -433,6 +433,8 @@ export function toPlayerCards() {
         cardRotationTimer = 4.2
         cardBobTimer = Math.PI*1.5
     }
+
+    spin()
 }
 
 export function toGhost() {
@@ -447,20 +449,22 @@ export function toGhost() {
 
     cardOutTween.start()
 }
+const duration = 2000
 
-export function playerCardUpdated() {
-
+function spin() {
     spinTweenVal = {
         addY: Math.PI*2
     }
-
-    const duration = 2000
 
     spinTween = new Tween(spinTweenVal)
         .to({ addY: 0 }, duration)
         .easing(Easing.Cubic.InOut)
 
     spinTween.start()
+}
+
+export function playerCardUpdated() {
+    spin()
 
     setTimeout(() => {
         for (let i = 0; i < 2; i++) {
