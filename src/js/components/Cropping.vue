@@ -15,7 +15,7 @@
                 <v-tab-item
                     v-for="i in 4" :key="i">
                     <player-cropping
-                        :player="i"
+                        :player="i-1"
                     ></player-cropping>
                 </v-tab-item>
             </v-tabs-items>

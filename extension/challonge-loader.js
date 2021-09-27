@@ -16,7 +16,7 @@ function capitalizeWords(str) {
 };
 
 // Replicant stuff
-const racerCardInfoRep = nodecg.Replicant("racerCardInfo")
+const playerInfoRep = nodecg.Replicant("playerInfo", {defaultValue: []})
 
 const playerProps = [
     "name",
@@ -35,11 +35,12 @@ const props = [
     "platform",
     "submitter",
     "currentBoxart",
+    "showPlayerCards",
 ]
 
 let replicants = {}
 
-for (let i = 1; i <= 4; i++) {
+for (let i = 0; i < 4; i++) {
     for (playerProp of playerProps) {
         const name = `player${i}${playerProp}`
         replicants[name] = nodecg.Replicant(name)
@@ -153,7 +154,7 @@ nodecg.listenFor("loadMatch", function(options, ack) {
                 const playerNames = []
 
                 for (let i = 0; i < 2; i++) {
-                    let playerNumber = i + 1 + (options.matchNumber == 2 ? 2 : 0)
+                    let playerNumber = i + (options.matchNumber == 2 ? 2 : 0)
 
                     playerNames[i] = playerDiscords[i].nickname ?? playerDiscords[i].user.username
                     let pronouns = ""
@@ -181,6 +182,8 @@ nodecg.listenFor("loadMatch", function(options, ack) {
                 replicants["submitter"].value = ""
                 replicants["currentBoxart"].value = ""
 
+                replicants["showPlayerCards"].value = false
+
                 nodecg.sendMessage("timerReset")
 
 
@@ -188,24 +191,18 @@ nodecg.listenFor("loadMatch", function(options, ack) {
                 // Filter data for size reasons maybe?
 
 
-                racerCardInfoRep.value = [
-                    {
-                        name: playerNames[0],
-                        challonge: players[0],
-                        matches: playerMatches[0],
-                        career: playerCareers[0],
-                        avatar: playerDiscords[0].user.avatarURL({size: 1024}),
-                    },
-                    {
-                        name: playerNames[1],
-                        challonge: players[1],
-                        matches: playerMatches[1],
-                        career: playerCareers[1],
-                        avatar: playerDiscords[1].user.avatarURL({size: 1024}),
+                for (let i = 0; i < 2; i++) {
+                    let playerNumber = i + (options.matchNumber == 2 ? 2 : 0)
+                    playerInfoRep.value[playerNumber] = {
+                        name: playerNames[i],
+                        challonge: players[i],
+                        matches: playerMatches[i],
+                        career: playerCareers[i],
+                        avatar: playerDiscords[i].user.avatarURL({size: 1024}),
                     }
-                ]
+                }
 
-                ack(null, `${racerCardInfoRep.value[0].name}  vs  ${racerCardInfoRep.value[1].name}`);
+                ack(null, `${playerNames[0]}  vs  ${playerNames[1]}`);
             })
         })
     })

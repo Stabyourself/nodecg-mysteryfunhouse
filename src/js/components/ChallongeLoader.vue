@@ -2,7 +2,7 @@
     <v-app align="center">
         <v-container>
             <p>
-                Enter a challonge match ID to import those racers.
+                Enter a challonge match ID to import those players.
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                         <v-icon

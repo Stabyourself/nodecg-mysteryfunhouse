@@ -2,24 +2,24 @@
     <v-app>
         <twitch-player
             style="position: absolute; top: 150px; left: 15px; width: 930px; height:698px;"
+            v-if="!player0streamHidden"
+
+            :playerNumber="0"
+            :url="player0twitch"
+            :quality="player0quality ? player0quality : 'auto'"
+            :volume="player0volume"
+            :crop="player0crop"
+        ></twitch-player>
+
+        <twitch-player
             v-if="!player1streamHidden"
+            style="position: absolute; top: 150px; left: 975px; width: 930px; height:698px"
 
             :playerNumber="1"
             :url="player1twitch"
             :quality="player1quality ? player1quality : 'auto'"
             :volume="player1volume"
             :crop="player1crop"
-        ></twitch-player>
-
-        <twitch-player
-            v-if="!player2streamHidden"
-            style="position: absolute; top: 150px; left: 975px; width: 930px; height:698px"
-
-            :playerNumber="2"
-            :url="player2twitch"
-            :quality="player2quality ? player2quality : 'auto'"
-            :volume="player2volume"
-            :crop="player2crop"
         ></twitch-player>
 
 
@@ -31,10 +31,10 @@
             name-h="115"
             style="top: 15px; left: 20px; width: 925px; height: 135px">
             <template v-slot:pronouns>
-                {{ player1pronouns }}
+                {{ player0pronouns }}
             </template>
             <template v-slot:name>
-                {{ player1name }}
+                {{ player0name }}
             </template>
         </player-name>
 
@@ -44,10 +44,10 @@
             name-h="115"
             style="top: 15px; left: 975px; width: 925px; height: 135px">
             <template v-slot:pronouns>
-                {{ player2pronouns }}
+                {{ player1pronouns }}
             </template>
             <template v-slot:name>
-                {{ player2name }}
+                {{ player1name }}
             </template>
         </player-name>
 
@@ -75,16 +75,16 @@
         </timer>
 
         <player-done-slider
-            :finalTime="player1finalTime"
+            :finalTime="player0finalTime"
             style="top: 848px; left: 15px; width: 930px;"
-            :class="{active: player1done || player1forfeit, done: player1done, forfeit: player1forfeit }">
+            :class="{active: player0done || player0forfeit, done: player0done, forfeit: player0forfeit }">
         </player-done-slider>
 
 
         <player-done-slider
-            :finalTime="player2finalTime"
+            :finalTime="player1finalTime"
             style="top: 848px; left: 975px; width: 930px;"
-            :class="{active: player2done || player2forfeit, done: player2done, forfeit: player2forfeit }">
+            :class="{active: player1done || player1forfeit, done: player1done, forfeit: player1forfeit }">
         </player-done-slider>
     </v-app>
 </template>
@@ -102,6 +102,20 @@ export default {
 
         bindReplicant.call(this, "timer")
 
+        bindReplicant.call(this, "player0name")
+        bindReplicant.call(this, "player0pronouns")
+
+        bindReplicant.call(this, "player0twitch")
+        // bindReplicant.call(this, "player0quality")
+        bindReplicant.call(this, "player0volume")
+        bindReplicant.call(this, "player0streamHidden")
+
+        bindReplicant.call(this, "player0done")
+        bindReplicant.call(this, "player0forfeit")
+        bindReplicant.call(this, "player0finalTime")
+
+        bindReplicant.call(this, "player0crop")
+
         bindReplicant.call(this, "player1name")
         bindReplicant.call(this, "player1pronouns")
 
@@ -115,20 +129,6 @@ export default {
         bindReplicant.call(this, "player1finalTime")
 
         bindReplicant.call(this, "player1crop")
-
-        bindReplicant.call(this, "player2name")
-        bindReplicant.call(this, "player2pronouns")
-
-        bindReplicant.call(this, "player2twitch")
-        // bindReplicant.call(this, "player2quality")
-        bindReplicant.call(this, "player2volume")
-        bindReplicant.call(this, "player2streamHidden")
-
-        bindReplicant.call(this, "player2done")
-        bindReplicant.call(this, "player2forfeit")
-        bindReplicant.call(this, "player2finalTime")
-
-        bindReplicant.call(this, "player2crop")
     },
 
     computed: {
@@ -145,6 +145,20 @@ export default {
             submitter: "",
             currentBoxart: "",
 
+            player0name: "",
+            player0pronouns: "",
+
+            player0twitch: "",
+            player0quality: null,
+            player0volume: 0,
+            player0streamHidden: false,
+
+            player0done: "",
+            player0forfeit: "",
+            player0finalTime: false,
+
+            player0crop: [0, 0, 0, 0],
+
             player1name: "",
             player1pronouns: "",
 
@@ -157,21 +171,7 @@ export default {
             player1forfeit: "",
             player1finalTime: false,
 
-            player1crop: [0, 0, 930, 698],
-
-            player2name: "",
-            player2pronouns: "",
-
-            player2twitch: "",
-            player2quality: null,
-            player2volume: 0,
-            player2streamHidden: false,
-
-            player2done: "",
-            player2forfeit: "",
-            player2finalTime: false,
-
-            player2crop: [0, 0, 930, 698],
+            player1crop: [0, 0, 0, 0],
 
             timer: {
                 ms: 0

@@ -40,39 +40,47 @@
         "file": "timer.html"
       },
       {
-        "name": "player-1",
+        "name": "player-0",
         "title": "Player 1",
         "width": 2,
-        "file": "player1.html",
+        "file": "player0.html",
         "headerColor": "#D32F2F"
       },
       {
-        "name": "player-2",
+        "name": "player-1",
         "title": "Player 2",
         "width": 2,
-        "file": "player2.html",
+        "file": "player1.html",
         "headerColor": "#1976D2"
       },
       {
-        "name": "player-3",
+        "name": "player-2",
         "title": "Player 3",
         "width": 2,
-        "file": "player3.html",
+        "file": "player2.html",
         "headerColor": "#FBC02D"
       },
       {
-        "name": "player-4",
+        "name": "player-3",
         "title": "Player 4",
         "width": 2,
-        "file": "player4.html",
+        "file": "player3.html",
         "headerColor": "#388E3C"
       },
+      {
+        "name": "game",
+        "title": "Game",
+        "width": 2,
+        "file": "game.html"
+      },
+
       {
         "name": "stream-cropping",
         "title": "Stream Cropping",
         "file": "cropping.html",
         "fullbleed": true
       },
+
       {
         "name": "boxart-select-dialog",
         "title": "Select Boxart",

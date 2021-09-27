@@ -5,11 +5,12 @@
         </video> -->
         <ghost-background
             ref="scene"
-            :racerCardCtx="racerCardCtx"
+            :playerCardCtx="playerCardCtx"
+            :showPlayerCards="showPlayerCards"
         ></ghost-background>
 
-        <racer-card :ctx="racerCardCtx[0]" @update="canvasUpdated" :info="racerCardInfo[0]"></racer-card>
-        <racer-card :ctx="racerCardCtx[1]" @update="canvasUpdated" :info="racerCardInfo[1]"></racer-card>
+        <player-card :ctx="playerCardCtx[0]" @update="canvasUpdated" :info="playerInfo[0]"></player-card>
+        <player-card :ctx="playerCardCtx[1]" @update="canvasUpdated" :info="playerInfo[1]"></player-card>
     </v-app>
 </template>
 
@@ -17,8 +18,9 @@
 import { bindReplicant } from "../util.js"
 
 export default {
-    mounted() {
-        bindReplicant.call(this, "racerCardInfo")
+    created() {
+        bindReplicant.call(this, "playerInfo")
+        bindReplicant.call(this, "showPlayerCards")
     },
 
     methods: {
@@ -29,13 +31,14 @@ export default {
 
     data() {
         return {
-            racerCardInfo: {
+            playerInfo: {
                 players: [],
             },
-            racerCardCtx: [
+            playerCardCtx: [
                 document.createElement('canvas').getContext('2d'),
                 document.createElement('canvas').getContext('2d'),
-            ]
+            ],
+            showPlayerCards: false,
         }
     }
 };

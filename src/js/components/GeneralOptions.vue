@@ -11,35 +11,34 @@
                     Load from match ID
                 </v-btn>
 
-                <v-text-field
-                    v-model="game"
-                    label="Game name"
-                ></v-text-field>
-
-                <label class="v-label v-label--active theme--dark" style="font-size:12px">Boxart</label>
-                <div class="select-img-wrap"
-                    nodecg-dialog="boxart-select-dialog">
-                    <img
-                        class="select-img"
-                        :src="currentBoxart?currentBoxart.url:''"
+                <v-btn
+                    :color="showPlayerCards ? 'red' : 'green'"
+                    block
+                    class="mb-3"
+                    @click="togglePlayerCards"
                     >
-                    <div class="select-img-border"></div>
+                    <span v-if="showPlayerCards">
+                        Hide Playercards
+                    </span>
+
+                    <span v-else>
+                        Show Playercards
+                    </span>
+                </v-btn>
+
+                <div>
+                    <h2>Player Card Status</h2>
+                    <ul>
+                        <li v-for="(player, i) of playerInfo" :key="player.name">
+                            Player {{ i+1 }}:
+                            {{ player.name }}
+                            <strong class="green--text">Valid!</strong>
+                            <span v-if="!player.career">
+                                But no career info (This is normal for new participants.)
+                            </span>
+                        </li>
+                    </ul>
                 </div>
-
-                <v-text-field
-                    v-model="goal"
-                    label="Goal"
-                ></v-text-field>
-
-                <v-text-field
-                    v-model="platform"
-                    label="Platform"
-                ></v-text-field>
-
-                <v-text-field
-                    v-model="submitter"
-                    label="Submitter"
-                ></v-text-field>
             </v-container>
         </v-main>
     </v-app>
@@ -49,40 +48,21 @@
 import { bindReplicant } from "../util.js"
 
 export default {
-    created() {
-        bindReplicant.call(this, "game")
-        bindReplicant.call(this, "goal")
-        bindReplicant.call(this, "platform")
-        bindReplicant.call(this, "submitter")
-        bindReplicant.call(this, "currentBoxart")
-
-        // ???
-        bindReplicant.call(this, "boxart", "assets:boxart")
+    methods: {
+        togglePlayerCards() {
+            this.showPlayerCards = !this.showPlayerCards
+        },
     },
 
-    computed: {
-        boxartWithEmpty () {
-            let modifiedBoxArts = JSON.parse(JSON.stringify(this.boxart))
-
-            modifiedBoxArts.push({
-                name:"None",
-                url: "",
-            })
-
-            modifiedBoxArts.reverse()
-
-            return modifiedBoxArts
-        }
+    created() {
+        bindReplicant.call(this, "showPlayerCards", "showPlayerCards", 0)
+        bindReplicant.call(this, "playerInfo")
     },
 
     data() {
         return {
-            game: "",
-            goal: "",
-            platform: "",
-            submitter: "",
-            boxart: [],
-            currentBoxart: {},
+            showPlayerCards: false,
+            playerInfo: [],
         }
     }
 };

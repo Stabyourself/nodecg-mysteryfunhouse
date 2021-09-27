@@ -12,10 +12,10 @@ let camera, scene, renderer
 let water, sun, sky, pmremGenerator, starMaterial, starMesh
 let clock, delta
 let ghost, ghostMeme, tweenVal
-let racerCardTextures = []
+let playerCardTextures = []
 let cards = []
 let shineTextures = []
-let racerCardUniforms = []
+let playerCardUniforms = []
 let cardInTween, cardOutTween
 
 let sunTimer = 20, ghostTimer = 0, cardRotationTimer = 0, cardBobTimer = 0, lawnMowerTimer = 0
@@ -35,7 +35,7 @@ function updateSun() {
     water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize()
 }
 
-export function init(container, racerCards) {
+export function init(container, playerCards) {
     renderer = new THREE.WebGLRenderer({antialias: true})
     renderer.setPixelRatio( window.devicePixelRatio )
     renderer.setSize( 1920, 1080 )
@@ -226,17 +226,17 @@ export function init(container, racerCards) {
                 `
 
                 const geometry = new THREE.PlaneGeometry(59, 86)
-                racerCardTextures[i] = new THREE.CanvasTexture(racerCards[i].canvas)
+                playerCardTextures[i] = new THREE.CanvasTexture(playerCards[i].canvas)
 
-                racerCardUniforms[i] = {    // custom uniforms (your textures)
-                    tOne: { type: "t", value: racerCardTextures[i] },
+                playerCardUniforms[i] = {    // custom uniforms (your textures)
+                    tOne: { type: "t", value: playerCardTextures[i] },
                     tSec: { type: "t", value: shineTextures[i] },
                     offsetY: { type: "f", value: 1},
                     lightness: { type: "f", value: 1},
                 }
 
                 let material = new THREE.ShaderMaterial({
-                    uniforms: racerCardUniforms[i],
+                    uniforms: playerCardUniforms[i],
                     // attributes: attributes,
                     vertexShader: vertShader,
                     fragmentShader: fragShader,
@@ -330,8 +330,8 @@ export function init(container, racerCards) {
             let rotY = Math.sin(rotYtimer)*0.2
 
             if (cards[i]) {
-                if (racerCardUniforms[i]) {
-                    racerCardUniforms[i].lightness.value = (1-Math.abs(rotY)) * Math.max(rise, 0.85)
+                if (playerCardUniforms[i]) {
+                    playerCardUniforms[i].lightness.value = (1-Math.abs(rotY)) * Math.max(rise, 0.85)
                 }
 
                 let rotYspinning = rotY
@@ -356,7 +356,7 @@ export function init(container, racerCards) {
                 }
 
                 if (update) {
-                    racerCardUniforms[i].offsetY.value = rotY * 20
+                    playerCardUniforms[i].offsetY.value = rotY * 20
                 }
             }
         }
@@ -414,7 +414,7 @@ function updatePositions() {
     camera.rotation.x = tweenVal.cameraX
 }
 
-export function toRacerCards() {
+export function toPlayerCards() {
     if (cardOutTween) {
         cardOutTween.stop()
     }
@@ -425,8 +425,10 @@ export function toRacerCards() {
         .onUpdate(updatePositions)
 
     cardInTween.start()
-    cardRotationTimer = 4.2
-    cardBobTimer = Math.PI*1.5
+    if (tweenVal.cardX == 90) {
+        cardRotationTimer = 4.2
+        cardBobTimer = Math.PI*1.5
+    }
 }
 
 export function toGhost() {
@@ -442,10 +444,10 @@ export function toGhost() {
     cardOutTween.start()
 }
 
-export function racerCardUpdated() {
+export function playerCardUpdated() {
     for (let i = 0; i < 2; i++) {
-        if (racerCardTextures[i]) {
-            racerCardTextures[i].needsUpdate = true
+        if (playerCardTextures[i]) {
+            playerCardTextures[i].needsUpdate = true
         }
     }
 }

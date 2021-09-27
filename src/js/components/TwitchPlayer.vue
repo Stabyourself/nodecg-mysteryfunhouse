@@ -54,13 +54,15 @@ export default {
 
             twitchOptions.channel = this.url
             this.player = new Twitch.Player(this.$refs.player, twitchOptions)
+            console.log("CREATING PLAYER " + this.url, this.player)
             this.player.addEventListener(Twitch.Embed.VIDEO_READY, () => {
+
                 this.player.setMuted(false);
                 this.player.setVolume(this.volume/100);
 
-                setInterval(() => {
-                    this.qualities = this.player.getQualities()
-                }, 5000)
+                // setInterval(() => {
+                //     this.qualities = this.player.getQualities()
+                // }, 5000)
             });
         }
     },

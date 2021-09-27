@@ -90,19 +90,22 @@ nodecg.listenFor("timerSet", set)
 
 
 // this is good code, I promise.
+const player0doneRep = nodecg.Replicant("player0done")
 const player1doneRep = nodecg.Replicant("player1done")
 const player2doneRep = nodecg.Replicant("player2done")
 const player3doneRep = nodecg.Replicant("player3done")
-const player4doneRep = nodecg.Replicant("player4done")
+const player0forfeitRep = nodecg.Replicant("player0forfeit")
 const player1forfeitRep = nodecg.Replicant("player1forfeit")
 const player2forfeitRep = nodecg.Replicant("player2forfeit")
 const player3forfeitRep = nodecg.Replicant("player3forfeit")
-const player4forfeitRep = nodecg.Replicant("player4forfeit")
 
 function checkForPause(changed) {
     if (stopTimerWhenDoneRep.value) {
         let donePlayers = 0
 
+        if (player0doneRep.value || player0forfeitRep.value || changed == 0) {
+            donePlayers++;
+        }
         if (player1doneRep.value || player1forfeitRep.value || changed == 1) {
             donePlayers++;
         }
@@ -110,9 +113,6 @@ function checkForPause(changed) {
             donePlayers++;
         }
         if (player3doneRep.value || player3forfeitRep.value || changed == 3) {
-            donePlayers++;
-        }
-        if (player4doneRep.value || player4forfeitRep.value || changed == 4) {
             donePlayers++;
         }
 
