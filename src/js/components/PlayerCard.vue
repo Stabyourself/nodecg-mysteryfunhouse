@@ -146,7 +146,7 @@ export default {
 
                 if (this.info.career) {
                     // Win rate
-                    lines.push(`Has a ${winPercentage}% win rate across all Mystery Tournaments.`)
+                    lines.push(`Has a win rate of ${winPercentage}% across all Mystery Tournaments.`)
 
                     // Best performance(s)
                     if (mtsWon.length > 0) {
@@ -172,11 +172,25 @@ export default {
                     lines.push(`Is participating for the first time.`)
                 }
 
-                let y = 955
+
+                let y = 960
                 for (let i = 0; i < lines.length; i++) {
                     this.ctx.fillText(lines[i], 72, y);
-                    y += 32;
+                    y += 34;
                 }
+
+                // Draw flavor
+                this.ctx.font = 'bold italic 23px StoneSerifOSITCBoldItalic';
+
+                let flavor = this.info.contact["Flavor text"] ?? ""
+                let flavorWidth = this.ctx.measureText(flavor).width;
+
+                scaleX = Math.min(1, 670/flavorWidth)
+
+                this.ctx.scale(scaleX, 1);
+                this.ctx.fillText(flavor, 72/scaleX, y-2);
+                this.ctx.scale(1/scaleX, 1);
+
 
                 // Draw win/loss
                 let wins = 0
@@ -277,6 +291,12 @@ export default {
         })
 
         f = new FontFace('MatrixBoldSmallCaps', 'url(../cards/font/MatrixBoldSmallCaps.ttf)');
+        f.load().then(font => {
+            document.fonts.add(font)
+            this.render()
+        })
+
+        f = new FontFace('StoneSerifOSITCBoldItalic', 'url(../cards/font/StoneSerifOSITC-BoldItalic.ttf)');
         f.load().then(font => {
             document.fonts.add(font)
             this.render()

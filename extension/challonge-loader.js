@@ -7,6 +7,7 @@ const discord = require("./discord")
 const _ = require("lodash")
 
 const ctx = require('./nodecg')
+const { arch } = require("os")
 const nodecg = ctx.get()
 
 function capitalizeWords(str) {
@@ -53,7 +54,8 @@ for (prop of props) {
 
 
 nodecg.listenFor("loadMatch", function(options, ack) {
-    challonge.getTournament(tournamentName).then(tournament => {
+    challonge.getTournament(tournamentName)
+    .then(tournament => {
         // Challonge stuff
         const match = tournament.matches.find(match => {
             return match.match.suggested_play_order == options.matchId
@@ -195,15 +197,24 @@ nodecg.listenFor("loadMatch", function(options, ack) {
                     let playerNumber = i + (options.matchNumber == 2 ? 2 : 0)
                     playerInfoRep.value[playerNumber] = {
                         name: playerNames[i],
+                        avatar: playerDiscords[i].user.avatarURL({size: 1024}),
+
                         challonge: players[i],
                         matches: playerMatches[i],
+                        contact: playerContacts[i],
                         career: playerCareers[i],
-                        avatar: playerDiscords[i].user.avatarURL({size: 1024}),
                     }
                 }
 
                 ack(null, `${playerNames[0]}  vs  ${playerNames[1]}`);
-            })
-        })
+            }) // career sheet promise
+        }) // contact sheet promise
+    }) // tournament promise
+    .catch(res => {
+        if (res.errno) {
+            ack(new Error(`Looks like the Challonge API is down (${res.code}). Try again.`))
+        } else {
+            ack(new Error(`Got status code ${res} on the Challonge request. Tell Maurice!`))
+        }
     })
 })
