@@ -41,9 +41,7 @@ export default {
 
     data() {
         return {
-            playerInfo: {
-                players: [],
-            },
+            playerInfo: [],
             playerCardCtx: [
                 document.createElement('canvas').getContext('2d'),
                 document.createElement('canvas').getContext('2d'),

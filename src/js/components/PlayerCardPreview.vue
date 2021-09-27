@@ -1,9 +1,10 @@
 <template>
     <v-app>
         <v-main>
-            <v-tabs v-model="tab" centered background-color="transparent">
+            <v-tabs v-model="tab" centered background-color="transparent" show-arrows>
                 <v-tabs-slider color="primary"></v-tabs-slider>
 
+                <v-tab>Firefox sucks</v-tab>
                 <v-tab
                     v-for="i in 4" :key="i"
                 >
@@ -12,6 +13,7 @@
             </v-tabs>
 
             <v-tabs-items v-model="tab">
+                <v-tab-item style="width: 500px; margin: 4em auto; text-align: center;">This tab is just here because Firefox has a bug that makes it error if I try to render to a canvas in an invisible iframe, like this one!</v-tab-item>
                 <v-tab-item
                     v-for="i in 4" :key="i">
                     <player-card :info="playerInfo[i-1]" class="player-card-preview"></player-card>
@@ -29,16 +31,10 @@ export default {
         bindReplicant.call(this, "playerInfo")
     },
 
-    watch: {
-        playInfo() {
-            console.log("!")
-        }
-    },
-
     data() {
         return {
             playerInfo: [],
-            tab: 0,
+            tab: null,
         }
     }
 };
