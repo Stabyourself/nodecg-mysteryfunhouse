@@ -94,6 +94,13 @@
         "file": "challonge.html",
         "width": 5,
         "dialog": true
+      },
+      {
+        "name": "player-card-preview-dialog",
+        "title": "Player Card Preview",
+        "file": "playercardpreview.html",
+        "width": 5,
+        "dialog": true
       }
     ],
     "graphics": [
@@ -118,6 +125,12 @@
           "gif",
           "png"
         ]
+      }
+    ],
+    "mount": [
+      {
+        "directory": "cards",
+        "endpoint": "cards"
       }
     ]
   },

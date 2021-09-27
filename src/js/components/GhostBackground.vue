@@ -4,7 +4,7 @@
 
 <script>
 import { bindReplicant } from "../util.js"
-import { init, playerCardUpdated, toPlayerCards, toGhost } from "../../html/graphics/js/threejs/scene.js"
+import { init, playerCardUpdated, toPlayerCards, toGhost } from "./threejs/scene.js"
 
 export default {
     props: [

@@ -9,8 +9,8 @@
             :showPlayerCards="showPlayerCards"
         ></ghost-background>
 
-        <player-card :ctx="playerCardCtx[0]" @update="canvasUpdated" :info="playerInfo[leftCardPlayer]"></player-card>
-        <player-card :ctx="playerCardCtx[1]" @update="canvasUpdated" :info="playerInfo[rightCardPlayer]"></player-card>
+        <player-card :use-ctx="playerCardCtx[0]" @update="canvasUpdated" :info="playerInfo[leftCardPlayer]"></player-card>
+        <player-card :use-ctx="playerCardCtx[1]" @update="canvasUpdated" :info="playerInfo[rightCardPlayer]"></player-card>
     </v-app>
 </template>
 

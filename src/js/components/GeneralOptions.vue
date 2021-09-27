@@ -33,16 +33,30 @@
                     </span>
                 </v-btn>
 
+                <v-divider class="my-7"></v-divider>
+
                 <div>
                     <h2>Player Card Status</h2>
+
+                    <a href="#" nodecg-dialog="player-card-preview-dialog">Preview</a>
+
                     <ul>
                         <li v-for="(player, i) of playerInfo" :key="player.name">
                             Player {{ i+1 }}:
-                            {{ player.name }}
-                            <strong class="green--text">Valid!</strong>
-                            <span v-if="!player.career">
-                                But no career info (This is normal for new participants.)
-                            </span>
+                            <strong>{{ player.name }}</strong>
+                            <v-tooltip top v-if="!player.career">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-icon
+                                    color="warning"
+                                    dark
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    >
+                                    mdi-alert
+                                    </v-icon>
+                                </template>
+                                <span>No career info! (This is normal for new participants)</span>
+                            </v-tooltip>
                         </li>
                     </ul>
                 </div>

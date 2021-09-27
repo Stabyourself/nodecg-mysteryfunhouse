@@ -56,3 +56,13 @@ body {
              </svg>') !important;
     background-size: 20px 20px !important;
 }
+
+.player-card-preview {
+    width: 100%;
+
+    canvas {
+        height: 750px;
+        margin: 0 auto;
+        display: block;
+    }
+}

@@ -11,7 +11,7 @@
                         v-bind="attrs"
                         v-on="on"
                         >
-                        mdi-help-circle-outline
+                        mdi-help-circle
                         </v-icon>
                     </template>
                     <span>The match ID of any race is the tiny number left of it!</span>

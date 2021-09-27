@@ -207,10 +207,30 @@ export default {
             }
 
             this.$emit("update")
+        },
+
+        loadAvatar() {
+            if (this.info && this.info.avatar) {
+                this.img.src = this.info.avatar
+                this.img.crossOrigin = "Anonymous";
+
+                this.img.onload = this.render
+            } else {
+                this.img = new Image()
+                this.render()
+            }
         }
     },
 
     mounted() {
+        if (!this.useCtx) {
+            this.canvas = document.createElement('canvas');
+            this.ctx = this.canvas.getContext('2d')
+            this.$el.appendChild(this.canvas);
+        } else {
+            this.ctx = this.useCtx
+        }
+
         this.ctx.canvas.width = 813;
         this.ctx.canvas.height = 1185;
 
@@ -226,61 +246,53 @@ export default {
         for (const color of colors) {
             let img  = new Image();
             img.onload = this.render
-            img.src = `img/card_front_${color}.png`;
+            img.src = `../cards/img/card_front_${color}.png`;
 
             this.cardFronts.push(img)
         }
 
 
         this.cardStar.onload = this.render
-        this.cardStar.src = 'img/card_star.png';
+        this.cardStar.src = '../cards/img/card_star.png';
 
         this.cardAttributes.onload = this.render
-        this.cardAttributes.src = 'img/card_attributes.png';
+        this.cardAttributes.src = '../cards/img/card_attributes.png';
 
-        var f = new FontFace('MatrixRegularSmallCaps', 'url(css/font/MatrixRegularSmallCaps.ttf)');
+        var f = new FontFace('MatrixRegularSmallCaps', 'url(../cards/font/MatrixRegularSmallCaps.ttf)');
         f.load().then(font => {
             document.fonts.add(font)
             this.render()
         })
 
-        f = new FontFace('ITCStoneSerifSmallCapsBold', 'url(css/font/ITCStoneSerifSmallCapsBold.ttf)');
+        f = new FontFace('ITCStoneSerifSmallCapsBold', 'url(../cards/font/ITCStoneSerifSmallCapsBold.ttf)');
         f.load().then(font => {
             document.fonts.add(font)
             this.render()
         })
 
-        f = new FontFace('StoneSerifRegular', 'url(css/font/StoneSerifRegular.ttf)');
+        f = new FontFace('StoneSerifRegular', 'url(../cards/font/StoneSerifRegular.ttf)');
         f.load().then(font => {
             document.fonts.add(font)
             this.render()
         })
 
-        f = new FontFace('MatrixBoldSmallCaps', 'url(css/font/MatrixBoldSmallCaps.ttf)');
+        f = new FontFace('MatrixBoldSmallCaps', 'url(../cards/font/MatrixBoldSmallCaps.ttf)');
         f.load().then(font => {
             document.fonts.add(font)
             this.render()
         })
 
-        this.render()
+        this.loadAvatar()
     },
 
     watch: {
         info() {
-            if (this.info.avatar) {
-                this.img.src = this.info.avatar
-                this.img.crossOrigin = "Anonymous";
-
-                this.img.onload = this.render
-            } else {
-                this.img = new Image()
-                this.render()
-            }
+            this.loadAvatar()
         }
     },
 
     props: [
-        "ctx",
+        "useCtx",
         "info"
     ],
 
