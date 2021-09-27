@@ -57,7 +57,7 @@ export function init(container, playerCards) {
         1,
         20000
     )
-    camera.position.set( 1, 30, 100 )
+    camera.position.set( 1, 30, 300 )
     camera.rotateX(-.2)
 
 
@@ -175,7 +175,6 @@ export function init(container, playerCards) {
         cards[i] = new THREE.Object3D()
         cards[i].scale.setScalar(0.6)
         cards[i].translateY(30)
-        cards[i].translateZ(35)
 
         let posX = -200
 
@@ -184,6 +183,8 @@ export function init(container, playerCards) {
         }
 
         cards[i].position.x = posX
+
+        cards[i].visible = false
 
         scene.add(cards[i])
 
@@ -427,12 +428,19 @@ export function toPlayerCards() {
         .to({ ghostY: -100, cardX: 25, cameraX: 0 }, 2000)
         .easing(Easing.Cubic.InOut)
         .onUpdate(updatePositions)
+        .onComplete(() => {
+            ghost.visible = false
+            ghostMeme.visible = false
+        })
 
     cardInTween.start()
     if (tweenVal.cardX == 90) {
         cardRotationTimer = 4.2
         cardBobTimer = Math.PI*1.5
     }
+
+    cards[0].visible = true
+    cards[1].visible = true
 
     spin()
 }
@@ -446,6 +454,13 @@ export function toGhost() {
         .to({ ghostY: 0, cardX: 90, cameraX: -0.2 }, 2000)
         .easing(Easing.Cubic.InOut)
         .onUpdate(updatePositions)
+        .onComplete(() => {
+            cards[0].visible = false
+            cards[1].visible = false
+        })
+
+    ghost.visible = true
+    ghostMeme.visible = true
 
     cardOutTween.start()
 }

@@ -6,11 +6,11 @@
         <ghost-background
             ref="scene"
             :playerCardCtx="playerCardCtx"
-            :showPlayerCards="showPlayerCards"
+            :state="waitScreenState"
         ></ghost-background>
 
-        <player-card :use-ctx="playerCardCtx[0]" @update="canvasUpdated" :info="playerInfo[leftCardPlayer]"></player-card>
-        <player-card :use-ctx="playerCardCtx[1]" @update="canvasUpdated" :info="playerInfo[rightCardPlayer]"></player-card>
+        <player-card :use-ctx="playerCardCtx[0]" @update="canvasUpdated" :info="leftPlayerInfo"></player-card>
+        <player-card :use-ctx="playerCardCtx[1]" @update="canvasUpdated" :info="rightPlayerInfo"></player-card>
     </v-app>
 </template>
 
@@ -20,8 +20,7 @@ import { bindReplicant } from "../util.js"
 export default {
     created() {
         bindReplicant.call(this, "playerInfo")
-        bindReplicant.call(this, "showPlayerCards")
-        bindReplicant.call(this, "activePlayerCards")
+        bindReplicant.call(this, "waitScreenState")
     },
 
     methods: {
@@ -30,13 +29,16 @@ export default {
         }
     },
 
-    computed: {
-        leftCardPlayer() {
-            return this.activePlayerCards*2
-        },
-        rightCardPlayer() {
-            return this.activePlayerCards*2 + 1
-        },
+    watch: {
+        waitScreenState(newValue) {
+            if (newValue == "cards1") {
+                this.leftPlayerInfo = this.playerInfo[0]
+                this.rightPlayerInfo = this.playerInfo[1]
+            } else if (newValue == "cards2") {
+                this.leftPlayerInfo = this.playerInfo[2]
+                this.rightPlayerInfo = this.playerInfo[3]
+            }
+        }
     },
 
     data() {
@@ -46,8 +48,10 @@ export default {
                 document.createElement('canvas').getContext('2d'),
                 document.createElement('canvas').getContext('2d'),
             ],
-            showPlayerCards: false,
-            activePlayerCards: 0,
+            waitScreenState: "ghost",
+
+            leftPlayerInfo: null,
+            rightPlayerInfo: null,
         }
     }
 };

@@ -184,8 +184,6 @@ nodecg.listenFor("loadMatch", function(options, ack) {
                 // replicants["submitter"].value = ""
                 // replicants["currentBoxart"].value = ""
 
-                // replicants["showPlayerCards"].value = false
-
                 nodecg.sendMessage("timerReset")
 
 

@@ -9,7 +9,7 @@ import { init, playerCardUpdated, toPlayerCards, toGhost } from "./threejs/scene
 export default {
     props: [
         "playerCardCtx",
-        "showPlayerCards"
+        "state"
     ],
 
     methods: {
@@ -21,11 +21,11 @@ export default {
     },
 
     watch: {
-        showPlayerCards(newValue) {
-            if (newValue) {
-                toPlayerCards()
-            } else {
+        state(newValue) {
+            if (newValue == "ghost") {
                 toGhost()
+            } else {
+                toPlayerCards()
             }
         }
     },

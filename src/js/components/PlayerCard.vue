@@ -18,6 +18,7 @@ export default {
 
             if (this.info) {
                 // set card color and attribute
+
                 let rand = gen.create(this.info.challonge.participant.display_name)
                 this.cardColor = rand.range(this.cardFronts.length)
                 this.attribute = rand.range(6)
@@ -161,12 +162,17 @@ export default {
                             list = mtsWon.join(", ")
                         }
                         lines.push(`Won ${list}.`)
-                    } else if (mtCount > 1) {
-                        lines.push(`Got a best placement of ${getNumberWithOrdinal(bestPlacement)} during ${bestPlacementMt}.`)
-                    }
 
-                    // First MT
-                    lines.push(`First joined in ${firstJoined} and finished ${getNumberWithOrdinal(firstJoinedPlacement)}.`)
+                    } else if (mtCount == 1) { // only joined 1 MT
+                        lines.push(`Joined in ${firstJoined} and finished ${getNumberWithOrdinal(firstJoinedPlacement)}.`)
+
+                    } else if (bestPlacement != firstJoinedPlacement) { // best placement was not their first
+                        lines.push(`First joined in ${firstJoined} and finished ${getNumberWithOrdinal(firstJoinedPlacement)}.`)
+                        lines.push(`Got a best placement of ${getNumberWithOrdinal(bestPlacement)} during ${bestPlacementMt}.`)
+
+                    } else { // best placement was their first
+                        lines.push(`First joined in ${firstJoined} and finished ${getNumberWithOrdinal(firstJoinedPlacement)}, their best placement.`)
+                    }
                 } else {
                     // No MTS
                     lines.push(`Is participating for the first time.`)

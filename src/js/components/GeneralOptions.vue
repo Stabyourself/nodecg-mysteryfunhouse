@@ -12,26 +12,11 @@
                 </v-btn>
 
                 <v-select
-                    label="Active player cards"
-                    v-model="activePlayerCards"
-                    :items="activePlayerCardsOptions"
+                    label="Wait Screen state"
+                    v-model="waitScreenState"
+                    :items="waitScreenStateOptions"
                 >
                 </v-select>
-
-                <v-btn
-                    :color="showPlayerCards ? 'red' : 'green'"
-                    block
-                    class="mb-3"
-                    @click="togglePlayerCards"
-                    >
-                    <span v-if="showPlayerCards">
-                        Hide Playercards
-                    </span>
-
-                    <span v-else>
-                        Show Playercards
-                    </span>
-                </v-btn>
 
                 <v-divider class="my-7"></v-divider>
 
@@ -69,25 +54,18 @@
 import { bindReplicant } from "../util.js"
 
 export default {
-    methods: {
-        togglePlayerCards() {
-            this.showPlayerCards = !this.showPlayerCards
-        },
-    },
-
     created() {
-        bindReplicant.call(this, "showPlayerCards", "showPlayerCards", 0)
-        bindReplicant.call(this, "activePlayerCards", "activePlayerCards", 0)
+        bindReplicant.call(this, "waitScreenState", "waitScreenState", 0)
         bindReplicant.call(this, "playerInfo")
     },
 
     data() {
         return {
-            showPlayerCards: false,
-            activePlayerCards: 0,
-            activePlayerCardsOptions: [
-                {text: "Players 1 and 2", value: 0},
-                {text: "Players 3 and 4", value: 1},
+            waitScreenState: false,
+            waitScreenStateOptions: [
+                {text: "Spinning Ghost", value: "ghost"},
+                {text: "Player Cards 1 and 2", value: "cards1"},
+                {text: "Player Cards 3 and 4", value: "cards2"},
             ],
             playerInfo: [],
         }
