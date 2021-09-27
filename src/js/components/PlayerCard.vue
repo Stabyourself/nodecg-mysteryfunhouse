@@ -125,7 +125,7 @@ export default {
                 this.ctx.textAlign = "left"
 
                 // Draw class or whatever this is
-                this.ctx.font = 'bold 40px ITCStoneSerifSmallCapsBold';
+                this.ctx.font = 'bold 40px StoneSerifOSITCBoldItalic';
                 this.ctx.fillStyle = '#000809';
 
                 let classes = ["Racer"]
@@ -180,9 +180,13 @@ export default {
                 }
 
                 // Draw flavor
-                this.ctx.font = 'bold italic 23px StoneSerifOSITCBoldItalic';
+                this.ctx.font = "bold italic 23px 'Times New Roman'";
 
-                let flavor = this.info.contact["Flavor text"] ?? ""
+                let flavor = ""
+
+                if (this.info.contact && this.info.contact["Flavor text"]) {
+                    flavor = this.info.contact["Flavor text"] ?? ""
+                }
                 let flavorWidth = this.ctx.measureText(flavor).width;
 
                 scaleX = Math.min(1, 670/flavorWidth)
@@ -291,12 +295,6 @@ export default {
         })
 
         f = new FontFace('MatrixBoldSmallCaps', 'url(../cards/font/MatrixBoldSmallCaps.ttf)');
-        f.load().then(font => {
-            document.fonts.add(font)
-            this.render()
-        })
-
-        f = new FontFace('StoneSerifOSITCBoldItalic', 'url(../cards/font/StoneSerifOSITC-BoldItalic.ttf)');
         f.load().then(font => {
             document.fonts.add(font)
             this.render()
