@@ -17,7 +17,7 @@ exports.getTournament = function(tournament) {
                 resolve(body.tournament)
             };
 
-            reject(body.errors)
+            reject(error)
         })
     })
 }

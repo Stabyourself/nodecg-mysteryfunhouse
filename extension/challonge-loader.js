@@ -161,7 +161,7 @@ nodecg.listenFor("loadMatch", function(options, ack) {
                     let twitch = ""
 
                     if (playerContacts[i]) {
-                        pronouns = playerContacts[i]['Preferred pronoun.']
+                        pronouns = playerContacts[i]['Pronoun']
                         twitch = playerContacts[i]['Twitch Channel']
                     }
 
