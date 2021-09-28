@@ -12,7 +12,7 @@
                 </v-text-field>
 
                 <div style="text-align: center;" class="grey--text">
-                    <span v-if="timer.state == 'paused'">{{ pausedTimerText }}</span>
+                    <span v-if="timer.state == 'paused'">Press play to continue {{ pausedTimerText }}</span>
                     <span v-else>&nbsp;</span>
                 </div>
 
@@ -134,7 +134,7 @@ export default {
         },
 
         pausedTimerText() {
-            return formatTimer(this.timer.pausedMs)
+            return formatTimer(this.timer.pausedMs, false)
         }
     },
 
