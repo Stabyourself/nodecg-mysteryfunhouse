@@ -1,7 +1,6 @@
 const mix = require('laravel-mix');
 require('vuetifyjs-mix-extension')
 
-
 mix
     .js('src/js/graphics.js', "graphics/js")
     .sass('src/scss/graphics.scss', "graphics/css")

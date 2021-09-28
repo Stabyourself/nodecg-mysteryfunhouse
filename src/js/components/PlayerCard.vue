@@ -125,7 +125,7 @@ export default {
                 this.ctx.textAlign = "left"
 
                 // Draw class or whatever this is
-                this.ctx.font = 'bold 40px StoneSerifOSITCBoldItalic';
+                this.ctx.font = 'bold 40px ITCStoneSerifSmallCapsBold';
 
                 let classes = ["Racer"]
 
