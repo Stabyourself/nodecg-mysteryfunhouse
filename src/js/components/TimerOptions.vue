@@ -84,7 +84,7 @@
         margin-top: 0;
 
         input {
-            font-size: 2.57em;
+            font-size: 3.87em;
             font-weight: 700;
             max-height: none;
             padding: 0;
@@ -126,7 +126,7 @@ export default {
     computed: {
         timerText: {
             get() {
-                return formatTimer(this.timer.ms)
+                return formatTimer(this.timer.ms, false)
             },
             set(newValue) {
                 this.newTime = newValue
