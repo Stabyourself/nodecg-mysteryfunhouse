@@ -3,7 +3,9 @@
         <v-main>
             <v-container>
                 <v-text-field
+                    color="red"
                     class="timer"
+                    :class="{active: timer.state == 'playing'}"
                     v-model="timerText"
                     :hint="timer.state != 'playing' ? 'Press enter to apply' : ''"
                     @keydown.enter="applyTime"

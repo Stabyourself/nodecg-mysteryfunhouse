@@ -66,3 +66,14 @@ body {
         display: block;
     }
 }
+
+.timer.theme--dark.v-input {
+    input {
+        color: #999;
+        transition: color 0.3s;
+    }
+
+    &.active input {
+        color: #fff
+    }
+}
