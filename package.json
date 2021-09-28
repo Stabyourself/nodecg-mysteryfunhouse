@@ -73,14 +73,12 @@
         "width": 2,
         "file": "game.html"
       },
-
       {
         "name": "stream-cropping",
         "title": "Stream Cropping",
         "file": "cropping.html",
         "fullbleed": true
       },
-
       {
         "name": "boxart-select-dialog",
         "title": "Select Boxart",
