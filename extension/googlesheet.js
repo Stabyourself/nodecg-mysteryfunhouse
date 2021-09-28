@@ -22,35 +22,10 @@ careerDoc.loadInfo().then(function() {
 })
 
 
-
-exports.getContactInfo = function(challongeName) {
-    return new Promise(function(resolve, reject) {
-        contactSheet.getRows().then(function(rows) {
-            let row = rows.find(row => {
-                return row._rawData[2].toLowerCase() == challongeName.toLowerCase()
-            })
-
-            if (row) {
-                resolve(Object.assign({}, row, {_sheet: undefined}))
-            } else {
-                reject(`Couldn't find challonge username "${challongeName}" on the Contact Sheet.`)
-            }
-        })
-    })
+exports.getContactSheet = function() {
+    return contactSheet.getRows()
 }
 
-exports.getCareerInfo = function(SRLName) {
-    return new Promise(function(resolve, reject) {
-        careerSheet.getRows().then(function(rows) {
-            let row = rows.find(row => {
-                return row._rawData[1].toLowerCase() == SRLName.toLowerCase()
-            })
-
-            if (row) {
-                resolve(Object.assign({}, row, {_sheet: undefined}))
-            } else {
-                reject(`Couldn't find SRL username "${SRLName}" on the Career Sheet.`)
-            }
-        })
-    })
+exports.getCareerSheet = function() {
+    return careerSheet.getRows()
 }
