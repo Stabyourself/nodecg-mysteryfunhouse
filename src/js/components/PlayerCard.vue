@@ -29,7 +29,7 @@ export default {
 
                 // Draw name
                 this.ctx.font = '110px MatrixRegularSmallCaps';
-                this.ctx.fillStyle = '#1B1515';
+                this.ctx.fillStyle = '#1b1515';
 
                 // see if we need to scale the name
                 let name = this.info.name
@@ -117,7 +117,6 @@ export default {
 
                 // Draw edition
                 this.ctx.font = 'bold 23px StoneSerifRegular';
-                this.ctx.fillStyle = '#000809';
                 this.ctx.fillText(`${getNumberWithOrdinal(mtCount+1)} Edition`, 90, 873);
 
                 // Draw serial number
@@ -127,7 +126,6 @@ export default {
 
                 // Draw class or whatever this is
                 this.ctx.font = 'bold 40px StoneSerifOSITCBoldItalic';
-                this.ctx.fillStyle = '#000809';
 
                 let classes = ["Racer"]
 
