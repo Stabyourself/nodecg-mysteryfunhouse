@@ -3,7 +3,7 @@
         <v-main>
             <v-container>
                 <v-btn
-                    color="green"
+                    color="primary"
                     block
                     class="mb-3"
                     nodecg-dialog="load-challonge-dialog"

@@ -85,16 +85,20 @@ export default {
                         }
                     }
 
+                    let i = 1;
+                    let mtName = "MT1"
 
-                    for (let i = 1; i <= 20; i++) {
-                        if (this.info.career[`MT${i}`] && this.info.career[`MT${i}`].length > 0) {
-
-                            checkPlacement(this.info.career[`MT${i}`], `MT${i}`)
+                    while (mtName in this.info.career) {
+                        if (this.info.career[mtName] && String(this.info.career[mtName]).length > 0) {
+                            checkPlacement(this.info.career[mtName], mtName)
                         }
-                    }
 
-                    if (this.info.career[`MTX`] !== "") {
-                        checkPlacement(this.info.career[`MTX`], "MTX")
+                        i++;
+
+                        mtName = "MT" + i
+                        if (i == 10) {
+                            mtName = "MTX";
+                        }
                     }
 
                     winPercentage = Math.round(this.info.career["%"])

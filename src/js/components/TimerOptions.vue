@@ -3,7 +3,6 @@
         <v-main>
             <v-container>
                 <v-text-field
-                    color="red"
                     class="timer"
                     :class="{active: timer.state == 'playing'}"
                     v-model="timerText"
