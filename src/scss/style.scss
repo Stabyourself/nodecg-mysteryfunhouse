@@ -1,19 +1,13 @@
 @font-face {
     font-family: 'Regen';
-      src:  url('font/Regen.ttf.woff') format('woff'),
-      url('font/Regen.ttf.svg#Regen') format('svg'),
-      url('font/Regen.ttf.eot'),
-      url('font/Regen.eot?#iefix') format('embedded-opentype');
+      src:  url('../../res/font/Regen.woff2') format('woff2');
       font-weight: normal;
       font-style: normal;
 }
 
 @font-face {
     font-family: 'Digital-7 Mono';
-    src: url('font/Digital-7Mono.eot');
-    src: url('font/Digital-7Mono.eot?#iefix') format('embedded-opentype'),
-        url('font/Digital-7Mono.woff') format('woff'),
-        url('font/Digital-7Mono.svg#Digital-7Mono') format('svg');
+    src: url('../../res/font/Digital-7Mono.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
 }
