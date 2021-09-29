@@ -127,8 +127,8 @@
     ],
     "mount": [
       {
-        "directory": "cards",
-        "endpoint": "cards"
+        "directory": "res",
+        "endpoint": "res"
       }
     ]
   },

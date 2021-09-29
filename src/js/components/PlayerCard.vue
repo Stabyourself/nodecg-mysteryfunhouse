@@ -19,7 +19,7 @@ export default {
             if (this.info) {
                 // set card color and attribute
 
-                let rand = gen.create(this.info.challonge.participant.display_name)
+                let rand = gen.create(this.info.contact["Challonge Username"])
                 this.cardColor = rand.range(this.cardFronts.length)
                 this.attribute = rand.range(6)
 
@@ -268,37 +268,37 @@ export default {
         for (const color of colors) {
             let img  = new Image();
             img.onload = this.render
-            img.src = `../cards/img/card_front_${color}.png`;
+            img.src = `../res/img/card_front_${color}.png`;
 
             this.cardFronts.push(img)
         }
 
 
         this.cardStar.onload = this.render
-        this.cardStar.src = '../cards/img/card_star.png';
+        this.cardStar.src = '../res/img/card_star.png';
 
         this.cardAttributes.onload = this.render
-        this.cardAttributes.src = '../cards/img/card_attributes.png';
+        this.cardAttributes.src = '../res/img/card_attributes.png';
 
-        var f = new FontFace('MatrixRegularSmallCaps', 'url(../cards/font/MatrixRegularSmallCaps.ttf)');
+        var f = new FontFace('MatrixRegularSmallCaps', 'url(../res/font/MatrixRegularSmallCaps.ttf)');
         f.load().then(font => {
             document.fonts.add(font)
             this.render()
         })
 
-        f = new FontFace('ITCStoneSerifSmallCapsBold', 'url(../cards/font/ITCStoneSerifSmallCapsBold.ttf)');
+        f = new FontFace('ITCStoneSerifSmallCapsBold', 'url(../res/font/ITCStoneSerifSmallCapsBold.ttf)');
         f.load().then(font => {
             document.fonts.add(font)
             this.render()
         })
 
-        f = new FontFace('StoneSerifRegular', 'url(../cards/font/StoneSerifRegular.ttf)');
+        f = new FontFace('StoneSerifRegular', 'url(../res/font/StoneSerifRegular.ttf)');
         f.load().then(font => {
             document.fonts.add(font)
             this.render()
         })
 
-        f = new FontFace('MatrixBoldSmallCaps', 'url(../cards/font/MatrixBoldSmallCaps.ttf)');
+        f = new FontFace('MatrixBoldSmallCaps', 'url(../res/font/MatrixBoldSmallCaps.ttf)');
         f.load().then(font => {
             document.fonts.add(font)
             this.render()

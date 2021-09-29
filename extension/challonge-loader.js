@@ -52,6 +52,69 @@ for (prop of props) {
     replicants[prop] = nodecg.Replicant(prop)
 }
 
+function getPlayerInfo(tournament, contactRows, careerRows, discordMembers, challongeName) {
+    // Challonge stuff
+    const challonge = tournament.participants.find(participant => {
+        return participant.participant.display_name == challongeName
+    })
+
+    const matches = tournament.matches.filter(match => {
+        return match.match.player1_id == challonge.participant.id || match.match.player2_id == challonge.participant.id
+    })
+
+
+    // Contact stuff
+    const contact = contactRows.find(row => {
+        return row["Challonge Username"].toLowerCase() == challongeName.toLowerCase()
+    })
+
+    if (!contact) {
+        return Error(`Couldn't find challonge username "${challongeName}" on the Contact Sheet.`)
+    }
+
+    if (!contact["SRL username"]) {
+        return Error(`SRL username for player "${challongeName}" is missing on the Contact Sheet.`)
+    }
+
+    if (!contact["Discord Username"]) {
+        return Error(`Discord username for player "${challongeName}" is missing on the Contact Sheet.`)
+    }
+
+
+
+    // Discord stuff
+    const discordNick = contact["Discord Username"]
+    const split = discordNick.split("#")
+
+    const member = discordMembers.find(member => {
+        return member.user.username.toLowerCase() == split[0].toLowerCase() && member.user.discriminator == split[1]
+    })
+
+    if (!member) {
+        return Error(`Couldn't find "${discordNick}" in the Mystery Discord server.`)
+    }
+
+
+
+    // Career stuff
+    const SRLName = contact["SRL username"]
+    const career = careerRows.find(row => {
+        return row["Competitor"].toLowerCase() == SRLName.toLowerCase()
+    })
+
+    if (!career) {
+        return Error(`Couldn't find SRL username "${SRLName}" on the Career Sheet.`)
+    }
+
+    return {
+        challonge: challonge,
+        contact: Object.assign({}, contact, {_sheet: undefined}),
+        matches: matches,
+        career: Object.assign({}, career, {_sheet: undefined}),
+        discord: member,
+    }
+}
+
 
 nodecg.listenFor("loadMatch", function(options, ack) {
     const promises = [
@@ -72,7 +135,7 @@ nodecg.listenFor("loadMatch", function(options, ack) {
             return ack(new Error(`Googlesheet API call failed (${results[2].reason}). Try again or tell Maurice.`))
         }
         if (results[3].status == "rejected") {
-            return ack(new Error(`Discord API call faile (${results[3].reason})d. Try again or tell Maurice.`))
+            return ack(new Error(`Discord API call failed (${results[3].reason}). Try again or tell Maurice.`))
         }
 
 
@@ -81,13 +144,7 @@ nodecg.listenFor("loadMatch", function(options, ack) {
         const careerRows = results[2].value
         const discordMembers = results[3].value
 
-        const playerChallonges = []
-        const playerMatches = []
-        const playerContacts = []
-        const playerDiscords = []
-        const playerNames = []
-        const playerCareers = []
-
+        const info = []
 
         // Match stuff
         const match = tournament.matches.find(match => {
@@ -99,86 +156,36 @@ nodecg.listenFor("loadMatch", function(options, ack) {
         }
 
         for (let i = 0; i < 2; i++) {
-            // Challonge stuff
-            playerChallonges[i] = tournament.participants.find(participant => {
+            const challongeName = tournament.participants.find(participant => {
                 return participant.participant.id == match.match[`player${i+1}_id`]
-            })
+            }).participant.display_name
 
+            info[i] = getPlayerInfo(tournament, contactRows, careerRows, discordMembers, challongeName)
 
-            playerMatches[i] = tournament.matches.filter(match => {
-                return match.match.player1_id == playerChallonges[i].participant.id || match.match.player2_id == playerChallonges[i].participant.id
-            })
-
-
-
-
-            // Contact stuff
-            const challongeName = playerChallonges[i].participant.display_name
-            const contactRow = contactRows.find(row => {
-                return row._rawData[2].toLowerCase() == challongeName.toLowerCase()
-            })
-
-            if (contactRow) {
-                playerContacts[i] = Object.assign({}, contactRow, {_sheet: undefined})
-            } else {
-                return ack(new Error(`Couldn't find challonge username "${challongeName}" on the Contact Sheet.`))
+            if (info[i] instanceof Error) {
+                return ack(info)
             }
 
-            if (!playerContacts[i]["SRL username"]) {
-                return ack(new Error(`SRL username for player "${challongeName}" is missing on the Contact Sheet.`))
-            }
+            info[i].name = info[i].discord.displayName
+            info[i].avatar = info[i].discord.user.displayAvatarURL({size: 1024})
 
-            if (!playerContacts[i]["Discord Username"]) {
-                return ack(new Error(`Discord username for player "${challongeName}" is missing on the Contact Sheet.`))
-            }
-
-
-
-            // Discord stuff
-            const discordNick = playerContacts[i]["Discord Username"]
-            const split = discordNick.split("#")
-
-            const discordMember = discordMembers.find(member => {
-                return member.user.username.toLowerCase() == split[0].toLowerCase() && member.user.discriminator == split[1]
-            })
-
-            if (discordMember) {
-                playerDiscords[i] = discordMember
-            } else {
-                return ack(new Error(`Couldn't find "${discordNick}" in the Mystery Discord server.`))
-            }
-
-
-
-            // Career stuff
-            const SRLName = playerContacts[i]["SRL username"]
-            const careerRow = careerRows.find(row => {
-                return row._rawData[1].toLowerCase() == SRLName.toLowerCase()
-            })
-
-            if (careerRow) {
-                playerCareers[i] = Object.assign({}, careerRow, {_sheet: undefined})
-            } else {
-                return ack(new Error(`Couldn't find SRL username "${SRLName}" on the Career Sheet.`))
-            }
+            delete info[i].discord // evil stuff that crashes my replicant >:(
         }
-
 
 
         for (let i = 0; i < 2; i++) {
             // Putting it together
             const playerNumber = i + (options.matchNumber == 2 ? 2 : 0)
 
-            playerNames[i] = playerDiscords[i].nickname ?? playerDiscords[i].user.username
             let pronouns = ""
             let twitch = ""
 
-            if (playerContacts[i]) {
-                pronouns = playerContacts[i]['Pronoun']
-                twitch = playerContacts[i]['Twitch Channel']
+            if (info[i].contact) {
+                pronouns = info[i].contact['Pronoun']
+                twitch = info[i].contact['Twitch Channel']
             }
 
-            replicants[`player${playerNumber}name`].value = playerNames[i]
+            replicants[`player${playerNumber}name`].value = info[i].name
             replicants[`player${playerNumber}pronouns`].value = capitalizeWords(pronouns)
             replicants[`player${playerNumber}twitch`].value = twitch
 
@@ -190,20 +197,12 @@ nodecg.listenFor("loadMatch", function(options, ack) {
 
 
             // Filter data for size reasons maybe?
-            playerInfoRep.value[playerNumber] = {
-                name: playerNames[i],
-                avatar: playerDiscords[i].user.avatarURL({size: 1024}),
-
-                challonge: playerChallonges[i],
-                matches: playerMatches[i],
-                contact: playerContacts[i],
-                career: playerCareers[i],
-            }
+            playerInfoRep.value[playerNumber] = info[i]
         }
 
         nodecg.sendMessage("timerReset")
 
 
-        return ack(null, `${playerNames[0]}  vs  ${playerNames[1]}`);
+        return ack(null, `${info[0].name}  vs  ${info[1].name}`);
     })
 })
