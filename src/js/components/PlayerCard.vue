@@ -141,6 +141,9 @@ export default {
                 if (this.info.challonge && this.info.challonge.participant.seed <= 10) {
                     classes.push("Seeded")
                 }
+                if (firstJoined == "MT1") {
+                    classes.push("OG")
+                }
                 this.ctx.fillText(`[${classes.join("/")}]`, 72, 925);
 
 
@@ -166,13 +169,17 @@ export default {
                             list = mtsWon.join(", ")
                         }
                         lines.push(`Won ${list}.`)
+                    }
 
-                    } else if (mtCount == 1) { // only joined 1 MT
+                    if (mtCount == 1) { // only joined 1 MT
                         lines.push(`Joined in ${firstJoined} and finished ${getNumberWithOrdinal(firstJoinedPlacement)}.`)
 
                     } else if (bestPlacement != firstJoinedPlacement) { // best placement was not their first
                         lines.push(`First joined in ${firstJoined} and finished ${getNumberWithOrdinal(firstJoinedPlacement)}.`)
-                        lines.push(`Got a best placement of ${getNumberWithOrdinal(bestPlacement)} during ${bestPlacementMt}.`)
+
+                        if (mtsWon.length == 0) {
+                            lines.push(`Got a best placement of ${getNumberWithOrdinal(bestPlacement)} during ${bestPlacementMt}.`)
+                        }
 
                     } else { // best placement was their first
                         lines.push(`First joined in ${firstJoined} and finished ${getNumberWithOrdinal(firstJoinedPlacement)}, their best placement.`)
