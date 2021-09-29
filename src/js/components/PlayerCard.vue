@@ -80,7 +80,7 @@ export default {
                             mtsWon.push(mt)
                         }
 
-                        if (placement <= 16) {
+                        if (placement <= 8) {
                             top8finishes++
                         }
                     }
