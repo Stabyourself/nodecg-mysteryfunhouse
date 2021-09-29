@@ -17,6 +17,7 @@ function capitalizeWords(str) {
 };
 
 // Replicant stuff
+const allInfoRep = nodecg.Replicant("allInfo", {defaultValue: []})
 const playerInfoRep = nodecg.Replicant("playerInfo", {defaultValue: []})
 
 const playerProps = [
@@ -55,7 +56,7 @@ for (prop of props) {
 function getPlayerInfo(tournament, contactRows, careerRows, discordMembers, challongeName) {
     // Challonge stuff
     const challonge = tournament.participants.find(participant => {
-        return participant.participant.display_name == challongeName
+        return participant.participant.display_name.toLowerCase() == challongeName.toLowerCase()
     })
 
     const matches = tournament.matches.filter(match => {
@@ -102,15 +103,11 @@ function getPlayerInfo(tournament, contactRows, careerRows, discordMembers, chal
         return row["Competitor"].toLowerCase() == SRLName.toLowerCase()
     })
 
-    if (!career) {
-        return Error(`Couldn't find SRL username "${SRLName}" on the Career Sheet.`)
-    }
-
     return {
         challonge: challonge,
         contact: Object.assign({}, contact, {_sheet: undefined}),
         matches: matches,
-        career: Object.assign({}, career, {_sheet: undefined}),
+        career: career ? Object.assign({}, career, {_sheet: undefined}) : null,
         discord: member,
     }
 }
@@ -204,5 +201,58 @@ nodecg.listenFor("loadMatch", function(options, ack) {
 
 
         return ack(null, `${info[0].name}  vs  ${info[1].name}`);
+    })
+})
+
+nodecg.listenFor("loadAllCards", function(options, ack) {
+    const promises = [
+        challonge.getTournament("speedrunslive-mystery16"),
+        googlesheet.getContactSheet(),
+        googlesheet.getCareerSheet(),
+        discord.getMembers(),
+    ]
+
+    Promise.allSettled(promises).then(results => {
+        if (results[0].status == "rejected") {
+            return ack(new Error(`Challonge API call failed (${results[0].reason}). Try again or tell Maurice.`))
+        }
+        if (results[1].status == "rejected") {
+            return ack(new Error(`Googlesheet API call failed (${results[1].reason}). Try again or tell Maurice.`))
+        }
+        if (results[2].status == "rejected") {
+            return ack(new Error(`Googlesheet API call failed (${results[2].reason}). Try again or tell Maurice.`))
+        }
+        if (results[3].status == "rejected") {
+            return ack(new Error(`Discord API call failed (${results[3].reason}). Try again or tell Maurice.`))
+        }
+
+
+        const tournament = results[0].value
+        const contactRows = results[1].value
+        const careerRows = results[2].value
+        const discordMembers = results[3].value
+
+        const allInfo = []
+
+        for (row of contactRows) {
+            const challongeName = row["Challonge Username"]
+
+            info = getPlayerInfo(tournament, contactRows, careerRows, discordMembers, challongeName)
+
+            console.log(challongeName)
+
+            if (!(info instanceof Error)) {
+                info.name = info.discord.displayName
+                info.avatar = info.discord.user.displayAvatarURL({size: 1024})
+
+                delete info.discord // evil stuff that crashes my replicant >:(
+
+                allInfo.push(info)
+            }
+        }
+
+        allInfoRep.value = allInfo
+
+        return ack();
     })
 })

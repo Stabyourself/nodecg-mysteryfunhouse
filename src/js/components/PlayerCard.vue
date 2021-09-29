@@ -121,7 +121,13 @@ export default {
 
                 // Draw serial number
                 this.ctx.textAlign = "right"
-                this.ctx.fillText(`MT16-${String(this.info.challonge.participant.seed).padStart(4, '0')}`, 727, 873);
+                let seed = "????"
+
+                if (this.info.challonge) {
+                    seed = String(this.info.challonge.participant.seed)
+                }
+
+                this.ctx.fillText(`MT16-${seed.padStart(4, '0')}`, 727, 873);
                 this.ctx.textAlign = "left"
 
                 // Draw class or whatever this is
@@ -132,7 +138,7 @@ export default {
                 if (bestPlacement == 1) {
                     classes.push("Champion")
                 }
-                if (this.info.challonge.participant.seed <= 10) {
+                if (this.info.challonge && this.info.challonge.participant.seed <= 10) {
                     classes.push("Seeded")
                 }
                 this.ctx.fillText(`[${classes.join("/")}]`, 72, 925);
@@ -173,7 +179,7 @@ export default {
                     }
                 } else {
                     // No MTS
-                    lines.push(`Is participating for the first time.`)
+                    lines.push(`Is participating for the first time!`)
                 }
 
 
@@ -232,7 +238,7 @@ export default {
         },
 
         loadAvatar() {
-            if (this.info && this.info.avatar) {
+            if (this.info && this.info.avatar && this.info.avatar != "https://cdn.discordapp.com/embed/avatars/2.png") {
                 this.img.src = this.info.avatar
                 this.img.crossOrigin = "Anonymous";
 
