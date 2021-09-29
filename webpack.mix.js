@@ -5,7 +5,7 @@ mix
     .js('src/js/main.js', "res/js")
     .sass('src/scss/style.scss', "res/css")
 
-    .sourceMaps()
+    .sourceMaps(false)
     .vuetify('vuetify-loader', 'src/scss/vuetify-variables.scss')
     .vue()
     .options({
