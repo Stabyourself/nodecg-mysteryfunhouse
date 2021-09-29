@@ -244,7 +244,7 @@ nodecg.listenFor("loadAllCards", function(options, ack) {
 
             if (!(info instanceof Error)) {
                 info.name = info.discord.displayName
-                info.avatar = info.discord.user.displayAvatarURL({size: 1024})
+                info.avatar = info.discord.displayAvatarURL({size: 1024})
 
                 delete info.discord // evil stuff that crashes my replicant >:(
 
