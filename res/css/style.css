@@ -18,8 +18,10 @@
   text-shadow: -2px 0 1px #000000, 0 2px 1px #000000, 2px 0 1px #000000, 0 -2px 1px #000000;
 }
 
-html.graphic, html.graphic body {
+html, body {
   margin: 0;
+}
+html.graphic, body.graphic {
   width: 1920px;
   height: 1080px;
   overflow: hidden;
