@@ -297,25 +297,25 @@ export default {
         this.cardAttributes.onload = this.render
         this.cardAttributes.src = '../res/img/card_attributes.png';
 
-        var f = new FontFace('MatrixRegularSmallCaps', 'url(../res/font/MatrixRegularSmallCaps.ttf)');
+        var f = new FontFace('MatrixRegularSmallCaps', 'url(../res/font/MatrixRegularSmallCaps.woff2)');
         f.load().then(font => {
             document.fonts.add(font)
             this.render()
         })
 
-        f = new FontFace('ITCStoneSerifSmallCapsBold', 'url(../res/font/ITCStoneSerifSmallCapsBold.ttf)');
+        f = new FontFace('ITCStoneSerifSmallCapsBold', 'url(../res/font/ITCStoneSerifSmallCapsBold.woff2)');
         f.load().then(font => {
             document.fonts.add(font)
             this.render()
         })
 
-        f = new FontFace('StoneSerifRegular', 'url(../res/font/StoneSerifRegular.ttf)');
+        f = new FontFace('StoneSerifRegular', 'url(../res/font/StoneSerifRegular.woff2)');
         f.load().then(font => {
             document.fonts.add(font)
             this.render()
         })
 
-        f = new FontFace('MatrixBoldSmallCaps', 'url(../res/font/MatrixBoldSmallCaps.ttf)');
+        f = new FontFace('MatrixBoldSmallCaps', 'url(../res/font/MatrixBoldSmallCaps.woff2)');
         f.load().then(font => {
             document.fonts.add(font)
             this.render()
