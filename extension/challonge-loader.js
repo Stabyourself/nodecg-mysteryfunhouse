@@ -73,9 +73,9 @@ function getPlayerInfo(tournament, contactRows, careerRows, discordMembers, chal
         return Error(`Couldn't find challonge username "${challongeName}" on the Contact Sheet.`)
     }
 
-    if (!contact["SRL username"]) {
-        return Error(`SRL username for player "${challongeName}" is missing on the Contact Sheet.`)
-    }
+    // if (!contact["SRL username"]) {
+    //     return Error(`SRL username for player "${challongeName}" is missing on the Contact Sheet.`)
+    // }
 
     if (!contact["Discord Username"]) {
         return Error(`Discord username for player "${challongeName}" is missing on the Contact Sheet.`)
@@ -99,9 +99,12 @@ function getPlayerInfo(tournament, contactRows, careerRows, discordMembers, chal
 
     // Career stuff
     const SRLName = contact["SRL username"]
-    const career = careerRows.find(row => {
-        return row["Competitor"].toLowerCase() == SRLName.toLowerCase()
-    })
+    let career
+    if (SRLName) {
+        career = careerRows.find(row => {
+            return row["Competitor"].toLowerCase() == SRLName.toLowerCase()
+        })
+    }
 
     return {
         challonge: challonge,
@@ -238,8 +241,6 @@ nodecg.listenFor("loadAllCards", function(options, ack) {
             const challongeName = row["Challonge Username"]
 
             info = getPlayerInfo(tournament, contactRows, careerRows, discordMembers, challongeName)
-
-            console.log(challongeName)
 
             if (!(info instanceof Error)) {
                 info.name = info.discord.displayName
