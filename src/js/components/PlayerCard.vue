@@ -245,7 +245,7 @@ export default {
         },
 
         loadAvatar() {
-            if (this.info && this.info.avatar && this.info.avatar != "https://cdn.discordapp.com/embed/avatars/2.png") {
+            if (this.info && this.info.avatar && this.info.avatar.search("embed") == -1) {
                 this.img.src = this.info.avatar
                 this.img.crossOrigin = "Anonymous";
 
