@@ -1,17 +1,15 @@
 <template>
     <v-app>
         <v-main>
-            <v-container>
-                <div>
-                    <v-btn @click="update" block color="primary" class="mb-3">Update</v-btn>
-                </div>
+            <div>
+                <v-btn @click="update" block color="primary" class="mb-3">Update data from sheets and stuff</v-btn>
+            </div>
 
-                <v-row>
-                    <v-col cols="3" v-for="info of infoSorted" :key="info.name">
-                        <player-card class="card" :info="info"></player-card>
-                    </v-col>
-                </v-row>
-            </v-container>
+            <v-row style="margin: 0">
+                <v-col cols="3" v-for="info of infoSorted" :key="info.name">
+                    <player-card class="card" :info="info"></player-card>
+                </v-col>
+            </v-row>
         </v-main>
     </v-app>
 </template>

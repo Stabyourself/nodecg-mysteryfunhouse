@@ -25,13 +25,12 @@
     text-shadow: -2px 0 1px #000000, 0 2px 1px #000000, 2px 0 1px #000000, 0 -2px 1px #000000;
 }
 
-body {
+html.graphic, html.graphic body {
     margin: 0;
 
-    &.graphic {
-        width: 1920px;
-        height: 1080px;
-    }
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
 }
 
 
