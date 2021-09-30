@@ -1,5 +1,5 @@
 <template>
-
+    <canvas></canvas>
 </template>
 
 <script>
@@ -186,7 +186,11 @@ export default {
                         }
 
                     } else { // best placement was their first
-                        lines.push(`First joined in ${firstJoined} and finished ${getNumberWithOrdinal(firstJoinedPlacement)}, their best placement.`)
+                        if (firstJoinedPlacement == 1) {
+                            lines.push(`First joined in ${firstJoined} and immediately won.`)
+                        } else {
+                            lines.push(`First joined in ${firstJoined} and finished ${getNumberWithOrdinal(firstJoinedPlacement)}, their best placement.`)
+                        }
                     }
                 } else {
                     // No MTS
@@ -263,9 +267,9 @@ export default {
 
     mounted() {
         if (!this.useCtx) {
-            this.canvas = document.createElement('canvas');
+            this.canvas = this.$el
+            this.canvas.style.height = "100%"
             this.ctx = this.canvas.getContext('2d')
-            this.$el.appendChild(this.canvas);
         } else {
             this.ctx = this.useCtx
         }

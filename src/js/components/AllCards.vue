@@ -6,8 +6,8 @@
             </div>
 
             <v-row style="margin: 0">
-                <v-col cols="3" v-for="info of infoSorted" :key="info.name">
-                    <player-card class="card" :info="info"></player-card>
+                <v-col cols="3" v-for="info of infoSorted" :key="info.name" class="card">
+                    <player-card  v-tilt :info="info"></player-card>
                 </v-col>
             </v-row>
         </v-main>

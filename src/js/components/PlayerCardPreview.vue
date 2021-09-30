@@ -16,8 +16,11 @@
                 <v-tab-item style="width: 500px; margin: 4em auto; text-align: center;"><p>This tab is just here because Firefox has a bug that makes it error if I try to render to a canvas in an invisible iframe, like this one!</p>
                 <p>But they'll probably fix it soon. It's only been known for <a target="_blank" href="https://bugzilla.mozilla.org/show_bug.cgi?id=941146">over 8 years</a>.</p></v-tab-item>
                 <v-tab-item
+                    style="text-align: center"
                     v-for="i in 4" :key="i">
-                    <player-card :info="playerInfo[i-1]" class="player-card-preview"></player-card>
+                    <div class="player-card-preview" v-tilt>
+                        <player-card :info="playerInfo[i-1]"></player-card>
+                    </div>
                 </v-tab-item>
             </v-tabs-items>
         </v-main>
