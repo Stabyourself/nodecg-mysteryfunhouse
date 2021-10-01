@@ -132,12 +132,16 @@ html.graphic, body.graphic {
 .player-path .match .match-info {
   flex-grow: 1;
 }
+.player-path .match .match-info .round {
+  font-size: 0.8em;
+  font-weight: 200;
+}
 .player-path .match .match-info .opponent {
   font-weight: 700;
   flex-grow: 1;
 }
 .player-path .match .score {
   font-size: 3em;
-  font-weight: 700;
+  font-weight: 800;
   line-height: 0;
 }

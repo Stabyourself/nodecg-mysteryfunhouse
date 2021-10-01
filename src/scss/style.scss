@@ -160,6 +160,11 @@ $padding: 100px;
     .match-info {
         flex-grow: 1;
 
+        .round {
+            font-size: 0.8em;
+            font-weight: 200;
+        }
+
         .opponent {
             font-weight: 700;
             flex-grow: 1;
@@ -168,7 +173,7 @@ $padding: 100px;
 
     .score {
         font-size: 3em;
-        font-weight: 700;
+        font-weight: 800;
         line-height: 0;
     }
 }

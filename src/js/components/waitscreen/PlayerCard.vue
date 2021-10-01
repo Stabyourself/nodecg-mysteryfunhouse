@@ -260,6 +260,7 @@ export default {
                 this.img.onload = this.render
             } else {
                 this.img = new Image()
+                this.img.crossOrigin = "Anonymous";
                 this.render()
             }
         }
