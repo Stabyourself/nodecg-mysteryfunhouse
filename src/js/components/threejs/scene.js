@@ -11,12 +11,14 @@ let stats
 let camera, scene, renderer
 let water, sun, sky, pmremGenerator, starMaterial, starMesh
 let clock, delta
-let ghost, ghostMeme, tweenVal, spinTweenVal
+let ghost, ghostMeme
 let playerCardTextures = []
 let cards = []
 let shineTextures = []
 let playerCardUniforms = []
-let cardInTween, cardOutTween, spinTween
+
+let tweenVars
+let cardInTween, cardOutTween, spinTween, zoomInTween, zoomOutTween
 
 let sunTimer = 20, ghostTimer = 0, cardRotationTimer = 0, cardBobTimer = 0, lawnMowerTimer = 0
 
@@ -53,7 +55,7 @@ export function init(container, playerCards) {
     // Camera
     camera = new THREE.PerspectiveCamera(
         55,
-        1920 / 1080,
+        16/9,
         1,
         20000
     )
@@ -184,8 +186,6 @@ export function init(container, playerCards) {
         }
 
         cards[i].position.x = posX
-
-        cards[i].visible = false
 
         scene.add(cards[i])
 
@@ -338,12 +338,10 @@ export function init(container, playerCards) {
 
                 let rotYspinning = rotY
 
-                if (spinTweenVal) {
-                    if (i == 0) {
-                        rotYspinning += spinTweenVal.addY
-                    } else {
-                        rotYspinning -= spinTweenVal.addY
-                    }
+                if (i == 0) {
+                    rotYspinning += tweenVars.cardRotationAddY
+                } else {
+                    rotYspinning -= tweenVars.cardRotationAddY
                 }
 
                 cards[i].rotation.y = rotYspinning
@@ -388,6 +386,12 @@ export function init(container, playerCards) {
         if (spinTween && spinTween.isPlaying()) {
             spinTween.update(void 0, false)
         }
+        if (zoomInTween && zoomInTween.isPlaying()) {
+            zoomInTween.update(void 0, false)
+        }
+        if (zoomOutTween && zoomOutTween.isPlaying()) {
+            zoomOutTween.update(void 0, false)
+        }
 
         render()
         // stats.update()
@@ -400,50 +404,52 @@ export function init(container, playerCards) {
     animate()
 }
 
-tweenVal = {
+const duration = 2000
+tweenVars = {
     ghostY: 0,
     cardX: 90,
-    cameraX: -0.2
+    cameraX: -0.2,
+    zoom: 1,
+    cardRotationAddY: 0,
 }
 
-function updatePositions() {
+function updateTweens() {
     if (ghost && ghostMeme) {
-        ghost.position.y = tweenVal.ghostY
-        ghostMeme.position.y = tweenVal.ghostY
+        ghost.position.y = tweenVars.ghostY
+        ghostMeme.position.y = tweenVars.ghostY
     }
 
     if (cards[0] && cards[1]) {
-        cards[0].position.x = -tweenVal.cardX
-        cards[1].position.x = tweenVal.cardX
+        cards[0].position.x = -tweenVars.cardX
+        cards[1].position.x = tweenVars.cardX
     }
 
-    camera.rotation.x = tweenVal.cameraX
+    camera.rotation.x = tweenVars.cameraX
+
+    if (camera.zoom != tweenVars.zoom) {
+        camera.zoom = tweenVars.zoom
+        camera.updateProjectionMatrix()
+    }
 }
 
+// Position tween
 export function toPlayerCards() {
     if (cardOutTween) {
         cardOutTween.stop()
     }
 
-    cardInTween = new Tween(tweenVal)
-        .to({ ghostY: -100, cardX: 25, cameraX: 0 }, 2000)
+    cardInTween = new Tween(tweenVars)
+        .to({ ghostY: -100, cardX: 25, cameraX: 0, zoom: 1 }, duration)
         .easing(Easing.Cubic.InOut)
-        .onUpdate(updatePositions)
-        .onComplete(() => {
-            ghost.visible = false
-            ghostMeme.visible = false
-        })
+        .onUpdate(updateTweens)
+        .start()
 
-    cardInTween.start()
-    if (tweenVal.cardX == 90) {
+    if (tweenVars.cardX == 90) {
         cardRotationTimer = 4.2
         cardBobTimer = Math.PI*1.5
+
+        spin()
     }
-
-    cards[0].visible = true
-    cards[1].visible = true
-
-    spin()
 }
 
 export function toGhost() {
@@ -451,37 +457,45 @@ export function toGhost() {
         cardInTween.stop()
     }
 
-    cardOutTween = new Tween(tweenVal)
-        .to({ ghostY: 0, cardX: 90, cameraX: -0.2 }, 2000)
+    cardOutTween = new Tween(tweenVars)
+        .to({ ghostY: 0, cardX: 90, cameraX: -0.2, zoom: 1 }, duration)
         .easing(Easing.Cubic.InOut)
-        .onUpdate(updatePositions)
-        .onComplete(() => {
-            cards[0].visible = false
-            cards[1].visible = false
-        })
+        .onUpdate(updateTweens)
+        .start()
 
-    ghost.visible = true
-    ghostMeme.visible = true
-
-    cardOutTween.start()
+    cardOutTween
 }
-const duration = 2000
 
-function spin() {
-    spinTweenVal = {
-        addY: Math.PI*2
+
+// Zoom tween
+export function toPaths() {
+    if (zoomInTween) {
+        zoomInTween.stop()
     }
 
-    spinTween = new Tween(spinTweenVal)
-        .to({ addY: 0 }, duration)
+    zoomOutTween = new Tween(tweenVars)
+        .to({ ghostY: -100, cardX: 25, cameraX: -0.7, zoom: 1.5 }, duration)
         .easing(Easing.Cubic.InOut)
-
-    spinTween.start()
+        .onUpdate(updateTweens)
+        .start()
 }
 
-export function playerCardUpdated() {
-    spin()
 
+
+export function spin() {
+    tweenVars.cardRotationAddY = Math.PI*2
+
+    spinTween = new Tween(tweenVars)
+        .to({ cardRotationAddY: 0 }, duration)
+        .easing(Easing.Cubic.InOut)
+        .start()
+}
+
+
+
+
+
+export function playerCardUpdated() {
     setTimeout(() => {
         for (let i = 0; i < 2; i++) {
             if (playerCardTextures[i]) {

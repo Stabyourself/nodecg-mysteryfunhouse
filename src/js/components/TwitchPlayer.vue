@@ -54,7 +54,7 @@ export default {
 
             twitchOptions.channel = this.url
             this.player = new Twitch.Player(this.$refs.player, twitchOptions)
-            console.log("CREATING PLAYER " + this.url, this.player)
+
             this.player.addEventListener(Twitch.Embed.VIDEO_READY, () => {
 
                 this.player.setMuted(false);

@@ -53,21 +53,40 @@ for (prop of props) {
     replicants[prop] = nodecg.Replicant(prop)
 }
 
+function getChallongeForId(tournament, id) {
+    return tournament.participants.find(participant => {
+        return participant.participant.id == id
+    }).participant
+}
+
+function getContactRowForChallongeName(contactRows, challongeName) {
+    return contactRows.find(row => {
+        return row["Challonge Username"].toLowerCase() == challongeName.toLowerCase()
+    })
+}
+
+function getMemberForDiscordUsername(members, discordUsername) {
+    const split = discordUsername.split("#")
+
+    return members.find(member => {
+        return member.user.username.toLowerCase() == split[0].toLowerCase() && member.user.discriminator == split[1]
+    })
+}
+
+
 function getPlayerInfo(tournament, contactRows, careerRows, discordMembers, challongeName) {
     // Challonge stuff
     const challonge = tournament.participants.find(participant => {
         return participant.participant.display_name.toLowerCase() == challongeName.toLowerCase()
     })
 
-    const matches = tournament.matches.filter(match => {
+    const rawMatches = tournament.matches.filter(match => {
         return match.match.player1_id == challonge.participant.id || match.match.player2_id == challonge.participant.id
     })
 
 
     // Contact stuff
-    const contact = contactRows.find(row => {
-        return row["Challonge Username"].toLowerCase() == challongeName.toLowerCase()
-    })
+    const contact = getContactRowForChallongeName(contactRows, challongeName)
 
     if (!contact) {
         return Error(`Couldn't find challonge username "${challongeName}" on the Contact Sheet.`)
@@ -84,15 +103,10 @@ function getPlayerInfo(tournament, contactRows, careerRows, discordMembers, chal
 
 
     // Discord stuff
-    const discordNick = contact["Discord Username"]
-    const split = discordNick.split("#")
-
-    const member = discordMembers.find(member => {
-        return member.user.username.toLowerCase() == split[0].toLowerCase() && member.user.discriminator == split[1]
-    })
+    const member = getMemberForDiscordUsername(discordMembers, contact["Discord Username"])
 
     if (!member) {
-        return Error(`Couldn't find "${discordNick}" in the Mystery Discord server.`)
+        return Error(`Couldn't find "${contact["Discord Username"]}" in the Mystery Discord server.`)
     }
 
 
@@ -107,9 +121,9 @@ function getPlayerInfo(tournament, contactRows, careerRows, discordMembers, chal
     }
 
     return {
-        challonge: challonge,
+        challonge: challonge ? challonge.participant : null,
         contact: Object.assign({}, contact, {_sheet: undefined}),
-        matches: matches,
+        rawMatches: rawMatches,
         career: career ? Object.assign({}, career, {_sheet: undefined}) : null,
         discord: member,
     }
@@ -156,9 +170,7 @@ nodecg.listenFor("loadMatch", function(options, ack) {
         }
 
         for (let i = 0; i < 2; i++) {
-            const challongeName = tournament.participants.find(participant => {
-                return participant.participant.id == match.match[`player${i+1}_id`]
-            }).participant.display_name
+            const challongeName = getChallongeForId(tournament, match.match[`player${i+1}_id`]).display_name
 
             info[i] = getPlayerInfo(tournament, contactRows, careerRows, discordMembers, challongeName)
 
@@ -175,6 +187,73 @@ nodecg.listenFor("loadMatch", function(options, ack) {
 
         for (let i = 0; i < 2; i++) {
             // Putting it together
+
+            // format matches
+            const matches = []
+
+            for (rawMatch of info[i].rawMatches) {
+                rawMatch = rawMatch.match
+
+                let match = {}
+
+                match.id = rawMatch.id
+                match.players = []
+                match.score = rawMatch.scores_csv
+
+                // fetch player info
+                for (let i = 0; i < 2; i++) {
+                    const challonge = getChallongeForId(tournament, rawMatch[`player${i+1}_id`])
+
+                    const contact = getContactRowForChallongeName(contactRows, challonge.display_name)
+
+                    let id = challonge.id
+                    let name = challonge.display_name
+                    let avatar = ""
+
+                    if (contact) {
+                        let member = getMemberForDiscordUsername(discordMembers, contact["Discord Username"])
+
+                        name = member.displayName
+                        avatar = member.user.displayAvatarURL({size: 1024})
+                    }
+
+                    match.players.push({
+                        id,
+                        name,
+                        avatar,
+                    })
+                }
+
+                // Make sure the player whose matches we're getting is 0
+                if (info[i].challonge.id == rawMatch.player2_id) {
+                    match.players = match.players.reverse()
+
+                    // turn the score around
+                    match.score = match.score.split("-").reverse().join("-")
+                }
+
+                // format round
+                if (rawMatch.round > 0) {
+                    match.round = "Winners " + rawMatch.round
+                } else {
+                    match.round = "Losers " + -rawMatch.round
+                }
+
+
+                if (rawMatch.winner_id == match.players[0].id) {
+                    match.winner = 0
+                } else {
+                    match.winner = 1
+                }
+
+                matches.push(match)
+            }
+
+            matches.sort((a,b) => a.id - b.id)
+
+            info[i].matches = matches
+
+            // set panel fields
             const playerNumber = i + (options.matchNumber == 2 ? 2 : 0)
 
             let pronouns = ""
@@ -238,9 +317,7 @@ nodecg.listenFor("loadAllCards", function(options, ack) {
         const allInfo = []
 
         for (row of contactRows) {
-            const challongeName = row["Challonge Username"]
-
-            info = getPlayerInfo(tournament, contactRows, careerRows, discordMembers, challongeName)
+            info = getPlayerInfo(tournament, contactRows, careerRows, discordMembers, row["Challonge Username"])
 
             if (!(info instanceof Error)) {
                 info.name = info.discord.displayName

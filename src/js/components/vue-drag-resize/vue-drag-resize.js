@@ -412,7 +412,6 @@ export default {
             if ((!this.isResizable || !this.active) && !force) {
                 return;
             }
-            console.log("bla!")
 
             this.stickDrag = true;
 

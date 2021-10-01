@@ -66,6 +66,8 @@ export default {
                 {text: "Spinning Ghost", value: "ghost"},
                 {text: "Player Cards 1 and 2", value: "cards1"},
                 {text: "Player Cards 3 and 4", value: "cards2"},
+                {text: "Tournament Paths 1 and 2", value: "paths1"},
+                {text: "Tournament Paths 3 and 4", value: "paths2"},
             ],
             playerInfo: [],
         }
