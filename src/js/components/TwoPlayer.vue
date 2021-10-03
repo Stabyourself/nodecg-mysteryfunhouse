@@ -64,6 +64,7 @@
         </game-box>
 
         <rainwave
+            v-if="showRainwave"
             style="top: 975px; left: 1521px; width: 444px; height: 124px">
         </rainwave>
 
@@ -101,6 +102,9 @@ export default {
         bindReplicant.call(this, "currentBoxart")
 
         bindReplicant.call(this, "timer")
+
+        bindReplicant.call(this, "showRainwave")
+
 
         bindReplicant.call(this, "player0name")
         bindReplicant.call(this, "player0pronouns")
@@ -175,7 +179,9 @@ export default {
 
             timer: {
                 ms: 0
-            }
+            },
+
+            showRainwave: false,
         }
     }
 };

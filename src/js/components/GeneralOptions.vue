@@ -18,6 +18,8 @@
                 >
                 </v-select>
 
+                <v-switch v-model="showRainwave" label="Show Rainwave"></v-switch>
+
                 <v-divider class="my-7"></v-divider>
 
                 <div>
@@ -56,12 +58,14 @@ import { bindReplicant } from "../util.js"
 export default {
     created() {
         bindReplicant.call(this, "waitScreenState", "waitScreenState", 0)
+        bindReplicant.call(this, "showRainwave", "showRainwave", 0)
         bindReplicant.call(this, "playerInfo")
     },
 
     data() {
         return {
             waitScreenState: false,
+            showRainwave: false,
             waitScreenStateOptions: [
                 {text: "Spinning Ghost", value: "ghost"},
                 {text: "Player Cards 1 and 2", value: "cards1"},
