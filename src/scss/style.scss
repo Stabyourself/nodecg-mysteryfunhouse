@@ -130,6 +130,8 @@ $padding: 100px;
     padding: 20px;
     text-align: center;
 
+    border-radius: 20px;
+
     opacity: 0;
     transform: translateY(200px);
     transition-delay: 0;
@@ -144,10 +146,27 @@ $padding: 100px;
         transition-delay: 1s;
     }
 
-    transition: all 0.6s;
+    transition: transform 0.6s, opacity 0.6s;
 
     overflow-y: hidden;
 
+}
+
+.v-timeline::before {
+    top: 55px !important;
+    height: calc(100% - 110px) !important;
+}
+
+.theme--light.v-timeline::before {
+    background: rgba(255, 255, 255, 0.24) !important
+}
+
+.theme--light.v-timeline .v-timeline-item__dot {
+    background: #111 !important;
+}
+
+.player-path .v-avatar {
+    border: 2px solid white;
 }
 
 .player-path .match {
@@ -156,33 +175,20 @@ $padding: 100px;
     font-size: 2em;
     align-items: center;
 
-    &:not(:last-child) {
-        margin-bottom: 20px;
+    .round {
+        font-size: 0.8em;
+        font-weight: 200;
+        width: 150px;
     }
 
-    .match-avatar {
-        width: 100px;
-        height: 100px;
-        margin-right: 1em;
-    }
-
-    .match-info {
+    .opponent {
+        font-weight: 700;
         flex-grow: 1;
-
-        .round {
-            font-size: 0.8em;
-            font-weight: 200;
-        }
-
-        .opponent {
-            font-weight: 700;
-            flex-grow: 1;
-        }
     }
 
     .score {
-        font-size: 3em;
-        font-weight: 800;
+        font-size: 1.5em;
+        font-weight: 300;
         line-height: 0;
     }
 }
