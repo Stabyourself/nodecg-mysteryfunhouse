@@ -2,8 +2,8 @@ const ctx = require('./nodecg')
 const nodecg = ctx.get()
 
 const timerRep = nodecg.Replicant("timer")
-const stopTimerWhenDoneRep = nodecg.Replicant("stopTimerWhenDone")
-const stopTimerWhenDoneCountRep = nodecg.Replicant("stopTimerWhenDoneCount")
+const stopTimerWhenDoneRep = nodecg.Replicant("stopTimerWhenDone", {defaultValue: true})
+const stopTimerWhenDoneCountRep = nodecg.Replicant("stopTimerWhenDoneCount", {defaultValue: 2})
 
 const { Timer } = require('timer-node');
 let timer = new Timer();

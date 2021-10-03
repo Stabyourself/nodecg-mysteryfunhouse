@@ -17,7 +17,7 @@
                     {{ goal }}
                 </fit-text>
             </div>
-            <div class="submitter">Submitted by {{ submitter }}</div>
+            <!-- <div class="submitter">Submitted by {{ submitter }}</div> -->
         </div>
     </div>
 </template>
@@ -30,7 +30,7 @@
         align-items: flex-end;
         font-size: 3rem;
         height: $boxartSize;
-        max-width: 765px;
+        max-width: 944px;
 
         .boxart {
             margin-right: 15px;

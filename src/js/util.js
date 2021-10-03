@@ -55,3 +55,11 @@ export function formatTimer(time, includeMs = true, alwaysIncludeHours = true) {
 
     return out;
 }
+
+export function apostrophe(s) {
+    if (s.slice(-1) == "s") {
+        return s + "’"
+    } else {
+        return s + "’s"
+    }
+}

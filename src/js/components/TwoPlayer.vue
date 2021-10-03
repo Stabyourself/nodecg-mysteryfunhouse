@@ -2,23 +2,23 @@
     <v-app>
         <twitch-player
             style="position: absolute; top: 150px; left: 15px; width: 930px; height:698px;"
-            v-if="!player0streamHidden"
+            :style="{opacity: player0streamHidden ? 0 : 1}"
 
             :playerNumber="0"
             :url="player0twitch"
             :quality="player0quality ? player0quality : 'auto'"
-            :volume="player0volume"
+            :volume="player0streamHidden ? 0 : player0volume"
             :crop="player0crop"
         ></twitch-player>
 
         <twitch-player
-            v-if="!player1streamHidden"
             style="position: absolute; top: 150px; left: 975px; width: 930px; height:698px"
+            :style="{opacity: player1streamHidden ? 0 : 1}"
 
             :playerNumber="1"
             :url="player1twitch"
             :quality="player1quality ? player1quality : 'auto'"
-            :volume="player1volume"
+            :volume="player1streamHidden ? 0 : player1volume"
             :crop="player1crop"
         ></twitch-player>
 

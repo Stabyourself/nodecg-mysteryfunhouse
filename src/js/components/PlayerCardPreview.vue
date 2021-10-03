@@ -6,9 +6,9 @@
 
                 <v-tab>Firefox sucks</v-tab>
                 <v-tab
-                    v-for="i in 4" :key="i"
+                    v-for="info in playerInfo" :key="info.name"
                 >
-                    {{ playerInfo[i-1] ? playerInfo[i-1].name : "Something went wrong!" }}
+                    {{ info.name }}
                 </v-tab>
             </v-tabs>
 
@@ -17,9 +17,10 @@
                 <p>But they'll probably fix it soon. It's only been known for <a target="_blank" href="https://bugzilla.mozilla.org/show_bug.cgi?id=941146">over 8 years</a>.</p></v-tab-item>
                 <v-tab-item
                     style="text-align: center"
-                    v-for="i in 4" :key="i">
+                    v-for="info in playerInfo" :key="info.name"
+                    >
                     <div class="player-card-preview" v-tilt>
-                        <player-card :info="playerInfo[i-1]"></player-card>
+                        <player-card :info="info"></player-card>
                     </div>
                 </v-tab-item>
             </v-tabs-items>

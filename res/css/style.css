@@ -70,7 +70,7 @@ html.graphic, body.graphic {
 }
 
 .checkerboard {
-  background: #eee url('data:image/svg+xml,    <svg xmlns="http://www.w3.org/2000/svg" width="400" height="400"         fill-opacity=".25" >             <rect x="200" width="200" height="200" />             <rect y="200" width="200" height="200" />             </svg>') !important;
+  background: #eee url('data:image/svg+xml,    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"         fill-opacity=".25" >             <rect x="8" width="8" height="8" />             <rect y="8" width="8" height="8" />             </svg>') !important;
   background-size: 16px 16px !important;
 }
 
@@ -105,6 +105,9 @@ html.graphic, body.graphic {
   transition-delay: 0;
   transition: all 0.6s;
   overflow-y: hidden;
+}
+.player-path h1 {
+  font-size: 2.5em;
 }
 .player-path.right {
   left: 1010px;

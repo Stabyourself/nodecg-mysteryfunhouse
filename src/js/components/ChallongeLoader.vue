@@ -58,9 +58,10 @@ export default {
         loadMatch() {
             let matchIdInt = parseInt(this.matchId)
 
+            this.error = null
+            this.success = null
+
             if (matchIdInt) {
-                this.error = null
-                this.success = null
                 this.loading = true
 
                 const options = {

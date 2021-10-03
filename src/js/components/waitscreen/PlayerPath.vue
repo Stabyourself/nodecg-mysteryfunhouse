@@ -1,5 +1,7 @@
 <template>
     <div class="player-path" v-if="info">
+        <h1>{{ apostrophe(info.name) }} matches</h1>
+
         <match-history-match v-for="match of info.matches" :key="match.id"
             :match="match">
         </match-history-match>
@@ -7,12 +9,15 @@
 </template>
 
 <script>
+import { apostrophe } from "../../util.js"
+
 export default {
     props: [
         "info"
     ],
 
     methods: {
+        apostrophe,
         animateScroll() {
             clearInterval(this.interval)
 

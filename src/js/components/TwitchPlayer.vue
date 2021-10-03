@@ -81,8 +81,8 @@ export default {
                 let hScale = playerWidth/width
                 let vScale = playerHeight/height
 
-                let translateX = Math.floor(playerWidth/2 - left - width/2)
-                let translateY = Math.floor(playerHeight/2 - top - height/2)
+                let translateX = playerWidth/2 - left - width/2
+                let translateY = playerHeight/2 - top - height/2
 
                 let transformOriginX = left + width/2
                 let transformOriginY = top + height/2
