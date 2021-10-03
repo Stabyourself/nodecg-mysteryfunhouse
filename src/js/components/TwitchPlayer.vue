@@ -69,6 +69,8 @@ export default {
 
     computed: {
         cropStyles() {
+            let styles = {}
+
             if (this.crop) {
                 let left = this.crop[0]
                 let right = this.crop[1]
@@ -99,11 +101,11 @@ export default {
                     "transform-origin": `${transformOriginX}px ${transformOriginY}px`,
                     "transform": `translate(${translateX}px, ${translateY}px) scale(${scale})`,
                 }
-
-                return styles
-            } else {
-                return {}
             }
+
+            styles.opacity = this.opacity ?? 1
+
+            return styles
         }
     },
 
@@ -127,6 +129,7 @@ export default {
         "playerNumber",
         "crop",
         "quality",
+        "opacity",
     ],
 
     data() {

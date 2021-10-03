@@ -5,7 +5,7 @@
                 <v-btn
                     color="primary"
                     block
-                    class="mb-3"
+                    class="mb-5"
                     nodecg-dialog="load-challonge-dialog"
                     >
                     Load from match ID

@@ -2,7 +2,7 @@
     <v-app>
         <twitch-player
             style="position: absolute; top: 150px; left: 15px; width: 930px; height:698px;"
-            :style="{opacity: player0streamHidden ? 0 : 1}"
+            :opacity="player0streamHidden ? 0 : 1"
 
             :playerNumber="0"
             :url="player0twitch"
@@ -13,7 +13,7 @@
 
         <twitch-player
             style="position: absolute; top: 150px; left: 975px; width: 930px; height:698px"
-            :style="{opacity: player1streamHidden ? 0 : 1}"
+            :opacity="player1streamHidden ? 0 : 1"
 
             :playerNumber="1"
             :url="player1twitch"

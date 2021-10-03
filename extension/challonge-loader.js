@@ -175,7 +175,7 @@ nodecg.listenFor("loadMatch", function(options, ack) {
             info[i] = getPlayerInfo(tournament, contactRows, careerRows, discordMembers, challongeName)
 
             if (info[i] instanceof Error) {
-                return ack(info)
+                return ack(info[i])
             }
 
             info[i].name = info[i].discord.displayName
