@@ -1,5 +1,6 @@
 <template>
     <v-item-group
+        :key="itemGroup"
         v-model="selected"
         @change="select"
         active-class="active">
@@ -57,12 +58,14 @@ export default {
 
     methods: {
         select() {
-            this.value = this.images[this.selected]
+            this.value = this.imagesReversed[this.selected]
         },
 
         updateSelection() {
+            this.itemGroup++ // vuetify bug workaround
+
             if (this.value != null) {
-                for (var [i, image] of this.images.entries()) {
+                for (let [i, image] of this.images.entries()) {
                     if (image.url == this.value.url) {
                         this.selected = i
                         return
@@ -79,6 +82,7 @@ export default {
             images: [],
             selected: null,
             value: "",
+            itemGroup: 0,
         }
     }
 };

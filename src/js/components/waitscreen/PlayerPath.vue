@@ -3,6 +3,7 @@
         <h1>{{ apostrophe(info.name) }} matches</h1>
 
         <v-timeline
+            v-if="info.matches.length > 0"
             dense
             light
             >
@@ -34,6 +35,10 @@
 
             </v-timeline-item>
         </v-timeline>
+
+        <div v-else style="font-size: 1.5em;">
+            No matches yet!
+        </div>
     </div>
 </template>
 

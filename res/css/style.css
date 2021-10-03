@@ -162,4 +162,5 @@ html.graphic::-webkit-scrollbar, body.graphic::-webkit-scrollbar {
   font-size: 1.5em;
   font-weight: 300;
   line-height: 0;
+  margin-right: 15px;
 }
