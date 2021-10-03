@@ -19,14 +19,16 @@
     text-shadow: -2px 0 1px #000000, 0 2px 1px #000000, 2px 0 1px #000000, 0 -2px 1px #000000;
 }
 
-html, body {
+body {
     margin: 0;
-    background-size: 1920px 1080px;
-    background-repeat: no-repeat;
 
     &.graphic {
+        background-size: 1920px 1080px;
+        background-repeat: no-repeat;
+
         width: 1920px;
         height: 1080px;
+        overflow: hidden;
 
         -ms-overflow-style: none;  /* Internet Explorer 10+ */
         scrollbar-width: none;  /* Firefox */

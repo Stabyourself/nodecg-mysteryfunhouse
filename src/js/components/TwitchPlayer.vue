@@ -91,7 +91,7 @@ export default {
 
                 let scale = Math.min(hScale, vScale)
 
-                let styles = {
+                styles = {
                     "clip": `rect(
                                 ${top}px,
                                 ${playerWidth-right}px,
