@@ -83,7 +83,7 @@
         "name": "all-cards",
         "title": "All Cards",
         "file": "allcards.html",
-        "fullbleed": true
+        "dialog": true
       },
       {
         "name": "boxart-select-dialog",

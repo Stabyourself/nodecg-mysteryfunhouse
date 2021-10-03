@@ -58,7 +58,7 @@ export default {
 
     methods: {
         select() {
-            this.value = this.imagesReversed[this.selected]
+            this.value = this.images[this.selected]
         },
 
         updateSelection() {
