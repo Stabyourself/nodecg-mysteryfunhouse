@@ -7,6 +7,7 @@
 <style scoped lang="scss">
     .player-backdrop {
         background-color: black;
+        overflow: hidden;
     }
 
     .player-wrapper {
