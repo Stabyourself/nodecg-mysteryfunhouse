@@ -9,5 +9,12 @@ client.login(nodecg.bundleConfig.discordKey);
 
 exports.getMembers = function() {
     const guild = client.guilds.cache.get('83038855732658176')
+
+    if (!guild) {
+        return new Promise((res, rej) => {
+            rej("Guild isn't loaded yet")
+        })
+    }
+
     return guild.members.fetch()
 }

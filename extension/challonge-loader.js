@@ -73,6 +73,16 @@ function getMemberForDiscordUsername(members, discordUsername) {
     })
 }
 
+function getAvatarForMember(member) {
+    let avatar = member.user.displayAvatarURL({size: 1024})
+
+    if (avatar.search("embed") != -1) {
+        avatar = "../res/img/default_avatar.png"
+    }
+
+    return avatar
+}
+
 
 function getPlayerInfo(tournament, contactRows, careerRows, discordMembers, challongeName) {
     // Challonge stuff
@@ -179,7 +189,7 @@ nodecg.listenFor("loadMatch", function(options, ack) {
             }
 
             info[i].name = info[i].discord.displayName
-            info[i].avatar = info[i].discord.user.displayAvatarURL({size: 1024})
+            info[i].avatar = getAvatarForMember(info[i].discord)
 
             delete info[i].discord // evil stuff that crashes my replicant >:(
         }
@@ -208,13 +218,13 @@ nodecg.listenFor("loadMatch", function(options, ack) {
 
                     let id = challonge.id
                     let name = challonge.display_name
-                    let avatar = ""
+                    let avatar = "../res/img/default_avatar.png"
 
                     if (contact) {
                         let member = getMemberForDiscordUsername(discordMembers, contact["Discord Username"])
 
                         name = member.displayName
-                        avatar = member.user.displayAvatarURL({size: 1024})
+                        avatar = getAvatarForMember(member)
                     }
 
                     match.players.push({
@@ -321,7 +331,7 @@ nodecg.listenFor("loadAllCards", function(options, ack) {
 
             if (!(info instanceof Error)) {
                 info.name = info.discord.displayName
-                info.avatar = info.discord.displayAvatarURL({size: 1024})
+                info.avatar = getAvatarForMember(info.discord)
 
                 delete info.discord // evil stuff that crashes my replicant >:(
 
