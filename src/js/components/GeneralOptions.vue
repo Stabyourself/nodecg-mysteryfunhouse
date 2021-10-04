@@ -18,6 +18,11 @@
                 >
                 </v-select>
 
+                <v-textarea
+                    label="Top text"
+                    v-model="topText"
+                    rows="3"></v-textarea>
+
                 <v-switch v-model="showRainwave" label="Show Rainwave"></v-switch>
 
                 <v-divider class="my-7"></v-divider>
@@ -59,6 +64,7 @@ export default {
     created() {
         bindReplicant.call(this, "waitScreenState", "waitScreenState", 0)
         bindReplicant.call(this, "showRainwave", "showRainwave", 0)
+        bindReplicant.call(this, "topText")
         bindReplicant.call(this, "playerInfo")
     },
 
@@ -74,6 +80,7 @@ export default {
                 {text: "Tournament Paths 3 and 4", value: "paths2"},
             ],
             playerInfo: [],
+            topText: "",
         }
     }
 };

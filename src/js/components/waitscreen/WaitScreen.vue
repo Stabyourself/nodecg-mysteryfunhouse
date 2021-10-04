@@ -17,7 +17,11 @@
         <player-path :class="{active: waitScreenState == 'paths2'}" :info="this.playerInfo[2]"></player-path>
         <player-path class="right" :class="{active: waitScreenState == 'paths2'}" :info="this.playerInfo[3]"></player-path>
 
-
+        <div class="mt-font top-text"
+            :class="{active: waitScreenState == 'ghost'}"
+            >
+            <fit-text>{{ topText }}</fit-text>
+        </div>
 
         <rainwave
             v-if="showRainwave"
@@ -33,6 +37,7 @@ export default {
     created() {
         bindReplicant.call(this, "playerInfo")
         bindReplicant.call(this, "waitScreenState")
+        bindReplicant.call(this, "topText")
         bindReplicant.call(this, "showRainwave")
     },
 
@@ -74,6 +79,7 @@ export default {
             leftPlayerInfo: null,
             rightPlayerInfo: null,
             showRainwave: false,
+            topText: "",
         }
     }
 };
