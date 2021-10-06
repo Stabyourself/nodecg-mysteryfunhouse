@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { init, playerCardUpdated, toPlayerCards, toGhost, spin, toPaths } from "../threejs/scene.js"
+import { init, playerCardUpdated, toPlayerCards, toGhost, spin, toPaths } from "./threejs/scene.js"
 
 export default {
     props: [
