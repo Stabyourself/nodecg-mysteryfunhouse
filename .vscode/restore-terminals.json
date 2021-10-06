@@ -1,0 +1,17 @@
+{
+  "runOnStartup": true,
+  "terminals": [
+    {
+      "splitTerminals": [
+        {
+          "name": "NodeCG",
+          "commands": ["node ../.."]
+        },
+        {
+          "name": "Webpack Watch",
+          "commands": ["npm run watch"]
+        }
+      ]
+    }
+  ]
+}
