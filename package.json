@@ -109,7 +109,12 @@
     ],
     "graphics": [
       {
-        "file": "twoplayer.html",
+        "file": "twoplayer_mt15.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "twoplayer_mt16.html",
         "width": 1920,
         "height": 1080
       },
