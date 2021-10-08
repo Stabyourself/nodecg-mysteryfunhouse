@@ -74,7 +74,7 @@
         <v-divider class="my-7"></v-divider>
 
         <v-btn color="green" elevation="2" block class="mb-3" @click="makeDone"
-        :disabled="done">
+        :disabled="done || forfeit">
             .done
             <v-icon right dark>
                 mdi-flag-checkered
@@ -82,7 +82,7 @@
         </v-btn>
 
         <v-btn color="red" elevation="2" block class="mb-3" @click="makeForfeit"
-        :disabled="forfeit">
+        :disabled="forfeit || done">
             .forfeit
             <v-icon right dark>
                 mdi-cancel
