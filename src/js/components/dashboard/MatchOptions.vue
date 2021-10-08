@@ -13,8 +13,7 @@
                     :max="100"
                     :min="0"
 
-                    color="primary darken-4"
-                    track-color="primary darken-4"
+                    color="rgba(255,255,255,.2)"
                     thumb-color="primary"
                     >
 
