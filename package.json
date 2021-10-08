@@ -107,8 +107,18 @@
     ],
     "assetCategories": [
       {
-        "name": "boxart",
-        "title": "Game Boxart",
+        "name": "boxarts",
+        "title": "Game Boxarts",
+        "allowedTypes": [
+          "jpg",
+          "jpeg",
+          "gif",
+          "png"
+        ]
+      },
+      {
+        "name": "popovers",
+        "title": "Player Popovers",
         "allowedTypes": [
           "jpg",
           "jpeg",

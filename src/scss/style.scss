@@ -219,3 +219,7 @@ $padding: 100px;
     left: 0px;
     font-size: 3em;
 }
+
+.v-progress-linear__background, .v-progress-linear__determinate {
+    transition: none !important;
+}

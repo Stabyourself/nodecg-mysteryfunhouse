@@ -12,7 +12,9 @@
             hint="This is also a free input"
         ></v-combobox>
 
+
         <v-divider class="my-7"></v-divider>
+
 
         <v-text-field
             v-model="twitch"
@@ -29,7 +31,6 @@
             item-value="group"
         ></v-select>
         -->
-
 
         <v-slider
             v-model="volume"
@@ -52,10 +53,29 @@
 
         <v-row>
             <v-col>
-                <v-btn :color="streamHidden ? 'red' : 'green'" elevation="2" block class="mb-3" @click="streamHidden = !streamHidden">
-                    {{ streamHidden ? "Hidden" : "Visible" }}
+                <v-btn
+                    v-if="!streamHidden"
+                    color="green"
+                    elevation="2"
+                    block
+                    class="mb-3"
+                    @click="streamHidden = true">
+                    Visible
                     <v-icon right dark>
-                    {{ streamHidden ? "mdi-eye-off" : "mdi-eye" }}
+                        mdi-eye
+                    </v-icon>
+                </v-btn>
+
+                <v-btn
+                    v-else
+                    color="red"
+                    elevation="2"
+                    block
+                    class="mb-3"
+                    @click="streamHidden = false">
+                    Hidden
+                    <v-icon right dark>
+                        mdi-eye-off
                     </v-icon>
                 </v-btn>
             </v-col>
@@ -72,6 +92,7 @@
 
 
         <v-divider class="my-7"></v-divider>
+
 
         <v-btn color="green" elevation="2" block class="mb-3" @click="makeDone"
         :disabled="done || forfeit">
@@ -110,6 +131,56 @@
             v-model="finalTime"
             label="Final time"
         ></v-text-field>
+
+
+        <v-divider class="my-7"></v-divider>
+
+
+        <v-select
+            :items="popovers"
+            item-text="base"
+            item-value="url"
+            v-model="popover"
+            label="Popover graphic"
+            >
+        </v-select>
+        <v-row>
+            <v-col cols="3">
+                <v-text-field
+                    label="Duration"
+                    suffix="s"
+                    v-model="popoverDuration"
+                    type="number"
+                    min="0"
+                    dense
+                >
+                </v-text-field>
+            </v-col>
+
+            <v-col cols="9">
+                <v-btn
+                    v-if="!popoverVisible"
+                    @click="showPopover"
+                    block
+                    color="primary">
+                    Activate Popover
+                </v-btn>
+
+                <v-btn
+                    v-else
+                    @click="hidePopover"
+                    block
+                    color="primary">
+                    Hide Popover
+                </v-btn>
+            </v-col>
+        </v-row>
+
+        <v-progress-linear
+            background-color="primary"
+            color="primary darken-4"
+            :value="popoverBarValue"
+        ></v-progress-linear>
     </div>
 </template>
 
@@ -131,6 +202,10 @@ export default {
         bindReplicant.call(this, "forfeit", this.makeName("forfeit"), 0)
         bindReplicant.call(this, "finalTime", this.makeName("finalTime"), 0)
 
+        bindReplicant.call(this, "popovers", "assets:popovers")
+        bindReplicant.call(this, "popover", this.makeName("popover"), 0)
+        bindReplicant.call(this, "popoverDuration", this.makeName("popoverDuration"))
+        bindReplicant.call(this, "popoverVisible", this.makeName("popoverVisible"))
     },
 
     methods: {
@@ -170,6 +245,43 @@ export default {
             this.refreshing = true
 
             setTimeout(() => { this.refreshing = false }, 500)
+        },
+
+        showPopover() {
+            this.popoverVisible = true
+
+            let duration = parseInt(this.popoverDuration*1000)
+
+            if (duration) {
+                this.popoverTime = new Date()
+                this.updatePopoverBar()
+
+                this.popoverTimeout = setTimeout(() => {
+                    this.popoverVisible = false
+                    this.popoverBarValue = 100
+                }, duration)
+            }
+        },
+
+        hidePopover() {
+            this.popoverVisible = false
+            this.popoverBarValue = 100
+
+            if (this.popoverTimeout) {
+                clearTimeout(this.popoverTimeout)
+            }
+        },
+
+        updatePopoverBar() {
+            if (this.popoverVisible) {
+                let diff = (new Date() - this.popoverTime)
+
+                if (diff < this.popoverDuration*1000) {
+                    requestAnimationFrame(this.updatePopoverBar)
+                }
+
+                this.popoverBarValue = diff / (this.popoverDuration*1000)*100
+            }
         }
     },
 
@@ -194,7 +306,14 @@ export default {
             finalTime: "",
 
             pronounOptions: ["", "He/Him", "She/Her", "They/Them"],
+            popover: null,
+            popoverDuration: 2,
+            popovers: [],
+            popoverVisible: false,
+            popoverTimeout: null,
+            popoverTime: null,
+            popoverBarValue: 100,
         }
     }
-};
+}
 </script>

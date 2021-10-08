@@ -1,6 +1,11 @@
 <template>
     <div class="player-backdrop">
         <div class="player-wrapper" :style="cropStyles" ref="player"></div>
+        <div class="popover-holder">
+            <img
+                :class="{active: popoverVisible }"
+                :src="popover">
+        </div>
     </div>
 </template>
 
@@ -12,6 +17,30 @@
 
     .player-wrapper {
         position: absolute;
+    }
+
+    .popover-holder {
+        pointer-events: none;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            width: 60%;
+            opacity: 0;
+            transition: opacity 0.2s;
+
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+
+            &.active {
+                opacity: 1;
+            }
+        }
     }
 </style>
 
@@ -37,6 +66,9 @@ export default {
             this.createPlayer()
         })
         bindReplicant.call(this, "qualities", `player${this.playerNumber}qualities`)
+
+        bindReplicant.call(this, "popover", `player${this.playerNumber}popover`)
+        bindReplicant.call(this, "popoverVisible", `player${this.playerNumber}popoverVisible`)
     },
 
     mounted() {
@@ -137,6 +169,8 @@ export default {
         return {
             player: null,
             qualities: [],
+            popover: null,
+            popoverVisible: false,
         }
     }
 };
