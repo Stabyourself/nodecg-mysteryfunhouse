@@ -52,16 +52,16 @@
 
         <v-row>
             <v-col>
-                <v-btn :color="streamHidden ? 'green' : 'red'" elevation="2" block class="mb-3" @click="streamHidden = !streamHidden">
-                    {{ streamHidden ? "Show" : "Hide" }}
+                <v-btn :color="streamHidden ? 'red' : 'green'" elevation="2" block class="mb-3" @click="streamHidden = !streamHidden">
+                    {{ streamHidden ? "Hidden" : "Visible" }}
                     <v-icon right dark>
-                    {{ streamHidden ? "mdi-eye" : "mdi-eye-off" }}
+                    {{ streamHidden ? "mdi-eye-off" : "mdi-eye" }}
                     </v-icon>
                 </v-btn>
             </v-col>
 
             <v-col>
-                <v-btn color="red" elevation="2" block class="mb-3" @click="reloadStream">
+                <v-btn color="primary" elevation="2" block class="mb-3" @click="reloadStream" :loading="refreshing">
                     Reload
                     <v-icon right dark>
                         mdi-refresh
@@ -167,6 +167,9 @@ export default {
 
         reloadStream() {
             nodecg.sendMessage(`stream${this.playerNumber}reload`)
+            this.refreshing = true
+
+            setTimeout(() => { this.refreshing = false }, 500)
         }
     },
 
@@ -184,6 +187,7 @@ export default {
             //quality: null,
             volume: 0,
             streamHidden: false,
+            refreshing: false,
 
             done: false,
             forfeit: false,
