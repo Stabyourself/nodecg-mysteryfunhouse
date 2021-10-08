@@ -37,7 +37,7 @@
             img {
                 display: block;
                 margin: 0 auto;
-                height: $boxartSize;
+                max-height: $boxartSize;
                 max-width: 335px;
             }
         }
