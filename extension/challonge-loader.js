@@ -7,7 +7,6 @@ const discord = require("./discord")
 const _ = require("lodash")
 
 const ctx = require('./nodecg')
-const { arch } = require("os")
 const nodecg = ctx.get()
 
 function capitalizeWords(str) {
