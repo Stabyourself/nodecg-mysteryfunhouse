@@ -29,13 +29,13 @@
         align-items: center;
 
         img {
-            width: 60%;
-            opacity: 0;
-            transition: opacity 0.2s;
-
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
             image-rendering: crisp-edges;
+
+            width: 60%;
+            opacity: 0;
+            transition: opacity 0.2s;
 
             &.active {
                 opacity: 1;

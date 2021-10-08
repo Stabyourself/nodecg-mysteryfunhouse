@@ -307,7 +307,7 @@ export default {
 
             pronounOptions: ["", "He/Him", "She/Her", "They/Them"],
             popover: null,
-            popoverDuration: 2,
+            popoverDuration: 3,
             popovers: [],
             popoverVisible: false,
             popoverTimeout: null,
