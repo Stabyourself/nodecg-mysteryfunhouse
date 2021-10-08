@@ -13,8 +13,8 @@
                     :max="100"
                     :min="0"
 
-                    color="blue"
-                    track-color="red"
+                    color="primary darken-4"
+                    track-color="primary darken-4"
                     thumb-color="primary"
                     >
 
@@ -80,6 +80,7 @@ export default {
 
     watch: {
         leftPrediction() {
+            console.log("!")
             this.rightPrediction = 100 - this.leftPrediction
         },
 
