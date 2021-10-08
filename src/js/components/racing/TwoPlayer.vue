@@ -166,8 +166,8 @@ export default {
             player0volume: 0,
             player0streamHidden: false,
 
-            player0done: "",
-            player0forfeit: "",
+            player0done: false,
+            player0forfeit: false,
             player0finalTime: false,
 
             player0crop: [0, 0, 0, 0],
@@ -180,8 +180,8 @@ export default {
             player1volume: 0,
             player1streamHidden: false,
 
-            player1done: "",
-            player1forfeit: "",
+            player1done: false,
+            player1forfeit: false,
             player1finalTime: false,
 
             player1crop: [0, 0, 0, 0],

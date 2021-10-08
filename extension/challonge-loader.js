@@ -20,39 +20,39 @@ function capitalizeWords(str) {
 const allInfoRep = nodecg.Replicant("allInfo", {defaultValue: []})
 const playerInfoRep = nodecg.Replicant("playerInfo", {defaultValue: []})
 
-const playerProps = [
-    "name",
-    "pronouns",
-    "twitch",
-    "volume",
-    "streamHidden",
-    "done",
-    "forfeit",
-    "finalTime",
-]
+const playerProps = {
+    name: "",
+    pronouns: "",
+    twitch: "",
+    volume: 0,
+    streamHidden: false,
+    done: false,
+    forfeit: false,
+    finalTime: "",
+}
 
-const props = [
-    "game",
-    "goal",
-    "platform",
-    "submitter",
-    "currentBoxart",
-    "showPlayerCards",
-    "match1round",
-    "match2round",
-]
+const props = {
+    game: "",
+    goal: "",
+    platform: "",
+    submitter: "",
+    currentBoxart: null,
+    showPlayerCards: false,
+    match1round: "",
+    match2round: "",
+}
 
 const replicants = {}
 
 for (let i = 0; i < 4; i++) {
-    for (playerProp of playerProps) {
-        const name = `player${i}${playerProp}`
-        replicants[name] = nodecg.Replicant(name)
+    for (let prop in playerProps) {
+        const name = `player${i}${prop}`
+        replicants[name] = nodecg.Replicant(name, {defaultValue: playerProps[prop]})
     }
 }
 
-for (prop of props) {
-    replicants[prop] = nodecg.Replicant(prop)
+for (let prop in props) {
+    replicants[prop] = nodecg.Replicant(prop, {defaultValue: props[prop]})
 }
 
 function getChallongeForId(tournament, id) {
