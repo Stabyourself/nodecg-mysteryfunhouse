@@ -64,13 +64,13 @@ export function init(container, playerCards) {
 
 
     // ghost
-    loader.load("../res/model/ghost.gltf", function (gltf) {
+    loader.load("../dist/model/ghost.gltf", function (gltf) {
         ghost = gltf.scene
         ghost.scale.set(5, 5, 5)
         scene.add(ghost)
     })
 
-    loader.load("../res/model/ghost_missing_pixel.gltf", function (gltf) {
+    loader.load("../dist/model/ghost_missing_pixel.gltf", function (gltf) {
         ghostMeme = gltf.scene
         ghostMeme.scale.set(5, 5, 5)
         ghostMeme.visible = false
@@ -81,7 +81,7 @@ export function init(container, playerCards) {
 
     let lawnmower, lawnmixer
     // lawnmower
-    loader.load("../res/model/lawnmower/scene.gltf", function (gltf) {
+    loader.load("../dist/model/lawnmower/scene.gltf", function (gltf) {
         lawnmower = gltf.scene
         lawnmower.rotateY(-Math.PI*.5)
         lawnmower.scale.set(0.1, 0.1, 0.1)
@@ -102,7 +102,7 @@ export function init(container, playerCards) {
         textureWidth: 512,
         textureHeight: 512,
         waterNormals: new THREE.TextureLoader().load(
-            '../res/img/waternormals.jpg',
+            '../dist/img/waternormals.jpg',
             function ( texture ) {
 
                 texture.wrapS = texture.wrapT = THREE.RepeatWrapping
@@ -146,7 +146,7 @@ export function init(container, playerCards) {
     // Stars
     var texLoader = new THREE.TextureLoader()
     texLoader.load(
-        "../res/img/sky.png",
+        "../dist/img/sky.png",
         (texture) => {
             var geometry = new THREE.PlaneBufferGeometry( 3000, 3000 )
             geometry.translate(0, 300, -1000)
@@ -191,7 +191,7 @@ export function init(container, playerCards) {
 
         // front
         texLoader.load(
-            "../res/img/shine.png",
+            "../dist/img/shine.png",
             (texture) => {
                 shineTextures[i] = texture
                 shineTextures[i].offset = new THREE.Vector2(0, 0.5)
@@ -254,7 +254,7 @@ export function init(container, playerCards) {
     // back
     for (let i = 0; i < 2; i++) {
         texLoader.load(
-            "../res/img/card_back.png",
+            "../dist/img/card_back.png",
             (texture) => {
                 const geometry = new THREE.PlaneGeometry(59, 86)
                 let material = new THREE.MeshStandardMaterial( {

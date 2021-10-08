@@ -77,7 +77,7 @@ function getAvatarForMember(member) {
     let avatar = member.user.displayAvatarURL({size: 1024})
 
     if (avatar.search("embed") != -1) {
-        avatar = "../res/img/default_avatar.png"
+        avatar = "../dist/img/default_avatar.png"
     }
 
     return avatar
@@ -218,7 +218,7 @@ nodecg.listenFor("loadMatch", function(options, ack) {
 
                     let id = challonge.id
                     let name = challonge.display_name
-                    let avatar = "../res/img/default_avatar.png"
+                    let avatar = "../dist/img/default_avatar.png"
 
                     if (contact) {
                         let member = getMemberForDiscordUsername(discordMembers, contact["Discord Username"])

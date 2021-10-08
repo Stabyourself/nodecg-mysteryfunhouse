@@ -290,37 +290,37 @@ export default {
         for (const color of colors) {
             let img  = new Image();
             img.onload = this.render
-            img.src = `../res/img/card_front_${color}.png`;
+            img.src = `../dist/img/card_front_${color}.png`;
 
             this.cardFronts.push(img)
         }
 
 
         this.cardStar.onload = this.render
-        this.cardStar.src = '../res/img/card_star.png';
+        this.cardStar.src = '../dist/img/card_star.png';
 
         this.cardAttributes.onload = this.render
-        this.cardAttributes.src = '../res/img/card_attributes.png';
+        this.cardAttributes.src = '../dist/img/card_attributes.png';
 
-        var f = new FontFace('MatrixRegularSmallCaps', 'url("../res/font/MatrixRegularSmallCaps.woff2") format("woff2")');
+        var f = new FontFace('MatrixRegularSmallCaps', 'url("../dist/font/MatrixRegularSmallCaps.woff2") format("woff2")');
         f.load().then(font => {
             document.fonts.add(font)
             this.render()
         })
 
-        f = new FontFace('ITCStoneSerifSmallCapsBold', 'url("../res/font/ITCStoneSerifSmallCapsBold.woff2") format("woff2")');
+        f = new FontFace('ITCStoneSerifSmallCapsBold', 'url("../dist/font/ITCStoneSerifSmallCapsBold.woff2") format("woff2")');
         f.load().then(font => {
             document.fonts.add(font)
             this.render()
         })
 
-        f = new FontFace('StoneSerifRegular', 'url("../res/font/StoneSerifRegular.woff2") format("woff2")');
+        f = new FontFace('StoneSerifRegular', 'url("../dist/font/StoneSerifRegular.woff2") format("woff2")');
         f.load().then(font => {
             document.fonts.add(font)
             this.render()
         })
 
-        f = new FontFace('MatrixBoldSmallCaps', 'url("../res/font/MatrixBoldSmallCaps.woff2") format("woff2")');
+        f = new FontFace('MatrixBoldSmallCaps', 'url("../dist/font/MatrixBoldSmallCaps.woff2") format("woff2")');
         f.load().then(font => {
             document.fonts.add(font)
             this.render()

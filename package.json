@@ -138,8 +138,8 @@
     ],
     "mount": [
       {
-        "directory": "res",
-        "endpoint": "res"
+        "directory": "dist",
+        "endpoint": "dist"
       }
     ]
   },
