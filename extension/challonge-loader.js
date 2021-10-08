@@ -75,7 +75,7 @@ function getMemberForDiscordUsername(members, discordUsername) {
 }
 
 function getAvatarForMember(member) {
-    let avatar = member.user.displayAvatarURL({size: 1024})
+    let avatar = member.displayAvatarURL({size: 1024})
 
     if (avatar.search("embed") != -1) {
         avatar = "../dist/img/default_avatar.png"
