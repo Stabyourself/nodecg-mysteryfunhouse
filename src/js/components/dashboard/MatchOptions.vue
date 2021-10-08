@@ -22,6 +22,8 @@
                         v-model="leftPrediction"
                         class="mt-0 pt-0"
                         type="number"
+                        max="100"
+                        min="0"
                         style="width: 60px"
                         ></v-text-field>
                     </template>
@@ -31,6 +33,8 @@
                         v-model="rightPrediction"
                         class="mt-0 pt-0"
                         type="number"
+                        max="100"
+                        min="0"
                         style="width: 60px"
                         ></v-text-field>
                     </template>
