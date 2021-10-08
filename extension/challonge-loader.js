@@ -28,7 +28,7 @@ const playerProps = [
     "streamHidden",
     "done",
     "forfeit",
-    "finalTime"
+    "finalTime",
 ]
 
 const props = [
@@ -38,6 +38,8 @@ const props = [
     "submitter",
     "currentBoxart",
     "showPlayerCards",
+    "match1round",
+    "match2round",
 ]
 
 const replicants = {}
@@ -289,8 +291,21 @@ nodecg.listenFor("loadMatch", function(options, ack) {
             playerInfoRep.value[playerNumber] = info[i]
         }
 
-        nodecg.sendMessage("timerReset")
+        // Match stuff
+        let round = match.match["round"]
 
+        if (round > 0) {
+            round = "Winners " + round
+        } else {
+            round = "Losers " + -round
+        }
+
+        replicants[`match${options.matchNumber}round`].value = round
+
+
+
+
+        nodecg.sendMessage("timerReset")
 
         return ack(null, `${info[0].name}  vs  ${info[1].name}`);
     })

@@ -40,32 +40,18 @@
         "file": "timer.html"
       },
       {
-        "name": "player-0",
-        "title": "Player 1",
-        "width": 2,
-        "file": "player0.html",
+        "name": "match-1",
+        "title": "Match 1",
+        "width": 4,
+        "file": "match1.html",
         "headerColor": "#D32F2F"
       },
       {
-        "name": "player-1",
-        "title": "Player 2",
-        "width": 2,
-        "file": "player1.html",
+        "name": "match-2",
+        "title": "Match 2",
+        "width": 4,
+        "file": "match2.html",
         "headerColor": "#1976D2"
-      },
-      {
-        "name": "player-2",
-        "title": "Player 3",
-        "width": 2,
-        "file": "player2.html",
-        "headerColor": "#FBC02D"
-      },
-      {
-        "name": "player-3",
-        "title": "Player 4",
-        "width": 2,
-        "file": "player3.html",
-        "headerColor": "#388E3C"
       },
       {
         "name": "game",
@@ -110,11 +96,6 @@
     "graphics": [
       {
         "file": "twoplayer_mt15.html",
-        "width": 1920,
-        "height": 1080
-      },
-      {
-        "file": "twoplayer_mt16.html",
         "width": 1920,
         "height": 1080
       },

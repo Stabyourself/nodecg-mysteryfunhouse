@@ -53,6 +53,11 @@
 
 
 
+        <div class="mt-font round" style="top: 10px">
+            {{ round }}
+        </div>
+
+
 
         <game-box
             style="top: 865px; left: 15px;"
@@ -106,6 +111,8 @@ export default {
         bindReplicant.call(this, "showRainwave")
 
 
+        bindReplicant.call(this, "round", "match1round")
+
         bindReplicant.call(this, "player0name")
         bindReplicant.call(this, "player0pronouns")
 
@@ -148,6 +155,8 @@ export default {
             platform: "",
             submitter: "",
             currentBoxart: "",
+
+            round: "",
 
             player0name: "",
             player0pronouns: "",

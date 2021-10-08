@@ -91,8 +91,8 @@ export default {
             success: null,
             matchNumber: 1,
             matchSelectOptions: [
-                {text: "Players 1 vs 2", value: 1},
-                {text: "Players 3 vs 4", value: 2},
+                {text: "Match 1", value: 1},
+                {text: "Match 2", value: 2},
             ]
         }
     }
