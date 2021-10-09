@@ -53,7 +53,7 @@
 
 
 
-        <div class="mt-font round" style="top: 10px">
+        <div class="mt-font match-round" style="top: 10px">
             {{ round }}
         </div>
 

@@ -175,12 +175,19 @@
         </v-row>
 
         <v-progress-linear
+            class="no-transition"
             background-color="primary"
             color="primary darken-4"
             :value="popoverBarValue"
         ></v-progress-linear>
     </div>
 </template>
+
+<style lang="scss">
+    .no-transition .v-progress-linear__background, .no-transition .v-progress-linear__determinate {
+        transition: none !important;
+    }
+</style>
 
 <script>
 import { bindReplicant, formatTimer } from "../../util.js"

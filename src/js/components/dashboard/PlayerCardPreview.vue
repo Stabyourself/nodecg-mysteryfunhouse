@@ -28,6 +28,18 @@
     </v-app>
 </template>
 
+<style lang="scss">
+    .player-card-preview {
+        height: 750px;
+        padding: 3em;
+        display: inline-block;
+
+        canvas {
+            height: 100%;
+        }
+    }
+</style>
+
 <script>
 import { bindReplicant } from "../../util.js"
 
