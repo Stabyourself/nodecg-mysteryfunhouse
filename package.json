@@ -137,6 +137,7 @@
   "repository": "github:Stabyourself/nodecg-mysteryfunhouse",
   "license": "MIT",
   "devDependencies": {
+    "@tweenjs/tween.js": "^18.6.4",
     "browser-sync": "^2.27.5",
     "browser-sync-webpack-plugin": "^2.3.0",
     "clone": "^2.1.2",
@@ -145,6 +146,7 @@
     "deepmerge": "^4.2.2",
     "laravel-mix": "^6.0.31",
     "node-sass": "^6.0.1",
+    "random-seed": "^0.3.0",
     "resolve-url-loader": "^4.0.0",
     "sass": "~1.32",
     "sass-loader": "^12.1.0",
@@ -163,11 +165,9 @@
     "webpack-cli": "^4.8.0"
   },
   "dependencies": {
-    "@tweenjs/tween.js": "^18.6.4",
     "discord.js": "^13.2.0",
     "google-spreadsheet": "^3.1.15",
     "lodash": "^4.17.21",
-    "random-seed": "^0.3.0",
     "request": "^2.88.2",
     "timer-node": "^5.0.5"
   }
