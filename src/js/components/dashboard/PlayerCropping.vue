@@ -20,6 +20,99 @@
 
                 <div style="width: 100%; height: 100%; position: absolute; top: 0px; left: 0px;"></div>
 
+
+                <div class="nudge-holder"
+                    style="position: absolute;"
+                    :style="{
+                        left: crop[0] + 'px',
+                        top: crop[2] + 'px',
+                        width: 930-crop[0]-crop[1] + 'px',
+                        height: 698-crop[2]-crop[3] + 'px'
+                    }">
+
+                    <div class="move-arrows" style="left: -48px; top: 50%;">
+                        <v-btn
+                            @mousedown="nudgeCrop(0, -1)"
+                            x-small
+                            outlined
+                            dark>
+                            <v-icon color="primary">mdi-arrow-left</v-icon>
+                        </v-btn>
+                        <v-btn
+                            @mousedown="nudgeCrop(0, 1)"
+                            x-small
+                            outlined
+                            dark>
+                            <v-icon color="primary">mdi-arrow-right</v-icon>
+                        </v-btn>
+                    </div>
+
+
+
+                    <div class="move-arrows" style="right: -60px; top: 50%;">
+                        <v-btn
+                            @mousedown="nudgeCrop(1, 1)"
+                            x-small
+                            outlined
+                            dark>
+                            <v-icon color="primary">mdi-arrow-left</v-icon>
+                        </v-btn>
+                        <v-btn
+                            @mousedown="nudgeCrop(1, -1)"
+                            x-small
+                            outlined
+                            dark>
+                            <v-icon color="primary">mdi-arrow-right</v-icon>
+                        </v-btn>
+                    </div>
+
+
+
+                    <div class="move-arrows" style="left: 50%; top: -40px;">
+                        <div>
+                            <v-btn
+                                @mousedown="nudgeCrop(2, -1)"
+                                x-small
+                                outlined
+                                dark>
+                                <v-icon color="primary">mdi-arrow-up</v-icon>
+                            </v-btn>
+                        </div>
+                        <div>
+                            <v-btn
+                                @mousedown="nudgeCrop(2, 1)"
+                                x-small
+                                outlined
+                                dark>
+                                <v-icon color="primary">mdi-arrow-down</v-icon>
+                            </v-btn>
+                        </div>
+                    </div>
+
+
+
+                    <div class="move-arrows" style="left: 50%; bottom: -49px;">
+                        <div>
+                            <v-btn
+                                @mousedown="nudgeCrop(3, 1)"
+                                x-small
+                                outlined
+                                dark>
+                                <v-icon color="primary">mdi-arrow-up</v-icon>
+                            </v-btn>
+                        </div>
+                        <div>
+                            <v-btn
+                                @mousedown="nudgeCrop(3, -1)"
+                                x-small
+                                outlined
+                                dark>
+                                <v-icon color="primary">mdi-arrow-down</v-icon>
+                            </v-btn>
+                        </div>
+                    </div>
+                </div>
+
                 <vue-drag-resize
                     :parentW="930"
                     :parentH="698"
@@ -34,7 +127,8 @@
                     ref="cropper"
                     @resizing="cropChanged"
                     @dragging="cropChanged"
-                ></vue-drag-resize>
+                >
+                </vue-drag-resize>
             </div>
 
             <div style="display: flex; align-items: center; justify-content: center; height: 698px">
@@ -121,7 +215,7 @@
     </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
     .crop-input-holder {
         max-width: 930px;
         margin: 0 auto;
@@ -133,13 +227,24 @@
     .crop-wrapper {
         width: 1875px;
         height:698px;
-        margin: 3px auto;
+        margin: 54px auto;
         position: relative;
     }
 
     .crop-input.v-input {
         flex: 0 0 100px;
         padding-right: 15px;
+    }
+
+    .move-arrows {
+        position: absolute;
+        margin-top: -12px;
+        margin-left: -12px;
+
+        button, button .v-btn__content {
+            min-width: auto !important;
+            padding: 0 !important
+        }
     }
 </style>
 
@@ -176,7 +281,7 @@ export default {
                     this.$set(this.crop, i, parseInt(parts[i]))
                 }
             }
-        }
+        },
     },
 
     methods: {
@@ -190,6 +295,17 @@ export default {
             this.$set(this.crop, 2, coordinates.top)
             this.$set(this.crop, 3, coordinates.bottom)
         },
+
+        nudgeCrop(i, diff) {
+            let val = this.crop[i] + diff
+            if (i < 2) {
+                val = Math.max(0, Math.min(930, val))
+            } else {
+                val = Math.max(0, Math.min(698, val))
+            }
+
+            this.$set(this.crop, i, val)
+        }
     },
 
     data() {
