@@ -1,5 +1,3 @@
-const tournamentName = "speedrunslive-mystery15"
-
 const challonge = require("./challonge")
 const googlesheet = require("./googlesheet")
 const discord = require("./discord")
@@ -143,7 +141,7 @@ function getPlayerInfo(tournament, contactRows, careerRows, discordMembers, chal
 
 nodecg.listenFor("loadMatch", function(options, ack) {
     const promises = [
-        challonge.getTournament(tournamentName),
+        challonge.getTournament(nodecg.bundleConfig.challongeTournament),
         googlesheet.getContactSheet(),
         googlesheet.getCareerSheet(),
         discord.getMembers(),
