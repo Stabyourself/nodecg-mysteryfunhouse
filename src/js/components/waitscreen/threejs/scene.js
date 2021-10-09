@@ -352,12 +352,8 @@ export function init(container, playerCards) {
             if (shineTextures[i]) {
                 let moduluTime = (rotYtimer) % (Math.PI * 2)
 
-                let update = false
+                playerCardUniforms[i].offsetY.value = -1
                 if (moduluTime < Math.PI*.5 ||  moduluTime > Math.PI*1.5) {
-                    update = true
-                }
-
-                if (update) {
                     playerCardUniforms[i].offsetY.value = rotY * 20
                 }
             }
