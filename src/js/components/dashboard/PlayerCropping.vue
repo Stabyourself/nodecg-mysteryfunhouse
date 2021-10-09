@@ -38,7 +38,7 @@
             </div>
 
             <div style="display: flex; align-items: center; justify-content: center; height: 698px">
-                <v-btn v-if="!assistantActive" color="green" elevation="2" @click="assistantActive = true">
+                <v-btn v-if="!assistantActive" color="green" @click="assistantActive = true">
                     Start cropping
                     <v-icon right dark>
                         mdi-arrow-right
@@ -101,7 +101,7 @@
             </v-col>
 
             <v-col>
-                <v-btn style="width: 192px" :color="assistantActive?'red':'green'" elevation="2" block @click="assistantActive = !assistantActive">
+                <v-btn style="width: 192px" :color="assistantActive?'red':'green'" block @click="assistantActive = !assistantActive">
                     {{ assistantActive?"Finish Cropping":"Start Cropping" }}
                     <v-icon right dark>
                         mdi-arrow-right
@@ -110,7 +110,7 @@
             </v-col>
 
             <v-col>
-                <v-btn color="red" elevation="2" block @click="resetCrop">
+                <v-btn color="red" block @click="resetCrop">
                     Reset
                     <v-icon right dark>
                         mdi-refresh

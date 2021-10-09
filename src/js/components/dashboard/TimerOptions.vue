@@ -21,7 +21,6 @@
                     <v-col>
                         <v-btn
                             color="green"
-                            elevation="2"
                             @click="play"
                             block
                             :disabled="timer.state == 'playing'"
@@ -35,7 +34,6 @@
                     <v-col>
                         <v-btn
                             color="orange"
-                            elevation="2"
                             @click="pause"
                             block
                             :disabled="timer.state != 'playing'"
@@ -50,7 +48,6 @@
                     <v-col>
                         <v-btn
                             color="red"
-                            elevation="2"
                             @click="reset"
                             block
                             :disabled="timer.ms == 0"
