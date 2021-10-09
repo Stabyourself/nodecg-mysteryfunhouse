@@ -144,7 +144,6 @@
     "css-loader": "^6.2.0",
     "deepmerge": "^4.2.2",
     "laravel-mix": "^6.0.31",
-    "lodash": "^4.17.21",
     "node-sass": "^6.0.1",
     "resolve-url-loader": "^4.0.0",
     "sass": "~1.32",
@@ -167,6 +166,7 @@
     "@tweenjs/tween.js": "^18.6.4",
     "discord.js": "^13.2.0-dev.1632916991.fe95005",
     "google-spreadsheet": "^3.1.15",
+    "lodash": "^4.17.21",
     "random-seed": "^0.3.0",
     "request": "^2.88.2",
     "timer-node": "^5.0.5"
