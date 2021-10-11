@@ -33,22 +33,22 @@ fs.readFile(__dirname + '/twitch_token.json', 'UTF-8').then((str) => {
 
 
     nodecg.listenFor("updateTwitch", function(options, ack) {
-        const gameName = nodecg.readReplicant("game")
+        const requestedGame = nodecg.readReplicant("game")
         const player0name = nodecg.readReplicant("player0name")
         const player1name = nodecg.readReplicant("player1name")
 
         const title = `Mystery Tournament 16! ${player0name} vs. ${player1name}`
 
-        apiClient.games.getGameByName(gameName).then(game => {
+        apiClient.games.getGameByName(requestedGame).then(game => {
             gameId = game ? game.id : "10553" // default to "Mystery Fun House" if game not found
+            gameName = game ? game.name : "Mystery Fun House"
+
             apiClient.channels.updateChannelInfo(nodecg.bundleConfig.twitchChannel, {
                 title: title,
                 gameId: gameId,
             }).then(() => {
-                let msg = "Done! " + title
-                if (!game) {
-                    msg += ` - Game "${gameName}" not found, so I put it as Mystery Fun House instead.`
-                }
+                let msg = `Done!\nTitle: ${title}\nGame: ${gameName}`
+
                 ack(null, msg)
             }).catch(() => {
                 ack(new Error("Something went wrong. Try again or tell Maurice."))

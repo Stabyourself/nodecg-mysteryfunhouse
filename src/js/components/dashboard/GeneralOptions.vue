@@ -20,7 +20,7 @@
                 </v-btn>
 
                 <span v-if="twitchError" class="error--text">{{ twitchError }}</span>
-                <span v-if="twitchSuccess" class="success--text">{{ twitchSuccess }}</span>
+                <span v-if="twitchSuccess" class="success--text" style="white-space: pre-line;">{{ twitchSuccess }}</span>
 
                 <v-select
                     class="mt-5"
