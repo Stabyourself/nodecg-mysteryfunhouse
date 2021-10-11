@@ -47,9 +47,10 @@ fs.readFile(__dirname + '/twitch_token.json', 'UTF-8').then((str) => {
                 title: title,
                 gameId: gameId,
             }).then(() => {
-                let msg = `Done!\nTitle: ${title}\nGame: ${gameName}`
-
-                ack(null, msg)
+                ack(null, {
+                    title: title,
+                    game: gameName
+                })
             }).catch(() => {
                 ack(new Error("Something went wrong. Try again or tell Maurice."))
             })

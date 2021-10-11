@@ -11,19 +11,7 @@
                     Load from match ID
                 </v-btn>
 
-                <v-btn
-                    color="primary"
-                    block
-                    @click="updateTwitch"
-                    :loading="updatingTwitch">
-                    Update Twitch Info
-                </v-btn>
-
-                <span v-if="twitchError" class="error--text">{{ twitchError }}</span>
-                <span v-if="twitchSuccess" class="success--text" style="white-space: pre-line;">{{ twitchSuccess }}</span>
-
                 <v-select
-                    class="mt-5"
                     label="Wait Screen state"
                     v-model="waitScreenState"
                     :items="waitScreenStateOptions"
@@ -80,24 +68,6 @@ export default {
         bindReplicant.call(this, "playerInfo")
     },
 
-    methods: {
-        updateTwitch() {
-            this.updatingTwitch = true
-
-            nodecg.sendMessage('updateTwitch')
-                .then((result) => {
-                    this.updatingTwitch = false
-                    this.twitchSuccess = result
-                    setTimeout(() => {
-                        this.twitchSuccess = ""
-                    }, 4000)
-                }).catch(error => {
-                    this.updatingTwitch = false
-                    this.twitchError = error.message
-                });
-        }
-    },
-
     data() {
         return {
             waitScreenState: false,
@@ -111,9 +81,6 @@ export default {
             ],
             playerInfo: [],
             topText: "",
-            updatingTwitch: false,
-            twitchError: "",
-            twitchSuccess: ""
         }
     }
 };

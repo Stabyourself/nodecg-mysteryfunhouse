@@ -60,6 +60,13 @@
         "file": "game.html"
       },
       {
+        "name": "twitch",
+        "title": "Twitch",
+        "width": 2,
+        "file": "twitch.html",
+        "headerColor": "#9146FF"
+      },
+      {
         "name": "stream-cropping",
         "title": "Stream Cropping",
         "file": "cropping.html",
