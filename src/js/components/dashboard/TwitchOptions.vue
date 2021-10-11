@@ -3,7 +3,7 @@
         <v-main>
             <v-container>
                 <v-btn
-                    class="mb-5"
+                    class="mb-3"
                     color="primary"
                     block
                     @click="updateTwitch"
