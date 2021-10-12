@@ -129,10 +129,10 @@
 
         <v-row>
             <v-col>
-                <v-switch v-model="done" label="Is done" dense></v-switch>
+                <v-switch v-model="done" label="Is done"></v-switch>
             </v-col>
             <v-col>
-                <v-switch v-model="forfeit" label="Forfeited" dense></v-switch>
+                <v-switch v-model="forfeit" label="Forfeited"></v-switch>
             </v-col>
         </v-row>
 

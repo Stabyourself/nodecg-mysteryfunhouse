@@ -26,6 +26,7 @@ const playerProps = {
     done: false,
     forfeit: false,
     finalTime: "",
+    prediction: 50
 }
 
 const props = {
@@ -37,6 +38,7 @@ const props = {
     showPlayerCards: false,
     match1round: "",
     match2round: "",
+    prediction: 50
 }
 
 const replicants = {}
@@ -299,6 +301,17 @@ nodecg.listenFor("loadMatch", function(options, ack) {
 
         replicants[`match${options.matchNumber}round`].value = round
 
+
+        // Predictions
+        let player1votes = match.match["player1_votes"]
+        let player2votes = match.match["player2_votes"]
+        let totalVotes = player1votes + player2votes
+
+
+        let leftPlayer = options.matchNumber == 2 ? 2 : 0
+
+        replicants[`player${leftPlayer}prediction`].value = Math.round(player1votes/totalVotes*100)
+        replicants[`player${leftPlayer+1}prediction`].value = Math.round(player2votes/totalVotes*100)
 
 
 
