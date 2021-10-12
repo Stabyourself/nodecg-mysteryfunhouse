@@ -5,7 +5,7 @@ It's a [NodeCG](https://www.nodecg.dev/) 1.8.1 bundle for MysteryFunHouse race r
 ## Config
 The following properties are needed for full functionality in the [bundle config](https://www.nodecg.dev/docs/bundle-configuration):
 
-```json
+```jsonc
 {
     "challongeApiKey": "...", // Challonge API key
     "challongeTournament": "...", // Challonge tournament name, eg speedrunslive-mystery16
