@@ -31,3 +31,4 @@ The following properties are needed for full functionality in the [bundle config
 - Player popovers (with upload)
 - Predictions
 - Fancy cropping overlay
+- Semi-automatic twitch stream info updating
