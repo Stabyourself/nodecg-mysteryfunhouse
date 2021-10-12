@@ -1,9 +1,9 @@
 <template>
     <div>
         <v-text-field
+            style="font-size: 1.5em"
             v-model="name"
-            label="Name"
-            dense
+            :label="`${playerNumber%2 == 0?'Left':'Right'} Player`"
         ></v-text-field>
 
         <v-combobox

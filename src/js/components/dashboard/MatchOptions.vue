@@ -46,11 +46,9 @@
 
                 <v-row>
                     <v-col class="divider">
-                        <h3 class="mb-3">Left Player</h3>
                         <player-options :player-number="(matchNumber-1)*2"></player-options>
                     </v-col>
                     <v-col>
-                        <h3 class="mb-3">Right Player</h3>
                         <player-options :player-number="(matchNumber-1)*2+1"></player-options>
                     </v-col>
                 </v-row>
