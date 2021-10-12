@@ -7,13 +7,16 @@ The following properties are needed for full functionality in the [bundle config
 
 ```json
 {
-    "challongeApiKey": "...",
-    "challongeTournament": "...",
-    "discordKey": "...",
-    "discordGuild": "...",
-    "googleApiKey": "...",
-    "contactSheet": "...",
-    "careerSheet": "..."
+    "challongeApiKey": "...", // Challonge API key
+    "challongeTournament": "...", // Challonge tournament name, eg speedrunslive-mystery16
+    "discordKey": "...", // Discord Bot Secret
+    "discordGuild": "...", // Discord Server ID
+    "googleApiKey": "...", // Google API key
+    "contactSheet": "...", // Contact sheet ID
+    "careerSheet": "...", // Career sheet ID
+    "twitchClientId": "...", // Id of the twitch App
+    "twitchClientSecret": "...", // Secret of the App
+    "twitchChannel": "..." // Twitch channel ID (not the name, it's numerical)
 }
 ```
 
