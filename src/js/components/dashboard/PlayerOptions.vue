@@ -1,8 +1,8 @@
 <template>
     <div>
         <v-text-field
-            style="font-size: 1.5em"
             v-model="name"
+            class="font-weight-bold"
             :label="`${playerNumber%2 == 0?'Left':'Right'} Player`"
         ></v-text-field>
 
