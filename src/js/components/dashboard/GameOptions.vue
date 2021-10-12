@@ -8,7 +8,7 @@
                 ></v-text-field>
 
                 <label class="v-label v-label--active theme--dark" style="font-size:12px">Boxart</label>
-                <div class="select-img-wrap"
+                <div class="select-img-wrap mb-3"
                     nodecg-dialog="boxart-select-dialog">
                     <img
                         class="select-img"
