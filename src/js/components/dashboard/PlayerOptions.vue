@@ -62,6 +62,7 @@
                     color="green"
                     block
                     class="mb-3"
+                    small
                     @click="streamHidden = true">
                     Visible
                     <v-icon right dark>
@@ -74,6 +75,7 @@
                     color="red"
                     block
                     class="mb-3"
+                    small
                     @click="streamHidden = false">
                     Hidden
                     <v-icon right dark>
@@ -83,7 +85,12 @@
             </v-col>
 
             <v-col>
-                <v-btn color="primary" block class="mb-3" @click="reloadStream" :loading="refreshing">
+                <v-btn
+                    color="primary"
+                    block class="mb-3"
+                    @click="reloadStream"
+                    :loading="refreshing"
+                    small>
                     Reload
                     <v-icon right dark>
                         mdi-refresh
