@@ -5,6 +5,8 @@
                 <v-text-field
                     v-model="round"
                     label="Round"
+                    dense
+                    class="mt-3"
                 ></v-text-field>
 
                 <label>Predictions</label>
@@ -25,6 +27,7 @@
                         max="100"
                         min="0"
                         style="width: 60px"
+                        dense
                         ></v-text-field>
                     </template>
 
@@ -36,17 +39,18 @@
                         max="100"
                         min="0"
                         style="width: 60px"
+                        dense
                         ></v-text-field>
                     </template>
                 </v-slider>
 
                 <v-row>
                     <v-col class="divider">
-                        <h3>Left Player</h3>
+                        <h3 class="mb-3">Left Player</h3>
                         <player-options :player-number="(matchNumber-1)*2"></player-options>
                     </v-col>
                     <v-col>
-                        <h3>Right Player</h3>
+                        <h3 class="mb-3">Right Player</h3>
                         <player-options :player-number="(matchNumber-1)*2+1"></player-options>
                     </v-col>
                 </v-row>

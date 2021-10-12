@@ -3,6 +3,7 @@
         <v-text-field
             v-model="name"
             label="Name"
+            dense
         ></v-text-field>
 
         <v-combobox
@@ -10,16 +11,18 @@
             :items="pronounOptions"
             label="Pronouns"
             hint="This is also a free input"
+            dense
         ></v-combobox>
 
 
-        <v-divider class="my-7"></v-divider>
+        <v-divider class="mb-7 mt-4"></v-divider>
 
 
         <v-text-field
             v-model="twitch"
             label="Twitch"
             prefix="twitch.tv/"
+            dense
         ></v-text-field>
 
         <!--
@@ -47,6 +50,7 @@
                 min="0"
                 max="100"
                 step="5"
+                dense
                 ></v-text-field>
             </template>
         </v-slider>
@@ -89,7 +93,7 @@
         </v-row>
 
 
-        <v-divider class="my-7"></v-divider>
+        <v-divider class="mb-7 mt-4"></v-divider>
 
 
         <v-btn color="green" block class="mb-3" @click="makeDone"
@@ -118,20 +122,21 @@
 
         <v-row>
             <v-col>
-                <v-switch v-model="done" label="Is done"></v-switch>
+                <v-switch v-model="done" label="Is done" dense></v-switch>
             </v-col>
             <v-col>
-                <v-switch v-model="forfeit" label="Forfeited"></v-switch>
+                <v-switch v-model="forfeit" label="Forfeited" dense></v-switch>
             </v-col>
         </v-row>
 
         <v-text-field
             v-model="finalTime"
             label="Final time"
+            dense
         ></v-text-field>
 
 
-        <v-divider class="my-7"></v-divider>
+        <v-divider class="mb-7 mt-4"></v-divider>
 
 
         <v-select
@@ -140,6 +145,7 @@
             item-value="url"
             v-model="popover"
             label="Popover graphic"
+            dense
             >
         </v-select>
         <v-row>
