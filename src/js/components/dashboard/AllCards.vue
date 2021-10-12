@@ -5,7 +5,7 @@
                 <v-btn @click="update" block color="primary" class="mb-3">Update data from sheets and stuff</v-btn>
             </div>
 
-            <v-row style="margin: 0">
+            <v-row>
                 <v-col cols="3" v-for="info of infoSorted" :key="info.name" class="card">
                     <player-card  v-tilt :info="info"></player-card>
                 </v-col>

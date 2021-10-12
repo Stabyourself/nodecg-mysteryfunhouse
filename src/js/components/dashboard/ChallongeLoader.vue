@@ -22,7 +22,7 @@
                 This will override the selected players!
             </p>
 
-            <v-row style="margin: 0 auto">
+            <v-row class="mx-auto">
                 <v-col>
                     <v-text-field
                         v-model="matchId"
@@ -42,7 +42,7 @@
                 </v-col>
 
                 <v-col>
-                    <v-btn color="green" style="margin-top: 13px;" block @click="loadMatch" :loading="loading">Load Match</v-btn>
+                    <v-btn color="green" class="mt-3" block @click="loadMatch" :loading="loading">Load Match</v-btn>
                 </v-col>
             </v-row>
 

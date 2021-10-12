@@ -12,7 +12,7 @@
                 >
                 </v-text-field>
 
-                <div style="text-align: center;" class="grey--text">
+                <div class="grey--text text-center">
                     <span v-if="timer.state == 'paused'">Press play to continue {{ pausedTimerText }}</span>
                     <span v-else>&nbsp;</span>
                 </div>
