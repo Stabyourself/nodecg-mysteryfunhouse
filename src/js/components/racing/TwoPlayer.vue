@@ -1,84 +1,70 @@
 <template>
     <v-app>
-        <twitch-player
-            style="position: absolute; top: 150px; left: 15px; width: 930px; height:698px;"
-            :opacity="player0streamHidden ? 0 : 1"
-
-            :playerNumber="0"
-            :url="player0twitch"
-            :quality="player0quality ? player0quality : 'auto'"
-            :volume="player0streamHidden ? 0 : player0volume"
-            :crop="player0crop"
-        ></twitch-player>
-
-        <twitch-player
-            style="position: absolute; top: 150px; left: 975px; width: 930px; height:698px"
-            :opacity="player1streamHidden ? 0 : 1"
-
-            :playerNumber="1"
-            :url="player1twitch"
-            :quality="player1quality ? player1quality : 'auto'"
-            :volume="player1streamHidden ? 0 : player1volume"
-            :crop="player1crop"
-        ></twitch-player>
-
-
-
+        <swipe :delay="0.5" :visible="visible" class="mt-font match-round" style="top: 10px">
+            {{ round }}
+        </swipe>
 
 
         <player-name
-            pronoun-h="20"
-            name-h="115"
+            :visible="visible"
+            pronoun-h="40"
+            name-h="95"
             style="top: 15px; left: 20px; width: 925px; height: 135px">
             <template v-slot:pronouns>
-                {{ player0pronouns }}
+                <swipe :visible="visible" dir="up" :delay="0.5">
+                    {{ player1pronouns }}
+                </swipe>
             </template>
             <template v-slot:name>
-                {{ player0name }}
+                <swipe dir="up" :visible="visible">
+                    <fit-text :max="2.5">{{ player0name }}</fit-text>
+                </swipe>
             </template>
         </player-name>
 
         <player-name
+            :visible="visible"
             class="right"
-            pronoun-h="20"
-            name-h="115"
+            pronoun-h="40"
+            name-h="95"
             style="top: 15px; left: 975px; width: 925px; height: 135px">
             <template v-slot:pronouns>
-                {{ player1pronouns }}
+                <swipe :visible="visible" dir="up" :delay="0.5">
+                    {{ player1pronouns }}
+                </swipe>
             </template>
             <template v-slot:name>
-                {{ player1name }}
+                <swipe dir="up" :visible="visible">
+                    <fit-text :max="2.5">{{ player1name }}</fit-text>
+                </swipe>
             </template>
         </player-name>
 
 
+        <div style="position: absolute; top: 150px; left: 15px; width: 930px; height:698px;">
+            <twitch-player
+                :opacity="player0streamHidden ? 0 : 1"
 
-        <div class="mt-font match-round" style="top: 10px">
-            {{ round }}
+                :playerNumber="0"
+                :url="player0twitch"
+                :quality="player0quality ? player0quality : 'auto'"
+                :volume="player0streamHidden ? 0 : player0volume"
+                :crop="player0crop"
+            ></twitch-player>
         </div>
 
+        <div style="position: absolute; top: 150px; left: 975px; width: 930px; height:698px">
+            <twitch-player
+                :opacity="player1streamHidden ? 0 : 1"
 
+                :playerNumber="1"
+                :url="player1twitch"
+                :quality="player1quality ? player1quality : 'auto'"
+                :volume="player1streamHidden ? 0 : player1volume"
+                :crop="player1crop"
+            ></twitch-player>
+        </div>
 
-        <game-box
-            style="top: 865px; left: 15px;"
-
-            :img-url="currentBoxart?currentBoxart.url:''"
-            :name="game"
-            :goal="goal"
-            :submitter="submitter">
-        </game-box>
-
-        <rainwave
-            v-if="showRainwave"
-            style="top: 975px; left: 1521px; width: 444px; height: 124px">
-        </rainwave>
-
-
-        <timer
-            style="top: 842px;"
-            :class="{active: timer.state == 'playing' }">
-            {{ timerText }}
-        </timer>
 
         <player-done-slider
             :finalTime="player0finalTime"
@@ -92,8 +78,64 @@
             style="top: 848px; left: 975px; width: 930px;"
             :class="{active: player1done || player1forfeit, done: player1done, forfeit: player1forfeit }">
         </player-done-slider>
+
+
+        <game-box style="top: 865px; left: 15px;">
+            <template v-slot:boxart>
+                <swipe :visible="visible" dir="right" class="boxart" v-if="currentBoxart">
+                    <div class="d-flex align-center" style="height: 100%">
+                        <img :src="currentBoxart.url">
+                    </div>
+                </swipe>
+            </template>
+
+            <template v-slot:text>
+                <swipe :visible="visible" dir="up" :delay="0.8" class="game">
+                    <fit-text :max="1" :min="0.1">
+                        <v-icon x-large dark class="mr-3">mdi-controller-classic</v-icon>
+                        {{ game }}
+                    </fit-text>
+                </swipe>
+                <swipe :visible="visible" dir="up" :delay="1" class="goal">
+                    <fit-text :max="1" :min="0.1">
+                        <v-icon x-large dark class="mr-3">mdi-trophy-variant</v-icon>
+                        {{ goal }}
+                    </fit-text>
+                </swipe>
+                <!-- <div class="submitter">Submitted by {{ submitter }}</div> -->
+            </template>
+        </game-box>
+
+
+        <rainwave
+            v-if="showRainwave"
+            style="top: 975px; left: 1521px; width: 444px; height: 124px">
+        </rainwave>
+
+
+        <timer
+            style="top: 842px;"
+            :class="{active: timer.state == 'playing' }">
+            <swipe dir="down" :visible="visible">
+                {{ timerText }}
+            </swipe>
+        </timer>
     </v-app>
 </template>
+
+<style lang="scss">
+    .boxart {
+        margin-right: 15px;
+        height: 100%;
+
+        img {
+            display: block;
+            margin: 0 auto;
+            max-height: 100%;
+            max-width: 335px;
+        }
+    }
+</style>
 
 <script>
 import { bindReplicant, formatTimer } from "../../util.js"
@@ -140,6 +182,24 @@ export default {
         bindReplicant.call(this, "player1finalTime")
 
         bindReplicant.call(this, "player1crop")
+
+        if (window.obsstudio && window.obsstudio.getControlLevel && window.obsstudio.getControlLevel != 0) {
+            window.addEventListener('obsSceneChanged', (event) => {
+                if (event.detail.name == "2player") {
+                    this.visible = true
+                } else {
+                    this.visible = false
+                }
+            })
+        } else {
+            this.visible = true
+
+            document.addEventListener("keyup", (e) => {
+                if (e.keyCode === 13) {
+                    this.visible = !this.visible
+                }
+            })
+        }
     },
 
     computed: {
@@ -191,6 +251,8 @@ export default {
             },
 
             showRainwave: false,
+
+            visible: false,
         }
     }
 };

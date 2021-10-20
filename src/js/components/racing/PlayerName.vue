@@ -5,7 +5,7 @@
         </div>
 
         <div class="name" :style="{height: nameH + 'px', 'line-height': nameH + 'px'}">
-            <fit-text :max="345/nameH"><slot name="name"></slot></fit-text>
+            <slot name="name"></slot>
         </div>
     </div>
 </template>
@@ -21,6 +21,7 @@
 
     .name {
         overflow-wrap: break-word;
+        margin-top: -10px;
 
         span {
             width: 100%;
@@ -34,6 +35,7 @@ export default {
     props: [
         "pronounH",
         "nameH",
+        "visible"
     ]
 };
 </script>
