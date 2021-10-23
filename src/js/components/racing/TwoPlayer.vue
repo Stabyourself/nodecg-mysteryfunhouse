@@ -90,13 +90,13 @@
             </template>
 
             <template v-slot:text>
-                <swipe :visible="visible" dir="up" :delay="0.8" class="game">
+                <swipe :visible="visible" dir="up" :delay="1" class="game">
                     <fit-text :max="1" :min="0.1">
                         <v-icon x-large dark class="mr-3">mdi-controller-classic</v-icon>
                         {{ game }}
                     </fit-text>
                 </swipe>
-                <swipe :visible="visible" dir="up" :delay="1" class="goal">
+                <swipe :visible="visible" dir="up" :delay="0.8" class="goal">
                     <fit-text :max="1" :min="0.1">
                         <v-icon x-large dark class="mr-3">mdi-trophy-variant</v-icon>
                         {{ goal }}
@@ -114,7 +114,7 @@
 
 
         <timer
-            style="top: 842px;"
+            style="top: 848px;"
             :class="{active: timer.state == 'playing' }">
             <swipe dir="down" :visible="visible">
                 {{ timerText }}
