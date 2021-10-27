@@ -1,8 +1,15 @@
 @font-face {
     font-family: 'Regen';
-      src:  url('../../dist/font/Regen.woff2') format('woff2');
-      font-weight: normal;
-      font-style: normal;
+    src:  url('../../dist/font/Regen.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Edit Undo BRK';
+    src:  url('../../dist/font/edit-undo.brk.woff2') format("woff2");
+    font-weight: normal;
+    font-style: normal;
 }
 
 @font-face {
@@ -17,6 +24,33 @@
     line-height: 1.2;
     font-family: "Regen";
     text-shadow: -2px 0 1px #000000, 0 2px 1px #000000, 2px 0 1px #000000, 0 -2px 1px #000000;
+}
+
+.pixel-font {
+    color: white;
+    line-height: 1;
+    font-family: "Edit Undo BRK" !important;
+
+    background: #EF5B00;
+    background: -webkit-linear-gradient(to bottom, #EF5B00 0%, #FED3B1 100%);
+    background: -moz-linear-gradient(to bottom, #EF5B00 0%, #FED3B1 100%);
+    background: linear-gradient(to bottom, #EF5B00 0%, #FED3B1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+
+    filter: drop-shadow(0px 4px #B10005);
+
+    &.pixel-font-alt {
+        background: #EFEFEF;
+        background: -webkit-linear-gradient(to top, #EFEFEF 0%, #476CFE 100%);
+        background: -moz-linear-gradient(to top, #EFEFEF 0%, #476CFE 100%);
+        background: linear-gradient(to top, #EFEFEF 0%, #476CFE 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+
+        filter: drop-shadow(0px 4px #050A87);
+    }
 }
 
 body {

@@ -1,5 +1,5 @@
 <template>
-    <div class="game-box mt-font">
+    <div class="game-box">
         <slot name="boxart"></slot>
 
         <div class="text">

@@ -1,5 +1,5 @@
 <template>
-    <div class="player-name mt-font">
+    <div class="player-name">
         <div class="pronouns" :style="{height: pronounH + 'px'}">
             <slot name="pronouns"></slot>
         </div>
