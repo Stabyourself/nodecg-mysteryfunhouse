@@ -211,7 +211,8 @@ export default {
                 }
             })
         } else {
-            this.visible = true
+            this.visible = false
+            setTimeout(() => {this.visible = true}, 0)
 
             document.addEventListener("keyup", (e) => {
                 if (e.keyCode === 13) {
