@@ -4,7 +4,7 @@
             <div class="logo pixel-font pixel-font-alt">
                 MT16<span class="logo-small">bit</span>
             </div>
-            <div class="round pixel-font">
+            <div class="round pixel-font pixel-font-alt">
                 {{ round }}
             </div>
         </swipe>
@@ -17,12 +17,12 @@
             style="top: 15px; left: 20px; width: 925px; height: 135px">
             <template v-slot:pronouns>
                 <swipe :visible="visible" dir="up" :delay="0.5">
-                    <span class="pixel-font">{{ player1pronouns }}</span>
+                    <span class="pixel-font pixel-font-alt">{{ player1pronouns }}</span>
                 </swipe>
             </template>
             <template v-slot:name>
                 <swipe dir="up" :visible="visible">
-                    <fit-text :max="2.5" class="pixel-font">{{ player0name }}</fit-text>
+                    <fit-text :max="2.5" class="pixel-font pixel-font-alt">{{ player0name }}</fit-text>
                 </swipe>
             </template>
         </player-name>
@@ -35,12 +35,12 @@
             style="top: 15px; left: 975px; width: 925px; height: 135px">
             <template v-slot:pronouns>
                 <swipe :visible="visible" dir="up" :delay="0.5">
-                    <span class="pixel-font">{{ player1pronouns }}</span>
+                    <span class="pixel-font pixel-font-alt">{{ player1pronouns }}</span>
                 </swipe>
             </template>
             <template v-slot:name>
                 <swipe dir="up" :visible="visible">
-                    <fit-text :max="2.5" class="pixel-font">{{ player1name }}</fit-text>
+                    <fit-text :max="2.5" class="pixel-font pixel-font-alt">{{ player1name }}</fit-text>
                 </swipe>
             </template>
         </player-name>
@@ -88,7 +88,7 @@
         <game-box style="top: 865px; left: 15px;">
             <template v-slot:boxart>
                 <swipe :visible="visible" dir="right" class="boxart" v-if="currentBoxart">
-                    <div class="d-flex align-center" style="height: 100%; border: 5px solid #F7995B">
+                    <div class="d-flex align-center" style="height: 100%;">
                         <img :src="currentBoxart.url">
                     </div>
                 </swipe>
@@ -97,12 +97,12 @@
             <template v-slot:text>
                 <swipe :visible="visible" dir="up" :delay="1" class="game">
                     <fit-text :max="1" :min="0.1">
-                        <span class="pixel-font">{{ game }}</span>
+                        <span class="pixel-font pixel-font-alt">{{ game }}</span>
                     </fit-text>
                 </swipe>
                 <swipe :visible="visible" dir="up" :delay="0.8" class="goal">
                     <fit-text :max="1" :min="0.1">
-                        <span class="pixel-font">{{ goal }}</span>
+                        <span class="pixel-font pixel-font-alt">{{ goal }}</span>
                     </fit-text>
                 </swipe>
                 <!-- <div class="submitter">Submitted by {{ submitter }}</div> -->
@@ -120,7 +120,7 @@
             style="top: 848px;"
             :class="{active: timer.state == 'playing' }">
             <swipe dir="down" :visible="visible">
-                <span class="pixel-font" style="font-size: 1.5em">{{ timerText }}</span>
+                {{ timerText }}
             </swipe>
         </timer>
     </v-app>
@@ -215,7 +215,7 @@ export default {
             setTimeout(() => {this.visible = true}, 0)
 
             document.addEventListener("keyup", (e) => {
-                if (e.keyCode === 13) {
+                if (e.key === "Enter") {
                     this.visible = !this.visible
                 }
             })

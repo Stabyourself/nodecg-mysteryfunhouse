@@ -36,7 +36,7 @@
 }
 .pixel-font.pixel-font-alt {
   background: #EFEFEF;
-  background: linear-gradient(to top, #EFEFEF 0%, #476CFE 100%);
+  background: linear-gradient(to bottom, #00B8FF 0%, #00FFF9 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0px 4px #050A87);
@@ -46,8 +46,10 @@ body {
   margin: 0;
 }
 body.graphic {
-  background-size: 1920px 1080px;
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
+  image-rendering: pixelated;
   width: 1920px;
   height: 1080px;
   overflow: hidden;
@@ -59,6 +61,10 @@ body.graphic {
 body.graphic::-webkit-scrollbar {
   display: none;
   /* Safari and Chrome */
+}
+
+#app {
+  image-rendering: auto;
 }
 
 .select-img-wrap {

@@ -16,6 +16,8 @@
         font-size: 3rem;
         height: 200px;
         max-width: 944px;
+
+        line-height: 1;
     }
 </style>
 

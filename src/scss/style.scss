@@ -32,8 +32,6 @@
     font-family: "Edit Undo BRK" !important;
 
     background: #EF5B00;
-    background: -webkit-linear-gradient(to bottom, #EF5B00 0%, #FED3B1 100%);
-    background: -moz-linear-gradient(to bottom, #EF5B00 0%, #FED3B1 100%);
     background: linear-gradient(to bottom, #EF5B00 0%, #FED3B1 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -43,9 +41,7 @@
 
     &.pixel-font-alt {
         background: #EFEFEF;
-        background: -webkit-linear-gradient(to top, #EFEFEF 0%, #476CFE 100%);
-        background: -moz-linear-gradient(to top, #EFEFEF 0%, #476CFE 100%);
-        background: linear-gradient(to top, #EFEFEF 0%, #476CFE 100%);
+        background: linear-gradient(to bottom, #00B8FF 0%, #00FFF9 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
 
@@ -57,8 +53,10 @@ body {
     margin: 0;
 
     &.graphic {
-        background-size: 1920px 1080px;
+        background-size: cover;
+        background-position: center;
         background-repeat: no-repeat;
+        image-rendering: pixelated;
 
         width: 1920px;
         height: 1080px;
@@ -70,6 +68,10 @@ body {
             display: none;  /* Safari and Chrome */
         }
     }
+}
+
+#app {
+    image-rendering: auto;
 }
 
 .select-img-wrap {
