@@ -91,6 +91,10 @@ function getPlayerInfo(tournament, contactRows, careerRows, discordMembers, chal
         return participant.participant.display_name.toLowerCase() == challongeName.toLowerCase()
     })
 
+    if (!challonge) {
+        return Error(`Couldn't find challonge username "${challongeName}" in tournament.`)
+    }
+
     const rawMatches = tournament.matches.filter(match => {
         return match.match.player1_id == challonge.participant.id || match.match.player2_id == challonge.participant.id
     })

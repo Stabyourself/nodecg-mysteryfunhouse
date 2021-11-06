@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <swipe :delay="0.5" :visible="visible" class="mt-font match-round" style="top: 10px">
+        <swipe :delay="0.5" :visible="visible" class="mt-font match-round" style="top: 100px">
             {{ round }}
         </swipe>
 
@@ -12,12 +12,12 @@
             style="top: 15px; left: 20px; width: 925px; height: 135px">
             <template v-slot:pronouns>
                 <swipe :visible="visible" dir="up" :delay="0.5">
-                    {{ player1pronouns }}
+                    <span class="mt-font">{{ player1pronouns }}</span>
                 </swipe>
             </template>
             <template v-slot:name>
                 <swipe dir="up" :visible="visible">
-                    <fit-text :max="2.5">{{ player0name }}</fit-text>
+                    <fit-text :max="2.5" class="mt-font">{{ player0name }}</fit-text>
                 </swipe>
             </template>
         </player-name>
@@ -30,12 +30,12 @@
             style="top: 15px; left: 975px; width: 925px; height: 135px">
             <template v-slot:pronouns>
                 <swipe :visible="visible" dir="up" :delay="0.5">
-                    {{ player1pronouns }}
+                    <span class="mt-font">{{ player1pronouns }}</span>
                 </swipe>
             </template>
             <template v-slot:name>
                 <swipe dir="up" :visible="visible">
-                    <fit-text :max="2.5">{{ player1name }}</fit-text>
+                    <fit-text :max="2.5" class="mt-font">{{ player1name }}</fit-text>
                 </swipe>
             </template>
         </player-name>
@@ -93,13 +93,13 @@
                 <swipe :visible="visible" dir="up" :delay="1" class="game">
                     <fit-text :max="1" :min="0.1">
                         <v-icon x-large dark class="mr-3">mdi-controller-classic</v-icon>
-                        {{ game }}
+                        <span class="mt-font">{{ game }}</span>
                     </fit-text>
                 </swipe>
                 <swipe :visible="visible" dir="up" :delay="0.8" class="goal">
                     <fit-text :max="1" :min="0.1">
                         <v-icon x-large dark class="mr-3">mdi-trophy-variant</v-icon>
-                        {{ goal }}
+                        <span class="mt-font">{{ goal }}</span>
                     </fit-text>
                 </swipe>
                 <!-- <div class="submitter">Submitted by {{ submitter }}</div> -->
