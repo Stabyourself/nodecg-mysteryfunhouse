@@ -185,6 +185,7 @@ export default {
 
         if (window.obsstudio && window.obsstudio.getControlLevel && window.obsstudio.getControlLevel != 0) {
             window.addEventListener('obsSceneChanged', (event) => {
+                console.log("Switched to scene " + event.detail.name)
                 if (event.detail.name == "2player") {
                     this.visible = true
                 } else {
