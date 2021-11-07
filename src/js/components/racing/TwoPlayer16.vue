@@ -203,6 +203,13 @@ export default {
         bindReplicant.call(this, "player1crop")
 
         if (window.obsstudio && window.obsstudio.getControlLevel && window.obsstudio.getControlLevel != 0) {
+            window.obsstudio.getCurrentScene((scene) => {
+                console.log("Start scene: " + scene.name)
+                if (scene.name == "2player") {
+                    this.visible = true
+                }
+            })
+
             window.addEventListener('obsSceneChanged', (event) => {
                 console.log("Switched to scene " + event.detail.name)
                 if (event.detail.name == "2player") {
