@@ -7,7 +7,7 @@
 
             <v-row>
                 <v-col cols="3" v-for="info of infoSorted" :key="info.name" class="card">
-                    <player-card  v-tilt :info="info"></player-card>
+                    <player-card v-tilt :info="info"></player-card>
                 </v-col>
             </v-row>
         </v-main>
@@ -15,9 +15,19 @@
 </template>
 
 <style lang="scss">
-    .card canvas {
-        width: 100%;
-        display: block;
+    .card {
+        &:hover {
+            z-index: 1000;
+
+            canvas {
+                filter: drop-shadow(0 0 5px #000);
+            }
+        }
+
+        canvas {
+            width: 100%;
+            display: block;
+        }
     }
 </style>
 
