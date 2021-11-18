@@ -34,6 +34,7 @@
     background: #EF5B00;
     background: linear-gradient(to bottom, #EF5B00 0%, #FED3B1 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: none;
 
@@ -43,6 +44,7 @@
         background: #EFEFEF;
         background: linear-gradient(to bottom, #00B8FF 0%, #00FFF9 100%);
         -webkit-background-clip: text;
+        background-clip: text;
         -webkit-text-fill-color: transparent;
 
         filter: drop-shadow(0px 4px #050A87);
