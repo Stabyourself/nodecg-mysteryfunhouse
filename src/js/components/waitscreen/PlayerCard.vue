@@ -142,7 +142,7 @@ export default {
                 if (bestPlacement == 1) {
                     classes.push("Champion")
                 }
-                if (this.info.challonge && this.info.challonge.seed <= 10) {
+                if (this.info.challonge && this.info.challonge.seed <= 16) {
                     classes.push("Seeded")
                 }
                 if (firstJoined == "MT1") {
