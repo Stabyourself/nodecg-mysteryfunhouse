@@ -123,7 +123,7 @@
     </v-app>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .boxart {
         margin-right: 15px;
         height: 100%;
