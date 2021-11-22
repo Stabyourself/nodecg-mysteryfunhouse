@@ -37,7 +37,7 @@
                 </v-timeline-item>
             </v-timeline>
 
-            <div v-else style="font-size: 1.5em;">
+            <div v-else style="font-size: 1.5em;" class="mt-10">
                 No matches yet!
             </div>
         </div>
@@ -108,7 +108,7 @@
             .round {
                 font-size: 0.8em;
                 font-weight: 200;
-                width: 150px;
+                min-width: 150px;
             }
 
             .opponent {
@@ -121,6 +121,7 @@
                 font-weight: 300;
                 line-height: 0;
                 margin-right: 15px;
+                white-space: nowrap;
             }
         }
 

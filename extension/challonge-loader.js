@@ -96,7 +96,10 @@ function getPlayerInfo(tournament, contactRows, careerRows, discordMembers, chal
     }
 
     const rawMatches = tournament.matches.filter(match => {
-        return match.match.player1_id == challonge.participant.id || match.match.player2_id == challonge.participant.id
+        return (
+            match.match.player1_id == challonge.participant.id ||
+            match.match.player2_id == challonge.participant.id) &&
+            match.match.state == "complete"
     })
 
 
