@@ -8,6 +8,9 @@ const fs = require('fs').promises;
 const clientId = nodecg.bundleConfig.twitchClientId;
 const clientSecret = nodecg.bundleConfig.twitchClientSecret;
 
+const twitchTemplate = nodecg.Replicant("twitchTemplate", {defaultValue: "Mystery Tournament 16! {player1} vs. {player2}"})
+
+
 //--------- USERS ---------
 // MauriceSY: 210715672
 // MFH: 175608452
@@ -34,10 +37,22 @@ fs.readFile(__dirname + '/twitch_token.json', 'UTF-8').then((str) => {
 
     nodecg.listenFor("updateTwitch", function(options, ack) {
         const requestedGame = nodecg.readReplicant("game")
-        const player0name = nodecg.readReplicant("player0name")
-        const player1name = nodecg.readReplicant("player1name")
 
-        const title = `Mystery Tournament 16! ${player0name} vs. ${player1name}`
+        // template placeholders
+        const placeHolders = {
+            "player1": nodecg.readReplicant("player0name"),
+            "player2": nodecg.readReplicant("player1name"),
+            "player3": nodecg.readReplicant("player2name"),
+            "player4": nodecg.readReplicant("player3name"),
+            "round1": nodecg.readReplicant("match1round"),
+            "round2": nodecg.readReplicant("match2round"),
+        }
+
+        // replace all placeholders in twitchTemplate
+        let title = twitchTemplate.value
+        for (let [placeholder, val] of Object.entries(placeHolders)) {
+            title = title.replace("{" + placeholder + "}", val)
+        }
 
         apiClient.games.getGameByName(requestedGame).then(game => {
             gameId = game ? game.id : "10553" // default to "Mystery Fun House" if game not found

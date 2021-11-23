@@ -85,7 +85,6 @@ export default {
 
     watch: {
         leftPrediction() {
-            console.log("!")
             this.rightPrediction = 100 - this.leftPrediction
         },
 
