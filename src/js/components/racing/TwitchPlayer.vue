@@ -49,12 +49,7 @@
 <script>
 import { bindReplicant } from "../../util.js"
 
-const playerWidth = 930
-const playerHeight = 698
-
 let twitchOptions = {
-    width: playerWidth,
-    height: playerHeight,
     channel: null,
     autoplay: true,
     muted: false,
@@ -88,6 +83,9 @@ export default {
             this.$refs.player.innerHTML = '';
 
             twitchOptions.channel = this.url
+            twitchOptions.width = this.width
+            twitchOptions.height = this.height
+
             this.player = new Twitch.Player(this.$refs.player, twitchOptions)
 
             this.player.addEventListener(Twitch.Player.READY, () => {
@@ -107,30 +105,30 @@ export default {
             let styles = {}
 
             if (this.crop) {
-                let left = this.crop[0]
-                let right = this.crop[1]
-                let top = this.crop[2]
-                let bottom = this.crop[3]
+                let left = this.crop[0] * (this.width / 930)
+                let right = this.crop[1] * (this.width / 930)
+                let top = this.crop[2] * (this.height / 698)
+                let bottom = this.crop[3] * (this.height / 698)
 
-                let width = playerWidth - left - right
-                let height = playerHeight - top - bottom
+                let width = this.width - left - right
+                let height = this.height - top - bottom
 
-                let translateX = playerWidth/2 - left - width/2
-                let translateY = playerHeight/2 - top - height/2
+                let translateX = this.width/2 - left - width/2
+                let translateY = this.height/2 - top - height/2
 
                 let transformOriginX = left + width/2
                 let transformOriginY = top + height/2
 
-                let hScale = playerWidth/width
-                let vScale = playerHeight/height
+                let hScale = this.width/width
+                let vScale = this.height/height
 
                 let scale = Math.min(hScale, vScale)
 
                 styles = {
                     "clip": `rect(
                                 ${top}px,
-                                ${playerWidth-right}px,
-                                ${playerHeight-bottom}px,
+                                ${this.width-right}px,
+                                ${this.height-bottom}px,
                                 ${left}px
                             )`,
                     "transform-origin": `${transformOriginX}px ${transformOriginY}px`,
@@ -165,6 +163,8 @@ export default {
         "crop",
         "quality",
         "opacity",
+        "width",
+        "height",
     ],
 
     data() {

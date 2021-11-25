@@ -102,12 +102,17 @@
     ],
     "graphics": [
       {
-        "file": "twoplayer_mt15.html",
+        "file": "mt15_2player.html",
         "width": 1920,
         "height": 1080
       },
       {
-        "file": "twoplayer_mt16.html",
+        "file": "mt16_2player.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "mt16_4player.html",
         "width": 1920,
         "height": 1080
       },

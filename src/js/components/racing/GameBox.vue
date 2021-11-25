@@ -15,7 +15,7 @@
         align-items: flex-end;
         font-size: 3rem;
         height: 200px;
-        max-width: 944px;
+        max-width: 1500px;
 
         line-height: 1;
     }

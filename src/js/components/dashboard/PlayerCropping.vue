@@ -6,6 +6,8 @@
                     :playerNumber="1"
                     :url="url"
                     :volume="0"
+                    :width="930"
+                    :height="698"
                 ></twitch-player>
 
                 <twitch-player
@@ -16,6 +18,8 @@
                     :volume="0"
                     :url="url"
                     :crop="crop"
+                    :width="930"
+                    :height="698"
                 ></twitch-player>
 
                 <div style="width: 100%; height: 100%; position: absolute; top: 0px; left: 0px;"></div>

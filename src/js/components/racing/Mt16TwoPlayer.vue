@@ -110,10 +110,10 @@
         </game-box>
 
 
-        <rainwave
+        <!-- <rainwave
             v-if="showRainwave"
             style="top: 975px; left: 1521px; width: 444px; height: 124px">
-        </rainwave>
+        </rainwave> -->
 
 
         <timer
