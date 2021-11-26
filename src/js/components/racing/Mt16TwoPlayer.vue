@@ -55,6 +55,8 @@
                 :quality="player0quality ? player0quality : 'auto'"
                 :volume="player0streamHidden ? 0 : player0volume"
                 :crop="player0crop"
+                :width="930"
+                :height="698"
             ></twitch-player>
         </div>
 
@@ -67,6 +69,8 @@
                 :quality="player1quality ? player1quality : 'auto'"
                 :volume="player1streamHidden ? 0 : player1volume"
                 :crop="player1crop"
+                :width="930"
+                :height="698"
             ></twitch-player>
         </div>
 
