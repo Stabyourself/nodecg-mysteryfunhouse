@@ -1,179 +1,184 @@
 <template>
-    <div class="player-backdrop">
-        <div class="player-wrapper" :style="cropStyles" ref="player"></div>
-        <div class="popover-holder">
-            <img
-                :class="{active: popoverVisible }"
-                :src="popover">
-        </div>
+  <div class="player-backdrop">
+    <div class="player-wrapper" :style="cropStyles" ref="player"></div>
+    <div class="popover-holder">
+      <img :class="{ active: popoverVisible }" :src="popover" />
     </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
-    .player-backdrop {
-        background-color: black;
-        overflow: hidden;
-        height: 100%;
-        width: 100%;
+.player-backdrop {
+  background-color: black;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+.player-wrapper {
+  position: absolute;
+}
+
+.popover-holder {
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+
+    width: 60%;
+    opacity: 0;
+    transition: opacity 0.2s;
+
+    &.active {
+      opacity: 1;
     }
-
-    .player-wrapper {
-        position: absolute;
-    }
-
-    .popover-holder {
-        pointer-events: none;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        img {
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-
-            width: 60%;
-            opacity: 0;
-            transition: opacity 0.2s;
-
-            &.active {
-                opacity: 1;
-            }
-        }
-    }
+  }
+}
 </style>
 
 <script>
-import { bindReplicant } from "../../util.js"
+import { bindReplicant } from "../../util.js";
 
 let twitchOptions = {
-    channel: null,
-    autoplay: true,
-    muted: false,
-    parent: ["nodecg.guegan.de"],
-    quality: "auto"
-}
+  channel: null,
+  autoplay: true,
+  muted: false,
+  parent: ["nodecg.guegan.de"],
+  quality: "auto",
+};
 
 export default {
-    created() {
-        nodecg.listenFor(`stream${this.playerNumber}reload`,() => {
-            this.createPlayer()
-        })
-        bindReplicant.call(this, "qualities", `player${this.playerNumber}qualities`)
+  created() {
+    nodecg.listenFor(`stream${this.playerNumber}reload`, () => {
+      this.createPlayer();
+    });
+    bindReplicant.call(
+      this,
+      "qualities",
+      `player${this.playerNumber}qualities`
+    );
 
-        bindReplicant.call(this, "popover", `player${this.playerNumber}popover`)
-        bindReplicant.call(this, "popoverVisible", `player${this.playerNumber}popoverVisible`)
+    bindReplicant.call(this, "popover", `player${this.playerNumber}popover`);
+    bindReplicant.call(
+      this,
+      "popoverVisible",
+      `player${this.playerNumber}popoverVisible`
+    );
+  },
+
+  mounted() {
+    if (this.url) {
+      this.createPlayer();
+    }
+  },
+
+  unmounted() {
+    this.$refs.player.innerHTML = "";
+  },
+
+  methods: {
+    createPlayer() {
+      this.$refs.player.innerHTML = "";
+
+      twitchOptions.channel = this.url;
+      twitchOptions.width = this.width;
+      twitchOptions.height = this.height;
+
+      this.player = new Twitch.Player(this.$refs.player, twitchOptions);
+
+      this.player.addEventListener(Twitch.Player.READY, () => {
+        this.player.setMuted(false);
+        this.player.setVolume(this.volume / 100);
+
+        // setInterval(() => {
+        //     this.qualities = this.player.getQualities()
+        // }, 5000)
+      });
     },
+  },
 
-    mounted() {
-        if (this.url) {
-            this.createPlayer()
-        }
-    },
+  computed: {
+    cropStyles() {
+      let styles = {};
 
-    unmounted() {
-        this.$refs.player.innerHTML = '';
-    },
+      if (this.crop) {
+        let left = this.crop[0] * (this.width / 930);
+        let right = this.crop[1] * (this.width / 930);
+        let top = this.crop[2] * (this.height / 698);
+        let bottom = this.crop[3] * (this.height / 698);
 
-    methods: {
-        createPlayer() {
-            this.$refs.player.innerHTML = '';
+        let width = this.width - left - right;
+        let height = this.height - top - bottom;
 
-            twitchOptions.channel = this.url
-            twitchOptions.width = this.width
-            twitchOptions.height = this.height
+        let translateX = this.width / 2 - left - width / 2;
+        let translateY = this.height / 2 - top - height / 2;
 
-            this.player = new Twitch.Player(this.$refs.player, twitchOptions)
+        let transformOriginX = left + width / 2;
+        let transformOriginY = top + height / 2;
 
-            this.player.addEventListener(Twitch.Player.READY, () => {
+        let hScale = this.width / width;
+        let vScale = this.height / height;
 
-                this.player.setMuted(false);
-                this.player.setVolume(this.volume/100);
+        let scale = Math.min(hScale, vScale);
 
-                // setInterval(() => {
-                //     this.qualities = this.player.getQualities()
-                // }, 5000)
-            });
-        }
-    },
-
-    computed: {
-        cropStyles() {
-            let styles = {}
-
-            if (this.crop) {
-                let left = this.crop[0] * (this.width / 930)
-                let right = this.crop[1] * (this.width / 930)
-                let top = this.crop[2] * (this.height / 698)
-                let bottom = this.crop[3] * (this.height / 698)
-
-                let width = this.width - left - right
-                let height = this.height - top - bottom
-
-                let translateX = this.width/2 - left - width/2
-                let translateY = this.height/2 - top - height/2
-
-                let transformOriginX = left + width/2
-                let transformOriginY = top + height/2
-
-                let hScale = this.width/width
-                let vScale = this.height/height
-
-                let scale = Math.min(hScale, vScale)
-
-                styles = {
-                    "clip": `rect(
+        styles = {
+          clip: `rect(
                                 ${top}px,
-                                ${this.width-right}px,
-                                ${this.height-bottom}px,
+                                ${this.width - right}px,
+                                ${this.height - bottom}px,
                                 ${left}px
                             )`,
-                    "transform-origin": `${transformOriginX}px ${transformOriginY}px`,
-                    "transform": `translate(${translateX}px, ${translateY}px) scale(${scale})`,
-                }
-            }
+          "transform-origin": `${transformOriginX}px ${transformOriginY}px`,
+          transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`,
+        };
+      }
 
-            styles.opacity = this.opacity ?? 1
+      styles.opacity = this.opacity ?? 1;
 
-            return styles
-        }
+      return styles;
+    },
+  },
+
+  watch: {
+    url() {
+      this.createPlayer();
     },
 
-    watch: {
-        url() {
-            this.createPlayer()
-        },
-
-        volume(newValue) {
-            this.player.setVolume(newValue/100)
-        },
-
-        quality(newValue) {
-            // this.player.setQuality(newValue)
-        }
+    volume(newValue) {
+      this.player.setVolume(newValue / 100);
     },
 
-    props: [
-        "url",
-        "volume",
-        "playerNumber",
-        "crop",
-        "quality",
-        "opacity",
-        "width",
-        "height",
-    ],
+    quality(newValue) {
+      // this.player.setQuality(newValue)
+    },
+  },
 
-    data() {
-        return {
-            player: null,
-            qualities: [],
-            popover: null,
-            popoverVisible: false,
-        }
-    }
+  props: [
+    "url",
+    "volume",
+    "playerNumber",
+    "crop",
+    "quality",
+    "opacity",
+    "width",
+    "height",
+  ],
+
+  data() {
+    return {
+      player: null,
+      qualities: [],
+      popover: null,
+      popoverVisible: false,
+    };
+  },
 };
 </script>

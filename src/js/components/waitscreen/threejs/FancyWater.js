@@ -1,44 +1,43 @@
-import { Water } from "./Water"
+import { Water } from "./Water";
 
 const waves = {
-    A: { direction: 0, steepness: 0.1, wavelength: 60 },
-    B: { direction: 30, steepness: 0.1, wavelength: 30 },
-    C: { direction: 60, steepness: 0.1, wavelength: 15 },
+  A: { direction: 0, steepness: 0.1, wavelength: 60 },
+  B: { direction: 30, steepness: 0.1, wavelength: 30 },
+  C: { direction: 60, steepness: 0.1, wavelength: 15 },
 };
 
 class FancyWater extends Water {
-	constructor( geometry, options = {} ) {
-		super( geometry, options );
+  constructor(geometry, options = {}) {
+    super(geometry, options);
 
-        this.rotation.x = - Math.PI / 2;
+    this.rotation.x = -Math.PI / 2;
 
-        this.material.onBeforeCompile = function ( shader ) {
-
-            shader.uniforms.waveA = {
-                value: [
-                    Math.sin( ( waves.A.direction * Math.PI ) / 180 ),
-                    Math.cos( ( waves.A.direction * Math.PI ) / 180 ),
-                    waves.A.steepness,
-                    waves.A.wavelength,
-                ],
-            };
-            shader.uniforms.waveB = {
-                value: [
-                    Math.sin( ( waves.B.direction * Math.PI ) / 180 ),
-                    Math.cos( ( waves.B.direction * Math.PI ) / 180 ),
-                    waves.B.steepness,
-                    waves.B.wavelength,
-                ],
-            };
-            shader.uniforms.waveC = {
-                value: [
-                    Math.sin( ( waves.C.direction * Math.PI ) / 180 ),
-                    Math.cos( ( waves.C.direction * Math.PI ) / 180 ),
-                    waves.C.steepness,
-                    waves.C.wavelength,
-                ],
-            };
-            shader.vertexShader = `
+    this.material.onBeforeCompile = function(shader) {
+      shader.uniforms.waveA = {
+        value: [
+          Math.sin((waves.A.direction * Math.PI) / 180),
+          Math.cos((waves.A.direction * Math.PI) / 180),
+          waves.A.steepness,
+          waves.A.wavelength,
+        ],
+      };
+      shader.uniforms.waveB = {
+        value: [
+          Math.sin((waves.B.direction * Math.PI) / 180),
+          Math.cos((waves.B.direction * Math.PI) / 180),
+          waves.B.steepness,
+          waves.B.wavelength,
+        ],
+      };
+      shader.uniforms.waveC = {
+        value: [
+          Math.sin((waves.C.direction * Math.PI) / 180),
+          Math.cos((waves.C.direction * Math.PI) / 180),
+          waves.C.steepness,
+          waves.C.wavelength,
+        ],
+      };
+      shader.vertexShader = `
                 uniform mat4 textureMatrix;
                 uniform float time;
 
@@ -89,7 +88,7 @@ class FancyWater extends Water {
                 }
             `;
 
-            shader.fragmentShader = `
+      shader.fragmentShader = `
                 uniform sampler2D mirrorSampler;
                 uniform float alpha;
                 uniform float time;
@@ -162,9 +161,8 @@ class FancyWater extends Water {
                     #include <fog_fragment>
                 }
             `;
-
-        };
-    }
+    };
+  }
 }
 
 export { FancyWater };

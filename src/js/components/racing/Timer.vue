@@ -1,30 +1,28 @@
 <template>
-    <div class="timer">
-        <slot></slot>
-    </div>
+  <div class="timer">
+    <slot></slot>
+  </div>
 </template>
 
 <style scoped lang="scss">
-    .timer {
-        position: absolute;
-        left: 0;
-        right: 0;
-        text-align: center;
-        font-family: 'Digital-7 Mono';
-        text-shadow: 3px 0 0 #000, 0 -3px 0 #000, 0 3px 0 #000, -3px 0 0 #000;
-        font-size: 6rem;
-        color: grey;
-        font-variant-numeric: tabular-nums lining-nums;
-        transition: color 0.4s;
+.timer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: "Digital-7 Mono";
+  text-shadow: 3px 0 0 #000, 0 -3px 0 #000, 0 3px 0 #000, -3px 0 0 #000;
+  font-size: 6rem;
+  color: grey;
+  font-variant-numeric: tabular-nums lining-nums;
+  transition: color 0.4s;
 
-        &.active {
-            color: white;
-        }
-    }
+  &.active {
+    color: white;
+  }
+}
 </style>
 
 <script>
-export default {
-
-};
+export default {};
 </script>

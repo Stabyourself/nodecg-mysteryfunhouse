@@ -2,7 +2,11 @@
   <v-app>
     <v-main>
       <v-container>
-        <v-textarea v-model="twitchTemplate" label="Stream Title Template" rows="3">
+        <v-textarea
+          v-model="twitchTemplate"
+          label="Stream Title Template"
+          rows="3"
+        >
         </v-textarea>
 
         <v-row>
@@ -12,29 +16,23 @@
               color="error"
               small
               block
-              @click="resetTemplate">
+              @click="resetTemplate"
+            >
               Reset
               <v-icon right dark>
-                  mdi-undo
+                mdi-undo
               </v-icon>
             </v-btn>
           </v-col>
 
-
           <v-col>
-            <v-btn
-              small
-              block
-              outlined
-              color="info"
-              @click="toggleHelp">
-            Help <v-icon>mdi-help</v-icon>
+            <v-btn small block outlined color="info" @click="toggleHelp">
+              Help <v-icon>mdi-help</v-icon>
             </v-btn>
           </v-col>
         </v-row>
 
-        <div v-if="helpVisible"
-          class="mb-3">
+        <div v-if="helpVisible" class="mb-3">
           The following placeholders are available:
           <ul>
             <li>{player1}</li>
@@ -45,7 +43,6 @@
             <li>{round2}</li>
           </ul>
         </div>
-
 
         <v-btn
           class="mb-3"
@@ -84,7 +81,7 @@ export default {
 
   methods: {
     resetTemplate() {
-        this.twitchTemplate = "Mystery Tournament 16! {player1} vs. {player2}";
+      this.twitchTemplate = "Mystery Tournament 16! {player1} vs. {player2}";
     },
 
     updateTwitch() {
@@ -108,7 +105,7 @@ export default {
 
     toggleHelp() {
       this.helpVisible = !this.helpVisible;
-    }
+    },
   },
 
   data() {

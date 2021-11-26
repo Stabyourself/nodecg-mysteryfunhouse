@@ -1,9 +1,9 @@
 {
-    "accessToken": "",
-    "refreshToken": "",
-    "scope": [
-        "user:edit:broadcast"
-    ],
-    "expiresIn": 13078,
-    "obtainmentTimestamp": 1633978820250
+  "accessToken": "",
+  "refreshToken": "",
+  "scope": [
+      "user:edit:broadcast"
+  ],
+  "expiresIn": 13078,
+  "obtainmentTimestamp": 1633978820250
 }

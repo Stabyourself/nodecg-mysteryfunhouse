@@ -1,9 +1,9 @@
-const ctx = require('./nodecg');
+const ctx = require("./nodecg");
 
-module.exports = function (nodecg) {
-    ctx.set(nodecg)
+module.exports = function(nodecg) {
+  ctx.set(nodecg);
 
-    require('./timer');
-    require('./challonge-loader');
-    require('./twitch');
-}
+  require("./timer");
+  require("./challonge-loader");
+  require("./twitch");
+};

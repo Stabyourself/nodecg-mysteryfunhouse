@@ -1,9 +1,9 @@
 let nodecg;
 
 exports.set = function(ctx) {
-    nodecg = ctx;
-}
+  nodecg = ctx;
+};
 
 exports.get = function() {
-    return nodecg;
-}
+  return nodecg;
+};

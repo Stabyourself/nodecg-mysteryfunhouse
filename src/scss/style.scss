@@ -1,167 +1,169 @@
 @font-face {
-    font-family: 'Regen';
-    src:  url('../../dist/font/Regen.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
+  font-family: "Regen";
+  src: url("../../dist/font/Regen.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'Edit Undo BRK';
-    src:  url('../../dist/font/edit-undo.brk.woff2') format("woff2");
-    font-weight: normal;
-    font-style: normal;
+  font-family: "Edit Undo BRK";
+  src: url("../../dist/font/edit-undo.brk.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'Digital-7 Mono';
-    src: url('../../dist/font/Digital-7Mono.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
+  font-family: "Digital-7 Mono";
+  src: url("../../dist/font/Digital-7Mono.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
 }
 
 .mt-font {
-    color: white;
-    line-height: 1.2;
-    font-family: "Regen";
-    text-shadow: -2px 0 1px #000000, 0 2px 1px #000000, 2px 0 1px #000000, 0 -2px 1px #000000;
+  color: white;
+  line-height: 1.2;
+  font-family: "Regen";
+  text-shadow: -2px 0 1px #000000, 0 2px 1px #000000, 2px 0 1px #000000,
+    0 -2px 1px #000000;
 }
 
 .pixel-font {
-    color: white;
-    line-height: 1;
-    font-family: "Edit Undo BRK" !important;
+  color: white;
+  line-height: 1;
+  font-family: "Edit Undo BRK" !important;
 
-    background: #EF5B00;
-    background: linear-gradient(to bottom, #EF5B00 0%, #FED3B1 100%);
+  background: #ef5b00;
+  background: linear-gradient(to bottom, #ef5b00 0%, #fed3b1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+
+  filter: drop-shadow(0px 4px #b10005);
+
+  &.pixel-font-alt {
+    background: #efefef;
+    background: linear-gradient(to bottom, #00b8ff 0%, #00fff9 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: none;
 
-    filter: drop-shadow(0px 4px #B10005);
-
-    &.pixel-font-alt {
-        background: #EFEFEF;
-        background: linear-gradient(to bottom, #00B8FF 0%, #00FFF9 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-
-        filter: drop-shadow(0px 4px #050A87);
-    }
+    filter: drop-shadow(0px 4px #050a87);
+  }
 }
 
 body {
-    margin: 0;
+  margin: 0;
 
-    &.graphic {
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        image-rendering: pixelated;
+  &.graphic {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
 
-        width: 1920px;
-        height: 1080px;
-        overflow: hidden;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
 
-        -ms-overflow-style: none;  /* Internet Explorer 10+ */
-        scrollbar-width: none;  /* Firefox */
-        &::-webkit-scrollbar {
-            display: none;  /* Safari and Chrome */
-        }
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+    &::-webkit-scrollbar {
+      display: none; /* Safari and Chrome */
     }
+  }
 }
 
 #app {
-    image-rendering: auto;
+  image-rendering: auto;
 }
 
 .select-img-wrap {
-    position: relative;
-    width: 200px;
-    height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
 
-    &:hover {
-        cursor: pointer;
-    }
+  &:hover {
+    cursor: pointer;
+  }
 
-    &:hover .select-img-border {
-        border-width: 1px;
-        border-color: white;
-    }
+  &:hover .select-img-border {
+    border-width: 1px;
+    border-color: white;
+  }
 
-    &.active .select-img-border {
-        border-width: 4px;
-        border-color: #00BEBE;
-    }
+  &.active .select-img-border {
+    border-width: 4px;
+    border-color: #00bebe;
+  }
 }
 
 .select-img-border {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
 
-    border: 1px solid rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.7);
 
-    transition: all 0.1s;
+  transition: all 0.1s;
 }
 
 .select-img {
-    max-height: 200px;
-    max-width: 200px;
-    display: block;
+  max-height: 200px;
+  max-width: 200px;
+  display: block;
 }
 
 .theme--dark.v-tabs-items {
-    background-color: transparent !important;
+  background-color: transparent !important;
 }
 
 .checkerboard {
-    background: #eee url('data:image/svg+xml,\
+  background: #eee
+    url('data:image/svg+xml,\
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"         fill-opacity=".25" >\
              <rect x="8" width="8" height="8" />\
              <rect y="8" width="8" height="8" />\
              </svg>') !important;
-    background-size: 16px 16px !important;
+  background-size: 16px 16px !important;
 }
 
 .timer.theme--dark.v-input {
-    input {
-        color: #999;
-        transition: color 0.3s;
-    }
+  input {
+    color: #999;
+    transition: color 0.3s;
+  }
 
-    &.active input {
-        color: #fff
-    }
+  &.active input {
+    color: #fff;
+  }
 }
 
 .top-text {
-    width: 100%;
-    text-align: center;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    font-size: 5em;
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  font-size: 5em;
 
-    opacity: 0;
-    transition: opacity 0.3s;
+  opacity: 0;
+  transition: opacity 0.3s;
 
-    &.active {
-        opacity: 1;
-    }
+  &.active {
+    opacity: 1;
+  }
 }
 
 .match-round {
-    width: 100%;
-    text-align: center;
-    position: absolute;
-    left: 0px;
-    font-size: 3em;
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  left: 0px;
+  font-size: 3em;
 }
