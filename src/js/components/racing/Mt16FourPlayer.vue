@@ -69,7 +69,7 @@
             name-h="95"
             style="top: 1031px; right: 676px; width: 656px; height: 135px">
             <template v-slot:pronouns>
-                <swipe :visible="visible" dir="up" :delay="0.5">
+                <swipe :visible="visible" dir="down" :delay="0.5">
                     <span class="pixel-font pixel-font-alt">
                         {{ player2pronouns != "" ? `(${player2pronouns})`: ""}}
                         {{ player2name }}
@@ -101,7 +101,7 @@
             name-h="95"
             style="top: 1031px; right: 10px; width: 656px; height: 135px">
             <template v-slot:pronouns>
-                <swipe :visible="visible" dir="up" :delay="0.5">
+                <swipe :visible="visible" dir="down" :delay="0.5">
                     <span class="pixel-font pixel-font-alt">
                         {{ player3name }}
                         {{ player3pronouns != "" ? `(${player3pronouns})`: ""}}
@@ -109,6 +109,16 @@
                 </swipe>
             </template>
         </player-name>
+
+        <div style="position: absolute; top: 0px; right: 0px; width: 1322px" class="round pixel-font pixel-font-alt">
+            {{ round1 }}
+        </div>
+
+        <div style="position: absolute; top: 1037px; left: 588px; width: 1322px" class="round pixel-font pixel-font-alt">
+            {{ round2 }}
+        </div>
+
+
 
         <div style="position: absolute; top: 545px; right: 10px; width: 656px; height:492px">
             <twitch-player
@@ -123,6 +133,43 @@
                 :height="492"
             ></twitch-player>
         </div>
+
+        <div class="info-holder">
+            <swipe :visible="visible" dir="right">
+                <div class="logo pixel-font pixel-font-alt">
+                    MT16<span class="logo-small">bit</span>
+                </div>
+            </swipe>
+
+            <swipe :visible="visible" :delay="0.2" dir="right" class="boxart" style="margin-top: 80px;" v-if="currentBoxart">
+                <img :src="currentBoxart.url">
+            </swipe>
+
+            <swipe :visible="visible" :delay="0.4" dir="right" class="game">
+                <fit-text :max="1" :min="0.1">
+                    <span class="pixel-font pixel-font-alt">{{ game }}</span>
+                </fit-text>
+            </swipe>
+            <swipe :visible="visible" dir="right" :delay="0.6" class="goal">
+                <fit-text :max="1" :min="0.1">
+                    <span class="pixel-font pixel-font-alt">{{ goal }}</span>
+                </fit-text>
+            </swipe>
+
+
+            <timer
+                style="margin-top: 80px;"
+                :class="{active: timer.state == 'playing' }">
+                <swipe dir="right" :visible="visible" :delay="0.8">
+                    {{ timerText }}
+                </swipe>
+            </timer>
+
+            <rainwave
+                v-if="showRainwave"
+                style="bottom: 0px; right: 10px;">
+            </rainwave>
+        </div>
     </v-app>
 </template>
 
@@ -130,6 +177,7 @@
     .boxart {
         margin-right: 15px;
         height: 100%;
+        max-height: 200px;
 
         img {
             display: block;
@@ -147,12 +195,21 @@
         }
     }
 
-    .round {
-        margin-top: -30px;
+    .info-holder {
+        font-size: 3rem;
+        line-height: 1;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        width: 588px;
+        text-align: center;
     }
 
-    .match-round {
-        margin-top: -26px;
+    .round {
+        font-size: 3rem;
+        text-align: center;
+        margin-top: -4px;
     }
 </style>
 
@@ -176,7 +233,6 @@ export default {
         bindReplicant.call(this, "round2", "match2round")
 
         for (let i = 0; i < 4; i++) {
-            console.log(i)
             bindReplicant.call(this, `player${i}name`)
             bindReplicant.call(this, `player${i}pronouns`)
 
@@ -234,7 +290,8 @@ export default {
             submitter: "",
             currentBoxart: "",
 
-            round: "",
+            round1: "",
+            round2: "",
 
             player0name: "",
             player0pronouns: "",

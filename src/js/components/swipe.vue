@@ -37,8 +37,7 @@
 
         &.visible .swipe-inner {
             transition: transform 1s;
-            transform: translateY(0);
-            transform: translateX(0);
+            transform: translateY(0) translateX(0);
         }
     }
 </style>

@@ -231,6 +231,10 @@ nodecg.listenFor("loadMatch", function(options, ack) {
                     if (contact) {
                         let member = getMemberForDiscordUsername(discordMembers, contact["Discord Username"])
 
+                        if (!member) {
+                            return ack(new Error(`Couldn't find "${contact["Discord Username"]}" in the Mystery Discord server.`))
+                        }
+
                         name = member.displayName
                         avatar = getAvatarForMember(member)
                     }

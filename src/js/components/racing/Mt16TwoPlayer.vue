@@ -17,7 +17,7 @@
             style="top: 15px; left: 20px; width: 925px; height: 135px">
             <template v-slot:pronouns>
                 <swipe :visible="visible" dir="up" :delay="0.5">
-                    <span class="pixel-font pixel-font-alt">{{ player1pronouns }}</span>
+                    <span class="pixel-font pixel-font-alt">{{ player0pronouns }}</span>
                 </swipe>
             </template>
             <template v-slot:name>
@@ -174,33 +174,21 @@ export default {
 
         bindReplicant.call(this, "round", "match1round")
 
-        bindReplicant.call(this, "player0name")
-        bindReplicant.call(this, "player0pronouns")
+        for (let i = 0; i < 2; i++) {
+            bindReplicant.call(this, `player${i}name`)
+            bindReplicant.call(this, `player${i}pronouns`)
 
-        bindReplicant.call(this, "player0twitch")
-        // bindReplicant.call(this, "player0quality")
-        bindReplicant.call(this, "player0volume")
-        bindReplicant.call(this, "player0streamHidden")
+            bindReplicant.call(this, `player${i}twitch`)
+            // bindReplicant.call(this, `player${i}quality`)
+            bindReplicant.call(this, `player${i}volume`)
+            bindReplicant.call(this, `player${i}streamHidden`)
 
-        bindReplicant.call(this, "player0done")
-        bindReplicant.call(this, "player0forfeit")
-        bindReplicant.call(this, "player0finalTime")
+            bindReplicant.call(this, `player${i}done`)
+            bindReplicant.call(this, `player${i}forfeit`)
+            bindReplicant.call(this, `player${i}finalTime`)
 
-        bindReplicant.call(this, "player0crop")
-
-        bindReplicant.call(this, "player1name")
-        bindReplicant.call(this, "player1pronouns")
-
-        bindReplicant.call(this, "player1twitch")
-        // bindReplicant.call(this, "player1quality")
-        bindReplicant.call(this, "player1volume")
-        bindReplicant.call(this, "player1streamHidden")
-
-        bindReplicant.call(this, "player1done")
-        bindReplicant.call(this, "player1forfeit")
-        bindReplicant.call(this, "player1finalTime")
-
-        bindReplicant.call(this, "player1crop")
+            bindReplicant.call(this, `player${i}crop`)
+        }
 
         if (window.obsstudio && window.obsstudio.getControlLevel && window.obsstudio.getControlLevel != 0) {
             window.obsstudio.getCurrentScene((scene) => {
