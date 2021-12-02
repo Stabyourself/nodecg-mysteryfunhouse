@@ -21,9 +21,11 @@
             </div>
             <div class="right">
               {{
-                new Date(match.time).toLocaleString("en-US", {
-                  timeZone: "America/New_York",
-                })
+                new Date(match.time)
+                  .toLocaleString("en-US", {
+                    timeZone: "America/New_York",
+                  })
+                  .replace(":00 ", " ")
               }}
               EST
             </div>
