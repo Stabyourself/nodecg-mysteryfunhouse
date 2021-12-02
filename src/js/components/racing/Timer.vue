@@ -13,12 +13,12 @@
   font-family: "Digital-7 Mono";
   text-shadow: 3px 0 0 #000, 0 -3px 0 #000, 0 3px 0 #000, -3px 0 0 #000;
   font-size: 6rem;
-  color: grey;
+  color: #ef5b00;
   font-variant-numeric: tabular-nums lining-nums;
   transition: color 0.4s;
 
   &.active {
-    color: white;
+    color: #fed3b1;
   }
 }
 </style>

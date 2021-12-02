@@ -185,7 +185,7 @@
           <span class="pixel-font">{{ game }}</span>
         </fit-text>
       </swipe>
-      <swipe :visible="visible" dir="right" :delay="0.6" class="goal">
+      <swipe :visible="visible" :delay="0.6" dir="right" class="goal">
         <fit-text :max="1" :min="0.1">
           <span class="pixel-font">{{ goal }}</span>
         </fit-text>
@@ -237,7 +237,7 @@
   height: 100%;
   width: 588px;
   text-align: center;
-  padding: 10px;
+  padding: 20px;
 }
 
 .round {
