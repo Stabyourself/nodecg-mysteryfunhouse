@@ -8,7 +8,7 @@
     >
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="up" :delay="0.5">
-          <span class="pixel-font pixel-font-alt">
+          <span class="pixel-font">
             {{ player0pronouns != "" ? `(${player0pronouns})` : "" }}
             {{ player0name }}
           </span>
@@ -17,7 +17,13 @@
     </player-name>
 
     <div
-      style="position: absolute; top: 43px; right: 676px; width: 656px; height:492px"
+      style="
+        position: absolute;
+        top: 43px;
+        right: 676px;
+        width: 656px;
+        height: 492px;
+      "
     >
       <twitch-player
         :opacity="player0streamHidden ? 0 : 1"
@@ -40,7 +46,7 @@
     >
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="up" :delay="0.5">
-          <span class="pixel-font pixel-font-alt">
+          <span class="pixel-font">
             {{ player1name }}
             {{ player1pronouns != "" ? `(${player1pronouns})` : "" }}
           </span>
@@ -49,7 +55,13 @@
     </player-name>
 
     <div
-      style="position: absolute; top: 43px; right: 10px; width: 656px; height:492px"
+      style="
+        position: absolute;
+        top: 43px;
+        right: 10px;
+        width: 656px;
+        height: 492px;
+      "
     >
       <twitch-player
         :opacity="player1streamHidden ? 0 : 1"
@@ -71,7 +83,7 @@
     >
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="down" :delay="0.5">
-          <span class="pixel-font pixel-font-alt">
+          <span class="pixel-font">
             {{ player2pronouns != "" ? `(${player2pronouns})` : "" }}
             {{ player2name }}
           </span>
@@ -80,7 +92,13 @@
     </player-name>
 
     <div
-      style="position: absolute; top: 545px; right: 676px; width: 656px; height:492px"
+      style="
+        position: absolute;
+        top: 545px;
+        right: 676px;
+        width: 656px;
+        height: 492px;
+      "
     >
       <twitch-player
         :opacity="player2streamHidden ? 0 : 1"
@@ -103,7 +121,7 @@
     >
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="down" :delay="0.5">
-          <span class="pixel-font pixel-font-alt">
+          <span class="pixel-font">
             {{ player3name }}
             {{ player3pronouns != "" ? `(${player3pronouns})` : "" }}
           </span>
@@ -113,20 +131,26 @@
 
     <div
       style="position: absolute; top: 0px; right: 0px; width: 1322px"
-      class="round pixel-font pixel-font-alt"
+      class="round pixel-font"
     >
       {{ round1 }}
     </div>
 
     <div
       style="position: absolute; top: 1037px; left: 588px; width: 1322px"
-      class="round pixel-font pixel-font-alt"
+      class="round pixel-font"
     >
       {{ round2 }}
     </div>
 
     <div
-      style="position: absolute; top: 545px; right: 10px; width: 656px; height:492px"
+      style="
+        position: absolute;
+        top: 545px;
+        right: 10px;
+        width: 656px;
+        height: 492px;
+      "
     >
       <twitch-player
         :opacity="player3streamHidden ? 0 : 1"
@@ -142,17 +166,15 @@
 
     <div class="info-holder">
       <swipe :visible="visible" dir="right">
-        <div class="logo pixel-font pixel-font-alt">
-          MT16<span class="logo-small">bit</span>
-        </div>
+        <div class="logo pixel-font pixel-font-alt">MT16</div>
       </swipe>
 
       <swipe
         :visible="visible"
         :delay="0.2"
         dir="right"
-        class="boxart"
-        style="margin-top: 80px;"
+        class="boxart mb-3"
+        style="margin-top: 80px"
         v-if="currentBoxart"
       >
         <img :src="currentBoxart.url" />
@@ -160,17 +182,17 @@
 
       <swipe :visible="visible" :delay="0.4" dir="right" class="game">
         <fit-text :max="1" :min="0.1">
-          <span class="pixel-font pixel-font-alt">{{ game }}</span>
+          <span class="pixel-font">{{ game }}</span>
         </fit-text>
       </swipe>
       <swipe :visible="visible" dir="right" :delay="0.6" class="goal">
         <fit-text :max="1" :min="0.1">
-          <span class="pixel-font pixel-font-alt">{{ goal }}</span>
+          <span class="pixel-font">{{ goal }}</span>
         </fit-text>
       </swipe>
 
       <timer
-        style="margin-top: 80px;"
+        style="margin-top: 80px"
         :class="{ active: timer.state == 'playing' }"
       >
         <swipe dir="right" :visible="visible" :delay="0.8">
@@ -178,7 +200,7 @@
         </swipe>
       </timer>
 
-      <rainwave v-if="showRainwave" style="bottom: 0px; right: 10px;">
+      <rainwave v-if="showRainwave" style="bottom: 0px; right: 10px">
       </rainwave>
     </div>
   </v-app>
@@ -215,6 +237,7 @@
   height: 100%;
   width: 588px;
   text-align: center;
+  padding: 10px;
 }
 
 .round {

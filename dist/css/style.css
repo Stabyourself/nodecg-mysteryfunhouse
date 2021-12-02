@@ -37,7 +37,7 @@
 }
 .pixel-font.pixel-font-alt {
   background: #efefef;
-  background: linear-gradient(to bottom, #00b8ff 0%, #00fff9 100%);
+  background: linear-gradient(to bottom, #008ac0 0%, #00e2de 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
