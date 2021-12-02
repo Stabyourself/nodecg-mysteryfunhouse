@@ -32,4 +32,4 @@ function updateSchedule() {
   });
 }
 
-setInterval(updateSchedule, 10000);
+setInterval(updateSchedule, 60000);
