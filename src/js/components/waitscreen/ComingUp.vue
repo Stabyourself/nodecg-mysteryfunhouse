@@ -69,7 +69,8 @@
 }
 
 .match {
-  margin: 0 13em;
+  margin: 0 auto;
+  width: 1200px;
   margin-bottom: 4rem;
   color: #f58038;
   font-size: 2em;
@@ -91,7 +92,7 @@
   .bottom {
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 0 0 5px 5px;
-    padding: 10px 30px;
+    padding: 10px 5px;
     width: 100%;
     align-items: center;
     font-size: 2.5em;
