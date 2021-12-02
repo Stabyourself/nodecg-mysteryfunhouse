@@ -166,7 +166,9 @@
 
     <div class="info-holder">
       <swipe :visible="visible" dir="right">
-        <div class="logo pixel-font pixel-font-alt">MT16</div>
+        <div class="logo pixel-font pixel-font-alt">
+          MT16<span class="logo-small">bit</span>
+        </div>
       </swipe>
 
       <swipe

@@ -6,7 +6,9 @@
       class="match-round"
       style="top: 10px"
     >
-      <div class="logo pixel-font pixel-font-alt">MT16</div>
+      <div class="logo pixel-font pixel-font-alt">
+        MT16<span class="logo-small">bit</span>
+      </div>
       <div class="round pixel-font pixel-font-alt">
         {{ round }}
       </div>
