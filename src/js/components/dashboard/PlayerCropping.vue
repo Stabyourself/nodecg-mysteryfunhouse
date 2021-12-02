@@ -11,7 +11,13 @@
         ></twitch-player>
 
         <twitch-player
-          style="position: absolute; top: 0px; left: 945px; width: 930px; height:698px;"
+          style="
+            position: absolute;
+            top: 0px;
+            left: 945px;
+            width: 930px;
+            height: 698px;
+          "
           class="checkerboard"
           :playerNumber="1"
           :volume="0"
@@ -22,12 +28,20 @@
         ></twitch-player>
 
         <div
-          style="width: 100%; height: 100%; position: absolute; top: 0px; left: 0px;"
+          v-if="!interacting"
+          style="
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+          "
         ></div>
 
         <div
+          v-if="!interacting"
           class="nudge-holder"
-          style="position: absolute;"
+          style="position: absolute"
           :style="{
             left: crop[0] + 'px',
             top: crop[2] + 'px',
@@ -35,7 +49,7 @@
             height: 698 - crop[2] - crop[3] + 'px',
           }"
         >
-          <div class="move-arrows" style="left: -48px; top: 50%;">
+          <div class="move-arrows" style="left: -48px; top: 50%">
             <v-btn @mousedown="nudgeCrop(0, -1)" x-small outlined dark>
               <v-icon color="primary">mdi-arrow-left</v-icon>
             </v-btn>
@@ -44,7 +58,7 @@
             </v-btn>
           </div>
 
-          <div class="move-arrows" style="right: -60px; top: 50%;">
+          <div class="move-arrows" style="right: -60px; top: 50%">
             <v-btn @mousedown="nudgeCrop(1, 1)" x-small outlined dark>
               <v-icon color="primary">mdi-arrow-left</v-icon>
             </v-btn>
@@ -53,7 +67,7 @@
             </v-btn>
           </div>
 
-          <div class="move-arrows" style="left: 50%; top: -40px;">
+          <div class="move-arrows" style="left: 50%; top: -40px">
             <div>
               <v-btn @mousedown="nudgeCrop(2, -1)" x-small outlined dark>
                 <v-icon color="primary">mdi-arrow-up</v-icon>
@@ -66,7 +80,7 @@
             </div>
           </div>
 
-          <div class="move-arrows" style="left: 50%; bottom: -49px;">
+          <div class="move-arrows" style="left: 50%; bottom: -49px">
             <div>
               <v-btn @mousedown="nudgeCrop(3, 1)" x-small outlined dark>
                 <v-icon color="primary">mdi-arrow-up</v-icon>
@@ -81,6 +95,7 @@
         </div>
 
         <vue-drag-resize
+          v-if="!interacting"
           :parentW="930"
           :parentH="698"
           :isActive="true"
@@ -99,7 +114,12 @@
       </div>
 
       <div
-        style="display: flex; align-items: center; justify-content: center; height: 698px"
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 698px;
+        "
       >
         <v-btn
           v-if="!assistantActive"
@@ -107,9 +127,7 @@
           @click="assistantActive = true"
         >
           Start cropping
-          <v-icon right dark>
-            mdi-arrow-right
-          </v-icon>
+          <v-icon right dark> mdi-arrow-right </v-icon>
         </v-btn>
       </div>
     </div>
@@ -171,18 +189,21 @@
           @click="assistantActive = !assistantActive"
         >
           {{ assistantActive ? "Finish Cropping" : "Start Cropping" }}
-          <v-icon right dark>
-            mdi-arrow-right
-          </v-icon>
+          <v-icon right dark> mdi-arrow-right </v-icon>
         </v-btn>
       </v-col>
 
       <v-col>
         <v-btn color="red" block @click="resetCrop">
           Reset
-          <v-icon right dark>
-            mdi-refresh
-          </v-icon>
+          <v-icon right dark> mdi-refresh </v-icon>
+        </v-btn>
+      </v-col>
+
+      <v-col v-if="assistantActive">
+        <v-btn color="red" block @click="interacting = !interacting">
+          {{ interacting ? "Stop Interacting" : "Interact" }}
+          <v-icon right dark> mdi-cursor-default-click </v-icon>
         </v-btn>
       </v-col>
     </div>
@@ -291,6 +312,7 @@ export default {
       crop: [0, 0, 0, 0],
       url: "",
       assistantActive: false,
+      interacting: false,
     };
   },
 };
