@@ -40,7 +40,7 @@ fs.readFile(__dirname + "/twitch_token.json", "UTF-8").then((str) => {
 
   const apiClient = new ApiClient({ authProvider });
 
-  nodecg.listenFor("updateTwitch", function(options, ack) {
+  nodecg.listenFor("updateTwitch", function (options, ack) {
     const requestedGame = nodecg.readReplicant("game");
 
     // template placeholders
@@ -74,7 +74,8 @@ fs.readFile(__dirname + "/twitch_token.json", "UTF-8").then((str) => {
             game: gameName,
           });
         })
-        .catch(() => {
+        .catch((err) => {
+          console.error(err);
           ack(new Error("Something went wrong. Try again or tell Maurice."));
         });
     });
