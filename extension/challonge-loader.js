@@ -8,7 +8,7 @@ const ctx = require("./nodecg");
 const nodecg = ctx.get();
 
 function capitalizeWords(str) {
-  return str.replace(/\b[a-z]/g, function(txt) {
+  return str.replace(/\b[a-z]/g, function (txt) {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
   });
 }
@@ -169,7 +169,7 @@ function getPlayerInfo(
   };
 }
 
-nodecg.listenFor("loadMatch", function(options, ack) {
+nodecg.listenFor("loadMatch", function (options, ack) {
   const promises = [
     challonge.getTournament(nodecg.bundleConfig.challongeTournament),
     googlesheet.getContactSheet(),
@@ -310,10 +310,7 @@ nodecg.listenFor("loadMatch", function(options, ack) {
           match.players = match.players.reverse();
 
           // turn the score around
-          match.score = match.score
-            .split("-")
-            .reverse()
-            .join("-");
+          match.score = match.score.split("-").reverse().join("-");
         }
 
         // format round
@@ -349,7 +346,7 @@ nodecg.listenFor("loadMatch", function(options, ack) {
 
       replicants[`player${playerNumber}name`].value = info[i].name;
       replicants[`player${playerNumber}pronouns`].value = capitalizeWords(
-        pronouns
+        pronouns ?? ""
       );
       replicants[`player${playerNumber}twitch`].value = twitch;
 
@@ -394,7 +391,7 @@ nodecg.listenFor("loadMatch", function(options, ack) {
   });
 });
 
-nodecg.listenFor("loadAllCards", function(options, ack) {
+nodecg.listenFor("loadAllCards", function (options, ack) {
   const promises = [
     challonge.getTournament("speedrunslive-mystery16"),
     googlesheet.getContactSheet(),
