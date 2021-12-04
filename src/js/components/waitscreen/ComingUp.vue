@@ -48,7 +48,7 @@
   </v-app>
 </template>
 
-<style scope lang="scss">
+<style scoped lang="scss">
 .logo-container {
   width: 100%;
   text-align: center;
