@@ -41,13 +41,21 @@
       </template>
       <template v-slot:name>
         <swipe dir="up" :visible="visible">
-          <fit-text :max="2.5" class="mt-font">{{ player1name }}</fit-text>
+          <fit-text :max="2.5" class="mt-font">
+            {{ player1name }}
+          </fit-text>
         </swipe>
       </template>
     </player-name>
 
     <div
-      style="position: absolute; top: 150px; left: 15px; width: 930px; height:698px;"
+      style="
+        position: absolute;
+        top: 150px;
+        left: 15px;
+        width: 930px;
+        height: 698px;
+      "
     >
       <twitch-player
         :opacity="player0streamHidden ? 0 : 1"
@@ -62,7 +70,13 @@
     </div>
 
     <div
-      style="position: absolute; top: 150px; left: 975px; width: 930px; height:698px"
+      style="
+        position: absolute;
+        top: 150px;
+        left: 975px;
+        width: 930px;
+        height: 698px;
+      "
     >
       <twitch-player
         :opacity="player1streamHidden ? 0 : 1"
@@ -78,7 +92,7 @@
 
     <player-done-slider
       :finalTime="player0finalTime"
-      style="top: 848px; left: 15px; width: 930px;"
+      style="top: 848px; left: 15px; width: 930px"
       :class="{
         active: player0done || player0forfeit,
         done: player0done,
@@ -89,7 +103,7 @@
 
     <player-done-slider
       :finalTime="player1finalTime"
-      style="top: 848px; left: 975px; width: 930px;"
+      style="top: 848px; left: 975px; width: 930px"
       :class="{
         active: player1done || player1forfeit,
         done: player1done,
@@ -98,7 +112,7 @@
     >
     </player-done-slider>
 
-    <game-box style="top: 865px; left: 15px;">
+    <game-box style="top: 865px; left: 15px">
       <template v-slot:boxart>
         <swipe
           :visible="visible"
@@ -135,7 +149,7 @@
     >
     </rainwave>
 
-    <timer style="top: 848px;" :class="{ active: timer.state == 'playing' }">
+    <timer style="top: 848px" :class="{ active: timer.state == 'playing' }">
       <swipe dir="down" :visible="visible">
         {{ timerText }}
       </swipe>

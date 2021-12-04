@@ -18,7 +18,8 @@
       :visible="visible"
       pronoun-h="40"
       name-h="95"
-      style="top: 15px; left: 20px; width: 925px; height: 135px"
+      style="top: 15px; left: 20px; width: 775px; height: 135px"
+      class="player-name"
     >
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="up" :delay="0.5">
@@ -27,7 +28,10 @@
       </template>
       <template v-slot:name>
         <swipe dir="up" :visible="visible">
-          <fit-text :max="2.5" class="pixel-font">{{ player0name }}</fit-text>
+          <fit-text :max="2.5" class="pixel-font">
+            {{ player0name
+            }}<img v-if="player0volume > 0" :src="'../dist/img/audio.png'" />
+          </fit-text>
         </swipe>
       </template>
     </player-name>
@@ -37,16 +41,22 @@
       class="right"
       pronoun-h="40"
       name-h="95"
-      style="top: 15px; left: 975px; width: 925px; height: 135px"
+      style="top: 15px; right: 15px; width: 775px; height: 135px"
     >
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="up" :delay="0.5">
-          <span class="pixel-font">{{ player1pronouns }}</span>
+          <span class="pixel-font">
+            {{ player1pronouns }}
+          </span>
         </swipe>
       </template>
       <template v-slot:name>
         <swipe dir="up" :visible="visible">
-          <fit-text :max="2.5" class="pixel-font">{{ player1name }}</fit-text>
+          <fit-text :max="2.5" class="pixel-font">
+            <img v-if="player1volume > 0" :src="'../dist/img/audio.png'" />{{
+              player1name
+            }}
+          </fit-text>
         </swipe>
       </template>
     </player-name>
@@ -132,7 +142,10 @@
       <template v-slot:text>
         <swipe :visible="visible" dir="up" :delay="1" class="game">
           <fit-text :max="1" :min="0.1">
-            <span class="pixel-font">{{ game }}</span>
+            <span class="pixel-font">
+              {{ game }}
+              <span v-if="!!submitter"> - Subbed by {{ submitter }}</span>
+            </span>
           </fit-text>
         </swipe>
         <swipe :visible="visible" dir="up" :delay="0.8" class="goal">
@@ -158,6 +171,17 @@
 </template>
 
 <style lang="scss" scoped>
+.player-name {
+  img {
+    margin-left: 0.3em;
+    margin-right: 0.3em;
+
+    height: 0.8em;
+    image-rendering: pixelated;
+    vertical-align: text-top;
+  }
+}
+
 .boxart {
   margin-right: 15px;
   height: 100%;

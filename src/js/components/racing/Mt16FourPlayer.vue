@@ -4,13 +4,14 @@
       :visible="visible"
       pronoun-h="40"
       name-h="95"
-      style="top: -6px; right: 676px; width: 656px; height: 135px"
+      style="top: -6px; left: 588px; width: 555px; height: 135px"
     >
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="up" :delay="0.5">
           <span class="pixel-font">
             {{ player0pronouns != "" ? `(${player0pronouns})` : "" }}
-            {{ player0name }}
+            {{ player0name
+            }}<img v-if="player0volume > 0" :src="'../dist/img/audio.png'" />
           </span>
         </swipe>
       </template>
@@ -42,12 +43,14 @@
       class="right"
       pronoun-h="40"
       name-h="95"
-      style="top: -6px; right: 10px; width: 656px; height: 135px"
+      style="top: -6px; right: 10px; width: 555px; height: 135px"
     >
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="up" :delay="0.5">
           <span class="pixel-font">
-            {{ player1name }}
+            <img v-if="player0v1lume > 0" :src="'../dist/img/audio.png'" />{{
+              player1name
+            }}
             {{ player1pronouns != "" ? `(${player1pronouns})` : "" }}
           </span>
         </swipe>
@@ -79,13 +82,14 @@
       :visible="visible"
       pronoun-h="40"
       name-h="95"
-      style="top: 1031px; right: 676px; width: 656px; height: 135px"
+      style="top: 1031px; left: 588px; width: 555px; height: 135px"
     >
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="down" :delay="0.5">
           <span class="pixel-font">
             {{ player2pronouns != "" ? `(${player2pronouns})` : "" }}
-            {{ player2name }}
+            {{ player2name
+            }}<img v-if="player2volume > 0" :src="'../dist/img/audio.png'" />
           </span>
         </swipe>
       </template>
@@ -117,31 +121,19 @@
       class="right"
       pronoun-h="40"
       name-h="95"
-      style="top: 1031px; right: 10px; width: 656px; height: 135px"
+      style="top: 1031px; right: 10px; width: 555px; height: 135px"
     >
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="down" :delay="0.5">
           <span class="pixel-font">
-            {{ player3name }}
+            <img v-if="player3volume > 0" :src="'../dist/img/audio.png'" />{{
+              player3name
+            }}
             {{ player3pronouns != "" ? `(${player3pronouns})` : "" }}
           </span>
         </swipe>
       </template>
     </player-name>
-
-    <div
-      style="position: absolute; top: 0px; right: 0px; width: 1322px"
-      class="round pixel-font"
-    >
-      {{ round1 }}
-    </div>
-
-    <div
-      style="position: absolute; top: 1037px; left: 588px; width: 1322px"
-      class="round pixel-font"
-    >
-      {{ round2 }}
-    </div>
 
     <div
       style="
@@ -162,6 +154,20 @@
         :width="656"
         :height="492"
       ></twitch-player>
+    </div>
+
+    <div
+      style="position: absolute; top: 0px; right: 10px; width: 1322px"
+      class="round pixel-font"
+    >
+      {{ round1 }}
+    </div>
+
+    <div
+      style="position: absolute; top: 1037px; right: 10px; width: 1322px"
+      class="round pixel-font"
+    >
+      {{ round2 }}
     </div>
 
     <div class="info-holder">
@@ -185,6 +191,11 @@
       <swipe :visible="visible" :delay="0.4" dir="right" class="game">
         <fit-text :max="1" :min="0.1">
           <span class="pixel-font">{{ game }}</span>
+        </fit-text>
+        <fit-text :max="1" :min="0.1">
+          <span class="pixel-font" v-if="!!submitter">
+            Subbed by {{ submitter }}</span
+          >
         </fit-text>
       </swipe>
       <swipe :visible="visible" :delay="0.6" dir="right" class="goal">
@@ -227,6 +238,17 @@
 
   .logo-small {
     font-size: 0.3em;
+  }
+}
+
+.player-name {
+  img {
+    margin-left: 0.3em;
+    margin-right: 0.3em;
+
+    height: 0.8em;
+    image-rendering: pixelated;
+    vertical-align: text-top;
   }
 }
 
