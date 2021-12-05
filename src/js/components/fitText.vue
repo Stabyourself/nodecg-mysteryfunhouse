@@ -56,7 +56,7 @@ export default {
     },
   },
   mounted() {
-    this.calculate();
+    setTimeout(this.calculate, 100);
 
     if ("MutationObserver" in window && this.observer === null) {
       // Create the observer (and what to do on changes...)
@@ -66,7 +66,7 @@ export default {
       this.observer.observe(this.$el, { subtree: true, characterData: true });
     }
   },
-  beforeDestroy: function() {
+  beforeDestroy: function () {
     // Clean up
     this.observer.disconnect();
   },
