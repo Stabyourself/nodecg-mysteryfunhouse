@@ -247,7 +247,6 @@
     margin-right: 0.3em;
 
     height: 0.8em;
-    image-rendering: pixelated;
     vertical-align: text-top;
   }
 }
