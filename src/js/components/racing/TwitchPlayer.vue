@@ -9,7 +9,7 @@
 
 <style scoped lang="scss">
 .player-backdrop {
-  background-color: black;
+  // background-color: black;
   overflow: hidden;
   height: 100%;
   width: 100%;
