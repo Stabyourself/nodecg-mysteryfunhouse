@@ -3,14 +3,14 @@ var clone = require("clone");
 export function bindReplicant(
   vueName,
   replicantName = vueName,
-  debounceWait = 300
+  debounceWait = 1000
 ) {
   const replicant = nodecg.Replicant(replicantName, {
     defaultValue: this[vueName],
   });
   let preventSend = false;
 
-  let sendValue = _.debounce(function(newValue) {
+  let sendValue = _.debounce(function (newValue) {
     replicant.value = newValue;
   }, debounceWait);
 

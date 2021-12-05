@@ -59,9 +59,7 @@
           @click="streamHidden = true"
         >
           Visible
-          <v-icon right dark>
-            mdi-eye
-          </v-icon>
+          <v-icon right dark> mdi-eye </v-icon>
         </v-btn>
 
         <v-btn
@@ -73,9 +71,7 @@
           @click="streamHidden = false"
         >
           Hidden
-          <v-icon right dark>
-            mdi-eye-off
-          </v-icon>
+          <v-icon right dark> mdi-eye-off </v-icon>
         </v-btn>
       </v-col>
 
@@ -89,9 +85,7 @@
           small
         >
           Reload
-          <v-icon right dark>
-            mdi-refresh
-          </v-icon>
+          <v-icon right dark> mdi-refresh </v-icon>
         </v-btn>
       </v-col>
     </v-row>
@@ -106,9 +100,7 @@
       :disabled="done || forfeit"
     >
       .done
-      <v-icon right dark>
-        mdi-flag-checkered
-      </v-icon>
+      <v-icon right dark> mdi-flag-checkered </v-icon>
     </v-btn>
 
     <v-btn
@@ -119,9 +111,7 @@
       :disabled="forfeit || done"
     >
       .forfeit
-      <v-icon right dark>
-        mdi-cancel
-      </v-icon>
+      <v-icon right dark> mdi-cancel </v-icon>
     </v-btn>
 
     <v-btn
@@ -131,9 +121,7 @@
       :disabled="!done && !forfeit"
     >
       .undone
-      <v-icon right dark>
-        mdi-undo
-      </v-icon>
+      <v-icon right dark> mdi-undo </v-icon>
     </v-btn>
 
     <v-row>
@@ -211,7 +199,7 @@ export default {
     bindReplicant.call(this, "name", this.makeName("name"));
     bindReplicant.call(this, "pronouns", this.makeName("pronouns"));
 
-    bindReplicant.call(this, "twitch", this.makeName("twitch"), 1000);
+    bindReplicant.call(this, "twitch", this.makeName("twitch"));
     // bindReplicant.call(this, "qualities", this.makeName("qualities"))
     //bindReplicant.call(this, "quality", this.makeName("quality"))
     bindReplicant.call(this, "volume", this.makeName("volume"));
@@ -228,7 +216,12 @@ export default {
       "popoverDuration",
       this.makeName("popoverDuration")
     );
-    bindReplicant.call(this, "popoverVisible", this.makeName("popoverVisible"));
+    bindReplicant.call(
+      this,
+      "popoverVisible",
+      this.makeName("popoverVisible"),
+      0
+    );
   },
 
   methods: {

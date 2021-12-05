@@ -249,8 +249,8 @@ import { bindReplicant } from "../../util.js";
 
 export default {
   created() {
-    bindReplicant.call(this, "crop", `player${this.player}crop`, 100);
-    bindReplicant.call(this, "url", `player${this.player}twitch`, 0);
+    bindReplicant.call(this, "crop", `player${this.player}crop`);
+    bindReplicant.call(this, "url", `player${this.player}twitch`);
   },
 
   props: ["player"],
