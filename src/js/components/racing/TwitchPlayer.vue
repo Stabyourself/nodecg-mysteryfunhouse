@@ -127,7 +127,36 @@ export default {
         let hScale = this.width / width;
         let vScale = this.height / height;
 
-        let scale = Math.min(hScale, vScale);
+        if (this.aspectratio) {
+          let split = this.aspectratio.split(":");
+          let targetAspect = split[0] / split[1];
+
+          let aspectRatio = width / height;
+
+          if (aspectRatio > targetAspect) {
+            hScale = vScale * (targetAspect / aspectRatio);
+          } else {
+            vScale = hScale / (targetAspect / aspectRatio);
+          }
+
+          if (hScale * width > this.width) {
+            let diff = this.width / (hScale * width);
+            hScale = hScale * diff;
+            vScale = vScale * diff;
+          }
+
+          if (vScale * height > this.height) {
+            let diff = this.height / (vScale * height);
+            hScale = hScale * diff;
+            vScale = vScale * diff;
+          }
+        } else {
+          //auto scale to touch our 4:3 from the inside
+          let scale = Math.min(hScale, vScale);
+
+          hScale = scale;
+          vScale = scale;
+        }
 
         styles = {
           clip: `rect(
@@ -137,7 +166,7 @@ export default {
                                 ${left}px
                             )`,
           "transform-origin": `${transformOriginX}px ${transformOriginY}px`,
-          transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`,
+          transform: `translate(${translateX}px, ${translateY}px) scaleX(${hScale}) scaleY(${vScale})`,
         };
       }
 
@@ -170,6 +199,7 @@ export default {
     "opacity",
     "width",
     "height",
+    "aspectratio",
   ],
 
   data() {

@@ -90,6 +90,13 @@
       </v-col>
     </v-row>
 
+    <v-combobox
+      :items="aspectratioOptions"
+      v-model="aspectratio"
+      label="Force Aspect Ratio"
+    >
+    </v-combobox>
+
     <v-divider class="mb-7 mt-4"></v-divider>
 
     <v-btn
@@ -204,6 +211,7 @@ export default {
     //bindReplicant.call(this, "quality", this.makeName("quality"))
     bindReplicant.call(this, "volume", this.makeName("volume"));
     bindReplicant.call(this, "streamHidden", this.makeName("streamHidden"), 0);
+    bindReplicant.call(this, "aspectratioRep", this.makeName("aspectratio"));
 
     bindReplicant.call(this, "done", this.makeName("done"), 0);
     bindReplicant.call(this, "forfeit", this.makeName("forfeit"), 0);
@@ -222,9 +230,33 @@ export default {
       this.makeName("popoverVisible"),
       0
     );
+    this.updateAspectRatioField();
+  },
+
+  watch: {
+    aspectratio() {
+      this.aspectratioRep =
+        typeof this.aspectratio == "object"
+          ? this.aspectratio.value
+          : this.aspectratio;
+    },
+
+    aspectratioRep() {
+      this.updateAspectRatioField();
+    },
   },
 
   methods: {
+    updateAspectRatioField() {
+      this.aspectratio = this.aspectratioOptions.find(
+        (x) => x.value == this.aspectratioRep
+      );
+
+      if (typeof this.aspectratio != "object" && this.aspectradio !== false) {
+        this.aspectratio = this.aspectratioRep;
+      }
+    },
+
     makeName(name) {
       return "player" + this.playerNumber + name;
     },
@@ -316,12 +348,40 @@ export default {
       volume: 0,
       streamHidden: false,
       refreshing: false,
+      aspectratio: false,
 
       done: false,
       forfeit: false,
       finalTime: "",
 
       pronounOptions: ["", "He/Him", "She/Her", "They/Them"],
+      aspectratioOptions: [
+        {
+          text: "Auto",
+          value: false,
+        },
+        {
+          text: "4:3",
+          value: "4:3",
+        },
+        {
+          text: "16:9",
+          value: "16:9",
+        },
+        {
+          text: "8:7 (NES, SNES)",
+          value: "8:7",
+        },
+        {
+          text: "10:9 (GB, GBC)",
+          value: "10:9",
+        },
+        {
+          text: "3:2 (GBA)",
+          value: "3:2",
+        },
+      ],
+      aspectratioRep: false,
       popover: null,
       popoverDuration: 3,
       popovers: [],

@@ -22,6 +22,7 @@ const playerProps = {
   pronouns: "",
   twitch: "",
   volume: 0,
+  aspectratio: false,
   streamHidden: false,
   done: false,
   forfeit: false,
@@ -349,6 +350,7 @@ nodecg.listenFor("loadMatch", function (options, ack) {
         pronouns ?? ""
       );
       replicants[`player${playerNumber}twitch`].value = twitch;
+      replicants[`player${playerNumber}aspectratio`].value = false;
 
       replicants[`player${playerNumber}volume`].value = 0;
       replicants[`player${playerNumber}streamHidden`].value = false;

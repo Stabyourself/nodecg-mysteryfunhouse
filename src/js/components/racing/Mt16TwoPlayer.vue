@@ -77,6 +77,7 @@
         :quality="player0quality ? player0quality : 'auto'"
         :volume="player0streamHidden ? 0 : player0volume"
         :crop="player0crop"
+        :aspectratio="player0aspectratio"
         :width="930"
         :height="698"
       ></twitch-player>
@@ -98,6 +99,7 @@
         :quality="player1quality ? player1quality : 'auto'"
         :volume="player1streamHidden ? 0 : player1volume"
         :crop="player1crop"
+        :aspectratio="player1aspectratio"
         :width="930"
         :height="698"
       ></twitch-player>
@@ -235,6 +237,7 @@ export default {
       // bindReplicant.call(this, `player${i}quality`)
       bindReplicant.call(this, `player${i}volume`);
       bindReplicant.call(this, `player${i}streamHidden`);
+      bindReplicant.call(this, `player${i}aspectratio`);
 
       bindReplicant.call(this, `player${i}done`);
       bindReplicant.call(this, `player${i}forfeit`);
@@ -306,6 +309,7 @@ export default {
       player0finalTime: false,
 
       player0crop: [0, 0, 0, 0],
+      player0aspectratio: false,
 
       player1name: "",
       player1pronouns: "",
@@ -320,6 +324,7 @@ export default {
       player1finalTime: false,
 
       player1crop: [0, 0, 0, 0],
+      player1aspectratio: false,
 
       timer: {
         ms: 0,

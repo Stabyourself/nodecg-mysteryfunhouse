@@ -33,6 +33,7 @@
         :quality="player0quality ? player0quality : 'auto'"
         :volume="player0streamHidden ? 0 : player0volume"
         :crop="player0crop"
+        :aspectratio="player0aspectratio"
         :width="656"
         :height="492"
       ></twitch-player>
@@ -73,6 +74,7 @@
         :quality="player1quality ? player1quality : 'auto'"
         :volume="player1streamHidden ? 0 : player1volume"
         :crop="player1crop"
+        :aspectratio="player1aspectratio"
         :width="656"
         :height="492"
       ></twitch-player>
@@ -111,6 +113,7 @@
         :quality="player2quality ? player2quality : 'auto'"
         :volume="player2streamHidden ? 0 : player2volume"
         :crop="player2crop"
+        :aspectratio="player2aspectratio"
         :width="656"
         :height="492"
       ></twitch-player>
@@ -151,6 +154,7 @@
         :quality="player3quality ? player3quality : 'auto'"
         :volume="player3streamHidden ? 0 : player3volume"
         :crop="player3crop"
+        :aspectratio="player3aspectratio"
         :width="656"
         :height="492"
       ></twitch-player>
@@ -302,6 +306,7 @@ export default {
       bindReplicant.call(this, `player${i}finalTime`);
 
       bindReplicant.call(this, `player${i}crop`);
+      bindReplicant.call(this, `player${i}aspectratio`);
     }
 
     if (
@@ -368,6 +373,7 @@ export default {
       player0finalTime: false,
 
       player0crop: [0, 0, 0, 0],
+      player0aspectratio: false,
 
       player1name: "",
       player1pronouns: "",
@@ -382,6 +388,7 @@ export default {
       player1finalTime: false,
 
       player1crop: [0, 0, 0, 0],
+      player1aspectratio: false,
 
       player2name: "",
       player2pronouns: "",
@@ -396,6 +403,7 @@ export default {
       player2finalTime: false,
 
       player2crop: [0, 0, 0, 0],
+      player2aspectratio: false,
 
       player3name: "",
       player3pronouns: "",
@@ -410,6 +418,7 @@ export default {
       player3finalTime: false,
 
       player3crop: [0, 0, 0, 0],
+      player3aspectratio: false,
 
       timer: {
         ms: 0,
