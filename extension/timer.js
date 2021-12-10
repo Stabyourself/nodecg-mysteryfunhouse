@@ -94,7 +94,7 @@ for (let i = 0; i < 4; i++) {
 
 function playerRaceStateChanged(data) {
   let player = data.player;
-  let state = data.state;
+  let raceState = data.state;
 
   // check if we wanna stop the timer
   if (stopTimerWhenDoneRep.value) {
@@ -105,19 +105,23 @@ function playerRaceStateChanged(data) {
         donePlayers++;
       }
     }
+
+    if (state == "playing" && donePlayers >= stopTimerWhenDoneCountRep.value) {
+      pause();
+    }
   }
 
   // check for place (should maybe be part of its own extension script)
   let newState = "none";
 
-  if (state == "done") {
+  if (raceState == "done") {
     let otherPlayer = player % 2 == 0 ? player + 1 : player - 1;
     newState = "winner";
 
     if (raceStates[otherPlayer].value == "winner") {
       newState = "loser";
     }
-  } else if (state == "forfeit") {
+  } else if (raceState == "forfeit") {
     newState = "forfeit";
   }
 
