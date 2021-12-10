@@ -84,47 +84,47 @@ function set(input) {
 }
 nodecg.listenFor("timerSet", set);
 
-// this is good code, I promise.
-const player0doneRep = nodecg.Replicant("player0done", { defaultValue: false });
-const player1doneRep = nodecg.Replicant("player1done", { defaultValue: false });
-const player2doneRep = nodecg.Replicant("player2done", { defaultValue: false });
-const player3doneRep = nodecg.Replicant("player3done", { defaultValue: false });
-const player0forfeitRep = nodecg.Replicant("player0forfeit", {
-  defaultValue: false,
-});
-const player1forfeitRep = nodecg.Replicant("player1forfeit", {
-  defaultValue: false,
-});
-const player2forfeitRep = nodecg.Replicant("player2forfeit", {
-  defaultValue: false,
-});
-const player3forfeitRep = nodecg.Replicant("player3forfeit", {
-  defaultValue: false,
-});
+const raceStates = [];
 
-function checkForPause(changed) {
+for (let i = 0; i < 4; i++) {
+  raceStates.push(
+    nodecg.Replicant("player" + i + "raceState", { defaultValue: "none" })
+  );
+}
+
+function playerRaceStateChanged(data) {
+  console.log(data);
+  let player = data.player;
+  let state = data.state;
+
+  // check if we wanna stop the timer
   if (stopTimerWhenDoneRep.value) {
     let donePlayers = 0;
 
-    if (player0doneRep.value || player0forfeitRep.value || changed == 0) {
-      donePlayers++;
-    }
-    if (player1doneRep.value || player1forfeitRep.value || changed == 1) {
-      donePlayers++;
-    }
-    if (player2doneRep.value || player2forfeitRep.value || changed == 2) {
-      donePlayers++;
-    }
-    if (player3doneRep.value || player3forfeitRep.value || changed == 3) {
-      donePlayers++;
-    }
-
-    if (state == "playing" && donePlayers >= stopTimerWhenDoneCountRep.value) {
-      pause();
+    for (let i = 0; i < raceStates.length; i++) {
+      if (raceStates[i].value != "none" || player == i) {
+        donePlayers++;
+      }
     }
   }
+
+  // check for place (should maybe be part of its own extension script)
+  let newState = "none";
+
+  if (state == "done") {
+    let otherPlayer = player % 2 == 0 ? player + 1 : player - 1;
+    newState = "winner";
+
+    if (raceStates[otherPlayer].value == "winner") {
+      newState = "loser";
+    }
+  } else if (state == "forfeit") {
+    newState = "forfeit";
+  }
+
+  raceStates[player].value = newState;
 }
-nodecg.listenFor("playerStatusChanged", checkForPause);
+nodecg.listenFor("playerRaceStateChanged", playerRaceStateChanged);
 
 function tick() {
   if (state == "playing" || state == "paused") {

@@ -310,8 +310,7 @@ export default {
       bindReplicant.call(this, `player${i}volume`);
       bindReplicant.call(this, `player${i}streamHidden`);
 
-      bindReplicant.call(this, `player${i}done`);
-      bindReplicant.call(this, `player${i}forfeit`);
+      bindReplicant.call(this, `player${i}raceState`);
       bindReplicant.call(this, `player${i}finalTime`);
 
       bindReplicant.call(this, `player${i}crop`);
@@ -377,8 +376,7 @@ export default {
       player0volume: 0,
       player0streamHidden: false,
 
-      player0done: false,
-      player0forfeit: false,
+      player0raceState: false,
       player0finalTime: false,
 
       player0crop: [0, 0, 0, 0],
@@ -392,8 +390,7 @@ export default {
       player1volume: 0,
       player1streamHidden: false,
 
-      player1done: false,
-      player1forfeit: false,
+      player1raceState: false,
       player1finalTime: false,
 
       player1crop: [0, 0, 0, 0],
@@ -407,8 +404,7 @@ export default {
       player2volume: 0,
       player2streamHidden: false,
 
-      player2done: false,
-      player2forfeit: false,
+      player2raceState: false,
       player2finalTime: false,
 
       player2crop: [0, 0, 0, 0],
@@ -422,8 +418,7 @@ export default {
       player3volume: 0,
       player3streamHidden: false,
 
-      player3done: false,
-      player3forfeit: false,
+      player3raceState: false,
       player3finalTime: false,
 
       player3crop: [0, 0, 0, 0],

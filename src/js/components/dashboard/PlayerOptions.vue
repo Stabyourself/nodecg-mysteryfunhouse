@@ -104,7 +104,7 @@
       block
       class="mb-3"
       @click="makeDone"
-      :disabled="done || forfeit"
+      :disabled="raceState != 'none'"
     >
       .done
       <v-icon right dark> mdi-flag-checkered </v-icon>
@@ -115,7 +115,7 @@
       block
       class="mb-3"
       @click="makeForfeit"
-      :disabled="forfeit || done"
+      :disabled="raceState != 'none'"
     >
       .forfeit
       <v-icon right dark> mdi-cancel </v-icon>
@@ -125,22 +125,29 @@
       color="orange"
       block
       @click="makeUndone"
-      :disabled="!done && !forfeit"
+      :disabled="raceState == 'none'"
     >
       .undone
       <v-icon right dark> mdi-undo </v-icon>
     </v-btn>
 
-    <v-row>
-      <v-col>
-        <v-switch v-model="done" label="Is done"></v-switch>
+    <v-row class="mt-3">
+      <v-col cols="6">
+        <v-select
+          v-model="raceState"
+          :items="raceStateOptions"
+          label="State"
+          dense
+        ></v-select>
       </v-col>
-      <v-col>
-        <v-switch v-model="forfeit" label="Forfeited"></v-switch>
+      <v-col cols="6">
+        <v-text-field
+          v-model="finalTime"
+          dense
+          label="Final time"
+        ></v-text-field>
       </v-col>
     </v-row>
-
-    <v-text-field v-model="finalTime" label="Final time" dense></v-text-field>
 
     <v-divider class="mb-7 mt-4"></v-divider>
 
@@ -213,8 +220,7 @@ export default {
     bindReplicant.call(this, "streamHidden", this.makeName("streamHidden"), 0);
     bindReplicant.call(this, "aspectratioRep", this.makeName("aspectratio"));
 
-    bindReplicant.call(this, "done", this.makeName("done"), 0);
-    bindReplicant.call(this, "forfeit", this.makeName("forfeit"), 0);
+    bindReplicant.call(this, "raceState", this.makeName("raceState"), 0);
     bindReplicant.call(this, "finalTime", this.makeName("finalTime"), 0);
 
     bindReplicant.call(this, "popovers", "assets:popovers");
@@ -262,30 +268,32 @@ export default {
     },
 
     makeDone() {
-      this.done = true;
-      this.forfeit = false;
-
       nodecg.readReplicant("timer", (timer) => {
         this.finalTime = formatTimer(timer.ms, false, false);
       });
 
-      nodecg.sendMessage("playerStatusChanged", this.playerNumber);
+      nodecg.sendMessage("playerRaceStateChanged", {
+        player: this.playerNumber,
+        state: "done",
+      });
     },
 
     makeForfeit() {
-      this.done = false;
-      this.forfeit = true;
-
       nodecg.readReplicant("timer", (timer) => {
         this.finalTime = formatTimer(timer.ms, false, false);
       });
 
-      nodecg.sendMessage("playerStatusChanged", this.playerNumber);
+      nodecg.sendMessage("playerRaceStateChanged", {
+        player: this.playerNumber,
+        state: "forfeit",
+      });
     },
 
     makeUndone() {
-      this.done = false;
-      this.forfeit = false;
+      nodecg.sendMessage("playerRaceStateChanged", {
+        player: this.playerNumber,
+        state: "none",
+      });
     },
 
     reloadStream() {
@@ -350,8 +358,7 @@ export default {
       refreshing: false,
       aspectratio: false,
 
-      done: false,
-      forfeit: false,
+      raceState: "none",
       finalTime: "",
 
       pronounOptions: ["", "He/Him", "She/Her", "They/Them"],
@@ -383,6 +390,24 @@ export default {
         {
           text: "30:17 (PSP)",
           value: "30:17",
+        },
+      ],
+      raceStateOptions: [
+        {
+          text: "None",
+          value: "none",
+        },
+        {
+          text: "1st Place",
+          value: "winner",
+        },
+        {
+          text: "2nd Place",
+          value: "loser",
+        },
+        {
+          text: "Forfeit",
+          value: "forfeit",
         },
       ],
       aspectratioRep: false,

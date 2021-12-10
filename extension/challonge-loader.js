@@ -24,8 +24,7 @@ const playerProps = {
   volume: 0,
   aspectratio: false,
   streamHidden: false,
-  done: false,
-  forfeit: false,
+  raceState: "none",
   finalTime: "",
   prediction: 50,
 };
@@ -354,8 +353,7 @@ nodecg.listenFor("loadMatch", function (options, ack) {
 
       replicants[`player${playerNumber}volume`].value = 0;
       replicants[`player${playerNumber}streamHidden`].value = false;
-      replicants[`player${playerNumber}done`].value = false;
-      replicants[`player${playerNumber}forfeit`].value = false;
+      replicants[`player${playerNumber}raceState`].value = "none";
       replicants[`player${playerNumber}finalTime`].value = "";
 
       // Filter data for size reasons maybe?

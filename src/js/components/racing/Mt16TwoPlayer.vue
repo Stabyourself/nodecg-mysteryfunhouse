@@ -109,9 +109,9 @@
       :finalTime="player0finalTime"
       style="top: 848px; left: 15px; width: 930px"
       :class="{
-        active: player0done || player0forfeit,
-        done: player0done,
-        forfeit: player0forfeit,
+        active: player0raceState != 'none',
+        done: player0raceState == 'winner' || player0raceState == 'loser',
+        forfeit: player0raceState == 'forfeit',
       }"
     >
     </player-done-slider>
@@ -120,9 +120,9 @@
       :finalTime="player1finalTime"
       style="top: 848px; left: 975px; width: 930px"
       :class="{
-        active: player1done || player1forfeit,
-        done: player1done,
-        forfeit: player1forfeit,
+        active: player1raceState != 'none',
+        done: player1raceState == 'winner' || player1raceState == 'loser',
+        forfeit: player1raceState == 'forfeit',
       }"
     >
     </player-done-slider>
@@ -242,8 +242,7 @@ export default {
       bindReplicant.call(this, `player${i}streamHidden`);
       bindReplicant.call(this, `player${i}aspectratio`);
 
-      bindReplicant.call(this, `player${i}done`);
-      bindReplicant.call(this, `player${i}forfeit`);
+      bindReplicant.call(this, `player${i}raceState`);
       bindReplicant.call(this, `player${i}finalTime`);
 
       bindReplicant.call(this, `player${i}crop`);
@@ -307,8 +306,7 @@ export default {
       player0volume: 0,
       player0streamHidden: false,
 
-      player0done: false,
-      player0forfeit: false,
+      player0raceState: false,
       player0finalTime: false,
 
       player0crop: [0, 0, 0, 0],
@@ -322,8 +320,7 @@ export default {
       player1volume: 0,
       player1streamHidden: false,
 
-      player1done: false,
-      player1forfeit: false,
+      player1raceState: false,
       player1finalTime: false,
 
       player1crop: [0, 0, 0, 0],
