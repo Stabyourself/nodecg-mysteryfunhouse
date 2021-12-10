@@ -194,18 +194,23 @@
 
       <swipe :visible="visible" :delay="0.4" dir="right" class="game">
         <fit-text :max="1" :min="0.1">
-          <span class="pixel-font">{{ game }}</span>
-        </fit-text>
-        <fit-text :max="1" :min="0.1">
-          <span class="pixel-font" v-if="!!submitter">
-            Subbed by {{ submitter }}</span
-          >
+          <span class="pixel-font">
+            {{ game }}
+            <span v-if="!!platform"> ({{ platform }}) </span>
+          </span>
         </fit-text>
       </swipe>
       <swipe :visible="visible" :delay="0.6" dir="right" class="goal">
         <fit-text :max="1" :min="0.1">
           <span class="pixel-font">{{ goal }}</span>
         </fit-text>
+        <div>
+          <fit-text :max="1" :min="0.1">
+            <span class="pixel-font submitter" v-if="!!submitter">
+              Subbed by {{ submitter }}</span
+            >
+          </fit-text>
+        </div>
       </swipe>
 
       <timer
@@ -271,6 +276,10 @@
   font-size: 3rem;
   text-align: center;
   margin-top: -4px;
+}
+
+.submitter {
+  font-size: 0.7em;
 }
 </style>
 

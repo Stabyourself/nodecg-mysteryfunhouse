@@ -146,13 +146,16 @@
           <fit-text :max="1" :min="0.1">
             <span class="pixel-font">
               {{ game }}
-              <span v-if="!!submitter"> - Subbed by {{ submitter }}</span>
+              <span v-if="!!platform"> ({{ platform }})</span>
             </span>
           </fit-text>
         </swipe>
         <swipe :visible="visible" dir="up" :delay="0.8" class="goal">
           <fit-text :max="1" :min="0.1">
-            <span class="pixel-font">{{ goal }}</span>
+            <span class="pixel-font">
+              {{ goal }}
+              <span v-if="!!submitter"> - Subbed by {{ submitter }}</span>
+            </span>
           </fit-text>
         </swipe>
         <!-- <div class="submitter">Submitted by {{ submitter }}</div> -->
