@@ -56,7 +56,9 @@ export default {
     },
   },
   mounted() {
-    setTimeout(this.calculate, 3000);
+    setTimeout(this.calculate, 0);
+    setTimeout(this.calculate, 500);
+    setTimeout(this.calculate, 5000);
 
     if ("MutationObserver" in window && this.observer === null) {
       // Create the observer (and what to do on changes...)

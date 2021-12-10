@@ -39,6 +39,14 @@
       ></twitch-player>
     </div>
 
+    <player-done-slider
+      style="top: 43px; right: 676px; width: 656px"
+      :state="player0raceState"
+      :finalTime="player0finalTime"
+      background
+    >
+    </player-done-slider>
+
     <player-name
       :visible="visible"
       class="right"
@@ -49,7 +57,7 @@
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="up" :delay="0.5">
           <span class="pixel-font">
-            <img v-if="player0v1lume > 0" :src="'../dist/img/audio.png'" />{{
+            <img v-if="player1volume > 0" :src="'../dist/img/audio.png'" />{{
               player1name
             }}
             {{ player1pronouns != "" ? `(${player1pronouns})` : "" }}
@@ -79,6 +87,14 @@
         :height="492"
       ></twitch-player>
     </div>
+
+    <player-done-slider
+      style="top: 43px; right: 10px; width: 656px"
+      :state="player1raceState"
+      :finalTime="player1finalTime"
+      background
+    >
+    </player-done-slider>
 
     <player-name
       :visible="visible"
@@ -118,6 +134,15 @@
         :height="492"
       ></twitch-player>
     </div>
+
+    <player-done-slider
+      style="top: 977px; left: 588px; width: 656px"
+      :state="player2raceState"
+      :finalTime="player2finalTime"
+      background
+      direction="up"
+    >
+    </player-done-slider>
 
     <player-name
       :visible="visible"
@@ -159,6 +184,15 @@
         :height="492"
       ></twitch-player>
     </div>
+
+    <player-done-slider
+      style="top: 977px; right: 10px; width: 656px"
+      :state="player3raceState"
+      :finalTime="player3finalTime"
+      background
+      direction="up"
+    >
+    </player-done-slider>
 
     <div
       style="position: absolute; top: 0px; right: 10px; width: 1322px"

@@ -106,24 +106,16 @@
     </div>
 
     <player-done-slider
-      :finalTime="player0finalTime"
       style="top: 848px; left: 15px; width: 930px"
-      :class="{
-        active: player0raceState != 'none',
-        done: player0raceState == 'winner' || player0raceState == 'loser',
-        forfeit: player0raceState == 'forfeit',
-      }"
+      :state="player0raceState"
+      :finalTime="player0finalTime"
     >
     </player-done-slider>
 
     <player-done-slider
-      :finalTime="player1finalTime"
       style="top: 848px; left: 975px; width: 930px"
-      :class="{
-        active: player1raceState != 'none',
-        done: player1raceState == 'winner' || player1raceState == 'loser',
-        forfeit: player1raceState == 'forfeit',
-      }"
+      :state="player1raceState"
+      :finalTime="player1finalTime"
     >
     </player-done-slider>
 
