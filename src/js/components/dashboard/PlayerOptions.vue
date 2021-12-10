@@ -369,16 +369,20 @@ export default {
           value: "16:9",
         },
         {
-          text: "8:7 (NES, SNES)",
-          value: "8:7",
-        },
-        {
-          text: "10:9 (GB, GBC)",
+          text: "10:9 (GB, GBC, GG)",
           value: "10:9",
         },
         {
           text: "3:2 (GBA)",
           value: "3:2",
+        },
+        {
+          text: "12:7 (VB)",
+          value: "12:7",
+        },
+        {
+          text: "30:17 (PSP)",
+          value: "30:17",
         },
       ],
       aspectratioRep: false,
