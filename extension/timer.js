@@ -93,7 +93,6 @@ for (let i = 0; i < 4; i++) {
 }
 
 function playerRaceStateChanged(data) {
-  console.log(data);
   let player = data.player;
   let state = data.state;
 
