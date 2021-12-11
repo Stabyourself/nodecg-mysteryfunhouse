@@ -186,7 +186,7 @@
     display: block;
     margin: 0 auto;
     max-height: 100%;
-    max-width: 335px;
+    max-width: 325px;
   }
 }
 
