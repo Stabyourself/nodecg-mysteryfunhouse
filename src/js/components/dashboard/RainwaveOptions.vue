@@ -5,6 +5,7 @@
         <audio
           ref="audio"
           controls
+          preload="none"
           src="https://relay.rainwave.cc/ocremix.ogg"
         ></audio>
 
