@@ -20,8 +20,6 @@
 
         <v-textarea label="Top text" v-model="topText" rows="3"></v-textarea>
 
-        <v-switch v-model="showRainwave" label="Show Rainwave"></v-switch>
-
         <v-divider class="my-7"></v-divider>
 
         <div>

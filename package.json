@@ -67,6 +67,13 @@
         "headerColor": "#9146FF"
       },
       {
+        "name": "rainwave",
+        "title": "Rainwave",
+        "width": 2,
+        "file": "rainwave.html",
+        "headerColor": "#F7941E"
+      },
+      {
         "name": "stream-cropping",
         "title": "Stream Cropping",
         "file": "cropping.html",
