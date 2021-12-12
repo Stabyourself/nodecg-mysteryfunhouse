@@ -39,10 +39,7 @@
       :info="this.playerInfo[3]"
     ></player-path>
 
-    <div
-      class="mt-font top-text"
-      :class="{ active: waitScreenState == 'ghost' }"
-    >
+    <div class="mt-font top-text" :class="{ active: true }">
       <fit-text>{{ topText }}</fit-text>
     </div>
 
