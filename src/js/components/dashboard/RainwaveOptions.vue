@@ -33,12 +33,8 @@
           </template>
         </v-slider>
 
-        <p>
-          If you pause, the stream will fall behind. Make sure to seek to the
-          end before resuming.
-        </p>
-
         <v-switch
+          class="my-0"
           v-model="showRainwave"
           label="Show Rainwave on stream"
         ></v-switch>
