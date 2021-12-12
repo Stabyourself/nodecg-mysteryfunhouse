@@ -85,6 +85,7 @@ export default {
         this.loading = false;
         this.audio.src = "";
         this.audio.pause();
+        this.audio = null;
       }
     },
   },
