@@ -2,12 +2,21 @@
   <v-app>
     <v-main>
       <v-container>
-        <audio
-          ref="audio"
-          controls
-          preload="none"
-          src="https://relay.rainwave.cc/ocremix.ogg"
-        ></audio>
+        <v-btn
+          v-if="!playing || loading"
+          block
+          color="green"
+          @click="playing = true"
+          :loading="loading"
+        >
+          <v-icon>mdi-play</v-icon>
+          Play
+        </v-btn>
+
+        <v-btn v-else block color="red" @click="playing = false">
+          <v-icon>mdi-pause</v-icon>
+          Pause
+        </v-btn>
 
         <v-slider v-model="volume" label="Volume" min="0" max="100">
           <template v-slot:append>
@@ -47,24 +56,49 @@ audio {
 <script>
 import { bindReplicant } from "../../util.js";
 
+function randomId() {
+  return Math.random().toString(36).substr(2, 9);
+}
+
 export default {
   created() {
     bindReplicant.call(this, "showRainwave", "showRainwave", 0);
   },
 
-  mounted() {
-    this.$refs.audio.volume = this.volume / 100;
-  },
-
   watch: {
     volume(newVal) {
-      this.$refs.audio.volume = newVal / 100;
+      if (this.audio) {
+        this.audio.volume = newVal / 100;
+      }
+    },
+
+    playing(newVal) {
+      if (newVal) {
+        this.playing = true;
+        this.audio = new Audio(
+          "https://relay.rainwave.cc/ocremix.ogg?" + randomId()
+        );
+        this.audio.volume = this.volume / 100;
+        this.audio.play();
+
+        this.loading = true;
+        this.audio.addEventListener("loadeddata", () => {
+          this.loading = false;
+        });
+      } else {
+        this.loading = false;
+        this.audio.src = "";
+        this.audio.pause();
+      }
     },
   },
 
   data() {
     return {
       showRainwave: false,
+      audio: null,
+      playing: false,
+      loading: false,
       volume: 50,
     };
   },
