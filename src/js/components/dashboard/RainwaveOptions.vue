@@ -5,7 +5,7 @@
         <audio
           ref="audio"
           controls
-          src="http://ocrstream.rainwave.cc:8000/ocremix.mp3"
+          src="https://relay.rainwave.cc/ocremix.ogg"
         ></audio>
 
         <v-slider v-model="volume" label="Volume" min="0" max="100">
@@ -28,7 +28,10 @@
           end before resuming.
         </p>
 
-        <v-switch v-model="showRainwave" label="Show Rainwave Info"></v-switch>
+        <v-switch
+          v-model="showRainwave"
+          label="Show Rainwave on stream"
+        ></v-switch>
       </v-container>
     </v-main>
   </v-app>
