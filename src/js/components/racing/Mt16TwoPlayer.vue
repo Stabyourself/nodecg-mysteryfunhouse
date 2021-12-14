@@ -298,8 +298,8 @@ export default {
       player0volume: 0,
       player0streamHidden: false,
 
-      player0raceState: false,
-      player0finalTime: false,
+      player0raceState: "none",
+      player0finalTime: "",
 
       player0crop: [0, 0, 0, 0],
       player0aspectratio: false,
@@ -312,8 +312,8 @@ export default {
       player1volume: 0,
       player1streamHidden: false,
 
-      player1raceState: false,
-      player1finalTime: false,
+      player1raceState: "none",
+      player1finalTime: "",
 
       player1crop: [0, 0, 0, 0],
       player1aspectratio: false,

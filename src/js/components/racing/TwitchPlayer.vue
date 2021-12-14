@@ -89,6 +89,7 @@ export default {
       this.$refs.player.innerHTML = "";
 
       twitchOptions.channel = this.url;
+      // twitchOptions.video = "1232657574";
       twitchOptions.width = this.width;
       twitchOptions.height = this.height;
 

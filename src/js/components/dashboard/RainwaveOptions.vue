@@ -62,15 +62,14 @@ export default {
   },
 
   watch: {
-    volume(newVal) {
+    volume(volume) {
       if (this.audio) {
-        this.audio.volume = newVal / 100;
+        this.audio.volume = volume / 100;
       }
     },
 
-    playing(newVal) {
-      if (newVal) {
-        this.playing = true;
+    playing(playing) {
+      if (playing) {
         this.audio = new Audio(
           "https://relay.rainwave.cc/ocremix.ogg?" + randomId()
         );

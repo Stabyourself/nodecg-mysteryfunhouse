@@ -410,8 +410,8 @@ export default {
       player0volume: 0,
       player0streamHidden: false,
 
-      player0raceState: false,
-      player0finalTime: false,
+      player0raceState: "none",
+      player0finalTime: "",
 
       player0crop: [0, 0, 0, 0],
       player0aspectratio: false,
@@ -424,8 +424,8 @@ export default {
       player1volume: 0,
       player1streamHidden: false,
 
-      player1raceState: false,
-      player1finalTime: false,
+      player1raceState: "none",
+      player1finalTime: "",
 
       player1crop: [0, 0, 0, 0],
       player1aspectratio: false,
@@ -438,8 +438,8 @@ export default {
       player2volume: 0,
       player2streamHidden: false,
 
-      player2raceState: false,
-      player2finalTime: false,
+      player2raceState: "none",
+      player2finalTime: "",
 
       player2crop: [0, 0, 0, 0],
       player2aspectratio: false,
@@ -452,8 +452,8 @@ export default {
       player3volume: 0,
       player3streamHidden: false,
 
-      player3raceState: false,
-      player3finalTime: false,
+      player3raceState: "none",
+      player3finalTime: "",
 
       player3crop: [0, 0, 0, 0],
       player3aspectratio: false,
