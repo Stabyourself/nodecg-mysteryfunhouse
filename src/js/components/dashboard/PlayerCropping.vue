@@ -19,6 +19,7 @@
             height: 698px;
           "
           class="checkerboard"
+          :aspectratio="aspectratio"
           :playerNumber="1"
           :volume="0"
           :url="url"
@@ -251,6 +252,7 @@ export default {
   created() {
     bindReplicant.call(this, "crop", `player${this.player}crop`);
     bindReplicant.call(this, "url", `player${this.player}twitch`);
+    bindReplicant.call(this, "aspectratio", `player${this.player}aspectratio`);
   },
 
   props: ["player"],
@@ -313,6 +315,7 @@ export default {
       url: "",
       assistantActive: false,
       interacting: false,
+      aspectratio: false,
     };
   },
 };
