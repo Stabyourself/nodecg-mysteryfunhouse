@@ -64,8 +64,10 @@ function getChallongeForId(tournament, id) {
 
 function getContactRowForChallongeName(contactRows, challongeName) {
   return contactRows.find((row) => {
+    console.log(row);
     return (
-      row["Challonge Username"].toLowerCase() == challongeName.toLowerCase()
+      String(row["Challonge Username"]).toLowerCase() ==
+      challongeName.toLowerCase()
     );
   });
 }
