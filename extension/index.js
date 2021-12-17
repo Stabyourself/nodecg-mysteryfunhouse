@@ -7,4 +7,5 @@ module.exports = function (nodecg) {
   require("./challonge-loader");
   require("./twitch");
   require("./schedule");
+  require("./card-api");
 };

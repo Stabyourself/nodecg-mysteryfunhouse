@@ -442,7 +442,7 @@ nodecg.listenFor("loadAllCards", function (options, ack) {
         contactRows,
         careerRows,
         discordMembers,
-        row["Challonge Username"]
+        String(row["Challonge Username"])
       );
 
       if (!(info instanceof Error)) {
