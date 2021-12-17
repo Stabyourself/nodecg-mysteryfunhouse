@@ -63,13 +63,11 @@ function getChallongeForId(tournament, id) {
 }
 
 function getContactRowForChallongeName(contactRows, challongeName) {
-  return contactRows.find((row) => {
-    console.log(row);
-    return (
+  return contactRows.find(
+    (row) =>
       String(row["Challonge Username"]).toLowerCase() ==
       challongeName.toLowerCase()
-    );
-  });
+  );
 }
 
 function getMemberForDiscordUsername(members, discordUsername) {
