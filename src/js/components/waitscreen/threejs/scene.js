@@ -59,14 +59,17 @@ export function init(container, playerCards) {
   camera.position.set(1, 30, 100);
   camera.rotateX(-0.2);
 
+  let queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+
   // ghost
-  loader.load("../dist/model/ghost.gltf", function(gltf) {
+  loader.load("../dist/model/ghost.gltf", function (gltf) {
     ghost = gltf.scene;
     ghost.scale.set(5, 5, 5);
     scene.add(ghost);
   });
 
-  loader.load("../dist/model/ghost_missing_pixel.gltf", function(gltf) {
+  loader.load("../dist/model/ghost_missing_pixel.gltf", function (gltf) {
     ghostMeme = gltf.scene;
     ghostMeme.scale.set(5, 5, 5);
     ghostMeme.visible = false;
@@ -75,7 +78,7 @@ export function init(container, playerCards) {
 
   let lawnmower, lawnmixer;
   // lawnmower
-  loader.load("../dist/model/lawnmower/scene.gltf", function(gltf) {
+  loader.load("../dist/model/lawnmower/scene.gltf", function (gltf) {
     lawnmower = gltf.scene;
     lawnmower.rotateY(-Math.PI * 0.5);
     lawnmower.scale.set(0.1, 0.1, 0.1);
@@ -97,7 +100,7 @@ export function init(container, playerCards) {
     textureHeight: 512,
     waterNormals: new THREE.TextureLoader().load(
       "../dist/img/waternormals.jpg",
-      function(texture) {
+      function (texture) {
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
       }
     ),
@@ -256,10 +259,11 @@ export function init(container, playerCards) {
 
     water.material.uniforms["time"].value += delta;
     if (ghost && ghostMeme) {
+      let mul = urlParams.get("spingate") != null ? 5 : 1;
       let oldRotation = ghost.rotation.y;
 
-      ghost.rotation.y = (ghostTimer % Math.PI) * 2;
-      ghostMeme.rotation.y = (ghostTimer % Math.PI) * 2;
+      ghost.rotation.y = (ghostTimer * 2 * mul) % (Math.PI * 2);
+      ghostMeme.rotation.y = (ghostTimer * 2 * mul) % (Math.PI * 2);
 
       if (ghost.rotation.y >= Math.PI * 1.5 && oldRotation < Math.PI * 1.5) {
         // swap?
@@ -267,7 +271,7 @@ export function init(container, playerCards) {
 
         if (ghost.visible) {
           // maybe swap
-          if (Math.random() < 2 / 100) {
+          if (Math.random() < 50 / 100) {
             swap = true;
           }
         } else {
