@@ -271,7 +271,7 @@ export function init(container, playerCards) {
 
         if (ghost.visible) {
           // maybe swap
-          if (Math.random() < 50 / 100) {
+          if (Math.random() < 2 / 100) {
             swap = true;
           }
         } else {
