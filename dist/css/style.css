@@ -132,6 +132,7 @@ body.graphic::-webkit-scrollbar {
   font-size: 5em;
   opacity: 0;
   transition: opacity 0.3s;
+  padding: 0 30px;
 }
 .top-text.active {
   opacity: 1;

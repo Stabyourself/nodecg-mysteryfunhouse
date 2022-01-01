@@ -154,6 +154,7 @@ body {
 
   opacity: 0;
   transition: opacity 0.3s;
+  padding: 0 30px;
 
   &.active {
     opacity: 1;
