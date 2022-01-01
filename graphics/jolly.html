@@ -11,16 +11,19 @@
       rel="stylesheet"
     />
     <link href="../dist/css/style.css" rel="stylesheet" />
+    <link rel="preload" as="image" href="../dist/img/winner.png" />
+    <link rel="preload" as="image" href="../dist/img/loser.png" />
+    <link rel="preload" as="image" href="../dist/img/forfeit.png" />
 
     <style>
       body {
-        background-image: url("../dist/img/twoplayer_back_mt15.png");
+        background-image: url("../dist/img/jolly_back.png");
       }
     </style>
   </head>
   <body class="graphic">
     <div id="app">
-      <mt15-two-player></mt15-two-player>
+      <jolly-layout></jolly-layout>
     </div>
 
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
