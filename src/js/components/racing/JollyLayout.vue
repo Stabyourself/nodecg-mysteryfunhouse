@@ -26,8 +26,7 @@
       <template v-slot:name>
         <swipe dir="up" :visible="visible">
           <fit-text :max="2.5" class="jolly-font">
-            {{ player0name
-            }}<img v-if="player0volume > 0" :src="'../dist/img/audio.png'" />
+            {{ player0name }}
           </fit-text>
         </swipe>
       </template>
@@ -50,9 +49,7 @@
       <template v-slot:name>
         <swipe dir="up" :visible="visible">
           <fit-text :max="2.5" class="jolly-font">
-            <img v-if="player1volume > 0" :src="'../dist/img/audio.png'" />{{
-              player1name
-            }}
+            {{ player1name }}
           </fit-text>
         </swipe>
       </template>
