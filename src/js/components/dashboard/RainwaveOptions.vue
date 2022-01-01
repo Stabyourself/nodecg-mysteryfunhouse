@@ -95,7 +95,7 @@ export default {
       audio: null,
       playing: false,
       loading: false,
-      volume: 50,
+      volume: 8,
     };
   },
 };
