@@ -174,6 +174,7 @@ nodecg.listenFor("loadMatch", function (options, ack) {
     challonge.getTournament(nodecg.bundleConfig.challongeTournament),
     googlesheet.getContactSheet(),
     googlesheet.getCareerSheet(),
+    googlesheet.getPlayedGamesSheet(),
     discord.getMembers(),
   ];
 
@@ -202,7 +203,14 @@ nodecg.listenFor("loadMatch", function (options, ack) {
     if (results[3].status == "rejected") {
       return ack(
         new Error(
-          `Discord API call failed (${results[3].reason}). Try again or tell Maurice.`
+          `Googlesheet API call failed (${results[3].reason}). Try again or tell Maurice.`
+        )
+      );
+    }
+    if (results[4].status == "rejected") {
+      return ack(
+        new Error(
+          `Discord API call failed (${results[4].reason}). Try again or tell Maurice.`
         )
       );
     }
@@ -210,7 +218,8 @@ nodecg.listenFor("loadMatch", function (options, ack) {
     const tournament = results[0].value;
     const contactRows = results[1].value;
     const careerRows = results[2].value;
-    const discordMembers = results[3].value;
+    const playedGamesRows = results[3].value;
+    const discordMembers = results[4].value;
 
     const info = [];
 
@@ -324,6 +333,17 @@ nodecg.listenFor("loadMatch", function (options, ack) {
           match.winner = 0;
         } else {
           match.winner = 1;
+        }
+
+        // find the game!
+        const gameRow = playedGamesRows.find((row) => {
+          return row["Match #"] == rawMatch.suggested_play_order;
+        });
+
+        if (gameRow) {
+          match.game = gameRow["Game"];
+          match.genre = gameRow["Genre"];
+          match.platform = gameRow["Platform"];
         }
 
         matches.push(match);

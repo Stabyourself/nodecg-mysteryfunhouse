@@ -27,6 +27,16 @@ scheduleDoc.loadInfo().then(function () {
   scheduleSheet = scheduleDoc.sheetsByIndex[0];
 });
 
+const playedGamesDoc = new GoogleSpreadsheet(
+  nodecg.bundleConfig.playedGamesSheet
+);
+playedGamesDoc.useApiKey(nodecg.bundleConfig.googleApiKey);
+
+let playedGamesSheet;
+playedGamesDoc.loadInfo().then(function () {
+  playedGamesSheet = playedGamesDoc.sheetsByIndex[0];
+});
+
 exports.getContactSheet = function () {
   if (!contactSheet) {
     return new Promise((res, rej) => {
@@ -52,4 +62,13 @@ exports.getScheduleSheet = function () {
     });
   }
   return scheduleSheet.getRows();
+};
+
+exports.getPlayedGamesSheet = function () {
+  if (!playedGamesSheet) {
+    return new Promise((res, rej) => {
+      rej("Schedule sheet isn't loaded yet");
+    });
+  }
+  return playedGamesSheet.getRows();
 };

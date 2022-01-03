@@ -31,12 +31,17 @@
               {{ match.score }}
             </div>
           </div>
+
+          <div class="game">
+            <span class="platform">
+              <v-icon>mdi-gamepad-variant</v-icon>{{ match.platform }}</span
+            >
+            {{ match.game ? match.game : "Unknown" }}
+          </div>
         </v-timeline-item>
       </v-timeline>
 
-      <div v-else style="font-size: 1.5em;" class="mt-10">
-        No matches yet!
-      </div>
+      <div v-else style="font-size: 1.5em" class="mt-10">No matches yet!</div>
     </div>
   </div>
 </template>
@@ -100,6 +105,7 @@ $padding: 100px;
     text-align: left;
     font-size: 2em;
     align-items: center;
+    margin-top: 0.7em;
 
     .round {
       font-size: 0.8em;
@@ -118,6 +124,19 @@ $padding: 100px;
       line-height: 0;
       margin-right: 15px;
       white-space: nowrap;
+    }
+  }
+
+  .game {
+    width: 100%;
+    text-align: left;
+
+    .platform {
+      background-color: white;
+      padding: 2px 6px;
+      border-radius: 5px;
+      margin-right: 3px;
+      color: #111;
     }
   }
 
