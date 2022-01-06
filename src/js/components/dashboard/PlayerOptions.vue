@@ -376,6 +376,10 @@ export default {
           value: "16:9",
         },
         {
+          text: "4:6 (Tate)",
+          value: "4:6",
+        },
+        {
           text: "10:9 (GB, GBC, GG)",
           value: "10:9",
         },

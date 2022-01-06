@@ -55,6 +55,9 @@ let twitchOptions = {
   quality: "auto",
 };
 
+let playerWidth = 930;
+let playerHeight = 698;
+
 export default {
   created() {
     nodecg.listenFor(`stream${this.playerNumber}reload`, () => {
@@ -90,8 +93,8 @@ export default {
 
       twitchOptions.channel = this.url;
       // twitchOptions.video = "1232657574";
-      twitchOptions.width = this.width;
-      twitchOptions.height = this.height;
+      twitchOptions.width = playerWidth;
+      twitchOptions.height = playerHeight;
 
       this.player = new Twitch.Player(this.$refs.player, twitchOptions);
 
@@ -111,13 +114,13 @@ export default {
       let styles = {};
 
       if (this.crop) {
-        let left = this.crop[0] * (this.width / 930);
-        let right = this.crop[1] * (this.width / 930);
-        let top = this.crop[2] * (this.height / 698);
-        let bottom = this.crop[3] * (this.height / 698);
+        let left = this.crop[0];
+        let right = this.crop[1];
+        let top = this.crop[2];
+        let bottom = this.crop[3];
 
-        let width = this.width - left - right;
-        let height = this.height - top - bottom;
+        let width = playerWidth - left - right;
+        let height = playerHeight - top - bottom;
 
         let translateX = this.width / 2 - left - width / 2;
         let translateY = this.height / 2 - top - height / 2;
@@ -162,8 +165,8 @@ export default {
         styles = {
           clip: `rect(
                                 ${top}px,
-                                ${this.width - right}px,
-                                ${this.height - bottom}px,
+                                ${playerWidth - right}px,
+                                ${playerHeight - bottom}px,
                                 ${left}px
                             )`,
           "transform-origin": `${transformOriginX}px ${transformOriginY}px`,
