@@ -150,9 +150,6 @@
           {{ timerText }}
         </swipe>
       </timer>
-
-      <rainwave v-if="showRainwave" style="bottom: 0px; right: 10px">
-      </rainwave>
     </div>
   </v-app>
 </template>
@@ -224,8 +221,6 @@ export default {
     bindReplicant.call(this, "currentBoxart");
 
     bindReplicant.call(this, "timer");
-
-    bindReplicant.call(this, "showRainwave");
 
     bindReplicant.call(this, "round1", "match1round");
     bindReplicant.call(this, "round2", "match2round");
@@ -356,8 +351,6 @@ export default {
       timer: {
         ms: 0,
       },
-
-      showRainwave: false,
 
       visible: false,
     };
