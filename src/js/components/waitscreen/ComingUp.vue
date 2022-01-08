@@ -109,6 +109,7 @@
     font-size: 2.5em;
 
     .player {
+      white-space: nowrap;
       font-weight: bold;
       flex-grow: 1;
       flex-shrink: 1;
