@@ -40,7 +40,7 @@
     ></player-path>
 
     <div class="mt-font top-text" :class="{ active: true }">
-      <fit-text>{{ topText }}</fit-text>
+      <markdown-it-vue :content="topText"></markdown-it-vue>
     </div>
 
     <rainwave
@@ -51,10 +51,26 @@
   </v-app>
 </template>
 
+<style lang="scss">
+.top-text {
+  margin-top: 0.2em;
+  font-size: 5em;
+  line-height: 0.8;
+  p {
+    margin: 0;
+  }
+}
+</style>
+
 <script>
 import { bindReplicant } from "../../util.js";
+import MarkdownItVue from "markdown-it-vue";
 
 export default {
+  components: {
+    MarkdownItVue,
+  },
+
   created() {
     bindReplicant.call(this, "playerInfo");
     bindReplicant.call(this, "waitScreenState");

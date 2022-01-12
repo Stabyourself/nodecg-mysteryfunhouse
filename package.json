@@ -204,6 +204,7 @@
     "discord.js": "^13.3.1",
     "google-spreadsheet": "^3.2.0",
     "lodash": "^4.17.21",
+    "markdown-it-vue": "^1.1.6",
     "request": "^2.88.2",
     "timer-node": "^5.0.5"
   }
