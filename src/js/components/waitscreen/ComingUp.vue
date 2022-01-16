@@ -19,9 +19,9 @@
             <div class="left">
               {{ getRelativeTime(match.time) }}
             </div>
-            <!-- <div class="round text-center">
+            <div class="round text-center pixel-font pixel-font-alt">
               {{ match.round }}
-            </div> -->
+            </div>
             <div class="right">
               {{
                 new Date(match.time)
@@ -89,6 +89,10 @@
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 0;
+  }
+
+  .round {
+    line-height: 48px;
   }
 
   .top {
