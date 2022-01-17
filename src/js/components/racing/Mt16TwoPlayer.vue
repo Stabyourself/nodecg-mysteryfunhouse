@@ -136,8 +136,7 @@
       <template v-slot:text>
         <swipe :visible="visible" dir="up" :delay="1" class="game">
           <fit-text :max="1" :min="0.1">
-            <span class="pixel-font"
-              >n
+            <span class="pixel-font">
               {{ game }}
               <span v-if="!!platform"> ({{ platform }})</span>
             </span>
