@@ -136,7 +136,8 @@
       <template v-slot:text>
         <swipe :visible="visible" dir="up" :delay="1" class="game">
           <fit-text :max="1" :min="0.1">
-            <span class="pixel-font">
+            <span class="pixel-font"
+              >n
               {{ game }}
               <span v-if="!!platform"> ({{ platform }})</span>
             </span>
@@ -265,13 +266,13 @@ export default {
       setTimeout(() => {
         this.visible = true;
       }, 0);
-
-      document.addEventListener("keyup", (e) => {
-        if (e.key === "Enter") {
-          this.visible = !this.visible;
-        }
-      });
     }
+
+    document.addEventListener("keyup", (e) => {
+      if (e.key === "Enter") {
+        this.visible = !this.visible;
+      }
+    });
   },
 
   computed: {

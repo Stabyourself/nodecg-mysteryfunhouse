@@ -371,13 +371,13 @@ export default {
       setTimeout(() => {
         this.visible = true;
       }, 0);
-
-      document.addEventListener("keyup", (e) => {
-        if (e.key === "Enter") {
-          this.visible = !this.visible;
-        }
-      });
     }
+
+    document.addEventListener("keyup", (e) => {
+      if (e.key === "Enter") {
+        this.visible = !this.visible;
+      }
+    });
   },
 
   computed: {

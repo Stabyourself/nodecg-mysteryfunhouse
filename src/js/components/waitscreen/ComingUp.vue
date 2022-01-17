@@ -193,13 +193,13 @@ export default {
       setTimeout(() => {
         this.visible = true;
       }, 1000);
-
-      document.addEventListener("keyup", (e) => {
-        if (e.key === "Enter") {
-          this.visible = !this.visible;
-        }
-      });
     }
+
+    document.addEventListener("keyup", (e) => {
+      if (e.key === "Enter") {
+        this.visible = !this.visible;
+      }
+    });
   },
 
   computed: {
