@@ -6,7 +6,6 @@ import { FancyWater } from "./FancyWater.js";
 import { Sky } from "./Sky.js";
 import { PointerLockControls } from "./PointerLockControls";
 
-let stats;
 let camera, scene, renderer;
 let water, sun, sky, pmremGenerator, starMaterial, starMesh;
 let clock, delta;
@@ -15,6 +14,7 @@ let playerCardTextures = [];
 let cards = [];
 let shineTextures = [];
 let playerCardUniforms = [];
+let autoCamera = true;
 
 let tweenVars;
 let cardInTween, cardOutTween, spinTween, zoomInTween, zoomOutTween;
@@ -62,6 +62,7 @@ export function init(container, playerCards) {
 
   document.addEventListener("click", function () {
     controls.lock();
+    autoCamera = false;
   });
 
   scene.add(controls.getObject());
@@ -88,9 +89,12 @@ export function init(container, playerCards) {
         moveRight = true;
         break;
 
+      case "ShiftLeft":
+        moveDown = true;
+        break;
+
       case "Space":
-        if (canJump === true) velocity.y += 350;
-        canJump = false;
+        moveUp = true;
         break;
     }
   };
@@ -116,6 +120,14 @@ export function init(container, playerCards) {
       case "KeyD":
         moveRight = false;
         break;
+
+      case "ShiftLeft":
+        moveDown = false;
+        break;
+
+      case "Space":
+        moveUp = false;
+        break;
     }
   };
 
@@ -126,6 +138,8 @@ export function init(container, playerCards) {
   let moveBackward = false;
   let moveLeft = false;
   let moveRight = false;
+  let moveUp = false;
+  let moveDown = false;
   const direction = new THREE.Vector3();
   const velocity = new THREE.Vector3();
 
@@ -232,7 +246,7 @@ export function init(container, playerCards) {
     cards[i].translateY(30);
     cards[i].translateZ(35);
 
-    let posX = -200;
+    let posX = -90;
 
     if (i == 1) {
       posX *= -1;
@@ -288,6 +302,8 @@ export function init(container, playerCards) {
         offsetY: { type: "f", value: 1 },
         lightness: { type: "f", value: 1 },
       };
+
+      playerCardTextures[i].needsUpdate = true;
 
       let material = new THREE.ShaderMaterial({
         uniforms: playerCardUniforms[i],
@@ -439,16 +455,20 @@ export function init(container, playerCards) {
 
     velocity.x -= velocity.x * 10.0 * delta;
     velocity.z -= velocity.z * 10.0 * delta;
+    velocity.y -= velocity.y * 10.0 * delta;
 
     direction.z = Number(moveForward) - Number(moveBackward);
     direction.x = Number(moveRight) - Number(moveLeft);
+    direction.y = Number(moveUp) - Number(moveDown);
     direction.normalize(); // this ensures consistent movements in all directions
 
     if (moveForward || moveBackward) velocity.z -= direction.z * 1000.0 * delta;
     if (moveLeft || moveRight) velocity.x -= direction.x * 1000.0 * delta;
+    if (moveUp || moveDown) velocity.y -= direction.y * 1000.0 * delta;
 
     controls.moveRight(-velocity.x * delta);
     controls.moveForward(-velocity.z * delta);
+    controls.moveUp(-velocity.y * delta);
 
     render();
     // stats.update()
@@ -481,7 +501,9 @@ function updateTweens() {
     cards[1].position.x = tweenVars.cardX;
   }
 
-  camera.rotation.x = tweenVars.cameraX;
+  if (autoCamera) {
+    camera.rotation.x = tweenVars.cameraX;
+  }
 
   if (camera.zoom != tweenVars.zoom) {
     camera.zoom = tweenVars.zoom;

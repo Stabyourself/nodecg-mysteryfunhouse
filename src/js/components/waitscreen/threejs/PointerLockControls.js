@@ -135,6 +135,10 @@ class PointerLockControls extends EventDispatcher {
       camera.position.addScaledVector(_vector, distance);
     };
 
+    this.moveUp = function (distance) {
+      camera.position.addScaledVector(new Vector3(0, 1, 0), distance);
+    };
+
     this.lock = function () {
       this.domElement.requestPointerLock();
     };
