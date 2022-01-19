@@ -20,6 +20,7 @@ const twitchTemplate = nodecg.Replicant("twitchTemplate", {
 
 //--------- GAME ---------
 // MysteryFunHouse: 10553
+// Retro: 27284
 
 fs.readFile(__dirname + "/twitch_token.json", "UTF-8").then((str) => {
   const tokenData = JSON.parse(str);
@@ -60,8 +61,8 @@ fs.readFile(__dirname + "/twitch_token.json", "UTF-8").then((str) => {
     }
 
     apiClient.games.getGameByName(requestedGame).then((game) => {
-      gameId = game ? game.id : "10553"; // default to "Mystery Fun House" if game not found
-      gameName = game ? game.name : "Mystery Fun House";
+      gameId = game ? game.id : "27284"; // default to "Mystery Fun House" if game not found
+      gameName = game ? game.name : "Retro";
 
       apiClient.channels
         .updateChannelInfo(nodecg.bundleConfig.twitchChannel, {
