@@ -89,7 +89,7 @@ function getAvatarForMember(member) {
   }
 
   if (member.id == "84300263346704384") {
-    avatar = "../dist/img/Maurice.png";
+    avatar = "../dist/img/maurice.png";
   }
 
   return avatar;
