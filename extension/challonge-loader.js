@@ -88,6 +88,10 @@ function getAvatarForMember(member) {
     avatar = "../dist/img/default_avatar.png";
   }
 
+  if (member.id == "84300263346704384") {
+    avatar = "../dist/img/Maurice.png";
+  }
+
   return avatar;
 }
 
