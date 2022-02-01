@@ -8,11 +8,11 @@
     >
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="up" :delay="0.5">
-          <span class="pixel-font">
+          <fit-text :max="1.5" class="pixel-font name">
             {{ player0pronouns != "" ? `(${player0pronouns})` : "" }}
             {{ player0name
             }}<img v-if="player0volume > 0" :src="'../dist/img/audio.png'" />
-          </span>
+          </fit-text>
         </swipe>
       </template>
     </player-name>
@@ -56,12 +56,12 @@
     >
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="up" :delay="0.5">
-          <span class="pixel-font">
+          <fit-text :max="1.5" class="pixel-font name">
             <img v-if="player1volume > 0" :src="'../dist/img/audio.png'" />{{
               player1name
             }}
             {{ player1pronouns != "" ? `(${player1pronouns})` : "" }}
-          </span>
+          </fit-text>
         </swipe>
       </template>
     </player-name>
@@ -177,6 +177,11 @@
 }
 
 .player-name {
+  .name {
+    font-size: 1.5em;
+    margin-top: -4px;
+  }
+
   img {
     margin-left: 0.3em;
     margin-right: 0.3em;
@@ -199,9 +204,9 @@
 }
 
 .round {
-  font-size: 3rem;
+  font-size: 2rem;
   text-align: center;
-  margin-top: -4px;
+  margin-top: 4px;
 }
 
 .submitter {
