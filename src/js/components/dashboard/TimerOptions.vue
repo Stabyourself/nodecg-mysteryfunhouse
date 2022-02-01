@@ -14,7 +14,8 @@
 
         <div class="grey--text text-center">
           <span v-if="timer.state == 'paused'"
-            >Press play to continue {{ pausedTimerText }}</span
+            >Press <v-icon color="grey">mdi-play</v-icon> to continue
+            {{ pausedTimerText }}</span
           >
           <span v-else>&nbsp;</span>
         </div>
@@ -27,9 +28,7 @@
               block
               :disabled="timer.state == 'playing'"
             >
-              <v-icon dark>
-                mdi-play
-              </v-icon>
+              <v-icon dark> mdi-play </v-icon>
             </v-btn>
           </v-col>
 
@@ -40,17 +39,13 @@
               block
               :disabled="timer.state != 'playing'"
             >
-              <v-icon dark>
-                mdi-pause
-              </v-icon>
+              <v-icon dark> mdi-pause </v-icon>
             </v-btn>
           </v-col>
 
           <v-col>
             <v-btn color="red" @click="reset" block :disabled="timer.ms == 0">
-              <v-icon dark>
-                mdi-undo
-              </v-icon>
+              <v-icon dark> mdi-undo </v-icon>
             </v-btn>
           </v-col>
         </v-row>
