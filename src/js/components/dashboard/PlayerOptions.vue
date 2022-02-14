@@ -318,6 +318,12 @@ export default {
           this.popoverVisible = false;
           this.popoverBarValue = 100;
         }, duration);
+
+        if (this.popover.search("player-dead") != -1) {
+          nodecg.sendMessage("playSound", {
+            sound: "Player Dead",
+          });
+        }
       }
     },
 

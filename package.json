@@ -80,12 +80,6 @@
         "fullbleed": true
       },
       {
-        "name": "all-cards",
-        "title": "All Cards",
-        "file": "allcards.html",
-        "dialog": true
-      },
-      {
         "name": "boxart-select-dialog",
         "title": "Select Boxart",
         "file": "boxart.html",
@@ -137,6 +131,13 @@
         "file": "coming_up.html",
         "width": 1920,
         "height": 1080
+      }
+    ],
+    "soundCues": [
+      {
+        "name": "Player Dead",
+        "assignable": false,
+        "defaultFile": "sound/player_dead.mp3"
       }
     ],
     "assetCategories": [

@@ -378,6 +378,15 @@ export default {
         this.visible = !this.visible;
       }
     });
+
+    let vue = this;
+    nodecg.listenFor("playSound", vue.playSound);
+  },
+
+  methods: {
+    playSound(data) {
+      nodecg.playSound(data.sound);
+    },
   },
 
   computed: {
