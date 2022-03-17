@@ -318,20 +318,22 @@ export default {
     for (const color of colors) {
       let img = new Image();
       img.onload = this.render;
-      img.src = `../dist/img/card_front_${color}.png`;
+      img.src = `/bundles/nodecg-mysteryfunhouse/dist/img/card_front_${color}.png`;
 
       this.cardFronts.push(img);
     }
 
     this.cardStar.onload = this.render;
-    this.cardStar.src = "../dist/img/card_star.png";
+    this.cardStar.src =
+      "/bundles/nodecg-mysteryfunhouse/dist/img/card_star.png";
 
     this.cardAttributes.onload = this.render;
-    this.cardAttributes.src = "../dist/img/card_attributes.png";
+    this.cardAttributes.src =
+      "/bundles/nodecg-mysteryfunhouse/dist/img/card_attributes.png";
 
     var f = new FontFace(
       "MatrixRegularSmallCaps",
-      'url("../dist/font/MatrixRegularSmallCaps.woff2") format("woff2")'
+      'url("/bundles/nodecg-mysteryfunhouse/dist/font/MatrixRegularSmallCaps.woff2") format("woff2")'
     );
     f.load().then((font) => {
       document.fonts.add(font);
@@ -340,7 +342,7 @@ export default {
 
     f = new FontFace(
       "ITCStoneSerifSmallCapsBold",
-      'url("../dist/font/ITCStoneSerifSmallCapsBold.woff2") format("woff2")'
+      'url("/bundles/nodecg-mysteryfunhouse/dist/font/ITCStoneSerifSmallCapsBold.woff2") format("woff2")'
     );
     f.load().then((font) => {
       document.fonts.add(font);
@@ -349,7 +351,7 @@ export default {
 
     f = new FontFace(
       "StoneSerifRegular",
-      'url("../dist/font/StoneSerifRegular.woff2") format("woff2")'
+      'url("/bundles/nodecg-mysteryfunhouse/dist/font/StoneSerifRegular.woff2") format("woff2")'
     );
     f.load().then((font) => {
       document.fonts.add(font);
@@ -358,7 +360,7 @@ export default {
 
     f = new FontFace(
       "MatrixBoldSmallCaps",
-      'url("../dist/font/MatrixBoldSmallCaps.woff2") format("woff2")'
+      'url("/bundles/nodecg-mysteryfunhouse/dist/font/MatrixBoldSmallCaps.woff2") format("woff2")'
     );
     f.load().then((font) => {
       document.fonts.add(font);

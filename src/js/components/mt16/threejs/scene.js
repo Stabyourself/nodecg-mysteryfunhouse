@@ -147,33 +147,42 @@ export function init(container, playerCards) {
   const urlParams = new URLSearchParams(queryString);
 
   // ghost
-  loader.load("../dist/model/ghost.gltf", function (gltf) {
-    ghost = gltf.scene;
-    ghost.scale.set(5, 5, 5);
-    scene.add(ghost);
-  });
+  loader.load(
+    "/bundles/nodecg-mysteryfunhouse/dist/model/ghost.gltf",
+    function (gltf) {
+      ghost = gltf.scene;
+      ghost.scale.set(5, 5, 5);
+      scene.add(ghost);
+    }
+  );
 
-  loader.load("../dist/model/ghost_missing_pixel.gltf", function (gltf) {
-    ghostMeme = gltf.scene;
-    ghostMeme.scale.set(5, 5, 5);
-    ghostMeme.visible = false;
-    scene.add(ghostMeme);
-  });
+  loader.load(
+    "/bundles/nodecg-mysteryfunhouse/dist/model/ghost_missing_pixel.gltf",
+    function (gltf) {
+      ghostMeme = gltf.scene;
+      ghostMeme.scale.set(5, 5, 5);
+      ghostMeme.visible = false;
+      scene.add(ghostMeme);
+    }
+  );
 
   let lawnmower, lawnmixer;
   // lawnmower
-  loader.load("../dist/model/lawnmower/scene.gltf", function (gltf) {
-    lawnmower = gltf.scene;
-    lawnmower.rotateY(-Math.PI * 0.5);
-    lawnmower.scale.set(0.1, 0.1, 0.1);
-    lawnmower.position.set(-500, -5, -200);
+  loader.load(
+    "/bundles/nodecg-mysteryfunhouse/dist/model/lawnmower/scene.gltf",
+    function (gltf) {
+      lawnmower = gltf.scene;
+      lawnmower.rotateY(-Math.PI * 0.5);
+      lawnmower.scale.set(0.1, 0.1, 0.1);
+      lawnmower.position.set(-500, -5, -200);
 
-    lawnmixer = new THREE.AnimationMixer(gltf.scene);
-    var action = lawnmixer.clipAction(gltf.animations[0]);
-    action.play();
+      lawnmixer = new THREE.AnimationMixer(gltf.scene);
+      var action = lawnmixer.clipAction(gltf.animations[0]);
+      action.play();
 
-    scene.add(lawnmower);
-  });
+      scene.add(lawnmower);
+    }
+  );
 
   // Water
 
@@ -183,7 +192,7 @@ export function init(container, playerCards) {
     textureWidth: 512,
     textureHeight: 512,
     waterNormals: new THREE.TextureLoader().load(
-      "../dist/img/waternormals.jpg",
+      "/bundles/nodecg-mysteryfunhouse/dist/img/waternormals.jpg",
       function (texture) {
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
       }
@@ -220,17 +229,20 @@ export function init(container, playerCards) {
 
   // Stars
   var texLoader = new THREE.TextureLoader();
-  texLoader.load("../dist/img/sky.png", (texture) => {
-    var geometry = new THREE.PlaneBufferGeometry(3000, 3000);
-    geometry.translate(0, 300, -1000);
+  texLoader.load(
+    "/bundles/nodecg-mysteryfunhouse/dist/img/sky.png",
+    (texture) => {
+      var geometry = new THREE.PlaneBufferGeometry(3000, 3000);
+      geometry.translate(0, 300, -1000);
 
-    starMaterial = new THREE.MeshStandardMaterial({
-      map: texture,
-      transparent: true,
-    });
-    starMesh = new THREE.Mesh(geometry, starMaterial);
-    scene.add(starMesh);
-  });
+      starMaterial = new THREE.MeshStandardMaterial({
+        map: texture,
+        transparent: true,
+      });
+      starMesh = new THREE.Mesh(geometry, starMaterial);
+      scene.add(starMesh);
+    }
+  );
 
   // Light
   const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.5);
@@ -257,11 +269,13 @@ export function init(container, playerCards) {
     scene.add(cards[i]);
 
     // front
-    texLoader.load("../dist/img/shine.png", (texture) => {
-      shineTextures[i] = texture;
-      shineTextures[i].offset = new THREE.Vector2(0, 0.5);
+    texLoader.load(
+      "/bundles/nodecg-mysteryfunhouse/dist/img/shine.png",
+      (texture) => {
+        shineTextures[i] = texture;
+        shineTextures[i].offset = new THREE.Vector2(0, 0.5);
 
-      let vertShader = `
+        let vertShader = `
                     varying vec2 vUv;
                     void main()
                     {
@@ -271,7 +285,7 @@ export function init(container, playerCards) {
                     }
                 `;
 
-      let fragShader = `
+        let fragShader = `
                     #ifdef GL_ES
                     precision highp float;
                     #endif
@@ -292,45 +306,49 @@ export function init(container, playerCards) {
                     }
                 `;
 
-      const geometry = new THREE.PlaneGeometry(59, 86);
-      playerCardTextures[i] = new THREE.CanvasTexture(playerCards[i].canvas);
+        const geometry = new THREE.PlaneGeometry(59, 86);
+        playerCardTextures[i] = new THREE.CanvasTexture(playerCards[i].canvas);
 
-      playerCardUniforms[i] = {
-        // custom uniforms (your textures)
-        tOne: { type: "t", value: playerCardTextures[i] },
-        tSec: { type: "t", value: shineTextures[i] },
-        offsetY: { type: "f", value: 1 },
-        lightness: { type: "f", value: 1 },
-      };
+        playerCardUniforms[i] = {
+          // custom uniforms (your textures)
+          tOne: { type: "t", value: playerCardTextures[i] },
+          tSec: { type: "t", value: shineTextures[i] },
+          offsetY: { type: "f", value: 1 },
+          lightness: { type: "f", value: 1 },
+        };
 
-      playerCardTextures[i].needsUpdate = true;
+        playerCardTextures[i].needsUpdate = true;
 
-      let material = new THREE.ShaderMaterial({
-        uniforms: playerCardUniforms[i],
-        // attributes: attributes,
-        vertexShader: vertShader,
-        fragmentShader: fragShader,
-        transparent: true,
-      });
+        let material = new THREE.ShaderMaterial({
+          uniforms: playerCardUniforms[i],
+          // attributes: attributes,
+          vertexShader: vertShader,
+          fragmentShader: fragShader,
+          transparent: true,
+        });
 
-      let mesh = new THREE.Mesh(geometry, material);
-      cards[i].add(mesh);
-    });
+        let mesh = new THREE.Mesh(geometry, material);
+        cards[i].add(mesh);
+      }
+    );
   }
 
   // back
   for (let i = 0; i < 2; i++) {
-    texLoader.load("../dist/img/card_back.png", (texture) => {
-      const geometry = new THREE.PlaneGeometry(59, 86);
-      let material = new THREE.MeshStandardMaterial({
-        map: texture,
-        transparent: true,
-      });
+    texLoader.load(
+      "/bundles/nodecg-mysteryfunhouse/dist/img/card_back.png",
+      (texture) => {
+        const geometry = new THREE.PlaneGeometry(59, 86);
+        let material = new THREE.MeshStandardMaterial({
+          map: texture,
+          transparent: true,
+        });
 
-      let mesh = new THREE.Mesh(geometry, material);
-      mesh.rotateY(Math.PI);
-      cards[i].add(mesh);
-    });
+        let mesh = new THREE.Mesh(geometry, material);
+        mesh.rotateY(Math.PI);
+        cards[i].add(mesh);
+      }
+    );
   }
 
   function animate() {

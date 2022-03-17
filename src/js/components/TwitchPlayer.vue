@@ -45,7 +45,7 @@
 </style>
 
 <script>
-import { bindReplicant } from "../../util.js";
+import { bindReplicant } from "../util.js";
 
 let twitchOptions = {
   channel: null,

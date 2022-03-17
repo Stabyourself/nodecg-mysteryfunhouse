@@ -103,32 +103,32 @@
     ],
     "graphics": [
       {
-        "file": "mt16_2player.html",
+        "file": "mt16/2player.html",
         "width": 1920,
         "height": 1080
       },
       {
-        "file": "mt16_2player_tate.html",
+        "file": "mt16/2player_tate.html",
         "width": 1920,
         "height": 1080
       },
       {
-        "file": "mt16_4player.html",
+        "file": "mt16/4player.html",
         "width": 1920,
         "height": 1080
       },
       {
-        "file": "jolly.html",
+        "file": "jolly/2player.html",
         "width": 1920,
         "height": 1080
       },
       {
-        "file": "waitscreen.html",
+        "file": "mt16/waitscreen.html",
         "width": 1920,
         "height": 1080
       },
       {
-        "file": "coming_up.html",
+        "file": "mt16/coming_up.html",
         "width": 1920,
         "height": 1080
       }
