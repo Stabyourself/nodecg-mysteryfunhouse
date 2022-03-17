@@ -11,11 +11,11 @@
           class="align-center"
           color="transparent"
         >
-          <!-- <template v-slot:icon>
+          <template v-slot:icon>
             <v-avatar>
               <img :src="match.players[1].avatar" />
             </v-avatar>
-          </template> -->
+          </template>
 
           <div class="match">
             <div class="round">{{ match.round }}</div>

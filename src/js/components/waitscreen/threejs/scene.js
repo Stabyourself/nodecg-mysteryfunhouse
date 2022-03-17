@@ -254,7 +254,7 @@ export function init(container, playerCards) {
 
     cards[i].position.x = posX;
 
-    // scene.add(cards[i]);
+    scene.add(cards[i]);
 
     // front
     texLoader.load("../dist/img/shine.png", (texture) => {
@@ -552,8 +552,7 @@ export function toPaths() {
   }
 
   zoomOutTween = new Tween(tweenVars)
-    // .to({ ghostY: -100, cardX: 25, cameraX: -0.7, zoom: 1.5 }, duration)
-    .to({ ghostY: 0, cardX: 25, cameraX: -0.7, zoom: 1.5 }, duration)
+    .to({ ghostY: -100, cardX: 25, cameraX: -0.7, zoom: 1.5 }, duration)
     .easing(Easing.Cubic.InOut)
     .onUpdate(updateTweens)
     .start();
