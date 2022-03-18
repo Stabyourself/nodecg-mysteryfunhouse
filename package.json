@@ -118,17 +118,22 @@
         "height": 1080
       },
       {
-        "file": "jolly/2player.html",
-        "width": 1920,
-        "height": 1080
-      },
-      {
         "file": "mt16/waitscreen.html",
         "width": 1920,
         "height": 1080
       },
       {
         "file": "mt16/coming_up.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "jolly/2player.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "funfest/4player.html",
         "width": 1920,
         "height": 1080
       }
