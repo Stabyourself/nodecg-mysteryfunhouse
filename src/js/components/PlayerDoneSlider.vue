@@ -77,9 +77,9 @@ export default {
   data() {
     return {
       images: {
-        winner: "../dist/img/winner.png",
-        loser: "../dist/img/loser.png",
-        forfeit: "../dist/img/forfeit.png",
+        winner: "/bundles/nodecg-mysteryfunhouse/dist/img/winner.png",
+        loser: "/bundles/nodecg-mysteryfunhouse/dist/img/loser.png",
+        forfeit: "/bundles/nodecg-mysteryfunhouse/dist/img/forfeit.png",
       },
       stateImage: "",
     };
