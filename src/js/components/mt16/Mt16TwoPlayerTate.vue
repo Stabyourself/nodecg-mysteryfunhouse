@@ -11,7 +11,10 @@
           <fit-text :max="1.5" class="pixel-font name">
             {{ player0pronouns != "" ? `(${player0pronouns})` : "" }}
             {{ player0name
-            }}<img v-if="player0volume > 0" :src="'../dist/img/audio.png'" />
+            }}<img
+              v-if="player0volume > 0"
+              :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'"
+            />
           </fit-text>
         </swipe>
       </template>
@@ -57,9 +60,10 @@
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="up" :delay="0.5">
           <fit-text :max="1.5" class="pixel-font name">
-            <img v-if="player1volume > 0" :src="'../dist/img/audio.png'" />{{
-              player1name
-            }}
+            <img
+              v-if="player1volume > 0"
+              :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'"
+            />{{ player1name }}
             {{ player1pronouns != "" ? `(${player1pronouns})` : "" }}
           </fit-text>
         </swipe>

@@ -30,7 +30,10 @@
         <swipe dir="up" :visible="visible">
           <fit-text :max="2.5" class="pixel-font">
             {{ player0name
-            }}<img v-if="player0volume > 0" :src="'../dist/img/audio.png'" />
+            }}<img
+              v-if="player0volume > 0"
+              :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'"
+            />
           </fit-text>
         </swipe>
       </template>
@@ -53,9 +56,10 @@
       <template v-slot:name>
         <swipe dir="up" :visible="visible">
           <fit-text :max="2.5" class="pixel-font">
-            <img v-if="player1volume > 0" :src="'../dist/img/audio.png'" />{{
-              player1name
-            }}
+            <img
+              v-if="player1volume > 0"
+              :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'"
+            />{{ player1name }}
           </fit-text>
         </swipe>
       </template>
