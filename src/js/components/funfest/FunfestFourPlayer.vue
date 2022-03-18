@@ -362,7 +362,7 @@ export default {
 
       window.addEventListener("obsSceneChanged", (event) => {
         console.log("Switched to scene " + event.detail.name);
-        if (event.detail.name == "4 Player") {
+        if (event.detail.name == "Funfest 4 Player") {
           this.visible = true;
         } else {
           this.visible = false;
