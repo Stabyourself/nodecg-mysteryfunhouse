@@ -1,6 +1,6 @@
 # NodeCG-MysteryFunHouse
 
-It's a [NodeCG](https://www.nodecg.dev/) 1.8.1 bundle for MysteryFunHouse race restreams.
+It's a [NodeCG](https://www.nodecg.dev/) 1.9.0 bundle for MysteryFunHouse race restreams.
 
 ## Config
 
