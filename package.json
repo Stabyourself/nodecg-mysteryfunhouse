@@ -87,6 +87,13 @@
         "dialog": true
       },
       {
+        "name": "event-logo-select-dialog",
+        "title": "Select Event Logo",
+        "file": "event-logo.html",
+        "width": 7,
+        "dialog": true
+      },
+      {
         "name": "load-challonge-dialog",
         "title": "Import Challonge match",
         "file": "challonge.html",
@@ -131,16 +138,6 @@
         "file": "jolly/2player.html",
         "width": 1920,
         "height": 1080
-      },
-      {
-        "file": "funfest/2player.html",
-        "width": 1920,
-        "height": 1080
-      },
-      {
-        "file": "funfest/4player.html",
-        "width": 1920,
-        "height": 1080
       }
     ],
     "soundCues": [
@@ -164,6 +161,16 @@
       {
         "name": "popovers",
         "title": "Player Popovers",
+        "allowedTypes": [
+          "jpg",
+          "jpeg",
+          "gif",
+          "png"
+        ]
+      },
+      {
+        "name": "eventLogos",
+        "title": "Event Logos",
         "allowedTypes": [
           "jpg",
           "jpeg",

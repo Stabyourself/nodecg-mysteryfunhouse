@@ -108,9 +108,11 @@
     </div>
 
     <div class="info-holder">
-      <swipe :visible="visible" dir="right">
-        <div class="logo pixel-font pixel-font-alt">
-          MT16<span class="logo-small">bit</span>
+      <swipe :visible="visible" dir="right" style="height: 200px">
+        <div class="match-round">
+          <div class="match-round-inner">
+            <img class="logo" :src="currentEventLogo.url" />
+          </div>
         </div>
       </swipe>
 
@@ -207,14 +209,32 @@
   padding: 20px;
 }
 
+.submitter {
+  font-size: 0.7em;
+}
+
 .round {
   font-size: 2rem;
   text-align: center;
   margin-top: 4px;
 }
 
-.submitter {
-  font-size: 0.7em;
+.match-round {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+
+  .logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .match-round-inner {
+    width: 500px;
+    height: 100%;
+  }
 }
 </style>
 
@@ -231,6 +251,7 @@ export default {
 
     bindReplicant.call(this, "timer");
 
+    bindReplicant.call(this, "currentEventLogo");
     bindReplicant.call(this, "round1", "match1round");
     bindReplicant.call(this, "round2", "match2round");
 
@@ -307,6 +328,7 @@ export default {
       submitter: "",
       currentBoxart: "",
 
+      currentEventLogo: {},
       round1: "",
       round2: "",
 

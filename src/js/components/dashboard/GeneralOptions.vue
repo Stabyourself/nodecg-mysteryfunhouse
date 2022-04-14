@@ -22,6 +22,24 @@
 
         <v-divider class="my-7"></v-divider>
 
+        <label
+          class="v-label v-label--active theme--dark"
+          style="font-size: 12px"
+          >Event Logo</label
+        >
+        <div
+          class="select-img-wrap mb-3"
+          nodecg-dialog="event-logo-select-dialog"
+        >
+          <img
+            class="select-img"
+            :src="currentEventLogo ? currentEventLogo.url : ''"
+          />
+          <div class="select-img-border"></div>
+        </div>
+
+        <v-divider class="my-7"></v-divider>
+
         <div>
           <h2>Player Card Status</h2>
 
@@ -58,6 +76,9 @@ export default {
     bindReplicant.call(this, "showRainwave", "showRainwave", 0);
     bindReplicant.call(this, "topText");
     bindReplicant.call(this, "playerInfo");
+    bindReplicant.call(this, "currentEventLogo");
+
+    bindReplicant.call(this, "eventLogo", "assets:eventLogo");
   },
 
   data() {
@@ -73,6 +94,7 @@ export default {
       ],
       playerInfo: [],
       topText: "",
+      currentEventLogo: {},
     };
   },
 };

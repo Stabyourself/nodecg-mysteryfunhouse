@@ -6,7 +6,7 @@
 
         <label
           class="v-label v-label--active theme--dark"
-          style="font-size:12px"
+          style="font-size: 12px"
           >Boxart</label
         >
         <div class="select-img-wrap mb-3" nodecg-dialog="boxart-select-dialog">
@@ -37,24 +37,6 @@ export default {
     bindReplicant.call(this, "platform");
     bindReplicant.call(this, "submitter");
     bindReplicant.call(this, "currentBoxart");
-
-    // ???
-    bindReplicant.call(this, "boxart", "assets:boxart");
-  },
-
-  computed: {
-    boxartWithEmpty() {
-      let modifiedBoxArts = JSON.parse(JSON.stringify(this.boxart));
-
-      modifiedBoxArts.push({
-        name: "None",
-        url: "",
-      });
-
-      modifiedBoxArts.reverse();
-
-      return modifiedBoxArts;
-    },
   },
 
   data() {
@@ -63,7 +45,6 @@ export default {
       goal: "",
       platform: "",
       submitter: "",
-      boxart: [],
       currentBoxart: {},
     };
   },

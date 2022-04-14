@@ -1,16 +1,13 @@
 <template>
   <v-app>
-    <swipe
-      :delay="0.5"
-      :visible="visible"
-      class="match-round"
-      style="top: 10px"
-    >
-      <div class="logo pixel-font pixel-font-alt">
-        MT16<span class="logo-small">bit</span>
-      </div>
-      <div class="round pixel-font pixel-font-alt">
-        {{ round }}
+    <swipe :delay="0.5" :visible="visible" style="height: 150px">
+      <div class="match-round">
+        <div class="match-round-inner">
+          <img class="logo" :src="currentEventLogo.url" />
+          <div class="round pixel-font pixel-font-alt">
+            {{ round }}
+          </div>
+        </div>
       </div>
     </swipe>
 
@@ -18,7 +15,7 @@
       :visible="visible"
       pronoun-h="40"
       name-h="95"
-      style="top: 15px; left: 20px; width: 775px; height: 135px"
+      style="top: 15px; left: 15px; width: 775px; height: 135px"
       class="player-name"
     >
       <template v-slot:pronouns>
@@ -59,8 +56,8 @@
             <img
               v-if="player1volume > 0"
               :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'"
-            />{{ player1name }}
-          </fit-text>
+            />{{ player1name }}</fit-text
+          >
         </swipe>
       </template>
     </player-name>
@@ -194,20 +191,26 @@
   }
 }
 
-.logo {
-  font-size: 3em;
-
-  .logo-small {
-    font-size: 0.3em;
-  }
-}
-
 .round {
   margin-top: -30px;
 }
 
 .match-round {
-  margin-top: -26px;
+  width: 100%;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+
+  .logo {
+    width: 100%;
+    height: 117px;
+    object-fit: contain;
+  }
+
+  .match-round-inner {
+    width: 340px;
+    height: 100%;
+  }
 }
 </style>
 
@@ -226,6 +229,7 @@ export default {
 
     bindReplicant.call(this, "showRainwave");
 
+    bindReplicant.call(this, "currentEventLogo");
     bindReplicant.call(this, "round", "match1round");
 
     for (let i = 0; i < 2; i++) {
@@ -301,6 +305,7 @@ export default {
       submitter: "",
       currentBoxart: "",
 
+      currentEventLogo: {},
       round: "",
 
       player0name: "",
