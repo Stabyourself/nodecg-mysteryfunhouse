@@ -30,11 +30,19 @@
       href="/bundles/nodecg-mysteryfunhouse/dist/img/forfeit.png"
     />
 
-    <style>
-      body {
-        background-image: url("/bundles/nodecg-mysteryfunhouse/dist/img/twoplayer_back_mt16.png");
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("transparent") == null) {
+        document.head.insertAdjacentHTML(
+          "beforeend",
+          `<style>
+          body {
+          background-image: url("/bundles/nodecg-mysteryfunhouse/dist/img/twoplayer_back_mt16.png");
+        }
+        </style>`
+        );
       }
-    </style>
+    </script>
   </head>
   <body class="graphic">
     <div id="app">
