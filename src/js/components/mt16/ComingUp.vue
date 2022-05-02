@@ -1,9 +1,11 @@
 <template>
   <v-app>
     <div class="logo-container">
-      <swipe :visible="visible" class="match-round" style="top: 10px">
-        <div class="logo pixel-font pixel-font-alt">
-          MT16<span class="logo-small">bit</span>
+      <swipe :visible="visible" dir="down" style="height: 200px">
+        <div class="match-round">
+          <div class="match-round-inner">
+            <img class="logo" :src="currentEventLogo.url" />
+          </div>
         </div>
       </swipe>
     </div>
@@ -56,14 +58,23 @@
   width: 100%;
   text-align: center;
   height: 100px;
+}
+
+.match-round {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  justify-content: center;
 
   .logo {
-    margin-top: -20px;
-    font-size: 5em;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 
-    .logo-small {
-      font-size: 0.3em;
-    }
+  .match-round-inner {
+    width: 500px;
+    height: 100%;
   }
 }
 
@@ -165,6 +176,7 @@ export default {
   },
 
   created() {
+    bindReplicant.call(this, "currentEventLogo");
     bindReplicant.call(this, "schedule");
     bindReplicant.call(this, "showRainwave");
 
@@ -213,6 +225,7 @@ export default {
       schedule: [],
       visible: false,
       showRainwave: false,
+      currentEventLogo: {},
     };
   },
 };
