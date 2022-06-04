@@ -50,6 +50,8 @@
       style="top: 975px; left: 1521px; width: 444px; height: 124px"
     >
     </rainwave>
+
+    <AchievementManager></AchievementManager>
   </v-app>
 </template>
 

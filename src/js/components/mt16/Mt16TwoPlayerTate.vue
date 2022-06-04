@@ -157,6 +157,8 @@
         </swipe>
       </timer>
     </div>
+
+    <AchievementManager></AchievementManager>
   </v-app>
 </template>
 
