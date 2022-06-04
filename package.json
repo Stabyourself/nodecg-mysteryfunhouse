@@ -74,6 +74,13 @@
         "headerColor": "#F7941E"
       },
       {
+        "name": "achievements",
+        "title": "Achievements",
+        "width": 2,
+        "file": "achievements.html",
+        "headerColor": "#39960c"
+      },
+      {
         "name": "stream-cropping",
         "title": "Stream Cropping",
         "file": "cropping.html",
@@ -144,7 +151,14 @@
       {
         "name": "Player Dead",
         "assignable": false,
-        "defaultFile": "sound/player_dead.mp3"
+        "defaultFile": "sound/player_dead.mp3",
+        "defaultVolume": 10
+      },
+      {
+        "name": "Achievement",
+        "assignable": false,
+        "defaultFile": "sound/xbox_achievement.mp3",
+        "defaultVolume": 10
       }
     ],
     "assetCategories": [

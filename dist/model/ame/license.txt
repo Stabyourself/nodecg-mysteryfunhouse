@@ -1,0 +1,11 @@
+Model Information:
+* title:	Smol Ame - Amelia Watson, HoloMyth
+* source:	https://sketchfab.com/3d-models/smol-ame-amelia-watson-holomyth-7d40f94be37d458e98365e89dcdcae11
+* author:	Seafoam (https://sketchfab.com/seafoam)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Smol Ame - Amelia Watson, HoloMyth" (https://sketchfab.com/3d-models/smol-ame-amelia-watson-holomyth-7d40f94be37d458e98365e89dcdcae11) by Seafoam (https://sketchfab.com/seafoam) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)

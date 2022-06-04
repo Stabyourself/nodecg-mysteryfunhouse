@@ -165,6 +165,8 @@
         {{ timerText }}
       </swipe>
     </timer>
+
+    <AchievementManager></AchievementManager>
   </v-app>
 </template>
 

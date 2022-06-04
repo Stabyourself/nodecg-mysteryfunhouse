@@ -169,15 +169,16 @@ export function init(container, playerCards) {
   let lawnmower, lawnmixer;
   // lawnmower
   loader.load(
-    "/bundles/nodecg-mysteryfunhouse/dist/model/lawnmower/scene.gltf",
+    "/bundles/nodecg-mysteryfunhouse/dist/model/ame/scene.gltf",
     function (gltf) {
       lawnmower = gltf.scene;
-      lawnmower.rotateY(-Math.PI * 0.5);
-      lawnmower.scale.set(0.1, 0.1, 0.1);
-      lawnmower.position.set(-500, -5, -200);
+      // lawnmower.rotateY();
+      // lawnmower.rotateX(Math.PI);
+      lawnmower.scale.set(40, 40, 40);
+      lawnmower.position.set(-500, 0, -200);
 
       lawnmixer = new THREE.AnimationMixer(gltf.scene);
-      var action = lawnmixer.clipAction(gltf.animations[0]);
+      var action = lawnmixer.clipAction(gltf.animations[1]);
       action.play();
 
       scene.add(lawnmower);
@@ -394,7 +395,7 @@ export function init(container, playerCards) {
       lawnmixer.update(delta);
       lawnmower.position.x += delta * 100;
 
-      lawnmower.rotation.y = Math.sin(lawnMowerTimer) * 0.3 - Math.PI / 2;
+      // lawnmower.rotation.y = Math.sin(lawnMowerTimer) * 0.3 - Math.PI / 2;
 
       if (lawnmower.position.x > 10000) {
         lawnmower.position.x = -500;
