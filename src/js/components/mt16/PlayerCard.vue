@@ -147,7 +147,7 @@ export default {
           seed = String(this.info.challonge.seed);
         }
 
-        this.ctx.fillText(`MT16-${seed.padStart(4, "0")}`, 727, 873);
+        this.ctx.fillText(`MT17-${seed.padStart(4, "0")}`, 727, 873);
         this.ctx.textAlign = "left";
 
         // Draw class or whatever this is
