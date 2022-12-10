@@ -16,6 +16,18 @@
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: "ImpactLabel-lVYZ";
+  src: url("../../dist/font/ImpactLabel-lVYZ.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "VCR_OSD_MONO_1.001";
+  src: url("../../dist/font/VCR_OSD_MONO_1.001.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
 .mt-font {
   color: white;
   line-height: 1.2;
@@ -144,4 +156,24 @@ body.graphic::-webkit-scrollbar {
   position: absolute;
   left: 0px;
   font-size: 3em;
+}
+
+.label-font {
+  font-family: "ImpactLabel-lVYZ";
+  font-size: 36px;
+  text-transform: uppercase;
+  color: black;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.lcd-font {
+  font-family: "VCR_OSD_MONO_1.001";
+  text-transform: uppercase;
+  color: white;
+  line-height: 1.2;
 }

@@ -257,14 +257,14 @@
         </div>
       </swipe>
 
-      <timer
+      <mt16-timer
         style="margin-top: 80px"
         :class="{ active: timer.state == 'playing' }"
       >
         <swipe dir="right" :visible="visible" :delay="0.8">
           {{ timerText }}
         </swipe>
-      </timer>
+      </mt16-timer>
     </div>
 
     <AchievementManager></AchievementManager>

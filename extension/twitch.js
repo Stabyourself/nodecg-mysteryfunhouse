@@ -9,7 +9,7 @@ const clientId = nodecg.bundleConfig.twitchClientId;
 const clientSecret = nodecg.bundleConfig.twitchClientSecret;
 
 const twitchTemplate = nodecg.Replicant("twitchTemplate", {
-  defaultValue: "Mystery Tournament 16! {player1} vs. {player2}",
+  defaultValue: "Mystery Tournament 0017! {player1} vs. {player2}",
 });
 
 //--------- USERS ---------
@@ -61,7 +61,7 @@ fs.readFile(__dirname + "/twitch_token.json", "UTF-8").then((str) => {
     }
 
     apiClient.games.getGameByName(requestedGame).then((game) => {
-      gameId = game ? game.id : "27284"; // default to "Mystery Fun House" if game not found
+      gameId = game ? game.id : "27284"; // default to "Retro" if game not found
       gameName = game ? game.name : "Retro";
 
       apiClient.channels

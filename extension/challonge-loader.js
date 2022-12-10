@@ -1,6 +1,7 @@
 const challonge = require("./challonge");
 const googlesheet = require("./googlesheet");
 const discord = require("./discord");
+const fetch = require("node-fetch");
 
 const _ = require("lodash");
 
@@ -62,13 +63,13 @@ function getChallongeForId(tournament, id) {
   }).participant;
 }
 
-function getContactRowForChallongeName(contactRows, challongeName) {
-  return contactRows.find(
-    (row) =>
-      String(row["Challonge Username"]).toLowerCase() ==
-      challongeName.toLowerCase()
-  );
-}
+// function getContactRowForChallongeName(contactRows, challongeName) {
+//   return contactRows.find(
+//     (row) =>
+//       String(row["Challonge Username"]).toLowerCase() ==
+//       challongeName.toLowerCase()
+//   );
+// }
 
 function getMemberForDiscordUsername(members, discordUsername) {
   const split = discordUsername.split("#");
@@ -78,6 +79,12 @@ function getMemberForDiscordUsername(members, discordUsername) {
       member.user.username.toLowerCase() == split[0].toLowerCase() &&
       member.user.discriminator == split[1]
     );
+  });
+}
+
+function getMemberForDiscordId(members, discordId) {
+  return members.find((member) => {
+    return member.user.id == discordId;
   });
 }
 
@@ -93,6 +100,10 @@ function getAvatarForMember(member) {
   // }
 
   return avatar;
+}
+
+async function getSignUpInfo(challongeName) {
+  return await fetch(`https://mysteryfun.house/api/user/${challongeName}`);
 }
 
 function getPlayerInfo(
@@ -125,50 +136,35 @@ function getPlayerInfo(
   });
 
   // Contact stuff
-  const contact = getContactRowForChallongeName(contactRows, challongeName);
+  let signUpInfo;
 
-  if (!contact) {
-    return Error(
-      `Couldn't find challonge username "${challongeName}" on the Contact Sheet.`
-    );
-  }
-
-  // if (!contact["SRL username"]) {
-  //     return Error(`SRL username for player "${challongeName}" is missing on the Contact Sheet.`)
-  // }
-
-  if (!contact["Discord Username"]) {
-    return Error(
-      `Discord username for player "${challongeName}" is missing on the Contact Sheet.`
-    );
-  }
+  getSignUpInfo(challongeName)
+    .then((res) => res.json())
+    .then((json) => (signUpInfo = json));
 
   // Discord stuff
-  const member = getMemberForDiscordUsername(
-    discordMembers,
-    contact["Discord Username"]
-  );
+  const member = getMemberForDiscordId(signUpInfo.id);
 
   if (!member) {
     return Error(
-      `Couldn't find "${contact["Discord Username"]}" in the Mystery Discord server.`
+      `Couldn't find "${challongeName}" in the Mystery Discord server.`
     );
   }
 
   // Career stuff
-  const SRLName = contact["SRL username"];
+  // const SRLName = contact["SRL username"];
   let career;
-  if (SRLName) {
-    career = careerRows.find((row) => {
-      return row["Competitor"].toLowerCase() == SRLName.toLowerCase();
-    });
-  }
+  // if (SRLName) {
+  //   career = careerRows.find((row) => {
+  //     return row["Competitor"].toLowerCase() == SRLName.toLowerCase();
+  //   });
+  // }
 
   return {
     challonge: challonge ? challonge.participant : null,
-    contact: Object.assign({}, contact, { _sheet: undefined }),
     rawMatches: rawMatches,
     career: career ? Object.assign({}, career, { _sheet: undefined }) : null,
+    signUpInfo: signUpInfo,
     discord: member,
   };
 }
@@ -284,32 +280,29 @@ nodecg.listenFor("loadMatch", function (options, ack) {
             rawMatch[`player${i + 1}_id`]
           );
 
-          const contact = getContactRowForChallongeName(
-            contactRows,
-            challonge.display_name
-          );
+          // const contact = getContactRowForChallongeName(
+          //   contactRows,
+          //   challonge.display_name
+          // );
 
           let id = challonge.id;
           let name = challonge.display_name;
           let avatar = "../dist/img/default_avatar.png";
 
-          if (contact) {
-            let member = getMemberForDiscordUsername(
-              discordMembers,
-              contact["Discord Username"]
+          // if (contact) {
+          let member = getMemberForDiscordId(info[i].signUpInfo.id);
+
+          if (!member) {
+            return ack(
+              new Error(
+                `Couldn't find "${challonge.display_name}" in the Mystery Discord server.`
+              )
             );
-
-            if (!member) {
-              return ack(
-                new Error(
-                  `Couldn't find "${contact["Discord Username"]}" in the Mystery Discord server.`
-                )
-              );
-            }
-
-            name = member.displayName;
-            avatar = getAvatarForMember(member);
           }
+
+          name = member.displayName;
+          avatar = getAvatarForMember(member);
+          // }
 
           match.players.push({
             id,
@@ -360,13 +353,8 @@ nodecg.listenFor("loadMatch", function (options, ack) {
       // set panel fields
       const playerNumber = i + (options.matchNumber == 2 ? 2 : 0);
 
-      let pronouns = "";
-      let twitch = "";
-
-      if (info[i].contact) {
-        pronouns = info[i].contact["Pronoun"];
-        twitch = info[i].contact["Twitch Channel"];
-      }
+      let pronouns = info.signUpInfo.pronouns;
+      let twitch = info.signUpInfo.twitch;
 
       replicants[`player${playerNumber}name`].value = info[i].name;
       replicants[`player${playerNumber}pronouns`].value = capitalizeWords(
@@ -415,72 +403,72 @@ nodecg.listenFor("loadMatch", function (options, ack) {
   });
 });
 
-nodecg.listenFor("loadAllCards", function (options, ack) {
-  const promises = [
-    challonge.getTournament("speedrunslive-mystery16"),
-    googlesheet.getContactSheet(),
-    googlesheet.getCareerSheet(),
-    discord.getMembers(),
-  ];
+// nodecg.listenFor("loadAllCards", function (options, ack) {
+//   const promises = [
+//     challonge.getTournament(nodecg.bundleConfig.challongeTournament),
+//     googlesheet.getContactSheet(),
+//     googlesheet.getCareerSheet(),
+//     discord.getMembers(),
+//   ];
 
-  Promise.allSettled(promises).then((results) => {
-    if (results[0].status == "rejected") {
-      return ack(
-        new Error(
-          `Challonge API call failed (${results[0].reason}). Try again or tell Maurice.`
-        )
-      );
-    }
-    if (results[1].status == "rejected") {
-      return ack(
-        new Error(
-          `Googlesheet API call failed (${results[1].reason}). Try again or tell Maurice.`
-        )
-      );
-    }
-    if (results[2].status == "rejected") {
-      return ack(
-        new Error(
-          `Googlesheet API call failed (${results[2].reason}). Try again or tell Maurice.`
-        )
-      );
-    }
-    if (results[3].status == "rejected") {
-      return ack(
-        new Error(
-          `Discord API call failed (${results[3].reason}). Try again or tell Maurice.`
-        )
-      );
-    }
+//   Promise.allSettled(promises).then((results) => {
+//     if (results[0].status == "rejected") {
+//       return ack(
+//         new Error(
+//           `Challonge API call failed (${results[0].reason}). Try again or tell Maurice.`
+//         )
+//       );
+//     }
+//     if (results[1].status == "rejected") {
+//       return ack(
+//         new Error(
+//           `Googlesheet API call failed (${results[1].reason}). Try again or tell Maurice.`
+//         )
+//       );
+//     }
+//     if (results[2].status == "rejected") {
+//       return ack(
+//         new Error(
+//           `Googlesheet API call failed (${results[2].reason}). Try again or tell Maurice.`
+//         )
+//       );
+//     }
+//     if (results[3].status == "rejected") {
+//       return ack(
+//         new Error(
+//           `Discord API call failed (${results[3].reason}). Try again or tell Maurice.`
+//         )
+//       );
+//     }
 
-    const tournament = results[0].value;
-    const contactRows = results[1].value;
-    const careerRows = results[2].value;
-    const discordMembers = results[3].value;
+//     const tournament = results[0].value;
+//     const contactRows = results[1].value;
+//     const careerRows = results[2].value;
+//     const discordMembers = results[3].value;
 
-    const allInfo = [];
+//     const allInfo = [];
 
-    for (row of contactRows) {
-      info = getPlayerInfo(
-        tournament,
-        contactRows,
-        careerRows,
-        discordMembers,
-        String(row["Challonge Username"])
-      );
+//     for (row of contactRows) {
+//       info = getPlayerInfo(
+//         tournament,
+//         contactRows,
+//         careerRows,
+//         discordMembers,
+//         String(row["Challonge Username"])
+//       );
 
-      if (!(info instanceof Error)) {
-        info.name = info.discord.displayName;
-        info.avatar = getAvatarForMember(info.discord);
+//       if (!(info instanceof Error)) {
+//         info.name = info.discord.displayName;
+//         info.avatar = getAvatarForMember(info.discord);
 
-        delete info.discord; // evil stuff that crashes my replicant >:(
+//         delete info.discord; // evil stuff that crashes my replicant >:(
 
-        allInfo.push(info);
-      }
-    }
+//         allInfo.push(info);
+//       }
+//     }
 
-    allInfoRep.value = allInfo;
+//     allInfoRep.value = allInfo;
 
-    return ack();
-  });
-});
+//     return ack();
+//   });
+// });

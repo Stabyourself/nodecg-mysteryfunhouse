@@ -120,7 +120,7 @@
     >
     </player-done-slider>
 
-    <game-box style="top: 865px; left: 15px">
+    <mt16-game-box style="top: 865px; left: 15px">
       <template v-slot:boxart>
         <swipe
           :visible="visible"
@@ -153,18 +153,21 @@
         </swipe>
         <!-- <div class="submitter">Submitted by {{ submitter }}</div> -->
       </template>
-    </game-box>
+    </mt16-game-box>
 
     <!-- <rainwave
             v-if="showRainwave"
             style="top: 975px; left: 1521px; width: 444px; height: 124px">
         </rainwave> -->
 
-    <timer style="top: 848px" :class="{ active: timer.state == 'playing' }">
+    <mt16-timer
+      style="top: 848px"
+      :class="{ active: timer.state == 'playing' }"
+    >
       <swipe dir="down" :visible="visible">
         {{ timerText }}
       </swipe>
-    </timer>
+    </mt16-timer>
 
     <AchievementManager></AchievementManager>
   </v-app>
