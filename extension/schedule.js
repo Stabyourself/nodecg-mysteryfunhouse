@@ -10,7 +10,7 @@ function updateSchedule() {
     let schedule = [];
 
     for (let row of rows) {
-      let time = new Date(row["Date"] + " " + row["Match Time"] + " EDT");
+      let time = new Date(row["Date"] + " " + row["Match Time"] + " EST");
       let now = new Date();
 
       if (time < now) {
