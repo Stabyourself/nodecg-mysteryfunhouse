@@ -83,20 +83,6 @@
       ></twitch-player>
     </div>
 
-    <mt17-player-done-slider
-      style="top: 860px; left: 15px; width: 930px"
-      :state="player0raceState"
-      :finalTime="player0finalTime"
-    >
-    </mt17-player-done-slider>
-
-    <mt17-player-done-slider
-      style="top: 860px; left: 975px; width: 930px"
-      :state="player1raceState"
-      :finalTime="player1finalTime"
-    >
-    </mt17-player-done-slider>
-
     <mt17-game-box style="top: 877px; left: 100px">
       <template v-slot:boxart>
         <div class="d-flex align-center" style="height: 100%">
@@ -126,6 +112,20 @@
         <!-- <div class="submitter">Submitted by {{ submitter }}</div> -->
       </template>
     </mt17-game-box>
+
+    <mt17-player-done-slider
+      style="top: 860px; left: 15px; width: 930px"
+      :state="player0raceState"
+      :finalTime="player0finalTime"
+    >
+    </mt17-player-done-slider>
+
+    <mt17-player-done-slider
+      style="top: 860px; left: 975px; width: 930px"
+      :state="player1raceState"
+      :finalTime="player1finalTime"
+    >
+    </mt17-player-done-slider>
 
     <!-- <rainwave
             v-if="showRainwave"

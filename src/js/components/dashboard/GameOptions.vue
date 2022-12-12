@@ -17,6 +17,16 @@
           <div class="select-img-border"></div>
         </div>
 
+        <div class="d-flex">
+          <v-text-field
+            v-model="boxartUrl"
+            label="URL"
+            filled
+            dense
+          ></v-text-field>
+          <v-btn @click="uploadBoxart" color="primary">Upload</v-btn>
+        </div>
+
         <v-text-field v-model="goal" label="Goal"></v-text-field>
 
         <v-text-field v-model="platform" label="Platform"></v-text-field>
@@ -46,7 +56,14 @@ export default {
       platform: "",
       submitter: "",
       currentBoxart: {},
+      boxartUrl: "",
     };
+  },
+
+  methods: {
+    uploadBoxart() {
+      nodecg.sendMessage("uploadBoxart", this.boxartUrl);
+    },
   },
 };
 </script>
