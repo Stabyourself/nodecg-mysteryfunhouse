@@ -9,11 +9,7 @@
         {{
           player0pronouns != "" && player0pronouns ? `(${player0pronouns})` : ""
         }}
-        {{ player0name
-        }}<img
-          v-if="player0volume > 0"
-          :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'"
-        />
+        {{ player0name }}
       </fit-text>
     </div>
 
@@ -52,11 +48,7 @@
         :max="1.5"
         class="label-font name"
         style="float: right; background: #147412"
-      >
-        <img
-          v-if="player1volume > 0"
-          :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'"
-        />{{ player1name }}
+        >{{ player1name }}
         {{
           player1pronouns != "" && player1pronouns ? `(${player1pronouns})` : ""
         }}
@@ -102,11 +94,7 @@
         {{
           player2pronouns != "" && player2pronouns ? `(${player2pronouns})` : ""
         }}
-        {{ player2name
-        }}<img
-          v-if="player2volume > 0"
-          :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'"
-        />
+        {{ player2name }}
       </fit-text>
     </div>
 
@@ -147,10 +135,7 @@
         class="label-font name"
         style="float: right; background: #2e2c94"
       >
-        <img
-          v-if="player3volume > 0"
-          :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'"
-        />{{ player3name }}
+        {{ player3name }}
         {{
           player3pronouns != "" && player3pronouns ? `(${player3pronouns})` : ""
         }}
