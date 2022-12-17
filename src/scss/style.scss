@@ -27,6 +27,13 @@
 }
 
 @font-face {
+  font-family: "ImpactLabelReversed-nDMR";
+  src: url("../../dist/font/ImpactLabelReversed-nDMR.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: "VCR_OSD_MONO_1.001";
   src: url("../../dist/font/VCR_OSD_MONO_1.001.woff2") format("woff2");
   font-weight: normal;
@@ -184,11 +191,11 @@ body {
 }
 
 .label-font {
-  font-family: "ImpactLabel-lVYZ";
+  font-family: "ImpactLabelReversed-nDMR";
   font-size: 36px;
   text-transform: uppercase;
-  color: black;
-  // background: #c3c3c3;
+  color: #ccc;
+  background: black;
 }
 
 .flex-center {

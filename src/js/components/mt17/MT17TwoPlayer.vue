@@ -19,7 +19,7 @@
       <div class="flex-center">
         <div
           class="label-font"
-          style="transform: rotate(0.5deg); color: #2e2c94"
+          style="transform: rotate(0.5deg); background-color: #2e2c94"
         >
           {{ player0name }}
           <span v-if="player0pronouns">({{ player0pronouns }})</span>
@@ -31,7 +31,7 @@
       <div class="flex-center">
         <div
           class="label-font"
-          style="transform: rotate(-0.5deg); color: #147412"
+          style="transform: rotate(-0.5deg); background-color: #147412"
         >
           {{ player1name }}
           <span v-if="player1pronouns">({{ player1pronouns }})</span>
