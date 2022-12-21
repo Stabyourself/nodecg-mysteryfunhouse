@@ -64,7 +64,6 @@ function getChallongeForId(tournament, id) {
 
 function getContactRowForChallongeName(contactRows, challongeName) {
   return contactRows.find((row) => {
-    console.log(row);
     return (
       String(row["Challonge Username"]).toLowerCase() ==
       challongeName.toLowerCase()
@@ -343,8 +342,8 @@ nodecg.listenFor("loadMatch", function (options, ack) {
         });
 
         if (gameRow) {
-          match.game = gameRow["Game"];
-          match.genre = gameRow["Genre"];
+          match.game = gameRow["Game Title"];
+          // match.genre = gameRow["Genre"];
           match.platform = gameRow["Platform"];
         }
 
