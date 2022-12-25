@@ -27,6 +27,9 @@
       </div>
     </div>
 
+    <!-- audio 0-->
+    <mt17-audio v-if="player0volume > 0" :x="40" :y="-10" />
+
     <div style="position: absolute; top: 0px; left: 1020px; right: 0px">
       <div class="flex-center">
         <div
@@ -38,6 +41,9 @@
         </div>
       </div>
     </div>
+
+    <!-- audio 1-->
+    <mt17-audio v-if="player1volume > 0" :x="1780" :y="-10" />
 
     <div
       style="

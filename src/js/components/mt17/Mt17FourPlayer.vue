@@ -191,6 +191,18 @@
       </div>
     </div>
 
+    <!-- audio 0-->
+    <mt17-audio v-if="player0volume > 0" :x="545" :y="40" :size="60" />
+
+    <!-- audio 1-->
+    <mt17-audio v-if="player1volume > 0" :x="1880" :y="40" :size="50" />
+
+    <!-- audio 2-->
+    <mt17-audio v-if="player2volume > 0" :x="545" :y="990" :size="60" />
+
+    <!-- audio 3-->
+    <mt17-audio v-if="player3volume > 0" :x="1880" :y="990" :size="50" />
+
     <div class="info-holder">
       <div class="match-round">
         <div class="match-round-inner">
