@@ -305,9 +305,9 @@
   top: 0px;
   left: 0px;
   height: 100%;
-  width: 588px;
+  width: 577px;
   text-align: center;
-  padding: 40px;
+  padding: 47px;
 }
 
 .submitter {
