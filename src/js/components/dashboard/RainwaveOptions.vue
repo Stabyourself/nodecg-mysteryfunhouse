@@ -38,6 +38,13 @@
           v-model="showRainwave"
           label="Show Rainwave on stream"
         ></v-switch>
+
+        <v-select
+          v-model="rainwaveId"
+          :items="rainwaveIds"
+          label="Rainwave station"
+        >
+        </v-select>
       </v-container>
     </v-main>
   </v-app>
@@ -59,6 +66,7 @@ function randomId() {
 export default {
   created() {
     bindReplicant.call(this, "showRainwave", "showRainwave", 0);
+    bindReplicant.call(this, "rainwaveId", "rainwaveId", 1);
   },
 
   watch: {
@@ -71,7 +79,9 @@ export default {
     playing(playing) {
       if (playing) {
         this.audio = new Audio(
-          "https://relay.rainwave.cc/ocremix.ogg?" + randomId()
+          `https://relay.rainwave.cc/${
+            this.rainwaveIds[this.rainwaveId - 1].channel
+          }.ogg?` + randomId()
         );
         this.audio.volume = this.volume / 100;
         this.audio.play();
@@ -87,6 +97,10 @@ export default {
         this.audio = null;
       }
     },
+
+    rainwaveId() {
+      this.playing = false;
+    },
   },
 
   data() {
@@ -96,6 +110,29 @@ export default {
       playing: false,
       loading: false,
       volume: 8,
+      rainwaveId: 1,
+      rainwaveIds: [
+        {
+          value: 1,
+          text: "Game",
+          channel: "game",
+        },
+        {
+          value: 2,
+          text: "OC Remix",
+          channel: "ocremix",
+        },
+        {
+          value: 3,
+          text: "Covers",
+          channel: "covers",
+        },
+        {
+          value: 4,
+          text: "Chiptune",
+          channel: "chiptune",
+        },
+      ],
     };
   },
 };
