@@ -382,6 +382,10 @@ export default {
           value: "16:9",
         },
         {
+          text: "1:1",
+          value: "1:1",
+        },
+        {
           text: "4:6 (Tate)",
           value: "4:6",
         },
