@@ -9,8 +9,9 @@ import { PointerLockControls } from "./PointerLockControls";
 import SmolAme from "./funnyObjects/SmolAme.js";
 import LawnMower from "./funnyObjects/LawnMower.js";
 import Toyota from "./funnyObjects/Toyota.js";
+import Box from "./funnyObjects/Box.js";
 
-let funnyObjectList = [Toyota, LawnMower, SmolAme];
+let funnyObjectList = [Box, Toyota, LawnMower, SmolAme];
 let funnyObjectDelay = 30;
 let funnyObjectTimer = 0;
 let funnyObjectI = 0;
