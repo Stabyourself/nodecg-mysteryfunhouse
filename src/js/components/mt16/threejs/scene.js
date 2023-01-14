@@ -6,6 +6,15 @@ import { FancyWater } from "./FancyWater.js";
 import { Sky } from "./Sky.js";
 import { PointerLockControls } from "./PointerLockControls";
 
+import SmolAme from "./funnyObjects/SmolAme.js";
+import LawnMower from "./funnyObjects/LawnMower.js";
+import Toyota from "./funnyObjects/Toyota.js";
+
+let funnyObjectList = [Toyota, LawnMower, SmolAme];
+let funnyObjectDelay = 30;
+let funnyObjectTimer = 0;
+let funnyObjectI = 0;
+
 let camera, scene, renderer;
 let water, sun, sky, pmremGenerator, starMaterial, starMesh;
 let clock, delta;
@@ -22,8 +31,7 @@ let cardInTween, cardOutTween, spinTween, zoomInTween, zoomOutTween;
 let sunTimer = 20,
   ghostTimer = 0,
   cardRotationTimer = 0,
-  cardBobTimer = 0,
-  lawnMowerTimer = 0;
+  cardBobTimer = 0;
 
 const parameters = {
   elevation: 135,
@@ -39,6 +47,8 @@ function updateSun() {
   sky.material.uniforms["sunPosition"].value.copy(sun);
   water.material.uniforms["sunDirection"].value.copy(sun).normalize();
 }
+
+let funnyObjects = [];
 
 export function init(container, playerCards) {
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -166,25 +176,6 @@ export function init(container, playerCards) {
     }
   );
 
-  let lawnmower, lawnmixer;
-  // lawnmower
-  loader.load(
-    "/bundles/nodecg-mysteryfunhouse/dist/model/ame/scene.gltf",
-    function (gltf) {
-      lawnmower = gltf.scene;
-      // lawnmower.rotateY();
-      // lawnmower.rotateX(Math.PI);
-      lawnmower.scale.set(40, 40, 40);
-      lawnmower.position.set(-500, 0, -200);
-
-      lawnmixer = new THREE.AnimationMixer(gltf.scene);
-      var action = lawnmixer.clipAction(gltf.animations[1]);
-      action.play();
-
-      scene.add(lawnmower);
-    }
-  );
-
   // Water
 
   const waterGeometry = new THREE.PlaneGeometry(2048, 2048, 512, 512);
@@ -208,7 +199,6 @@ export function init(container, playerCards) {
   scene.add(water);
 
   // Skybox
-
   sky = new Sky();
   sky.scale.setScalar(10000);
   scene.add(sky);
@@ -352,13 +342,17 @@ export function init(container, playerCards) {
     );
   }
 
+  // preload funny objects
+  for (let i = 0; i < funnyObjectList.length; i++) {
+    funnyObjectList[i].preloadScene = scene;
+  }
+
   function animate() {
     requestAnimationFrame(animate);
     delta = clock.getDelta();
 
     sunTimer += delta;
     ghostTimer += delta * 0.3;
-    lawnMowerTimer += delta * 3;
     cardRotationTimer += delta;
     cardBobTimer += delta * 0.7;
 
@@ -388,17 +382,6 @@ export function init(container, playerCards) {
           ghost.visible = !ghost.visible;
           ghostMeme.visible = !ghostMeme.visible;
         }
-      }
-    }
-
-    if (lawnmower) {
-      lawnmixer.update(delta);
-      lawnmower.position.x += delta * 100;
-
-      // lawnmower.rotation.y = Math.sin(lawnMowerTimer) * 0.3 - Math.PI / 2;
-
-      if (lawnmower.position.x > 10000) {
-        lawnmower.position.x = -500;
       }
     }
 
@@ -488,6 +471,28 @@ export function init(container, playerCards) {
     controls.moveRight(-velocity.x * delta);
     controls.moveForward(-velocity.z * delta);
     controls.moveUp(-velocity.y * delta);
+
+    // funny objects
+    funnyObjectTimer += delta;
+
+    if (funnyObjectTimer > funnyObjectDelay) {
+      funnyObjectTimer = 0;
+      if (funnyObjectList[funnyObjectI].loaded) {
+        funnyObjects.push(new funnyObjectList[funnyObjectI](scene));
+      }
+      funnyObjectI++;
+
+      if (funnyObjectI >= funnyObjectList.length) {
+        funnyObjectI = 0;
+      }
+    }
+
+    var i = funnyObjects.length;
+    while (i--) {
+      if (funnyObjects[i].update(delta)) {
+        funnyObjects.splice(i, 1);
+      }
+    }
 
     render();
     // stats.update()
