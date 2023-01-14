@@ -10,8 +10,9 @@ import SmolAme from "./funnyObjects/SmolAme.js";
 import LawnMower from "./funnyObjects/LawnMower.js";
 import Toyota from "./funnyObjects/Toyota.js";
 import Box from "./funnyObjects/Box.js";
+import GolfBall from "./funnyObjects/GolfBall.js";
 
-let funnyObjectList = [Box, Toyota, LawnMower, SmolAme];
+let funnyObjectList = [Box, GolfBall, Toyota, LawnMower, SmolAme];
 let funnyObjectDelay = 30;
 let funnyObjectTimer = 0;
 let funnyObjectI = 0;
