@@ -74,19 +74,31 @@ function getContactRowForChallongeName(contactRows, challongeName) {
 function getMemberForDiscordUsername(members, discordUsername) {
   const split = discordUsername.split("#");
 
-  return members.find((member) => {
+  let member = members.find((member) => {
     return (
       member.user.username.toLowerCase() == split[0].toLowerCase() &&
       member.user.discriminator == split[1]
     );
   });
+
+  // fallback for when the user is not found
+  if (!member) {
+    member = {
+      displayName: split[0],
+      displayAvatarURL() {
+        return "../../dist/img/default_avatar.png";
+      },
+    };
+  }
+
+  return member;
 }
 
 function getAvatarForMember(member) {
   let avatar = member.displayAvatarURL({ size: 1024 });
 
   if (avatar.search("embed") != -1) {
-    avatar = "../dist/img/default_avatar.png";
+    avatar = "../../dist/img/default_avatar.png";
   }
 
   return avatar;
@@ -288,7 +300,7 @@ nodecg.listenFor("loadMatch", function (options, ack) {
 
           let id = challonge.id;
           let name = challonge.display_name;
-          let avatar = "../dist/img/default_avatar.png";
+          let avatar = "../../dist/img/default_avatar.png";
 
           if (contact) {
             let member = getMemberForDiscordUsername(
