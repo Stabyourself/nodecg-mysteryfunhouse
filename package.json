@@ -184,7 +184,8 @@
           "jpg",
           "jpeg",
           "gif",
-          "png"
+          "png",
+          "webp"
         ]
       },
       {
@@ -194,7 +195,8 @@
           "jpg",
           "jpeg",
           "gif",
-          "png"
+          "png",
+          "webp"
         ]
       },
       {
@@ -204,7 +206,8 @@
           "jpg",
           "jpeg",
           "gif",
-          "png"
+          "png",
+          "webp"
         ]
       }
     ],
