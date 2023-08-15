@@ -1,39 +1,32 @@
 <template>
-  <canvas
-  id="telestrator"
-    @mousedown="mouseDown"
-    @mouseup="mouseUp"
-    @mousemove="mouseMove"
-    >
-
-  </canvas>
+  <canvas id="telestrator" @mousedown="mouseDown" @mouseup="mouseUp" @mousemove="mouseMove"> </canvas>
 </template>
 
 <style lang="scss" scoped>
-  canvas {
-    background-color: rgba(0, 0, 0, 0);
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-  }
+canvas {
+  background-color: rgba(0, 0, 0, 0);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
 </style>
 
 <script>
-const telestratorLinesRep = nodecg.Replicant("telestratorLines");
+const telestratorLinesRep = nodecg.Replicant('telestratorLines');
 
 export default {
-  name: "Telestrator",
+  name: 'Telestrator',
   mounted() {
     // initialize canvas
-    this.canvas = document.getElementById("telestrator");
+    this.canvas = document.getElementById('telestrator');
     this.canvas.width = 1920;
     this.canvas.height = 1080;
-    this.ctx = this.canvas.getContext("2d");
-    this.ctx.strokeStyle = "yellow";
+    this.ctx = this.canvas.getContext('2d');
+    this.ctx.strokeStyle = 'yellow';
     this.ctx.lineWidth = 5;
 
-    telestratorLinesRep.on("change", (newVal) => {
+    telestratorLinesRep.on('change', (newVal) => {
       this.redraw();
     });
   },
@@ -41,31 +34,42 @@ export default {
     mouseDown(e) {
       this.isMouseDown = true;
       this.lastPos = {
-        x: e.offsetX,
-        y: e.offsetY
+        x: e.x,
+        y: e.y,
       };
     },
 
-    mouseUp() {
+    mouseUp(e) {
       this.isMouseDown = false;
+
+      const pos = {
+        x: e.x,
+        y: e.y,
+      };
+
+      this.makeLine(this.lastPos, pos);
     },
 
-    mouseMove: _.throttle(function(e) {
-        const pos = {
-          x: e.offsetX,
-          y: e.offsetY
-        };
+    mouseMove: _.throttle(function (e) {
+      console.log(e);
+      const pos = {
+        x: e.x,
+        y: e.y,
+      };
 
       if (this.isMouseDown) {
-
-        nodecg.sendMessage("addTelestratorLine", {
-          start: this.lastPos,
-          end: pos
-        });
+        this.makeLine(this.lastPos, pos);
       }
 
       this.lastPos = pos;
     }, 50),
+
+    makeLine(start, end) {
+      nodecg.sendMessage('addTelestratorLine', {
+        start,
+        end,
+      });
+    },
 
     redraw() {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -76,7 +80,7 @@ export default {
         this.ctx.lineTo(line.end.x, line.end.y);
         this.ctx.stroke();
       });
-    }
+    },
   },
 
   data() {
@@ -86,9 +90,9 @@ export default {
       isMouseDown: false,
       lastPos: {
         x: 0,
-        y: 0
-      }
-    }
+        y: 0,
+      },
+    };
   },
-}
+};
 </script>
