@@ -18,7 +18,7 @@ function updateSchedule() {
       }
 
       // format round
-      let round = row["Round"];
+      let round = row["Round"] ?? "";
       if (round.length === 2) {
         if (round[0] === "W") {
           round = "Winners " + round[1];

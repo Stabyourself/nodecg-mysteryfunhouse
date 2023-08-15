@@ -3,6 +3,8 @@ import { GLTFLoader } from "../GLTFLoader";
 import * as THREE from "three/build/three.module.js";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils.js";
 
+let gltf;
+
 class Box extends FunnyObject {
   constructor(parentScene) {
     if (!gltf) return;
@@ -32,22 +34,22 @@ class Box extends FunnyObject {
       }
     }
   }
+
+  static init() {
+    const loader = new GLTFLoader();
+
+    loader.load(
+      "/bundles/nodecg-mysteryfunhouse/dist/model/box/scene.gltf",
+      (loadedGltf) => {
+        gltf = loadedGltf;
+        gltf.scene.position.set(0, -10, 0);
+        FunnyObject.preload(gltf.scene, Box.preloadScene);
+        Box.loaded = true;
+      }
+    );
+  }
 }
 
 Box.loaded = false;
-
-const loader = new GLTFLoader();
-
-let gltf;
-
-loader.load(
-  "/bundles/nodecg-mysteryfunhouse/dist/model/box/scene.gltf",
-  (loadedGltf) => {
-    gltf = loadedGltf;
-    gltf.scene.position.set(0, -10, 0);
-    FunnyObject.preload(gltf.scene, Box.preloadScene);
-    Box.loaded = true;
-  }
-);
 
 export default Box;

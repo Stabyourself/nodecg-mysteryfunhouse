@@ -25,7 +25,7 @@
     "nodecg-bundle"
   ],
   "nodecg": {
-    "compatibleRange": "^1.1.1",
+    "compatibleRange": "^2.1.11",
     "dashboardPanels": [
       {
         "name": "general",

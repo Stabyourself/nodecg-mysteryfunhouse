@@ -2,6 +2,9 @@ import FunnyObject from "./FunnyObject";
 import { GLTFLoader } from "../GLTFLoader";
 import * as THREE from "three/build/three.module.js";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils.js";
+import { init } from "../scene";
+
+let gltf;
 
 class LawnMower extends FunnyObject {
   constructor(parentScene) {
@@ -35,23 +38,23 @@ class LawnMower extends FunnyObject {
       }
     }
   }
+
+  static init() {
+    const loader = new GLTFLoader();
+
+    loader.load(
+      "/bundles/nodecg-mysteryfunhouse/dist/model/lawnmower/scene.gltf",
+      (loadedGltf) => {
+        gltf = loadedGltf;
+        gltf.scene.scale.set(0.1, 0.1, 0.1);
+        gltf.scene.position.set(0, -50, 0);
+        FunnyObject.preload(gltf.scene, LawnMower.preloadScene);
+        LawnMower.loaded = true;
+      }
+    );
+  }
 }
 
 LawnMower.loaded = false;
-
-const loader = new GLTFLoader();
-
-let gltf;
-
-loader.load(
-  "/bundles/nodecg-mysteryfunhouse/dist/model/lawnmower/scene.gltf",
-  (loadedGltf) => {
-    gltf = loadedGltf;
-    gltf.scene.scale.set(0.1, 0.1, 0.1);
-    gltf.scene.position.set(0, -50, 0);
-    FunnyObject.preload(gltf.scene, LawnMower.preloadScene);
-    LawnMower.loaded = true;
-  }
-);
 
 export default LawnMower;

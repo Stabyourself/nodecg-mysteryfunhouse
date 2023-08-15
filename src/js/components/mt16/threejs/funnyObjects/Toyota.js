@@ -2,6 +2,9 @@ import FunnyObject from "./FunnyObject";
 import { GLTFLoader } from "../GLTFLoader";
 import * as THREE from "three/build/three.module.js";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils.js";
+import { init } from "../scene";
+
+let gltf;
 
 class Toyota extends FunnyObject {
   constructor(parentScene) {
@@ -30,22 +33,22 @@ class Toyota extends FunnyObject {
       }
     }
   }
+
+  static init() {
+    const loader = new GLTFLoader();
+
+    loader.load(
+      "/bundles/nodecg-mysteryfunhouse/dist/model/toyota/scene.gltf",
+      (loadedGltf) => {
+        gltf = loadedGltf;
+        gltf.scene.position.set(0, -10, 0);
+        FunnyObject.preload(gltf.scene, Toyota.preloadScene);
+        Toyota.loaded = true;
+      }
+    );
+  }
 }
 
 Toyota.loaded = false;
-
-const loader = new GLTFLoader();
-
-let gltf;
-
-loader.load(
-  "/bundles/nodecg-mysteryfunhouse/dist/model/toyota/scene.gltf",
-  (loadedGltf) => {
-    gltf = loadedGltf;
-    gltf.scene.position.set(0, -10, 0);
-    FunnyObject.preload(gltf.scene, Toyota.preloadScene);
-    Toyota.loaded = true;
-  }
-);
 
 export default Toyota;

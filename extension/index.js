@@ -9,4 +9,5 @@ module.exports = function (nodecg) {
   require("./schedule");
   require("./card-api");
   require("./boxart-uploader");
+  require("./telestrator");
 };

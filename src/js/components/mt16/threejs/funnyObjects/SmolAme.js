@@ -1,7 +1,10 @@
-import FunnyObject from "./FunnyObject";
-import { GLTFLoader } from "../GLTFLoader";
-import * as THREE from "three/build/three.module.js";
-import { clone } from "three/examples/jsm/utils/SkeletonUtils.js";
+import FunnyObject from './FunnyObject';
+import { GLTFLoader } from '../GLTFLoader';
+import * as THREE from 'three/build/three.module.js';
+import { clone } from 'three/examples/jsm/utils/SkeletonUtils.js';
+import { init } from '../scene';
+
+let gltf;
 
 class SmolAme extends FunnyObject {
   constructor(parentScene) {
@@ -32,23 +35,20 @@ class SmolAme extends FunnyObject {
       }
     }
   }
+
+  static init() {
+    const loader = new GLTFLoader();
+
+    loader.load('/bundles/nodecg-mysteryfunhouse/dist/model/ame/scene.gltf', (loadedGltf) => {
+      gltf = loadedGltf;
+
+      gltf.scene.position.set(0, -10, 0);
+      FunnyObject.preload(gltf.scene, SmolAme.preloadScene);
+      SmolAme.loaded = true;
+    });
+  }
 }
 
 SmolAme.loaded = false;
-
-const loader = new GLTFLoader();
-
-let gltf;
-
-loader.load(
-  "/bundles/nodecg-mysteryfunhouse/dist/model/ame/scene.gltf",
-  (loadedGltf) => {
-    gltf = loadedGltf;
-
-    gltf.scene.position.set(0, -10, 0);
-    FunnyObject.preload(gltf.scene, SmolAme.preloadScene);
-    SmolAme.loaded = true;
-  }
-);
 
 export default SmolAme;

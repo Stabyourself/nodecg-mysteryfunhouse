@@ -66,8 +66,6 @@ body {
   margin: 0;
 }
 body.graphic {
-  background-size: cover;
-  background-position: center;
   background-repeat: no-repeat;
   image-rendering: pixelated;
   width: 1920px;

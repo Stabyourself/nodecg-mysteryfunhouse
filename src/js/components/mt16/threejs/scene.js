@@ -1,16 +1,16 @@
-import * as THREE from "three/build/three.module.js";
-import { Easing, Tween } from "@tweenjs/tween.js";
-import { GLTFLoader } from "./GLTFLoader";
+import * as THREE from 'three/build/three.module.js';
+import { Easing, Tween } from '@tweenjs/tween.js';
+import { GLTFLoader } from './GLTFLoader';
 
-import { FancyWater } from "./FancyWater.js";
-import { Sky } from "./Sky.js";
-import { PointerLockControls } from "./PointerLockControls";
+import { FancyWater } from './FancyWater.js';
+import { Sky } from './Sky.js';
+import { PointerLockControls } from './PointerLockControls';
 
-import SmolAme from "./funnyObjects/SmolAme.js";
-import LawnMower from "./funnyObjects/LawnMower.js";
-import Toyota from "./funnyObjects/Toyota.js";
-import Box from "./funnyObjects/Box.js";
-import GolfBall from "./funnyObjects/GolfBall.js";
+import SmolAme from './funnyObjects/SmolAme.js';
+import LawnMower from './funnyObjects/LawnMower.js';
+import Toyota from './funnyObjects/Toyota.js';
+import Box from './funnyObjects/Box.js';
+import GolfBall from './funnyObjects/GolfBall.js';
 
 let funnyObjectList = [Box, GolfBall, Toyota, LawnMower, SmolAme];
 let funnyObjectDelay = 30;
@@ -46,13 +46,17 @@ function updateSun() {
 
   sun.setFromSphericalCoords(1, phi, theta);
 
-  sky.material.uniforms["sunPosition"].value.copy(sun);
-  water.material.uniforms["sunDirection"].value.copy(sun).normalize();
+  sky.material.uniforms['sunPosition'].value.copy(sun);
+  water.material.uniforms['sunDirection'].value.copy(sun).normalize();
 }
 
 let funnyObjects = [];
 
 export function init(container, playerCards) {
+  funnyObjectList.forEach((obj) => {
+    obj.init();
+  });
+
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(1920, 1080);
@@ -72,7 +76,7 @@ export function init(container, playerCards) {
 
   const controls = new PointerLockControls(camera, document.body);
 
-  document.addEventListener("click", function () {
+  document.addEventListener('click', function () {
     controls.lock();
     autoCamera = false;
   });
@@ -81,31 +85,31 @@ export function init(container, playerCards) {
 
   const onKeyDown = function (event) {
     switch (event.code) {
-      case "ArrowUp":
-      case "KeyW":
+      case 'ArrowUp':
+      case 'KeyW':
         moveForward = true;
         break;
 
-      case "ArrowLeft":
-      case "KeyA":
+      case 'ArrowLeft':
+      case 'KeyA':
         moveLeft = true;
         break;
 
-      case "ArrowDown":
-      case "KeyS":
+      case 'ArrowDown':
+      case 'KeyS':
         moveBackward = true;
         break;
 
-      case "ArrowRight":
-      case "KeyD":
+      case 'ArrowRight':
+      case 'KeyD':
         moveRight = true;
         break;
 
-      case "ShiftLeft":
+      case 'ShiftLeft':
         moveDown = true;
         break;
 
-      case "Space":
+      case 'Space':
         moveUp = true;
         break;
     }
@@ -113,38 +117,38 @@ export function init(container, playerCards) {
 
   const onKeyUp = function (event) {
     switch (event.code) {
-      case "ArrowUp":
-      case "KeyW":
+      case 'ArrowUp':
+      case 'KeyW':
         moveForward = false;
         break;
 
-      case "ArrowLeft":
-      case "KeyA":
+      case 'ArrowLeft':
+      case 'KeyA':
         moveLeft = false;
         break;
 
-      case "ArrowDown":
-      case "KeyS":
+      case 'ArrowDown':
+      case 'KeyS':
         moveBackward = false;
         break;
 
-      case "ArrowRight":
-      case "KeyD":
+      case 'ArrowRight':
+      case 'KeyD':
         moveRight = false;
         break;
 
-      case "ShiftLeft":
+      case 'ShiftLeft':
         moveDown = false;
         break;
 
-      case "Space":
+      case 'Space':
         moveUp = false;
         break;
     }
   };
 
-  document.addEventListener("keydown", onKeyDown);
-  document.addEventListener("keyup", onKeyUp);
+  document.addEventListener('keydown', onKeyDown);
+  document.addEventListener('keyup', onKeyUp);
 
   let moveForward = false;
   let moveBackward = false;
@@ -159,24 +163,18 @@ export function init(container, playerCards) {
   const urlParams = new URLSearchParams(queryString);
 
   // ghost
-  loader.load(
-    "/bundles/nodecg-mysteryfunhouse/dist/model/ghost.gltf",
-    function (gltf) {
-      ghost = gltf.scene;
-      ghost.scale.set(5, 5, 5);
-      scene.add(ghost);
-    }
-  );
+  loader.load('/bundles/nodecg-mysteryfunhouse/dist/model/ghost.gltf', function (gltf) {
+    ghost = gltf.scene;
+    ghost.scale.set(5, 5, 5);
+    scene.add(ghost);
+  });
 
-  loader.load(
-    "/bundles/nodecg-mysteryfunhouse/dist/model/ghost_missing_pixel.gltf",
-    function (gltf) {
-      ghostMeme = gltf.scene;
-      ghostMeme.scale.set(5, 5, 5);
-      ghostMeme.visible = false;
-      scene.add(ghostMeme);
-    }
-  );
+  loader.load('/bundles/nodecg-mysteryfunhouse/dist/model/ghost_missing_pixel.gltf', function (gltf) {
+    ghostMeme = gltf.scene;
+    ghostMeme.scale.set(5, 5, 5);
+    ghostMeme.visible = false;
+    scene.add(ghostMeme);
+  });
 
   // Water
 
@@ -186,10 +184,10 @@ export function init(container, playerCards) {
     textureWidth: 512,
     textureHeight: 512,
     waterNormals: new THREE.TextureLoader().load(
-      "/bundles/nodecg-mysteryfunhouse/dist/img/waternormals.jpg",
+      '/bundles/nodecg-mysteryfunhouse/dist/img/waternormals.jpg',
       function (texture) {
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-      }
+      },
     ),
     sunDirection: new THREE.Vector3(),
     sunColor: 0xffffff,
@@ -207,10 +205,10 @@ export function init(container, playerCards) {
 
   const skyUniforms = sky.material.uniforms;
 
-  skyUniforms["turbidity"].value = 10;
-  skyUniforms["rayleigh"].value = 2;
-  skyUniforms["mieCoefficient"].value = 0.005;
-  skyUniforms["mieDirectionalG"].value = 0.8;
+  skyUniforms['turbidity'].value = 10;
+  skyUniforms['rayleigh'].value = 2;
+  skyUniforms['mieCoefficient'].value = 0.005;
+  skyUniforms['mieDirectionalG'].value = 0.8;
 
   clock = new THREE.Clock();
 
@@ -222,20 +220,17 @@ export function init(container, playerCards) {
 
   // Stars
   var texLoader = new THREE.TextureLoader();
-  texLoader.load(
-    "/bundles/nodecg-mysteryfunhouse/dist/img/sky.png",
-    (texture) => {
-      var geometry = new THREE.PlaneBufferGeometry(3000, 3000);
-      geometry.translate(0, 300, -1000);
+  texLoader.load('/bundles/nodecg-mysteryfunhouse/dist/img/sky.png', (texture) => {
+    var geometry = new THREE.PlaneBufferGeometry(3000, 3000);
+    geometry.translate(0, 300, -1000);
 
-      starMaterial = new THREE.MeshStandardMaterial({
-        map: texture,
-        transparent: true,
-      });
-      starMesh = new THREE.Mesh(geometry, starMaterial);
-      scene.add(starMesh);
-    }
-  );
+    starMaterial = new THREE.MeshStandardMaterial({
+      map: texture,
+      transparent: true,
+    });
+    starMesh = new THREE.Mesh(geometry, starMaterial);
+    scene.add(starMesh);
+  });
 
   // Light
   const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.5);
@@ -262,13 +257,11 @@ export function init(container, playerCards) {
     scene.add(cards[i]);
 
     // front
-    texLoader.load(
-      "/bundles/nodecg-mysteryfunhouse/dist/img/shine.png",
-      (texture) => {
-        shineTextures[i] = texture;
-        shineTextures[i].offset = new THREE.Vector2(0, 0.5);
+    texLoader.load('/bundles/nodecg-mysteryfunhouse/dist/img/shine.png', (texture) => {
+      shineTextures[i] = texture;
+      shineTextures[i].offset = new THREE.Vector2(0, 0.5);
 
-        let vertShader = `
+      let vertShader = `
                     varying vec2 vUv;
                     void main()
                     {
@@ -278,7 +271,7 @@ export function init(container, playerCards) {
                     }
                 `;
 
-        let fragShader = `
+      let fragShader = `
                     #ifdef GL_ES
                     precision highp float;
                     #endif
@@ -299,49 +292,45 @@ export function init(container, playerCards) {
                     }
                 `;
 
-        const geometry = new THREE.PlaneGeometry(59, 86);
-        playerCardTextures[i] = new THREE.CanvasTexture(playerCards[i].canvas);
+      const geometry = new THREE.PlaneGeometry(59, 86);
+      playerCardTextures[i] = new THREE.CanvasTexture(playerCards[i].canvas);
 
-        playerCardUniforms[i] = {
-          // custom uniforms (your textures)
-          tOne: { type: "t", value: playerCardTextures[i] },
-          tSec: { type: "t", value: shineTextures[i] },
-          offsetY: { type: "f", value: 1 },
-          lightness: { type: "f", value: 1 },
-        };
+      playerCardUniforms[i] = {
+        // custom uniforms (your textures)
+        tOne: { type: 't', value: playerCardTextures[i] },
+        tSec: { type: 't', value: shineTextures[i] },
+        offsetY: { type: 'f', value: 1 },
+        lightness: { type: 'f', value: 1 },
+      };
 
-        playerCardTextures[i].needsUpdate = true;
+      playerCardTextures[i].needsUpdate = true;
 
-        let material = new THREE.ShaderMaterial({
-          uniforms: playerCardUniforms[i],
-          // attributes: attributes,
-          vertexShader: vertShader,
-          fragmentShader: fragShader,
-          transparent: true,
-        });
+      let material = new THREE.ShaderMaterial({
+        uniforms: playerCardUniforms[i],
+        // attributes: attributes,
+        vertexShader: vertShader,
+        fragmentShader: fragShader,
+        transparent: true,
+      });
 
-        let mesh = new THREE.Mesh(geometry, material);
-        cards[i].add(mesh);
-      }
-    );
+      let mesh = new THREE.Mesh(geometry, material);
+      cards[i].add(mesh);
+    });
   }
 
   // back
   for (let i = 0; i < 2; i++) {
-    texLoader.load(
-      "/bundles/nodecg-mysteryfunhouse/dist/img/card_back.png",
-      (texture) => {
-        const geometry = new THREE.PlaneGeometry(59, 86);
-        let material = new THREE.MeshStandardMaterial({
-          map: texture,
-          transparent: true,
-        });
+    texLoader.load('/bundles/nodecg-mysteryfunhouse/dist/img/card_back.png', (texture) => {
+      const geometry = new THREE.PlaneGeometry(59, 86);
+      let material = new THREE.MeshStandardMaterial({
+        map: texture,
+        transparent: true,
+      });
 
-        let mesh = new THREE.Mesh(geometry, material);
-        mesh.rotateY(Math.PI);
-        cards[i].add(mesh);
-      }
-    );
+      let mesh = new THREE.Mesh(geometry, material);
+      mesh.rotateY(Math.PI);
+      cards[i].add(mesh);
+    });
   }
 
   // preload funny objects
@@ -358,9 +347,9 @@ export function init(container, playerCards) {
     cardRotationTimer += delta;
     cardBobTimer += delta * 0.7;
 
-    water.material.uniforms["time"].value += delta;
+    water.material.uniforms['time'].value += delta;
     if (ghost && ghostMeme) {
-      let mul = urlParams.get("spingate") != null ? 5 : 1;
+      let mul = urlParams.get('spingate') != null ? 5 : 1;
       let oldRotation = ghost.rotation.y;
 
       ghost.rotation.y = (ghostTimer * 2 * mul) % (Math.PI * 2);
@@ -401,8 +390,7 @@ export function init(container, playerCards) {
 
       if (cards[i]) {
         if (playerCardUniforms[i]) {
-          playerCardUniforms[i].lightness.value =
-            (1 - Math.abs(rotY)) * Math.max(rise, 0.85);
+          playerCardUniforms[i].lightness.value = (1 - Math.abs(rotY)) * Math.max(rise, 0.85);
         }
 
         let rotYspinning = rotY;
@@ -587,10 +575,7 @@ export function toPaths() {
 export function spin() {
   tweenVars.cardRotationAddY = Math.PI * 2;
 
-  spinTween = new Tween(tweenVars)
-    .to({ cardRotationAddY: 0 }, duration)
-    .easing(Easing.Cubic.InOut)
-    .start();
+  spinTween = new Tween(tweenVars).to({ cardRotationAddY: 0 }, duration).easing(Easing.Cubic.InOut).start();
 }
 
 export function playerCardUpdated() {
