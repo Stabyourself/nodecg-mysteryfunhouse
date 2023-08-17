@@ -49,8 +49,6 @@ canvas {
 </style>
 
 <script>
-const telestratorLinesRep = nodecg.Replicant('telestratorLines');
-
 export default {
   name: 'Telestrator',
   mounted() {
@@ -64,7 +62,10 @@ export default {
     this.ctx.lineCap = 'round';
     this.ctx.lineJoin = 'round';
 
-    telestratorLinesRep.on('change', (newVal) => {
+    nodecg.listenFor('telestratorLineAdded', this.telestratorLineAdded);
+
+    nodecg.readReplicant('telestratorLines', (value) => {
+      this.lines = value;
       this.redraw();
     });
   },
@@ -118,8 +119,10 @@ export default {
       let lastPos;
       this.ctx.beginPath();
 
-      telestratorLinesRep.value.forEach((line) => {
+      this.lines.forEach((line) => {
         if (lastPos && (line.s.x != lastPos.x || line.s.y != lastPos.y)) {
+          this.ctx.stroke();
+          this.ctx.beginPath();
           this.ctx.moveTo(line.s.x, line.s.y);
         }
 
@@ -136,6 +139,15 @@ export default {
     clear() {
       nodecg.sendMessage('clearTelestrator');
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    },
+
+    telestratorLineAdded(line) {
+      this.ctx.beginPath();
+      this.ctx.strokeStyle = line.c;
+      this.ctx.lineWidth = line.t;
+      this.ctx.moveTo(line.s.x, line.s.y);
+      this.ctx.lineTo(line.e.x, line.e.y);
+      this.ctx.stroke();
     },
   },
 
@@ -156,6 +168,7 @@ export default {
         '#a52a2a',
         '#808080',
       ],
+      lines: [],
       canvas: null,
       ctx: null,
       isMouseDown: false,
