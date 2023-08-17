@@ -62,7 +62,7 @@ export default {
     this.ctx.lineCap = 'round';
     this.ctx.lineJoin = 'round';
 
-    nodecg.listenFor('telestratorLineAdded', this.telestratorLineAdded);
+    nodecg.listenFor('addTelestratorLine', this.telestratorLineAdded);
     nodecg.listenFor('clearTelestrator', this.clear);
 
     // nodecg.readReplicant('telestratorLines', (value) => {
