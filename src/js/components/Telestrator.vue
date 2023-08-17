@@ -143,7 +143,21 @@ export default {
 
   data() {
     return {
-      colors: ['yellow', 'red', 'blue', 'green', 'white'],
+      colors: [
+        '#ffff00',
+        '#ff0000',
+        '#0000ff',
+        '#00ff00',
+        '#00ffff',
+        '#ff00ff',
+        '#ffffff',
+        '#000000',
+        '#ffa500',
+        '#800080',
+        '#ffc0cb',
+        '#a52a2a',
+        '#808080',
+      ],
       canvas: null,
       ctx: null,
       isMouseDown: false,
