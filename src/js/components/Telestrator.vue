@@ -105,8 +105,8 @@ export default {
 
     makeLine(start, end) {
       nodecg.sendMessage('addTelestratorLine', {
-        s,
-        e,
+        s: start,
+        e: end,
         c: this.color,
         t: this.thickness,
       });
