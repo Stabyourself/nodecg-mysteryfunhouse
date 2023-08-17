@@ -165,7 +165,7 @@ export default {
         x: 0,
         y: 0,
       },
-      color: 'yellow',
+      color: '#ffff00',
       thickness: 5,
     };
   },
