@@ -9,9 +9,6 @@
       <div style="width: 100px">
         <v-slider v-model="thickness" min="1" max="50" step="1" thumb-label :thumb-size="thickness"></v-slider>
       </div>
-      <div style="width: 100px">
-        <v-slider v-model="opacity" min="0" max="1" step="0.01" thumb-label></v-slider>
-      </div>
       <v-btn style="margin-left: 2em" @click="clearBtn">Clear</v-btn>
     </div>
   </div>
@@ -109,7 +106,6 @@ export default {
         e: end,
         c: this.color,
         t: this.thickness,
-        o: this.opacity,
       });
     },
 
@@ -125,7 +121,6 @@ export default {
       this.ctx.beginPath();
       this.ctx.strokeStyle = line.c;
       this.ctx.lineWidth = line.t;
-      this.ctx.globalAlpha = line.o;
       this.ctx.moveTo(line.s.x, line.s.y);
       this.ctx.lineTo(line.e.x, line.e.y);
       this.ctx.stroke();
@@ -159,7 +154,6 @@ export default {
       },
       color: '#ffff00',
       thickness: 5,
-      opacity: 1,
     };
   },
 };
