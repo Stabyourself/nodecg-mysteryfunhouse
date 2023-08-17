@@ -1,5 +1,17 @@
 <template>
-  <canvas id="telestrator" @mousedown="mouseDown" @mouseup="mouseUp" @mousemove="mouseMove"> </canvas>
+  <div>
+    <canvas id="telestrator" @mousedown="mouseDown" @mouseup="mouseUp" @mousemove="mouseMove"></canvas>
+
+    <div class="telestrator-controls" @click.stop>
+      <v-btn v-for="c in colors" :key="c" :color="c" @click="color = c">
+        <v-icon v-if="color == c">mdi-check</v-icon>
+      </v-btn>
+      <div style="width: 100px">
+        <v-slider v-model="thickness" min="1" max="50" step="1" thumb-label :thumb-size="thickness"></v-slider>
+      </div>
+      <v-btn style="margin-left: 2em" @click="clear">Clear</v-btn>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -9,6 +21,30 @@ canvas {
   top: 0;
   left: 0;
   z-index: 1000;
+}
+
+.telestrator-controls {
+  &:not(:hover) {
+    opacity: 0;
+  }
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+
+  button i {
+    text-shadow: 0 0 3px black;
+  }
 }
 </style>
 
@@ -25,6 +61,8 @@ export default {
     this.ctx = this.canvas.getContext('2d');
     this.ctx.strokeStyle = 'yellow';
     this.ctx.lineWidth = 5;
+    this.ctx.lineCap = 'round';
+    this.ctx.lineJoin = 'round';
 
     telestratorLinesRep.on('change', (newVal) => {
       this.redraw();
@@ -34,8 +72,8 @@ export default {
     mouseDown(e) {
       this.isMouseDown = true;
       this.lastPos = {
-        x: e.x,
-        y: e.y,
+        x: e.pageX,
+        y: e.pageY,
       };
     },
 
@@ -43,18 +81,19 @@ export default {
       this.isMouseDown = false;
 
       const pos = {
-        x: e.x,
-        y: e.y,
+        x: e.pageX,
+        y: e.pageY,
       };
 
-      this.makeLine(this.lastPos, pos);
+      if (this.lastPos.x != pos.x || this.lastPos.y != pos.y) {
+        this.makeLine(this.lastPos, pos);
+      }
     },
 
     mouseMove: _.throttle(function (e) {
-      console.log(e);
       const pos = {
-        x: e.x,
-        y: e.y,
+        x: e.pageX,
+        y: e.pageY,
       };
 
       if (this.isMouseDown) {
@@ -62,29 +101,49 @@ export default {
       }
 
       this.lastPos = pos;
-    }, 50),
+    }, 20),
 
     makeLine(start, end) {
       nodecg.sendMessage('addTelestratorLine', {
         start,
         end,
+        color: this.color,
+        thickness: this.thickness,
       });
     },
 
     redraw() {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+      let lastPos;
+      this.ctx.beginPath();
+
       telestratorLinesRep.value.forEach((line) => {
-        this.ctx.beginPath();
-        this.ctx.moveTo(line.start.x, line.start.y);
+        if (lastPos && (line.start.x != lastPos.x || line.start.y != lastPos.y)) {
+          this.ctx.stroke();
+          this.ctx.beginPath();
+          this.ctx.moveTo(line.start.x, line.start.y);
+        }
+
+        this.ctx.strokeStyle = line.color;
+        this.ctx.lineWidth = line.thickness;
         this.ctx.lineTo(line.end.x, line.end.y);
-        this.ctx.stroke();
+
+        lastPos = line.end;
       });
+
+      this.ctx.stroke();
+    },
+
+    clear() {
+      nodecg.sendMessage('clearTelestrator');
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     },
   },
 
   data() {
     return {
+      colors: ['yellow', 'red', 'blue', 'green', 'white'],
       canvas: null,
       ctx: null,
       isMouseDown: false,
@@ -92,6 +151,8 @@ export default {
         x: 0,
         y: 0,
       },
+      color: 'yellow',
+      thickness: 5,
     };
   },
 };

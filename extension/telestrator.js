@@ -1,13 +1,17 @@
-const ctx = require("./nodecg");
+const ctx = require('./nodecg');
 const nodecg = ctx.get();
 
-const telestratorLinesRep = nodecg.Replicant("telestratorLines", {
+const telestratorLinesRep = nodecg.Replicant('telestratorLines', {
   defaultValue: [],
 });
 
-
 function addTelestratorLine(data) {
   telestratorLinesRep.value.push(data);
-  telestratorLinesRep.value = telestratorLinesRep.value.slice(-100)
+  telestratorLinesRep.value = telestratorLinesRep.value.slice(-500);
 }
-nodecg.listenFor("addTelestratorLine", addTelestratorLine);
+nodecg.listenFor('addTelestratorLine', addTelestratorLine);
+
+function clearTelestrator() {
+  telestratorLinesRep.value = [];
+}
+nodecg.listenFor('clearTelestrator', clearTelestrator);
