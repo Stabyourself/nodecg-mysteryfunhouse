@@ -9,7 +9,7 @@
       <div style="width: 100px">
         <v-slider v-model="thickness" min="1" max="50" step="1" thumb-label :thumb-size="thickness"></v-slider>
       </div>
-      <v-btn style="margin-left: 2em" @click="clear">Clear</v-btn>
+      <v-btn style="margin-left: 2em" @click="clearBtn">Clear</v-btn>
     </div>
   </div>
 </template>
@@ -63,11 +63,12 @@ export default {
     this.ctx.lineJoin = 'round';
 
     nodecg.listenFor('telestratorLineAdded', this.telestratorLineAdded);
+    nodecg.listenFor('clearTelestrator', this.clear);
 
-    nodecg.readReplicant('telestratorLines', (value) => {
-      this.lines = value;
-      this.redraw();
-    });
+    // nodecg.readReplicant('telestratorLines', (value) => {
+    //   this.lines = value;
+    //   this.redraw();
+    // });
   },
   methods: {
     mouseDown(e) {
@@ -113,31 +114,34 @@ export default {
       });
     },
 
-    redraw() {
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    // redraw() {
+    //   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-      let lastPos;
-      this.ctx.beginPath();
+    //   let lastPos;
+    //   this.ctx.beginPath();
 
-      this.lines.forEach((line) => {
-        if (lastPos && (line.s.x != lastPos.x || line.s.y != lastPos.y)) {
-          this.ctx.stroke();
-          this.ctx.beginPath();
-          this.ctx.moveTo(line.s.x, line.s.y);
-        }
+    //   this.lines.forEach((line) => {
+    //     if (lastPos && (line.s.x != lastPos.x || line.s.y != lastPos.y)) {
+    //       this.ctx.stroke();
+    //       this.ctx.beginPath();
+    //       this.ctx.moveTo(line.s.x, line.s.y);
+    //     }
 
-        this.ctx.strokeStyle = line.c;
-        this.ctx.lineWidth = line.t;
-        this.ctx.lineTo(line.e.x, line.e.y);
+    //     this.ctx.strokeStyle = line.c;
+    //     this.ctx.lineWidth = line.t;
+    //     this.ctx.lineTo(line.e.x, line.e.y);
 
-        lastPos = line.e;
-      });
+    //     lastPos = line.e;
+    //   });
 
-      this.ctx.stroke();
+    //   this.ctx.stroke();
+    // },
+
+    clearBtn() {
+      nodecg.sendMessage('clearTelestrator');
     },
 
     clear() {
-      nodecg.sendMessage('clearTelestrator');
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     },
 
