@@ -9,6 +9,9 @@
       <div style="width: 100px">
         <v-slider v-model="thickness" min="1" max="50" step="1" thumb-label :thumb-size="thickness"></v-slider>
       </div>
+      <div style="width: 100px">
+        <v-slider v-model="opacity" min="0" max="1" step="0.01" thumb-label></v-slider>
+      </div>
       <v-btn style="margin-left: 2em" @click="clearBtn">Clear</v-btn>
     </div>
   </div>
@@ -64,11 +67,6 @@ export default {
 
     nodecg.listenFor('addTelestratorLine', this.telestratorLineAdded);
     nodecg.listenFor('clearTelestrator', this.clear);
-
-    // nodecg.readReplicant('telestratorLines', (value) => {
-    //   this.lines = value;
-    //   this.redraw();
-    // });
   },
   methods: {
     mouseDown(e) {
@@ -111,31 +109,9 @@ export default {
         e: end,
         c: this.color,
         t: this.thickness,
+        o: this.opacity,
       });
     },
-
-    // redraw() {
-    //   this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-    //   let lastPos;
-    //   this.ctx.beginPath();
-
-    //   this.lines.forEach((line) => {
-    //     if (lastPos && (line.s.x != lastPos.x || line.s.y != lastPos.y)) {
-    //       this.ctx.stroke();
-    //       this.ctx.beginPath();
-    //       this.ctx.moveTo(line.s.x, line.s.y);
-    //     }
-
-    //     this.ctx.strokeStyle = line.c;
-    //     this.ctx.lineWidth = line.t;
-    //     this.ctx.lineTo(line.e.x, line.e.y);
-
-    //     lastPos = line.e;
-    //   });
-
-    //   this.ctx.stroke();
-    // },
 
     clearBtn() {
       nodecg.sendMessage('clearTelestrator');
@@ -149,6 +125,7 @@ export default {
       this.ctx.beginPath();
       this.ctx.strokeStyle = line.c;
       this.ctx.lineWidth = line.t;
+      this.ctx.globalAlpha = line.o;
       this.ctx.moveTo(line.s.x, line.s.y);
       this.ctx.lineTo(line.e.x, line.e.y);
       this.ctx.stroke();
@@ -182,6 +159,7 @@ export default {
       },
       color: '#ffff00',
       thickness: 5,
+      opacity: 1,
     };
   },
 };
