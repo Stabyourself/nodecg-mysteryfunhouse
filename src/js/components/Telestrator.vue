@@ -105,10 +105,10 @@ export default {
 
     makeLine(start, end) {
       nodecg.sendMessage('addTelestratorLine', {
-        start,
-        end,
-        color: this.color,
-        thickness: this.thickness,
+        s,
+        e,
+        c: this.color,
+        t: this.thickness,
       });
     },
 
@@ -119,17 +119,17 @@ export default {
       this.ctx.beginPath();
 
       telestratorLinesRep.value.forEach((line) => {
-        if (lastPos && (line.start.x != lastPos.x || line.start.y != lastPos.y)) {
+        if (lastPos && (line.s.x != lastPos.x || line.s.y != lastPos.y)) {
           this.ctx.stroke();
           this.ctx.beginPath();
-          this.ctx.moveTo(line.start.x, line.start.y);
+          this.ctx.moveTo(line.s.x, line.s.y);
         }
 
-        this.ctx.strokeStyle = line.color;
-        this.ctx.lineWidth = line.thickness;
-        this.ctx.lineTo(line.end.x, line.end.y);
+        this.ctx.strokeStyle = line.c;
+        this.ctx.lineWidth = line.t;
+        this.ctx.lineTo(line.e.x, line.e.y);
 
-        lastPos = line.end;
+        lastPos = line.e;
       });
 
       this.ctx.stroke();
