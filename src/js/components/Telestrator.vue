@@ -120,8 +120,6 @@ export default {
 
       telestratorLinesRep.value.forEach((line) => {
         if (lastPos && (line.s.x != lastPos.x || line.s.y != lastPos.y)) {
-          this.ctx.stroke();
-          this.ctx.beginPath();
           this.ctx.moveTo(line.s.x, line.s.y);
         }
 
