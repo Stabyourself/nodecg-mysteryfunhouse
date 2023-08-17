@@ -6,8 +6,8 @@ const telestratorLinesRep = nodecg.Replicant('telestratorLines', {
 });
 
 function addTelestratorLine(data) {
-  telestratorLinesRep.value.push(data);
-  telestratorLinesRep.value = telestratorLinesRep.value.slice(-500);
+  // telestratorLinesRep.value.push(data);
+  // telestratorLinesRep.value = telestratorLinesRep.value.slice(-500);
 
   nodecg.sendMessage('telestratorLineAdded', data);
 }
