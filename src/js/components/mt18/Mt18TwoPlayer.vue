@@ -133,6 +133,7 @@
     </div>
 
     <AchievementManager></AchievementManager>
+    <Telestrator></Telestrator>
   </v-app>
 </template>
 
