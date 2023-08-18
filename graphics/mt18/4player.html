@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" class="graphic">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="/bundles/nodecg-mysteryfunhouse/dist/css/style.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/bundles/nodecg-mysteryfunhouse/dist/img/winner.png"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/bundles/nodecg-mysteryfunhouse/dist/img/loser.png"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/bundles/nodecg-mysteryfunhouse/dist/img/forfeit.png"
+    />
+
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("transparent") == null) {
+        document.head.insertAdjacentHTML(
+          "beforeend",
+          `<style>
+          body {
+          background-image: url("/bundles/nodecg-mysteryfunhouse/dist/img/mt16_twoplayer.png");
+        }
+        </style>`
+        );
+      }
+    </script>
+  </head>
+  <body class="graphic">
+    <div id="app">
+      <mt16-four-player></mt16-four-player>
+    </div>
+
+    <script src="https://player.twitch.tv/js/embed/v1.js"></script>
+    <script src="/bundles/nodecg-mysteryfunhouse/dist/js/manifest.js"></script>
+    <script src="/bundles/nodecg-mysteryfunhouse/dist/js/vendor.js"></script>
+    <script src="/bundles/nodecg-mysteryfunhouse/dist/js/main.js"></script>
+  </body>
+</html>

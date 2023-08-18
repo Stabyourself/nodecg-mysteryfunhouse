@@ -1,41 +1,41 @@
 @font-face {
-  font-family: "Regen";
-  src: url("../../dist/font/Regen.woff2") format("woff2");
+  font-family: 'Regen';
+  src: url('../../dist/font/Regen.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Edit Undo BRK";
-  src: url("../../dist/font/edit-undo.brk.woff2") format("woff2");
+  font-family: 'Edit Undo BRK';
+  src: url('../../dist/font/edit-undo.brk.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Digital-7 Mono";
-  src: url("../../dist/font/Digital-7Mono.woff2") format("woff2");
+  font-family: 'Digital-7 Mono';
+  src: url('../../dist/font/Digital-7Mono.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "ImpactLabel-lVYZ";
-  src: url("../../dist/font/ImpactLabel-lVYZ.woff2") format("woff2");
+  font-family: 'ImpactLabel-lVYZ';
+  src: url('../../dist/font/ImpactLabel-lVYZ.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "ImpactLabelReversed-nDMR";
-  src: url("../../dist/font/ImpactLabelReversed-nDMR.woff2") format("woff2");
+  font-family: 'ImpactLabelReversed-nDMR';
+  src: url('../../dist/font/ImpactLabelReversed-nDMR.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "VCR_OSD_MONO_1.001";
-  src: url("../../dist/font/VCR_OSD_MONO_1.001.woff2") format("woff2");
+  font-family: 'VCR_OSD_MONO_1.001';
+  src: url('../../dist/font/VCR_OSD_MONO_1.001.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
@@ -43,15 +43,14 @@
 .mt-font {
   color: white;
   line-height: 1.2;
-  font-family: "Regen";
-  text-shadow: -2px 0 1px #000000, 0 2px 1px #000000, 2px 0 1px #000000,
-    0 -2px 1px #000000;
+  font-family: 'Regen';
+  text-shadow: -2px 0 1px #000000, 0 2px 1px #000000, 2px 0 1px #000000, 0 -2px 1px #000000;
 }
 
 .pixel-font {
   color: white;
   line-height: 1;
-  font-family: "Edit Undo BRK" !important;
+  font-family: 'Edit Undo BRK' !important;
 
   background: #ef5b00;
   background: linear-gradient(to bottom, #ef5b00 0%, #fed3b1 100%);
@@ -83,6 +82,7 @@ body {
     width: 1920px;
     height: 1080px;
     overflow: hidden;
+    background-size: 1920px 1080px;
 
     -ms-overflow-style: none; /* Internet Explorer 10+ */
     scrollbar-width: none; /* Firefox */
@@ -94,6 +94,10 @@ body {
 
 #app {
   image-rendering: auto;
+}
+
+.v-application--wrap {
+  min-height: auto !important;
 }
 
 .select-img-wrap {
@@ -189,7 +193,7 @@ body {
 }
 
 .label-font {
-  font-family: "ImpactLabelReversed-nDMR";
+  font-family: 'ImpactLabelReversed-nDMR';
   font-size: 36px;
   text-transform: uppercase;
   color: #ccc;
@@ -203,7 +207,7 @@ body {
 }
 
 .lcd-font {
-  font-family: "VCR_OSD_MONO_1.001";
+  font-family: 'VCR_OSD_MONO_1.001';
   text-transform: uppercase;
   color: white;
   line-height: 1.2;

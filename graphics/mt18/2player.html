@@ -6,15 +6,27 @@
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
     <link href="/bundles/nodecg-mysteryfunhouse/dist/css/style.css" rel="stylesheet" />
 
-    <style>
-      body {
-        background-image: url('/bundles/nodecg-mysteryfunhouse/dist/img/mt16_twoplayer.png');
+    <link rel="preload" as="image" href="/bundles/nodecg-mysteryfunhouse/dist/img/winner.png" />
+    <link rel="preload" as="image" href="/bundles/nodecg-mysteryfunhouse/dist/img/loser.png" />
+    <link rel="preload" as="image" href="/bundles/nodecg-mysteryfunhouse/dist/img/forfeit.png" />
+
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('transparent') == null) {
+        document.head.insertAdjacentHTML(
+          'beforeend',
+          `<style>
+          body {
+          background-image: url("/bundles/nodecg-mysteryfunhouse/dist/img/mt18.jpg");
+        }
+        </style>`,
+        );
       }
-    </style>
+    </script>
   </head>
   <body class="graphic">
     <div id="app">
-      <mt16-coming-up></mt16-coming-up>
+      <mt18-two-player></mt18-two-player>
     </div>
 
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>

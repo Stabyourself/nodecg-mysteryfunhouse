@@ -71,6 +71,7 @@ body.graphic {
   width: 1920px;
   height: 1080px;
   overflow: hidden;
+  background-size: 1920px 1080px;
   -ms-overflow-style: none;
   /* Internet Explorer 10+ */
   scrollbar-width: none;
@@ -83,6 +84,10 @@ body.graphic::-webkit-scrollbar {
 
 #app {
   image-rendering: auto;
+}
+
+.v-application--wrap {
+  min-height: auto !important;
 }
 
 .select-img-wrap {

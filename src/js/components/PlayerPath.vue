@@ -4,13 +4,7 @@
 
     <div class="timeline-wrap" ref="timelineWrap">
       <v-timeline v-if="info.matches.length > 0" dense light>
-        <v-timeline-item
-          v-for="match of info.matches"
-          :key="match.id"
-          large
-          class="align-center"
-          color="transparent"
-        >
+        <v-timeline-item v-for="match of info.matches" :key="match.id" large class="align-center" color="transparent">
           <template v-slot:icon>
             <v-avatar>
               <img :src="match.players[1].avatar" />
@@ -26,17 +20,14 @@
               :class="{
                 'green--text': match.winner == 0,
                 'red--text': match.winner == 1,
-              }"
-            >
+              }">
               {{ match.score }}
             </div>
           </div>
 
           <div class="game">
-            <span class="platform">
-              <v-icon>mdi-gamepad-variant</v-icon>{{ match.platform }}</span
-            >
-            {{ match.game ? match.game : "Unknown" }}
+            <span class="platform"> <v-icon>mdi-gamepad-variant</v-icon>{{ match.platform }}</span>
+            {{ match.game ? match.game : 'Unknown' }}
           </div>
         </v-timeline-item>
       </v-timeline>
@@ -156,10 +147,10 @@ $padding: 100px;
 </style>
 
 <script>
-import { apostrophe } from "../../util.js";
+import { apostrophe } from '../util.js';
 
 export default {
-  props: ["info"],
+  props: ['info'],
 
   methods: {
     apostrophe,
@@ -180,8 +171,7 @@ export default {
             this.interval = setInterval(scrollpage, speed);
 
             function scrollpage() {
-              if (currentHeight < -200 || currentHeight > height + 200)
-                bool = !bool;
+              if (currentHeight < -200 || currentHeight > height + 200) bool = !bool;
               if (bool) {
                 el.scrollTo(0, (currentHeight += step));
               } else {
