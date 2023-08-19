@@ -37,7 +37,7 @@
     }
 
     &.swing-left {
-      transform-origin: right;
+      transform-origin: 140%;
       transform: rotateY(90deg);
     }
   }
