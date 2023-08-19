@@ -74,7 +74,7 @@
 
     <mt16-game-box class="pga-box" style="top: 865px; left: 15px; padding: 0">
       <template v-slot:boxart>
-        <swipe :visible="visible" dir="right" class="boxart" v-if="currentBoxart">
+        <swipe :visible="visible" dir="right" class="boxart" v-if="currentBoxart" delay="1.5">
           <div class="d-flex align-center" style="height: 100%">
             <img :src="currentBoxart.url" />
           </div>
@@ -105,7 +105,7 @@
 
     <div id="logo-box">
       <div id="timer">
-        <swipe dir="down" :visible="visible">
+        <swipe dir="left" :visible="visible">
           {{ timerText }}
         </swipe>
       </div>
