@@ -1,57 +1,38 @@
 <template>
   <v-app>
-    <swipe :delay="0.5" :visible="visible" style="height: 150px">
-      <div class="match-round">
-        <div class="match-round-inner pga-box">
-          {{ round }}
+    <div id="top-section">
+      <div class="player-name pga-box">
+        <div class="pronouns">
+          <swipe :visible="visible" dir="up" :delay="1">
+            {{ player0pronouns }}
+          </swipe>
+        </div>
+
+        <div class="name">
+          <swipe dir="right" :visible="visible">
+            <fit-text :max="2.5">
+              {{ player0name }}
+            </fit-text>
+          </swipe>
         </div>
       </div>
-    </swipe>
 
-    <player-name
-      :visible="visible"
-      pronoun-h="40"
-      name-h="95"
-      style="top: 15px; left: 15px; width: 775px; height: 135px"
-      class="player-name pga-box">
-      <template v-slot:pronouns>
-        <swipe :visible="visible" dir="up" :delay="0.5">
-          <span>{{ player0pronouns }}</span>
-        </swipe>
-      </template>
-      <template v-slot:name>
-        <swipe dir="up" :visible="visible">
-          <fit-text :max="2.5">
-            {{ player0name
-            }}<img v-if="player0volume > 0" :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'" />
-          </fit-text>
-        </swipe>
-      </template>
-    </player-name>
-
-    <player-name
-      :visible="visible"
-      class="right pga-box"
-      pronoun-h="40"
-      name-h="95"
-      style="top: 15px; right: 15px; width: 775px; height: 135px">
-      <template v-slot:pronouns>
-        <swipe :visible="visible" dir="up" :delay="0.5">
-          <span>
+      <div class="pga-box player-name right">
+        <div class="pronouns">
+          <swipe :visible="visible" dir="up" :delay="1">
             {{ player1pronouns }}
-          </span>
-        </swipe>
-      </template>
-      <template v-slot:name>
-        <swipe dir="up" :visible="visible">
-          <fit-text :max="2.5">
-            <img v-if="player1volume > 0" :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'" />{{
-              player1name
-            }}</fit-text
-          >
-        </swipe>
-      </template>
-    </player-name>
+          </swipe>
+        </div>
+
+        <div class="name">
+          <swipe dir="left" :visible="visible">
+            <fit-text :max="2.5">
+              {{ player1name }}
+            </fit-text>
+          </swipe>
+        </div>
+      </div>
+    </div>
 
     <div style="position: absolute; top: 150px; left: 15px; width: 930px; height: 698px">
       <twitch-player
@@ -138,13 +119,34 @@
 </template>
 
 <style lang="scss" scoped>
-.player-name {
-  img {
-    margin-left: 0.3em;
-    margin-right: 0.3em;
+#top-section {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 150px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+}
 
-    height: 0.8em;
-    vertical-align: text-top;
+.player-name {
+  width: 930px;
+  line-height: 1;
+  .pronouns {
+    text-transform: none;
+    background-color: white;
+    color: #333;
+    font-family: serif;
+    padding: 0.2em 1em !important;
+  }
+
+  .name {
+    padding: 0.5em 1em !important;
+  }
+
+  &.right {
+    text-align: right;
   }
 }
 
@@ -168,7 +170,7 @@
 
 #logo-box {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   position: absolute;
   bottom: 15px;
   right: 15px;
@@ -201,7 +203,6 @@
 .pga-box {
   overflow: hidden;
   color: white;
-  padding: 0.1em 0.3em;
   font-weight: bold;
   text-transform: uppercase;
   background: rgb(0, 113, 164);
