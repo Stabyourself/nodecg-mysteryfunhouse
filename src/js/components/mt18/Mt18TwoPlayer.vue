@@ -180,12 +180,10 @@ $whiteBoxFont: 'Arvo', serif;
 
 #game-box {
   display: flex;
-  max-width: 1200px;
 }
 
 #game-boxart {
   height: 100%;
-  flex-shrink: 0;
 
   img {
     display: block;
@@ -210,7 +208,7 @@ $whiteBoxFont: 'Arvo', serif;
   padding: 0.2em 1rem !important;
   line-height: 1;
   font-size: 3em;
-  padding-right: 100px !important;
+  padding-right: 100px;
 }
 
 #game-info-body {
