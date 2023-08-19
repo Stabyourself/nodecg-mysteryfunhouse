@@ -1,15 +1,15 @@
 <template>
   <v-app>
     <div id="top-section">
-      <div class="player-name pga-box">
-        <swipe :visible="visible" dir="up" :delay="1">
-          <div class="pronouns">
-            {{ player0pronouns }}
-          </div>
-        </swipe>
+      <div class="player-name">
+        <div class="pronouns">
+          <swipe :visible="visible" dir="right" :delay="0">
+            <span>{{ player0pronouns }}</span>
+          </swipe>
+        </div>
 
-        <swipe dir="right" :visible="visible">
-          <div class="name">
+        <swipe dir="down" :visible="visible" :delay="1">
+          <div class="name pga-box">
             <fit-text :max="2.5">
               {{ player0name }}
             </fit-text>
@@ -17,15 +17,15 @@
         </swipe>
       </div>
 
-      <div class="pga-box player-name right">
-        <swipe :visible="visible" dir="up" :delay="1">
-          <div class="pronouns">
-            {{ player1pronouns }}
-          </div>
-        </swipe>
+      <div class="player-name right">
+        <div class="pronouns">
+          <swipe :visible="visible" dir="left" :delay="0">
+            <span>{{ player1pronouns }}</span>
+          </swipe>
+        </div>
 
-        <swipe dir="left" :visible="visible">
-          <div class="name">
+        <swipe dir="down" :visible="visible" :delay="1">
+          <div class="name pga-box">
             <fit-text :max="2.5">
               {{ player1name }}
             </fit-text>
@@ -91,12 +91,16 @@
           </swipe>
 
           <div id="game-info-body">
-            <swipe :visible="visible" dir="up" :delay="0.8" id="goal">
-              {{ goal }}
+            <swipe :visible="visible" dir="right" :delay="0.8">
+              <div id="goal">
+                {{ goal }}
+              </div>
             </swipe>
 
-            <swipe :visible="visible" dir="up" :delay="1" id="submitter">
-              <fit-text :max="1" :min="0.1"> Subbed by {{ submitter }} </fit-text>
+            <swipe :visible="visible" dir="right" :delay="1">
+              <div id="submitter">
+                <fit-text :max="1" :min="0.1"> Subbed by {{ submitter }} </fit-text>
+              </div>
             </swipe>
           </div>
         </div>
@@ -105,18 +109,18 @@
       <div id="logo-box">
         <div>
           <div id="round">
-            <swipe dir="left" :visible="visible" :delay="1.8">
+            <swipe dir="left" :visible="visible" :delay="0.8">
               <span>{{ round }}</span>
             </swipe>
           </div>
           <div id="timer">
-            <swipe dir="left" :visible="visible" :delay="2">
+            <swipe dir="left" :visible="visible" :delay="1">
               <span>{{ timerText }}</span>
             </swipe>
           </div>
         </div>
 
-        <swipe dir="swing-left" :visible="visible" :delay="1">
+        <swipe dir="swing-left" :visible="visible" :delay="0">
           <img class="logo" id="logo" :src="currentEventLogo.url" />
         </swipe>
       </div>
@@ -151,8 +155,12 @@ $whiteBoxFont: 'Arvo', serif;
     background-color: white;
     font-family: $whiteBoxFont;
     color: #333;
-    padding: 0em 1em !important;
     line-height: 1.4;
+    font-weight: 700;
+
+    span {
+      padding: 0em 1em !important;
+    }
   }
 
   .name {
