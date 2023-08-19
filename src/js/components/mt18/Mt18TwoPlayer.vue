@@ -74,14 +74,14 @@
 
     <div id="bottom-section">
       <div id="game-box" class="pga-box">
-        <swipe :visible="visible" dir="right" id="game-boxart" v-if="currentBoxart" :delay="1.5">
+        <swipe :visible="visible" dir="right" id="game-boxart" v-if="currentBoxart" :delay="0">
           <div class="d-flex align-center" style="height: 100%">
             <img :src="currentBoxart.url" />
           </div>
         </swipe>
 
         <div id="game-info">
-          <swipe :visible="visible" dir="up" :delay="1" id="game">
+          <swipe :visible="visible" dir="up" :delay="0" id="game">
             <fit-text :max="1" :min="0.1">
               {{ game }}
               <span v-if="!!platform"> ({{ platform }})</span>
@@ -94,7 +94,7 @@
             </fit-text>
           </swipe>
 
-          <swipe :visible="visible" dir="up" :delay="0.6" id="submitter">
+          <swipe :visible="visible" dir="up" :delay="1" id="submitter">
             <fit-text :max="1" :min="0.1"> Subbed by {{ submitter }} </fit-text>
           </swipe>
         </div>
@@ -140,6 +140,7 @@
 .player-name {
   width: 930px;
   line-height: 1;
+  margin-bottom: 15px;
   .pronouns {
     text-transform: none;
     background-color: white;
