@@ -2,35 +2,35 @@
   <v-app>
     <div id="top-section">
       <div class="player-name pga-box">
-        <div class="pronouns">
-          <swipe :visible="visible" dir="up" :delay="1">
+        <swipe :visible="visible" dir="up" :delay="1">
+          <div class="pronouns">
             {{ player0pronouns }}
-          </swipe>
-        </div>
+          </div>
+        </swipe>
 
-        <div class="name">
-          <swipe dir="right" :visible="visible">
+        <swipe dir="right" :visible="visible">
+          <div class="name">
             <fit-text :max="2.5">
               {{ player0name }}
             </fit-text>
-          </swipe>
-        </div>
+          </div>
+        </swipe>
       </div>
 
       <div class="pga-box player-name right">
-        <div class="pronouns">
-          <swipe :visible="visible" dir="up" :delay="1">
+        <swipe :visible="visible" dir="up" :delay="1">
+          <div class="pronouns">
             {{ player1pronouns }}
-          </swipe>
-        </div>
+          </div>
+        </swipe>
 
-        <div class="name">
-          <swipe dir="left" :visible="visible">
+        <swipe dir="left" :visible="visible">
+          <div class="name">
             <fit-text :max="2.5">
               {{ player1name }}
             </fit-text>
-          </swipe>
-        </div>
+          </div>
+        </swipe>
       </div>
     </div>
 
@@ -74,18 +74,20 @@
 
     <div id="bottom-section">
       <div id="game-box" class="pga-box">
-        <swipe :visible="visible" dir="right" id="game-boxart" v-if="currentBoxart" :delay="0">
+        <swipe :visible="visible" dir="down" id="game-boxart" v-if="currentBoxart" :delay="0">
           <div class="d-flex align-center" style="height: 100%">
             <img :src="currentBoxart.url" />
           </div>
         </swipe>
 
         <div id="game-info">
-          <swipe :visible="visible" dir="up" :delay="0" id="game">
-            <fit-text :max="1" :min="0.1">
-              {{ game }}
-              <span v-if="!!platform"> ({{ platform }})</span>
-            </fit-text>
+          <swipe :visible="visible" dir="down" :delay="0">
+            <div id="game">
+              <fit-text :max="1" :min="0.1">
+                {{ game }}
+                <span v-if="!!platform"> ({{ platform }})</span>
+              </fit-text>
+            </div>
           </swipe>
 
           <div id="game-info-body">
@@ -103,18 +105,18 @@
       <div id="logo-box">
         <div>
           <div id="round">
-            <swipe dir="left" :visible="visible" :delay="0.8">
+            <swipe dir="left" :visible="visible" :delay="1.8">
               <span>{{ round }}</span>
             </swipe>
           </div>
           <div id="timer">
-            <swipe dir="left" :visible="visible" :delay="1">
+            <swipe dir="left" :visible="visible" :delay="2">
               <span>{{ timerText }}</span>
             </swipe>
           </div>
         </div>
 
-        <swipe dir="swing-left" :visible="visible">
+        <swipe dir="swing-left" :visible="visible" :delay="1">
           <img class="logo" id="logo" :src="currentEventLogo.url" />
         </swipe>
       </div>
@@ -149,7 +151,8 @@ $whiteBoxFont: 'Arvo', serif;
     background-color: white;
     font-family: $whiteBoxFont;
     color: #333;
-    padding: 0.2em 1em !important;
+    padding: 0em 1em !important;
+    line-height: 1.4;
   }
 
   .name {
@@ -205,8 +208,8 @@ $whiteBoxFont: 'Arvo', serif;
   background-color: white;
   font-family: $whiteBoxFont;
   color: #333;
-  padding: 0.2em 1rem !important;
-  line-height: 1;
+  padding: 0 1rem !important;
+  line-height: 1.4;
   font-size: 3em;
   padding-right: 100px;
 }
