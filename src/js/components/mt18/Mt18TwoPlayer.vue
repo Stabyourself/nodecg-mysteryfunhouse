@@ -104,13 +104,22 @@
         </rainwave> -->
 
     <div id="logo-box">
-      <div id="timer">
-        <swipe dir="left" :visible="visible">
-          {{ timerText }}
-        </swipe>
+      <div>
+        <div id="round">
+          <swipe dir="left" :visible="visible" delay="0.8">
+            <span>{{ round }}</span>
+          </swipe>
+        </div>
+        <div id="timer">
+          <swipe dir="left" :visible="visible" delay="1">
+            <span>{{ timerText }}</span>
+          </swipe>
+        </div>
       </div>
 
-      <img class="logo" id="logo" :src="currentEventLogo.url" />
+      <swipe dir="swing-left" :visible="visible">
+        <img class="logo" id="logo" :src="currentEventLogo.url" />
+      </swipe>
     </div>
 
     <AchievementManager></AchievementManager>
@@ -183,10 +192,24 @@
   max-height: 200px;
 }
 
+#round {
+  text-align: right;
+  font-size: 3em;
+
+  span {
+    padding-right: 15px;
+  }
+}
+
 #timer {
-  font-size: 5em;
+  text-align: right;
+  font-size: 4em;
   line-height: 0.9;
   font-weight: bold;
+
+  span {
+    padding-right: 15px;
+  }
 }
 
 .match-round {

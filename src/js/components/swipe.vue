@@ -1,10 +1,6 @@
 <template>
-  <div class="swipe" :class="{ visible: visible }">
-    <div
-      class="swipe-inner"
-      :class="dir"
-      :style="{ 'transition-delay': delay + 's' }"
-    >
+  <div class="swipe" :class="[{ visible: visible }, dir]">
+    <div class="swipe-inner" :class="dir" :style="{ 'transition-delay': delay + 's' }">
       <slot></slot>
     </div>
   </div>
@@ -12,7 +8,13 @@
 
 <style lang="scss">
 .swipe {
-  overflow: hidden;
+  &.up,
+  &.down,
+  &.left,
+  &.right {
+    overflow: hidden;
+  }
+  perspective: 500px;
 
   .swipe-inner {
     height: 100%;
@@ -33,6 +35,11 @@
     &.right {
       transform: translateX(-100%);
     }
+
+    &.swing-left {
+      transform-origin: right;
+      transform: rotateY(90deg);
+    }
   }
 
   &:not(.visible) .swipe-inner {
@@ -41,7 +48,7 @@
 
   &.visible .swipe-inner {
     transition: transform 1s;
-    transform: translateY(0) translateX(0);
+    transform: none;
   }
 }
 </style>
@@ -56,7 +63,7 @@ export default {
 
     dir: {
       type: String,
-      default: "down",
+      default: 'down',
     },
 
     delay: {
