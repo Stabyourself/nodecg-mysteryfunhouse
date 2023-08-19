@@ -144,8 +144,8 @@
   .pronouns {
     text-transform: none;
     background-color: white;
+    font-family: 'OpenSerif Book', serif;
     color: #333;
-    font-family: serif;
     padding: 0.2em 1em !important;
   }
 
@@ -198,8 +198,8 @@
   width: 100%;
   text-transform: none;
   background-color: white;
+  font-family: 'OpenSerif Book', serif;
   color: #333;
-  font-family: serif;
   padding: 0.2em 1rem !important;
   line-height: 1.2;
   font-size: 3em;

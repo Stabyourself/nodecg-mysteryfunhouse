@@ -34,6 +34,12 @@
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: "OpenSerif Book";
+  src: url("../../dist/font/OpenSerif-Book.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
 .mt-font {
   color: white;
   line-height: 1.2;
