@@ -3,12 +3,12 @@
     <div id="top-section">
       <div class="player-name">
         <div class="pronouns">
-          <swipe :visible="visible" dir="right" :delay="0">
+          <swipe :visible="visible" dir="right" :delay="0.3">
             <span>{{ player0pronouns }}</span>
           </swipe>
         </div>
 
-        <swipe dir="down" :visible="visible" :delay="1">
+        <swipe dir="down" :visible="visible" :delay="0.2">
           <div class="name pga-box">
             <fit-text :max="2.5">
               {{ player0name }}
@@ -19,12 +19,12 @@
 
       <div class="player-name right">
         <div class="pronouns">
-          <swipe :visible="visible" dir="left" :delay="0">
+          <swipe :visible="visible" dir="left" :delay="0.3">
             <span>{{ player1pronouns }}</span>
           </swipe>
         </div>
 
-        <swipe dir="down" :visible="visible" :delay="1">
+        <swipe dir="down" :visible="visible" :delay="0.2">
           <div class="name pga-box">
             <fit-text :max="2.5">
               {{ player1name }}
