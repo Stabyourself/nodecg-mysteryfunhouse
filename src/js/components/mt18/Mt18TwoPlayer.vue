@@ -72,54 +72,52 @@
       :finalTime="player1finalTime">
     </player-done-slider>
 
-    <mt16-game-box class="pga-box" style="top: 865px; left: 15px; padding: 0">
-      <template v-slot:boxart>
-        <swipe :visible="visible" dir="right" class="boxart" v-if="currentBoxart" delay="1.5">
+    <div id="bottom-section">
+      <div id="game-box" class="pga-box">
+        <swipe :visible="visible" dir="right" id="game-boxart" v-if="currentBoxart" :delay="1.5">
           <div class="d-flex align-center" style="height: 100%">
             <img :src="currentBoxart.url" />
           </div>
         </swipe>
-      </template>
 
-      <template v-slot:text>
-        <swipe :visible="visible" dir="up" :delay="1" class="game">
-          <fit-text :max="1" :min="0.1">
-            {{ game }}
-            <span v-if="!!platform"> ({{ platform }})</span>
-          </fit-text>
-        </swipe>
-        <swipe :visible="visible" dir="up" :delay="0.8" class="goal">
-          <fit-text :max="1" :min="0.1">
-            {{ goal }}
-            <span v-if="!!submitter"> - Subbed by {{ submitter }}</span>
-          </fit-text>
-        </swipe>
-        <!-- <div class="submitter">Submitted by {{ submitter }}</div> -->
-      </template>
-    </mt16-game-box>
-
-    <!-- <rainwave
-            v-if="showRainwave"
-            style="top: 975px; left: 1521px; width: 444px; height: 124px">
-        </rainwave> -->
-
-    <div id="logo-box">
-      <div>
-        <div id="round">
-          <swipe dir="left" :visible="visible" delay="0.8">
-            <span>{{ round }}</span>
+        <div id="game-info">
+          <swipe :visible="visible" dir="up" :delay="1" id="game">
+            <fit-text :max="1" :min="0.1">
+              {{ game }}
+              <span v-if="!!platform"> ({{ platform }})</span>
+            </fit-text>
           </swipe>
-        </div>
-        <div id="timer">
-          <swipe dir="left" :visible="visible" delay="1">
-            <span>{{ timerText }}</span>
+
+          <swipe :visible="visible" dir="up" :delay="0.8" id="goal">
+            <fit-text :max="1" :min="0.1">
+              {{ goal }}
+            </fit-text>
+          </swipe>
+
+          <swipe :visible="visible" dir="up" :delay="0.6" id="submitter">
+            <fit-text :max="1" :min="0.1"> Subbed by {{ submitter }} </fit-text>
           </swipe>
         </div>
       </div>
 
-      <swipe dir="swing-left" :visible="visible">
-        <img class="logo" id="logo" :src="currentEventLogo.url" />
-      </swipe>
+      <div id="logo-box">
+        <div>
+          <div id="round">
+            <swipe dir="left" :visible="visible" :delay="0.8">
+              <span>{{ round }}</span>
+            </swipe>
+          </div>
+          <div id="timer">
+            <swipe dir="left" :visible="visible" :delay="1">
+              <span>{{ timerText }}</span>
+            </swipe>
+          </div>
+        </div>
+
+        <swipe dir="swing-left" :visible="visible">
+          <img class="logo" id="logo" :src="currentEventLogo.url" />
+        </swipe>
+      </div>
     </div>
 
     <AchievementManager></AchievementManager>
@@ -165,8 +163,22 @@
   position: relative;
 }
 
-.boxart {
-  margin-right: 15px;
+#bottom-section {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  height: 232px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#game-box {
+  display: flex;
+  width: 930px;
+}
+
+#game-boxart {
   height: 100%;
 
   img {
@@ -177,16 +189,42 @@
   }
 }
 
+#game-info {
+  flex-grow: 1;
+}
+
+#game {
+  width: 100%;
+  text-transform: none;
+  background-color: white;
+  color: #333;
+  font-family: serif;
+  padding: 0.2em 1rem !important;
+  line-height: 1.2;
+  font-size: 3em;
+}
+
+#goal {
+  margin-top: 30px;
+  padding: 0.1em 1rem !important;
+  font-size: 2em;
+  line-height: 1;
+}
+
+#submitter {
+  padding: 0.1em 1rem !important;
+  font-size: 1.5em;
+  line-height: 1;
+  font-weight: 300;
+}
+
 #logo-box {
   display: flex;
   align-items: flex-end;
-  position: absolute;
-  bottom: 15px;
-  right: 15px;
-  height: 200px;
 }
 
 #logo {
+  display: block;
   opacity: 0.6;
   max-width: 300px;
   max-height: 200px;
