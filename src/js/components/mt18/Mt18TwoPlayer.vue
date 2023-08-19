@@ -88,15 +88,17 @@
             </fit-text>
           </swipe>
 
-          <swipe :visible="visible" dir="up" :delay="0.8" id="goal">
-            <fit-text :max="1" :min="0.1">
-              {{ goal }}
-            </fit-text>
-          </swipe>
+          <div id="game-info-body">
+            <swipe :visible="visible" dir="up" :delay="0.8" id="goal">
+              <fit-text :max="1" :min="0.1">
+                {{ goal }}
+              </fit-text>
+            </swipe>
 
-          <swipe :visible="visible" dir="up" :delay="1" id="submitter">
-            <fit-text :max="1" :min="0.1"> Subbed by {{ submitter }} </fit-text>
-          </swipe>
+            <swipe :visible="visible" dir="up" :delay="1" id="submitter">
+              <fit-text :max="1" :min="0.1"> Subbed by {{ submitter }} </fit-text>
+            </swipe>
+          </div>
         </div>
       </div>
 
@@ -192,6 +194,8 @@
 
 #game-info {
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 #game {
@@ -201,12 +205,18 @@
   font-family: 'OpenSerif Book', serif;
   color: #333;
   padding: 0.2em 1rem !important;
-  line-height: 1.2;
+  line-height: 1;
   font-size: 3em;
 }
 
+#game-info-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 #goal {
-  margin-top: 30px;
   padding: 0.1em 1rem !important;
   font-size: 2em;
   line-height: 1;
