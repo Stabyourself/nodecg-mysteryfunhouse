@@ -99,7 +99,7 @@
 
             <swipe :visible="visible" dir="right" :delay="1">
               <div id="submitter">
-                <fit-text :max="1" :min="0.1"> Subbed by {{ submitter }} </fit-text>
+                <fit-text :max="1" :min="0.1"> Submitted by {{ submitter }} </fit-text>
               </div>
             </swipe>
           </div>
@@ -271,7 +271,7 @@ $whiteBoxFont: 'Arvo', serif;
   text-align: right;
   font-size: 4em;
   line-height: 0.9;
-  font-weight: bold;
+  font-weight: 700;
 
   span {
     padding-right: 15px;
