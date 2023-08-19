@@ -90,9 +90,7 @@
 
           <div id="game-info-body">
             <swipe :visible="visible" dir="up" :delay="0.8" id="goal">
-              <fit-text :max="1" :min="0.1">
-                {{ goal }}
-              </fit-text>
+              {{ goal }}
             </swipe>
 
             <swipe :visible="visible" dir="up" :delay="1" id="submitter">
