@@ -126,25 +126,28 @@
 </template>
 
 <style lang="scss" scoped>
+$whiteBoxFont: 'Arvo', serif;
+
 #top-section {
   position: absolute;
   top: 0px;
   left: 0px;
   width: 100%;
   height: 150px;
+  padding: 0 15px;
   display: flex;
   align-items: flex-end;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .player-name {
-  width: 930px;
+  width: 575px;
   line-height: 1;
   margin-bottom: 15px;
   .pronouns {
     text-transform: none;
     background-color: white;
-    font-family: 'OpenSerif Book', serif;
+    font-family: $whiteBoxFont;
     color: #333;
     padding: 0.2em 1em !important;
   }
@@ -170,17 +173,19 @@
   width: 100%;
   height: 232px;
   padding: 15px;
+  padding-top: 30px;
   display: flex;
   justify-content: space-between;
 }
 
 #game-box {
   display: flex;
-  width: 930px;
+  max-width: 1200px;
 }
 
 #game-boxart {
   height: 100%;
+  flex-shrink: 0;
 
   img {
     display: block;
@@ -200,11 +205,12 @@
   width: 100%;
   text-transform: none;
   background-color: white;
-  font-family: 'OpenSerif Book', serif;
+  font-family: $whiteBoxFont;
   color: #333;
   padding: 0.2em 1rem !important;
   line-height: 1;
   font-size: 3em;
+  padding-right: 100px !important;
 }
 
 #game-info-body {
@@ -212,6 +218,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-right: 100px;
 }
 
 #goal {
@@ -236,12 +243,15 @@
   display: block;
   opacity: 0.6;
   max-width: 300px;
-  max-height: 200px;
+  max-height: 185px;
 }
 
 #round {
   text-align: right;
   font-size: 3em;
+  text-transform: uppercase;
+  font-weight: 300;
+  line-height: 1.2;
 
   span {
     padding-right: 15px;
