@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <video src="/assets/nodecg-mysteryfunhouse/droneShots/supermario64.webm" autoplay loop muted></video>
+    <DroneShotManager />
 
-    <div id="videodimmer"></div>
+    <div id="videodimmer" />
 
     <swipe :visible="visible" dir="down">
       <div class="logo-container">
@@ -43,9 +43,9 @@
       </div>
     </div>
 
-    <rainwave v-if="showRainwave" style="top: 975px; left: 1521px; width: 444px; height: 124px"> </rainwave>
+    <rainwave v-if="showRainwave" style="top: 975px; left: 1521px; width: 444px; height: 124px" />
 
-    <AchievementManager></AchievementManager>
+    <AchievementManager />
   </v-app>
 </template>
 
