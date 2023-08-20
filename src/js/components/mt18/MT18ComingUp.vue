@@ -2,19 +2,15 @@
   <v-app>
     <video src="/bundles/nodecg-mysteryfunhouse/dist/video/droneshots/mario64.mp4" autoplay loop muted></video>
 
-    <div class="logo-container">
-      <swipe :visible="visible" dir="down" style="height: 200px">
-        <div class="match-round">
-          <div class="match-round-inner">
-            <img class="logo" :src="currentEventLogo.url" />
-          </div>
-        </div>
-      </swipe>
-    </div>
+    <swipe :visible="visible" dir="down">
+      <div class="logo-container">
+        <img class="logo" :src="currentEventLogo.url" />
+      </div>
+    </swipe>
 
     <div class="matches">
       <div v-for="(match, i) in slicedSchedule" :key="match.match" class="match">
-        <swipe :delay="i * 0.5 + 1" :visible="visible" dir="up">
+        <swipe :delay="i * 0.3 + 1" :visible="visible" dir="right">
           <div class="d-flex top">
             <div class="left">
               {{ match.round }}
@@ -62,50 +58,21 @@ video {
 
 .logo-container {
   width: 100%;
-  text-align: center;
-  height: 100px;
-}
-
-.match-round {
-  width: 100%;
-  height: 200px;
   display: flex;
   justify-content: center;
 
   .logo {
-    width: 100%;
-    height: 100%;
+    margin: 10px 0;
+    height: 200px;
     object-fit: contain;
   }
-
-  .match-round-inner {
-    width: 500px;
-    height: 100%;
-  }
-}
-
-.matches {
-  margin-top: 7em;
 }
 
 .match {
   margin: 0 auto;
   width: 1200px;
-  margin-bottom: 4rem;
+  margin-bottom: 25px;
   color: #f58038;
-
-  .right {
-    flex-grow: 1;
-    text-align: right;
-    flex-shrink: 1;
-    flex-basis: 0;
-  }
-
-  .left {
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 0;
-  }
 
   .top {
     background-color: white;
@@ -115,6 +82,19 @@ video {
     line-height: 1.4;
     font-size: 2em;
     font-weight: 700;
+
+    .right {
+      flex-grow: 1;
+      text-align: right;
+      flex-shrink: 1;
+      flex-basis: 0;
+    }
+
+    .left {
+      flex-grow: 1;
+      flex-shrink: 1;
+      flex-basis: 0;
+    }
   }
 
   .bottom {
@@ -212,7 +192,7 @@ export default {
 
   computed: {
     slicedSchedule() {
-      return this.schedule.slice(0, 4);
+      return this.schedule.slice(0, 5);
     },
   },
 
