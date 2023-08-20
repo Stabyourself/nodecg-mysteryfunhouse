@@ -1,16 +1,21 @@
-const ctx = require("./nodecg");
+const ctx = require('./nodecg');
 const nodecg = ctx.get();
 
-const googlesheet = require("./googlesheet");
+const googlesheet = require('./googlesheet');
 
-const scheduleRep = nodecg.Replicant("schedule", { defaultValue: [] });
+const scheduleRep = nodecg.Replicant('schedule', { defaultValue: [] });
 
 function updateSchedule() {
   googlesheet.getScheduleSheet().then(function (rows) {
     let schedule = [];
 
     for (let row of rows) {
-      let time = new Date(row["Date"] + " " + row["Match Time"] + " EST");
+      let timeZone = 'EST';
+      if (new Date(row['Date']).isDstObserved()) {
+        timeZone = 'EDT';
+      }
+
+      let time = new Date(row['Date'] + ' ' + row['Match Time'] + ' ' + timeZone);
       let now = new Date();
 
       if (time < now) {
@@ -18,21 +23,21 @@ function updateSchedule() {
       }
 
       // format round
-      let round = row["Round"] ?? "";
+      let round = row['Round'] ?? '';
       if (round.length === 2) {
-        if (round[0] === "W") {
-          round = "Winners " + round[1];
-        } else if (round[0] === "L") {
-          round = "Losers " + round[1];
+        if (round[0] === 'W' || round[0] === 'Winners') {
+          round = 'Front ' + round[1];
+        } else if (round[0] === 'L' || round[0] === 'Losers') {
+          round = 'Back ' + round[1];
         }
       }
 
       schedule.push({
         time: time,
-        player1: row["Player 1"],
-        player2: row["Player 2"],
+        player1: row['Player 1'],
+        player2: row['Player 2'],
         round: round,
-        match: row["_rawData"][2],
+        match: row['_rawData'][2],
       });
     }
 
@@ -41,6 +46,16 @@ function updateSchedule() {
     scheduleRep.value = schedule;
   });
 }
+
+Date.prototype.stdTimezoneOffset = function () {
+  var jan = new Date(this.getFullYear(), 0, 1);
+  var jul = new Date(this.getFullYear(), 6, 1);
+  return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+};
+
+Date.prototype.isDstObserved = function () {
+  return this.getTimezoneOffset() < this.stdTimezoneOffset();
+};
 
 setTimeout(updateSchedule, 5000);
 setInterval(updateSchedule, 60000);

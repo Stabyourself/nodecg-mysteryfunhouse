@@ -9,10 +9,15 @@
         </div>
 
         <swipe dir="down" :visible="visible" :delay="0.2">
-          <div class="name pga-box">
-            <fit-text :max="2.5">
-              {{ player0name }}
-            </fit-text>
+          <div class="name-box pga-box">
+            <div class="name">
+              <fit-text :max="2.5">
+                {{ player0name }}
+              </fit-text>
+            </div>
+            <div class="audio">
+              <v-icon v-if="player0volume > 0"> mdi-volume-high </v-icon>
+            </div>
           </div>
         </swipe>
       </div>
@@ -25,10 +30,15 @@
         </div>
 
         <swipe dir="down" :visible="visible" :delay="0.2">
-          <div class="name pga-box">
-            <fit-text :max="2.5">
-              {{ player1name }}
-            </fit-text>
+          <div class="name-box pga-box">
+            <div class="audio">
+              <v-icon v-if="player1volume > 0"> mdi-volume-high </v-icon>
+            </div>
+            <div class="name">
+              <fit-text :max="2.5">
+                {{ player1name }}
+              </fit-text>
+            </div>
           </div>
         </swipe>
       </div>
@@ -97,7 +107,7 @@
               </div>
             </swipe>
 
-            <swipe :visible="visible" dir="right" :delay="1">
+            <swipe :visible="visible" dir="right" :delay="1" v-if="submitter != ''">
               <div id="submitter">
                 <fit-text :max="1" :min="0.1"> Submitted by {{ submitter }} </fit-text>
               </div>
@@ -163,8 +173,23 @@ $whiteBoxFont: 'Arvo', serif;
     }
   }
 
-  .name {
+  .name-box {
     padding: 0.5em 1em !important;
+    display: flex;
+    align-items: center;
+
+    .name {
+      flex-grow: 1;
+    }
+
+    .audio {
+      flex-shrink: 0;
+      width: 40px;
+
+      i {
+        font-size: 40px;
+      }
+    }
   }
 
   &.right {
