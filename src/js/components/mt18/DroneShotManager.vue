@@ -2,16 +2,7 @@
   <div id="videoHolder"></div>
 </template>
 
-<style>
-@keyframes fade-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
+<style lang="scss">
 #videoHolder {
   width: 1920px;
   height: 1080px;
@@ -20,9 +11,14 @@
 
 video {
   position: absolute;
-  animation: fade-in 2s linear;
+  transition: opacity 2s linear;
   width: 100%;
   height: 100%;
+  opacity: 1;
+
+  &.fadeout {
+    opacity: 0;
+  }
 }
 </style>
 
@@ -51,21 +47,25 @@ export default {
       video.play();
       let deleting = false;
       video.addEventListener('timeupdate', () => {
-        if (video.currentTime >= video.duration - 2 && !deleting) {
+        if (video.currentTime >= video.duration - 3 && !deleting) {
           // remove the video from the dom
           this.newVideo();
           deleting = true;
 
           setTimeout(() => {
-            video.remove();
-          }, 2000);
+            video.classList.add('fadeout');
+
+            setTimeout(() => {
+              video.remove();
+            }, 2000);
+          }, 1000);
         }
       });
 
       const videoHolder = document.getElementById('videoHolder');
 
       // Include in HTML as child of #box
-      videoHolder.appendChild(video);
+      videoHolder.prepend(video);
     },
   },
 
