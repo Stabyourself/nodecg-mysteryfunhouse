@@ -219,6 +219,14 @@
           "png",
           "webp"
         ]
+      },
+      {
+        "name": "droneShots",
+        "title": "Drone Shots",
+        "allowedTypes": [
+          "webm",
+          "mp4"
+        ]
       }
     ],
     "mount": [

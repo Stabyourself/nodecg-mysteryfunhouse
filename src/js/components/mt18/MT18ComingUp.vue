@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <video src="/bundles/nodecg-mysteryfunhouse/dist/video/droneshots/mario64.mp4" autoplay loop muted></video>
+    <video src="/assets/nodecg-mysteryfunhouse/droneShots/supermario64.webm" autoplay loop muted></video>
 
     <div id="videodimmer"></div>
 
