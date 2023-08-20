@@ -2,6 +2,8 @@
   <v-app>
     <video src="/bundles/nodecg-mysteryfunhouse/dist/video/droneshots/mario64.mp4" autoplay loop muted></video>
 
+    <div id="videodimmer"></div>
+
     <swipe :visible="visible" dir="down">
       <div class="logo-container">
         <img class="logo" :src="currentEventLogo.url" />
@@ -54,6 +56,15 @@ video {
   position: absolute;
   top: 0px;
   left: 0px;
+}
+
+#videodimmer {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 1920px;
+  height: 1080px;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .logo-container {
