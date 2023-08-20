@@ -13,7 +13,7 @@
     <div class="matches">
       <div v-for="(match, i) in slicedSchedule" :key="match.match" class="match">
         <swipe :delay="i * 0.3 + 1" :visible="visible" dir="right">
-          <div class="d-flex top">
+          <div class="top">
             <div class="left">
               {{ match.round }}
             </div>
@@ -28,7 +28,7 @@
             </div>
           </div>
 
-          <div class="d-flex bottom">
+          <div class="bottom">
             <div>
               {{ match.player1 }}
               <span class="vs">vs.</span>
@@ -64,7 +64,7 @@ video {
   left: 0px;
   width: 1920px;
   height: 1080px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .logo-container {
@@ -93,18 +93,11 @@ video {
     line-height: 1.4;
     font-size: 2em;
     font-weight: 700;
+    display: flex;
+    justify-content: space-between;
 
     .right {
-      flex-grow: 1;
       text-align: right;
-      flex-shrink: 1;
-      flex-basis: 0;
-    }
-
-    .left {
-      flex-grow: 1;
-      flex-shrink: 1;
-      flex-basis: 0;
     }
   }
 
@@ -125,7 +118,7 @@ video {
 
     .vs {
       font-weight: 200;
-      margin: 0 1rem;
+      margin: 0 0.3rem;
     }
 
     .round {
