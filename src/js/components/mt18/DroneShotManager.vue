@@ -28,18 +28,19 @@ const droneShots = nodecg.Replicant('assets:droneShots');
 export default {
   methods: {
     newVideo() {
-      // pick random new video
-      let newVideo = this.currentVideo;
-      while (newVideo === this.currentVideo) {
-        newVideo = Math.floor(Math.random() * droneShots.value.length);
-      }
-      console.log(newVideo);
-      this.currentVideo = newVideo;
+      // pick random new video until it's not in lastVideos
+      let nextVideo;
+      do {
+        nextVideo = Math.floor(Math.random() * droneShots.value.length);
+      } while (this.lastVideos.includes(nextVideo));
+
+      this.lastVideos.push(nextVideo);
+      this.lastVideos = this.lastVideos.slice(-3);
 
       // Create video element
       const video = document.createElement('video');
 
-      video.src = droneShots.value[this.currentVideo].url;
+      video.src = droneShots.value[nextVideo].url;
       video.controls = false;
       video.muted = true;
       video.height = 1920; // in px
@@ -47,7 +48,7 @@ export default {
       video.play();
       let deleting = false;
       video.addEventListener('timeupdate', () => {
-        if (video.currentTime >= video.duration - 3 && !deleting) {
+        if (video.currentTime >= video.duration - 25 && !deleting) {
           // remove the video from the dom
           this.newVideo();
           deleting = true;
@@ -70,14 +71,14 @@ export default {
   },
 
   mounted() {
-    droneShots.on('change', (newValue) => {
+    droneShots.on('change', () => {
       this.newVideo();
     });
   },
 
   data() {
     return {
-      currentVideo: -1,
+      lastVideos: [],
     };
   },
 };
