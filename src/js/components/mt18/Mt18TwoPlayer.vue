@@ -123,7 +123,6 @@
             <div id="game">
               <fit-text :max="1" :min="0.1">
                 {{ game }}
-                <span v-if="!!platform"> ({{ platform }})</span>
               </fit-text>
             </div>
           </swipe>
