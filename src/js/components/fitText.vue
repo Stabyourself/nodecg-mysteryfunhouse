@@ -4,6 +4,12 @@
   </span>
 </template>
 
+<style scoped lang="scss">
+span {
+  line-break: anywhere;
+}
+</style>
+
 <script>
 export default {
   props: {
@@ -12,7 +18,7 @@ export default {
       type: Number,
     },
     unit: {
-      default: "em",
+      default: 'em',
       type: String,
     },
     min: {
@@ -33,18 +39,15 @@ export default {
     calculate() {
       let element = this.$el;
       // first make it an inline block and set the line height to a fixed pixel value
-      element.style.display = "inline";
-      element.style.lineHeight = "1px";
+      element.style.display = 'inline';
+      element.style.lineHeight = '1px';
 
       // then keep trying untill it fits
       let fontSize = this.max;
-      let stepSize = this.unit === "px" ? 1 : 0.05;
+      let stepSize = this.unit === 'px' ? 1 : 0.05;
       element.style.fontSize = fontSize + this.unit;
 
-      while (
-        element.getClientRects().length > this.targetLineCount &&
-        fontSize > this.min
-      ) {
+      while (element.getClientRects().length > this.targetLineCount && fontSize > this.min) {
         fontSize -= stepSize;
         element.style.fontSize = fontSize + this.unit;
       }
@@ -59,7 +62,7 @@ export default {
     setTimeout(this.calculate, 0);
     setInterval(this.calculate, 1000);
 
-    if ("MutationObserver" in window && this.observer === null) {
+    if ('MutationObserver' in window && this.observer === null) {
       // Create the observer (and what to do on changes...)
       this.observer = new MutationObserver(this.calculate);
 

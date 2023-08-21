@@ -1,46 +1,86 @@
 <template>
   <v-app>
     <div id="top-section">
-      <div class="player-name">
-        <div class="pronouns">
-          <swipe :visible="visible" dir="right" :delay="0.3">
-            <span>{{ player0pronouns }}</span>
+      <div class="playerinfo-box">
+        <div class="player-name">
+          <div class="pronouns">
+            <swipe :visible="visible" dir="right" :delay="0.3">
+              <span>{{ player0pronouns }}</span>
+            </swipe>
+          </div>
+
+          <swipe dir="down" :visible="visible" :delay="0.2">
+            <div class="name-box pga-box">
+              <div class="name">
+                <fit-text :max="2.5">
+                  {{ player0name }}
+                </fit-text>
+              </div>
+              <div class="audio">
+                <v-icon v-if="player0volume > 0"> mdi-volume-high </v-icon>
+              </div>
+            </div>
           </swipe>
         </div>
 
-        <swipe dir="down" :visible="visible" :delay="0.2">
-          <div class="name-box pga-box">
-            <div class="name">
-              <fit-text :max="2.5">
-                {{ player0name }}
-              </fit-text>
+        <div class="done-holder">
+          <div class="done-slider" :class="{ on: player0raceState != 'none' }">
+            <div class="left" :class="player0raceState" v-if="player0raceState == 'winner'">
+              1<span class="small">st</span>
             </div>
-            <div class="audio">
-              <v-icon v-if="player0volume > 0"> mdi-volume-high </v-icon>
+
+            <div class="left" :class="player0raceState" v-if="player0raceState == 'loser'">
+              2<span class="small">nd</span>
             </div>
+
+            <div class="left" :class="player0raceState" v-if="player0raceState == 'forfeit'">FF</div>
+
+            <div class="left" :class="player0raceState" v-if="player0raceState == 'none'"></div>
+
+            <div class="right">{{ player0finalTime }}</div>
           </div>
-        </swipe>
+        </div>
       </div>
 
-      <div class="player-name right">
-        <div class="pronouns">
-          <swipe :visible="visible" dir="left" :delay="0.3">
-            <span>{{ player1pronouns }}</span>
-          </swipe>
+      <div class="playerinfo-box">
+        <div class="done-holder">
+          <div class="done-slider right" :class="{ on: player1raceState != 'none' }">
+            <div class="left" :class="player1raceState" v-if="player1raceState == 'winner'">
+              1<span class="small">st</span>
+            </div>
+
+            <div class="left" :class="player1raceState" v-if="player1raceState == 'loser'">
+              2<span class="small">nd</span>
+            </div>
+
+            <div class="left" :class="player1raceState" v-if="player1raceState == 'forfeit'">FF</div>
+
+            <div class="left" :class="player1raceState" v-if="player1raceState == 'none'"></div>
+
+            <div class="right">{{ player1finalTime }}</div>
+          </div>
         </div>
 
-        <swipe dir="down" :visible="visible" :delay="0.2">
-          <div class="name-box pga-box">
-            <div class="audio">
-              <v-icon v-if="player1volume > 0"> mdi-volume-high </v-icon>
-            </div>
-            <div class="name">
-              <fit-text :max="2.5">
-                {{ player1name }}
-              </fit-text>
-            </div>
+        <div class="player-name right">
+          <div class="pronouns">
+            <swipe :visible="visible" dir="left" :delay="0.3">
+              <span>{{ player1pronouns }}</span>
+            </swipe>
           </div>
-        </swipe>
+
+          <swipe dir="down" :visible="visible" :delay="0.2">
+            <div class="name-box pga-box">
+              <div class="audio">
+                <v-icon v-if="player1volume > 0"> mdi-volume-high </v-icon>
+              </div>
+              <div class="name">
+                <fit-text :max="2.5">
+                  {{ player1name }}
+                </fit-text>
+              </div>
+            </div>
+          </swipe>
+        </div>
       </div>
     </div>
 
@@ -69,20 +109,6 @@
         :width="930"
         :height="698"></twitch-player>
     </div>
-
-    <mt18-player-done-slider
-      style="top: 788px; left: 15px; width: 930px"
-      :state="player0raceState"
-      :finalTime="player0finalTime"
-      direction="up">
-    </mt18-player-done-slider>
-
-    <mt18-player-done-slider
-      style="top: 788px; left: 975px; width: 930px"
-      :state="player1raceState"
-      :finalTime="player1finalTime"
-      direction="up">
-    </mt18-player-done-slider>
 
     <div id="bottom-section">
       <div id="game-box" class="pga-box">
@@ -146,6 +172,71 @@
 <style lang="scss" scoped>
 $whiteBoxFont: 'Arvo', serif;
 
+.done-holder {
+  display: flex;
+  overflow: hidden;
+}
+
+.done-slider {
+  display: flex;
+  font-size: 3rem;
+  color: #333;
+  align-items: center;
+
+  transform: translateX(-101%);
+
+  padding-left: 15px;
+  &.right {
+    transform: translateX(101%);
+    flex-direction: row-reverse;
+    padding-right: 15px;
+    padding-left: 0px;
+  }
+
+  transition: transform 1s;
+
+  &.on {
+    transform: translateX(0%);
+  }
+
+  .left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 78px;
+    font-weight: 700;
+
+    background-color: white;
+
+    &.winner {
+      background-color: gold;
+    }
+
+    &.loser {
+      background-color: silver;
+    }
+
+    &.forfeit {
+      background-color: #f58038;
+    }
+
+    .small {
+      font-size: 0.3em;
+      margin-bottom: 20px;
+    }
+  }
+
+  .right {
+    background-color: white;
+    font-weight: 200;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+  }
+}
+
 #top-section {
   position: absolute;
   top: 0px;
@@ -158,10 +249,14 @@ $whiteBoxFont: 'Arvo', serif;
   justify-content: space-between;
 }
 
+.playerinfo-box {
+  display: flex;
+  margin-bottom: 15px;
+}
+
 .player-name {
   width: 575px;
   line-height: 1;
-  margin-bottom: 15px;
   .pronouns {
     text-transform: none;
     background-color: white;
@@ -179,6 +274,7 @@ $whiteBoxFont: 'Arvo', serif;
     padding: 0.5em 1em !important;
     display: flex;
     align-items: center;
+    height: 56px;
 
     .name {
       flex-grow: 1;
