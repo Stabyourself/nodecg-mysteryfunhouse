@@ -48,7 +48,7 @@ export default {
       video.play();
       let deleting = false;
       video.addEventListener('timeupdate', () => {
-        if (video.currentTime >= video.duration - 25 && !deleting) {
+        if (video.currentTime >= video.duration - 3 && !deleting) {
           // remove the video from the dom
           this.newVideo();
           deleting = true;

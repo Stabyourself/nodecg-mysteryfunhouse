@@ -70,17 +70,19 @@
         :height="698"></twitch-player>
     </div>
 
-    <player-done-slider
-      style="top: 848px; left: 15px; width: 930px"
+    <mt18-player-done-slider
+      style="top: 788px; left: 15px; width: 930px"
       :state="player0raceState"
-      :finalTime="player0finalTime">
-    </player-done-slider>
+      :finalTime="player0finalTime"
+      direction="up">
+    </mt18-player-done-slider>
 
-    <player-done-slider
-      style="top: 848px; left: 975px; width: 930px"
+    <mt18-player-done-slider
+      style="top: 788px; left: 975px; width: 930px"
       :state="player1raceState"
-      :finalTime="player1finalTime">
-    </player-done-slider>
+      :finalTime="player1finalTime"
+      direction="up">
+    </mt18-player-done-slider>
 
     <div id="bottom-section">
       <div id="game-box" class="pga-box">
@@ -216,6 +218,7 @@ $whiteBoxFont: 'Arvo', serif;
 
 #game-box {
   display: flex;
+  max-width: 1300px;
 }
 
 #game-boxart {
@@ -245,6 +248,8 @@ $whiteBoxFont: 'Arvo', serif;
   line-height: 1.4;
   font-size: 3em;
   padding-right: 100px;
+  display: flex;
+  align-items: center;
 }
 
 #game-info-body {
