@@ -1,13 +1,13 @@
 // src/main.js
 
-const _ = require("lodash");
-import Vue from "vue";
-import vuetify from "./vuetify"; // path to vuetify export
+const _ = require('lodash');
+import Vue from 'vue';
+import vuetify from './vuetify'; // path to vuetify export
 
-import VueTilt from "vue-tilt.js";
+import VueTilt from 'vue-tilt.js';
 Vue.use(VueTilt);
 
-const requireComponent = require.context("./", true, /\.vue$/i);
+const requireComponent = require.context('./', true, /\.vue$/i);
 
 requireComponent.keys().forEach((fileName) => {
   // Get component config
@@ -18,10 +18,10 @@ requireComponent.keys().forEach((fileName) => {
     _.camelCase(
       // Gets the file name regardless of folder depth
       fileName
-        .split("/")
+        .split('/')
         .pop()
-        .replace(/\.\w+$/, "")
-    )
+        .replace(/\.\w+$/, ''),
+    ),
   );
 
   // Register component globally
@@ -30,4 +30,4 @@ requireComponent.keys().forEach((fileName) => {
 
 new Vue({
   vuetify,
-}).$mount("#app");
+}).$mount('#app');

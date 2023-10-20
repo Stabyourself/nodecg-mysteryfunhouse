@@ -11,11 +11,14 @@
 
           <swipe dir="down" :visible="visible" :delay="0.2">
             <div class="name-box pga-box">
+              <Flag code="de.svg" />
+
               <div class="name">
                 <fit-text :max="2.5">
                   {{ player0name }}
                 </fit-text>
               </div>
+
               <div class="audio">
                 <v-icon v-if="player0volume > 0"> mdi-volume-high </v-icon>
               </div>
@@ -69,14 +72,17 @@
           </div>
 
           <swipe dir="down" :visible="visible" :delay="0.2">
-            <div class="name-box pga-box">
-              <div class="audio">
-                <v-icon v-if="player1volume > 0"> mdi-volume-high </v-icon>
-              </div>
+            <div class="name-box pga-box right">
+              <Flag code="us.svg" />
+
               <div class="name">
                 <fit-text :max="2.5">
                   {{ player1name }}
                 </fit-text>
+              </div>
+
+              <div class="audio">
+                <v-icon v-if="player1volume > 0"> mdi-volume-high </v-icon>
               </div>
             </div>
           </swipe>
@@ -112,14 +118,14 @@
 
     <div id="bottom-section">
       <div id="game-box" class="pga-box">
-        <swipe :visible="visible" dir="down" id="game-boxart" v-if="currentBoxart" :delay="0">
+        <swipe :visible="visible" dir="right" id="game-boxart" v-if="currentBoxart" :delay="0">
           <div class="d-flex align-center" style="height: 100%">
             <img :src="currentBoxart.url" />
           </div>
         </swipe>
 
         <div id="game-info">
-          <swipe :visible="visible" dir="down" :delay="0">
+          <swipe :visible="visible" dir="right" :delay="0.8">
             <div id="game">
               <fit-text :max="1" :min="0.1">
                 {{ game }}
@@ -128,7 +134,7 @@
           </swipe>
 
           <div id="game-info-body">
-            <swipe :visible="visible" dir="right" :delay="0.8">
+            <swipe :visible="visible" dir="right" :delay="0.9">
               <div id="goal">
                 {{ goal }}
               </div>
@@ -192,7 +198,7 @@ $whiteBoxFont: 'Arvo', serif;
     padding-left: 0px;
   }
 
-  transition: transform 1s;
+  transition: transform 0.5s;
 
   &.on {
     transform: translateX(0%);
@@ -270,16 +276,25 @@ $whiteBoxFont: 'Arvo', serif;
   }
 
   .name-box {
-    padding: 0.5em 1em !important;
     display: flex;
     align-items: center;
     height: 56px;
 
+    &.right {
+      flex-direction: row-reverse;
+    }
+
+    .flag {
+      height: 100%;
+    }
+
     .name {
+      padding: 0.5em 1em;
       flex-grow: 1;
     }
 
     .audio {
+      margin-right: 10px;
       flex-shrink: 0;
       width: 40px;
 
