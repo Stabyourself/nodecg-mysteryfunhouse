@@ -4,35 +4,19 @@
       :visible="visible"
       pronoun-h="40"
       name-h="95"
-      style="top: -2px; left: 588px; width: 555px; height: 135px"
-    >
+      style="top: -2px; left: 588px; width: 555px; height: 135px">
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="up" :delay="0.5">
           <fit-text :max="1.5" class="pixel-font name">
-            {{
-              player0pronouns != "" && player0pronouns
-                ? `(${player0pronouns})`
-                : ""
-            }}
+            {{ player0pronouns != '' && player0pronouns ? `(${player0pronouns})` : '' }}
             {{ player0name
-            }}<img
-              v-if="player0volume > 0"
-              :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'"
-            />
+            }}<img v-if="player0volume > 0" :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'" />
           </fit-text>
         </swipe>
       </template>
     </player-name>
 
-    <div
-      style="
-        position: absolute;
-        top: 43px;
-        right: 676px;
-        width: 656px;
-        height: 492px;
-      "
-    >
+    <div style="position: absolute; top: 43px; right: 676px; width: 656px; height: 492px">
       <twitch-player
         :opacity="player0streamHidden ? 0 : 1"
         :playerNumber="0"
@@ -42,16 +26,14 @@
         :crop="player0crop"
         :aspectratio="player0aspectratio"
         :width="656"
-        :height="492"
-      ></twitch-player>
+        :height="492"></twitch-player>
     </div>
 
     <player-done-slider
       style="top: 43px; right: 676px; width: 656px"
       :state="player0raceState"
       :finalTime="player0finalTime"
-      background
-    >
+      background>
     </player-done-slider>
 
     <player-name
@@ -59,34 +41,20 @@
       class="right"
       pronoun-h="40"
       name-h="95"
-      style="top: -2px; right: 10px; width: 555px; height: 135px"
-    >
+      style="top: -2px; right: 10px; width: 555px; height: 135px">
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="up" :delay="0.5">
           <fit-text :max="1.5" class="pixel-font name">
-            <img
-              v-if="player1volume > 0"
-              :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'"
-            />{{ player1name }}
-            {{
-              player1pronouns != "" && player1pronouns
-                ? `(${player1pronouns})`
-                : ""
+            <img v-if="player1volume > 0" :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'" />{{
+              player1name
             }}
+            {{ player1pronouns != '' && player1pronouns ? `(${player1pronouns})` : '' }}
           </fit-text>
         </swipe>
       </template>
     </player-name>
 
-    <div
-      style="
-        position: absolute;
-        top: 43px;
-        right: 10px;
-        width: 656px;
-        height: 492px;
-      "
-    >
+    <div style="position: absolute; top: 43px; right: 10px; width: 656px; height: 492px">
       <twitch-player
         :opacity="player1streamHidden ? 0 : 1"
         :playerNumber="1"
@@ -96,51 +64,33 @@
         :crop="player1crop"
         :aspectratio="player1aspectratio"
         :width="656"
-        :height="492"
-      ></twitch-player>
+        :height="492"></twitch-player>
     </div>
 
     <player-done-slider
       style="top: 43px; right: 10px; width: 656px"
       :state="player1raceState"
       :finalTime="player1finalTime"
-      background
-    >
+      background>
     </player-done-slider>
 
     <player-name
       :visible="visible"
       pronoun-h="40"
       name-h="95"
-      style="top: 1035px; left: 588px; width: 555px; height: 135px"
-    >
+      style="top: 1035px; left: 588px; width: 555px; height: 135px">
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="down" :delay="0.5">
           <fit-text :max="1.5" class="pixel-font name">
-            {{
-              player2pronouns != "" && player2pronouns
-                ? `(${player2pronouns})`
-                : ""
-            }}
+            {{ player2pronouns != '' && player2pronouns ? `(${player2pronouns})` : '' }}
             {{ player2name
-            }}<img
-              v-if="player2volume > 0"
-              :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'"
-            />
+            }}<img v-if="player2volume > 0" :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'" />
           </fit-text>
         </swipe>
       </template>
     </player-name>
 
-    <div
-      style="
-        position: absolute;
-        top: 545px;
-        right: 676px;
-        width: 656px;
-        height: 492px;
-      "
-    >
+    <div style="position: absolute; top: 545px; right: 676px; width: 656px; height: 492px">
       <twitch-player
         :opacity="player2streamHidden ? 0 : 1"
         :playerNumber="2"
@@ -150,8 +100,7 @@
         :crop="player2crop"
         :aspectratio="player2aspectratio"
         :width="656"
-        :height="492"
-      ></twitch-player>
+        :height="492"></twitch-player>
     </div>
 
     <player-done-slider
@@ -159,8 +108,7 @@
       :state="player2raceState"
       :finalTime="player2finalTime"
       background
-      direction="up"
-    >
+      direction="up">
     </player-done-slider>
 
     <player-name
@@ -168,34 +116,20 @@
       class="right"
       pronoun-h="40"
       name-h="95"
-      style="top: 1035px; right: 10px; width: 555px; height: 135px"
-    >
+      style="top: 1035px; right: 10px; width: 555px; height: 135px">
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="down" :delay="0.5">
           <fit-text :max="1.5" class="pixel-font name">
-            <img
-              v-if="player3volume > 0"
-              :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'"
-            />{{ player3name }}
-            {{
-              player3pronouns != "" && player3pronouns
-                ? `(${player3pronouns})`
-                : ""
+            <img v-if="player3volume > 0" :src="'/bundles/nodecg-mysteryfunhouse/dist/img/audio.png'" />{{
+              player3name
             }}
+            {{ player3pronouns != '' && player3pronouns ? `(${player3pronouns})` : '' }}
           </fit-text>
         </swipe>
       </template>
     </player-name>
 
-    <div
-      style="
-        position: absolute;
-        top: 545px;
-        right: 10px;
-        width: 656px;
-        height: 492px;
-      "
-    >
+    <div style="position: absolute; top: 545px; right: 10px; width: 656px; height: 492px">
       <twitch-player
         :opacity="player3streamHidden ? 0 : 1"
         :playerNumber="3"
@@ -205,8 +139,7 @@
         :crop="player3crop"
         :aspectratio="player3aspectratio"
         :width="656"
-        :height="492"
-      ></twitch-player>
+        :height="492"></twitch-player>
     </div>
 
     <player-done-slider
@@ -214,21 +147,14 @@
       :state="player3raceState"
       :finalTime="player3finalTime"
       background
-      direction="up"
-    >
+      direction="up">
     </player-done-slider>
 
-    <div
-      style="position: absolute; top: 0px; right: 10px; width: 1322px"
-      class="round pixel-font"
-    >
+    <div style="position: absolute; top: 0px; right: 10px; width: 1322px" class="round pixel-font">
       {{ round1 }}
     </div>
 
-    <div
-      style="position: absolute; top: 1037px; right: 10px; width: 1322px"
-      class="round pixel-font"
-    >
+    <div style="position: absolute; top: 1037px; right: 10px; width: 1322px" class="round pixel-font">
       {{ round2 }}
     </div>
 
@@ -247,8 +173,7 @@
         dir="right"
         class="boxart mb-3"
         style="margin-top: 80px"
-        v-if="currentBoxart"
-      >
+        v-if="currentBoxart">
         <img :src="currentBoxart.url" />
       </swipe>
 
@@ -266,17 +191,12 @@
         </fit-text>
         <div>
           <fit-text :max="1" :min="0.1">
-            <span class="pixel-font submitter" v-if="!!submitter">
-              Subbed by {{ submitter }}</span
-            >
+            <span class="pixel-font submitter" v-if="!!submitter"> Subbed by {{ submitter }}</span>
           </fit-text>
         </div>
       </swipe>
 
-      <mt16-timer
-        style="margin-top: 80px"
-        :class="{ active: timer.state == 'playing' }"
-      >
+      <mt16-timer style="margin-top: 80px" :class="{ active: timer.state == 'playing' }">
         <swipe dir="right" :visible="visible" :delay="0.8">
           {{ timerText }}
         </swipe>
@@ -290,8 +210,7 @@
 <style lang="scss" scoped>
 .boxart {
   margin-right: 15px;
-  height: 100%;
-  max-height: 200px;
+  height: 250px;
 
   img {
     display: block;
@@ -361,21 +280,21 @@
 </style>
 
 <script>
-import { bindReplicant, formatTimer } from "../../util.js";
+import { bindReplicant, formatTimer } from '../../util.js';
 
 export default {
   created() {
-    bindReplicant.call(this, "game");
-    bindReplicant.call(this, "goal");
-    bindReplicant.call(this, "platform");
-    bindReplicant.call(this, "submitter");
-    bindReplicant.call(this, "currentBoxart");
+    bindReplicant.call(this, 'game');
+    bindReplicant.call(this, 'goal');
+    bindReplicant.call(this, 'platform');
+    bindReplicant.call(this, 'submitter');
+    bindReplicant.call(this, 'currentBoxart');
 
-    bindReplicant.call(this, "timer");
+    bindReplicant.call(this, 'timer');
 
-    bindReplicant.call(this, "currentEventLogo");
-    bindReplicant.call(this, "round1", "match1round");
-    bindReplicant.call(this, "round2", "match2round");
+    bindReplicant.call(this, 'currentEventLogo');
+    bindReplicant.call(this, 'round1', 'match1round');
+    bindReplicant.call(this, 'round2', 'match2round');
 
     for (let i = 0; i < 4; i++) {
       bindReplicant.call(this, `player${i}name`);
@@ -393,21 +312,17 @@ export default {
       bindReplicant.call(this, `player${i}aspectratio`);
     }
 
-    if (
-      window.obsstudio &&
-      window.obsstudio.getControlLevel &&
-      window.obsstudio.getControlLevel != 0
-    ) {
+    if (window.obsstudio && window.obsstudio.getControlLevel && window.obsstudio.getControlLevel != 0) {
       window.obsstudio.getCurrentScene((scene) => {
-        console.log("Start scene: " + scene.name);
-        if (scene.name == "4 Player") {
+        console.log('Start scene: ' + scene.name);
+        if (scene.name == '4 Player') {
           this.visible = true;
         }
       });
 
-      window.addEventListener("obsSceneChanged", (event) => {
-        console.log("Switched to scene " + event.detail.name);
-        if (event.detail.name == "4 Player") {
+      window.addEventListener('obsSceneChanged', (event) => {
+        console.log('Switched to scene ' + event.detail.name);
+        if (event.detail.name == '4 Player') {
           this.visible = true;
         } else {
           this.visible = false;
@@ -420,14 +335,14 @@ export default {
       }, 0);
     }
 
-    document.addEventListener("keyup", (e) => {
-      if (e.key === "Enter") {
+    document.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') {
         this.visible = !this.visible;
       }
     });
 
     let vue = this;
-    nodecg.listenFor("playSound", vue.playSound);
+    nodecg.listenFor('playSound', vue.playSound);
   },
 
   methods: {
@@ -444,68 +359,68 @@ export default {
 
   data() {
     return {
-      game: "",
-      goal: "",
-      platform: "",
-      submitter: "",
-      currentBoxart: "",
+      game: '',
+      goal: '',
+      platform: '',
+      submitter: '',
+      currentBoxart: '',
 
       currentEventLogo: {},
-      round1: "",
-      round2: "",
+      round1: '',
+      round2: '',
 
-      player0name: "",
-      player0pronouns: "",
+      player0name: '',
+      player0pronouns: '',
 
-      player0twitch: "",
+      player0twitch: '',
       player0quality: null,
       player0volume: 0,
       player0streamHidden: false,
 
-      player0raceState: "none",
-      player0finalTime: "",
+      player0raceState: 'none',
+      player0finalTime: '',
 
       player0crop: [0, 0, 0, 0],
       player0aspectratio: false,
 
-      player1name: "",
-      player1pronouns: "",
+      player1name: '',
+      player1pronouns: '',
 
-      player1twitch: "",
+      player1twitch: '',
       player1quality: null,
       player1volume: 0,
       player1streamHidden: false,
 
-      player1raceState: "none",
-      player1finalTime: "",
+      player1raceState: 'none',
+      player1finalTime: '',
 
       player1crop: [0, 0, 0, 0],
       player1aspectratio: false,
 
-      player2name: "",
-      player2pronouns: "",
+      player2name: '',
+      player2pronouns: '',
 
-      player2twitch: "",
+      player2twitch: '',
       player2quality: null,
       player2volume: 0,
       player2streamHidden: false,
 
-      player2raceState: "none",
-      player2finalTime: "",
+      player2raceState: 'none',
+      player2finalTime: '',
 
       player2crop: [0, 0, 0, 0],
       player2aspectratio: false,
 
-      player3name: "",
-      player3pronouns: "",
+      player3name: '',
+      player3pronouns: '',
 
-      player3twitch: "",
+      player3twitch: '',
       player3quality: null,
       player3volume: 0,
       player3streamHidden: false,
 
-      player3raceState: "none",
-      player3finalTime: "",
+      player3raceState: 'none',
+      player3finalTime: '',
 
       player3crop: [0, 0, 0, 0],
       player3aspectratio: false,
