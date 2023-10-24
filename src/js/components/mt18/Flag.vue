@@ -1,6 +1,6 @@
 <template>
   <div class="flag">
-    <img :src="flag" />
+    <img :src="flag" v-if="code != ''" />
   </div>
 </template>
 

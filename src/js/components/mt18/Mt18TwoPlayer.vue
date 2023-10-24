@@ -1,96 +1,11 @@
 <template>
   <v-app>
     <div id="top-section">
-      <div class="playerinfo-box">
-        <div class="player-name">
-          <div class="pronouns">
-            <swipe :visible="visible" dir="right" :delay="0.3">
-              <span>{{ player0pronouns }}</span>
-            </swipe>
-          </div>
-
-          <swipe dir="down" :visible="visible" :delay="0.2">
-            <div class="name-box pga-box">
-              <Flag code="de.svg" />
-
-              <div class="name">
-                <fit-text :max="2.5">
-                  {{ player0name }}
-                </fit-text>
-              </div>
-
-              <div class="audio">
-                <v-icon v-if="player0volume > 0"> mdi-volume-high </v-icon>
-              </div>
-            </div>
-          </swipe>
-        </div>
-
-        <div class="done-holder">
-          <div class="done-slider" :class="{ on: player0raceState != 'none' }">
-            <div class="left" :class="player0raceState" v-if="player0raceState == 'winner'">
-              1<span class="small">st</span>
-            </div>
-
-            <div class="left" :class="player0raceState" v-if="player0raceState == 'loser'">
-              2<span class="small">nd</span>
-            </div>
-
-            <div class="left" :class="player0raceState" v-if="player0raceState == 'forfeit'">FF</div>
-
-            <div class="left" :class="player0raceState" v-if="player0raceState == 'none'"></div>
-
-            <div class="right">{{ player0finalTime }}</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="playerinfo-box">
-        <div class="done-holder">
-          <div class="done-slider right" :class="{ on: player1raceState != 'none' }">
-            <div class="left" :class="player1raceState" v-if="player1raceState == 'winner'">
-              1<span class="small">st</span>
-            </div>
-
-            <div class="left" :class="player1raceState" v-if="player1raceState == 'loser'">
-              2<span class="small">nd</span>
-            </div>
-
-            <div class="left" :class="player1raceState" v-if="player1raceState == 'forfeit'">FF</div>
-
-            <div class="left" :class="player1raceState" v-if="player1raceState == 'none'"></div>
-
-            <div class="right">{{ player1finalTime }}</div>
-          </div>
-        </div>
-
-        <div class="player-name right">
-          <div class="pronouns">
-            <swipe :visible="visible" dir="left" :delay="0.3">
-              <span>{{ player1pronouns }}</span>
-            </swipe>
-          </div>
-
-          <swipe dir="down" :visible="visible" :delay="0.2">
-            <div class="name-box pga-box right">
-              <Flag code="us.svg" />
-
-              <div class="name">
-                <fit-text :max="2.5">
-                  {{ player1name }}
-                </fit-text>
-              </div>
-
-              <div class="audio">
-                <v-icon v-if="player1volume > 0"> mdi-volume-high </v-icon>
-              </div>
-            </div>
-          </swipe>
-        </div>
-      </div>
+      <mt18-player-box :player="player0" :visible="visible" side="left" />
+      <mt18-player-box :player="player1" :visible="visible" side="right" />
     </div>
 
-    <div style="position: absolute; top: 150px; left: 15px; width: 930px; height: 698px">
+    <div id="player-section">
       <twitch-player
         :opacity="player0streamHidden ? 0 : 1"
         :playerNumber="0"
@@ -101,9 +16,7 @@
         :aspectratio="player0aspectratio"
         :width="930"
         :height="698"></twitch-player>
-    </div>
 
-    <div style="position: absolute; top: 150px; left: 975px; width: 930px; height: 698px">
       <twitch-player
         :opacity="player1streamHidden ? 0 : 1"
         :playerNumber="1"
@@ -117,56 +30,9 @@
     </div>
 
     <div id="bottom-section">
-      <div id="game-box" class="pga-box">
-        <swipe :visible="visible" dir="right" id="game-boxart" v-if="currentBoxart" :delay="0">
-          <div class="d-flex align-center" style="height: 100%">
-            <img :src="currentBoxart.url" />
-          </div>
-        </swipe>
+      <mt18-game-box :game="game" :goal="goal" :submitter="submitter" :visible="visible" :boxart="currentBoxart" />
 
-        <div id="game-info">
-          <swipe :visible="visible" dir="right" :delay="0.8">
-            <div id="game">
-              <fit-text :max="1" :min="0.1">
-                {{ game }}
-              </fit-text>
-            </div>
-          </swipe>
-
-          <div id="game-info-body">
-            <swipe :visible="visible" dir="right" :delay="0.9">
-              <div id="goal">
-                {{ goal }}
-              </div>
-            </swipe>
-
-            <swipe :visible="visible" dir="right" :delay="1" v-if="submitter != ''">
-              <div id="submitter">
-                <fit-text :max="1" :min="0.1"> Submitted by {{ submitter }} </fit-text>
-              </div>
-            </swipe>
-          </div>
-        </div>
-      </div>
-
-      <div id="logo-box">
-        <div>
-          <div id="round">
-            <swipe dir="left" :visible="visible" :delay="0.8">
-              <span>{{ round }}</span>
-            </swipe>
-          </div>
-          <div id="timer">
-            <swipe dir="left" :visible="visible" :delay="1">
-              <span>{{ timerText }}</span>
-            </swipe>
-          </div>
-        </div>
-
-        <swipe dir="swing-left" :visible="visible" :delay="0">
-          <img class="logo" id="logo" :src="currentEventLogo.url" />
-        </swipe>
-      </div>
+      <mt18-logo-box :round="round" :timer="timerText" :logo="currentEventLogo" :visible="visible"></mt18-logo-box>
     </div>
 
     <AchievementManager></AchievementManager>
@@ -177,142 +43,25 @@
 <style lang="scss" scoped>
 $whiteBoxFont: 'Arvo', serif;
 
-.done-holder {
-  display: flex;
-  overflow: hidden;
-}
-
-.done-slider {
-  display: flex;
-  font-size: 3rem;
-  color: #333;
-  align-items: center;
-
-  transform: translateX(-101%);
-
-  padding-left: 15px;
-  &.right {
-    transform: translateX(101%);
-    flex-direction: row-reverse;
-    padding-right: 15px;
-    padding-left: 0px;
-  }
-
-  transition: transform 0.5s;
-
-  &.on {
-    transform: translateX(0%);
-  }
-
-  .left {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 78px;
-    font-weight: 700;
-
-    background-color: white;
-
-    &.winner {
-      background-color: gold;
-    }
-
-    &.loser {
-      background-color: silver;
-    }
-
-    &.forfeit {
-      background-color: #f58038;
-    }
-
-    .small {
-      font-size: 0.3em;
-      margin-bottom: 20px;
-    }
-  }
-
-  .right {
-    background-color: white;
-    font-weight: 200;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    padding: 0 15px;
-  }
+#app {
+  width: 1920px;
+  height: 1080px;
+  position: relative;
 }
 
 #top-section {
-  position: absolute;
-  top: 0px;
-  left: 0px;
   width: 100%;
   height: 150px;
   padding: 0 15px;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-}
-
-.playerinfo-box {
-  display: flex;
   margin-bottom: 15px;
 }
 
-.player-name {
-  width: 575px;
-  line-height: 1;
-  .pronouns {
-    text-transform: none;
-    background-color: white;
-    font-family: $whiteBoxFont;
-    color: #333;
-    line-height: 1.4;
-    font-weight: 700;
-
-    span {
-      padding: 0em 1em !important;
-    }
-  }
-
-  .name-box {
-    display: flex;
-    align-items: center;
-    height: 56px;
-
-    &.right {
-      flex-direction: row-reverse;
-    }
-
-    .flag {
-      height: 100%;
-    }
-
-    .name {
-      padding: 0.5em 1em;
-      flex-grow: 1;
-    }
-
-    .audio {
-      margin-right: 10px;
-      flex-shrink: 0;
-      width: 40px;
-
-      i {
-        font-size: 40px;
-      }
-    }
-  }
-
-  &.right {
-    text-align: right;
-  }
-}
-
-#app {
-  width: 1920px;
-  height: 1080px;
-  position: relative;
+#player-section {
+  display: flex;
+  justify-content: space-around;
 }
 
 #bottom-section {
@@ -324,118 +73,6 @@ $whiteBoxFont: 'Arvo', serif;
   padding-top: 30px;
   display: flex;
   justify-content: space-between;
-}
-
-#game-box {
-  display: flex;
-  max-width: 1300px;
-}
-
-#game-boxart {
-  height: 100%;
-
-  img {
-    display: block;
-    margin: 0 auto;
-    max-height: 100%;
-    max-width: 325px;
-  }
-}
-
-#game-info {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-#game {
-  width: 100%;
-  text-transform: none;
-  background-color: white;
-  font-family: $whiteBoxFont;
-  color: #333;
-  padding: 0 1rem !important;
-  line-height: 1.4;
-  font-size: 3em;
-  padding-right: 100px;
-  display: flex;
-  align-items: center;
-}
-
-#game-info-body {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-right: 100px;
-}
-
-#goal {
-  padding: 0.1em 1rem !important;
-  font-size: 2em;
-  line-height: 1;
-}
-
-#submitter {
-  padding: 0.1em 1rem !important;
-  font-size: 1.5em;
-  line-height: 1;
-  font-weight: 300;
-}
-
-#logo-box {
-  display: flex;
-  align-items: flex-end;
-}
-
-#logo {
-  display: block;
-  opacity: 0.6;
-  max-width: 300px;
-  max-height: 185px;
-}
-
-#round {
-  text-align: right;
-  font-size: 3em;
-  text-transform: uppercase;
-  font-weight: 300;
-  line-height: 1.2;
-
-  span {
-    padding-right: 15px;
-  }
-}
-
-#timer {
-  text-align: right;
-  font-size: 4em;
-  line-height: 0.9;
-  font-weight: 700;
-
-  span {
-    padding-right: 15px;
-  }
-}
-
-.match-round {
-  width: 100%;
-  display: flex;
-  font-size: 2em;
-  justify-content: center;
-
-  .match-round-inner {
-    height: 100%;
-  }
-}
-
-.pga-box {
-  overflow: hidden;
-  color: white;
-  font-weight: bold;
-  text-transform: uppercase;
-  background: rgb(0, 113, 164);
-  background: linear-gradient(135deg, rgba(0, 113, 164, 0.6) 0%, rgba(3, 30, 47, 0.6) 80%);
 }
 </style>
 
@@ -460,6 +97,7 @@ export default {
     for (let i = 0; i < 2; i++) {
       bindReplicant.call(this, `player${i}name`);
       bindReplicant.call(this, `player${i}pronouns`);
+      bindReplicant.call(this, `player${i}flag`);
 
       bindReplicant.call(this, `player${i}twitch`);
       // bindReplicant.call(this, `player${i}quality`)
@@ -516,6 +154,28 @@ export default {
     timerText() {
       return formatTimer(this.timer.ms, false, false);
     },
+
+    player0() {
+      return {
+        name: this.player0name,
+        pronouns: this.player0pronouns,
+        flag: this.player0flag,
+        volume: this.player0volume,
+        raceState: this.player0raceState,
+        finalTime: this.player0finalTime,
+      };
+    },
+
+    player1() {
+      return {
+        name: this.player1name,
+        pronouns: this.player1pronouns,
+        flag: this.player1flag,
+        volume: this.player1volume,
+        raceState: this.player1raceState,
+        finalTime: this.player1finalTime,
+      };
+    },
   },
 
   data() {
@@ -524,13 +184,14 @@ export default {
       goal: '',
       platform: '',
       submitter: '',
-      currentBoxart: '',
+      currentBoxart: {},
 
       currentEventLogo: {},
       round: '',
 
       player0name: '',
       player0pronouns: '',
+      player0flag: '',
 
       player0twitch: '',
       player0quality: null,
@@ -545,6 +206,7 @@ export default {
 
       player1name: '',
       player1pronouns: '',
+      player1flag: '',
 
       player1twitch: '',
       player1quality: null,

@@ -11,17 +11,14 @@
 .player-backdrop {
   // background-color: black;
   overflow: hidden;
-  height: 100%;
-  width: 100%;
-}
-
-.player-wrapper {
-  position: absolute;
+  position: relative;
 }
 
 .popover-holder {
   pointer-events: none;
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   display: flex;
@@ -45,14 +42,14 @@
 </style>
 
 <script>
-import { bindReplicant } from "../util.js";
+import { bindReplicant } from '../util.js';
 
 let twitchOptions = {
   channel: null,
   autoplay: true,
   muted: false,
-  parent: ["nodecg.guegan.de"],
-  quality: "auto",
+  parent: ['nodecg.guegan.de'],
+  quality: 'auto',
 };
 
 let playerWidth = 930;
@@ -63,18 +60,10 @@ export default {
     nodecg.listenFor(`stream${this.playerNumber}reload`, () => {
       this.createPlayer();
     });
-    bindReplicant.call(
-      this,
-      "qualities",
-      `player${this.playerNumber}qualities`
-    );
+    bindReplicant.call(this, 'qualities', `player${this.playerNumber}qualities`);
 
-    bindReplicant.call(this, "popover", `player${this.playerNumber}popover`);
-    bindReplicant.call(
-      this,
-      "popoverVisible",
-      `player${this.playerNumber}popoverVisible`
-    );
+    bindReplicant.call(this, 'popover', `player${this.playerNumber}popover`);
+    bindReplicant.call(this, 'popoverVisible', `player${this.playerNumber}popoverVisible`);
   },
 
   mounted() {
@@ -84,12 +73,12 @@ export default {
   },
 
   unmounted() {
-    this.$refs.player.innerHTML = "";
+    this.$refs.player.innerHTML = '';
   },
 
   methods: {
     createPlayer() {
-      this.$refs.player.innerHTML = "";
+      this.$refs.player.innerHTML = '';
 
       twitchOptions.channel = this.url;
       // twitchOptions.video = "1232657574";
@@ -132,7 +121,7 @@ export default {
         let vScale = this.height / height;
 
         if (this.aspectratio) {
-          let split = this.aspectratio.split(":");
+          let split = this.aspectratio.split(':');
           let targetAspect = split[0] / split[1];
 
           let aspectRatio = width / height;
@@ -169,7 +158,7 @@ export default {
                                 ${playerHeight - bottom}px,
                                 ${left}px
                             )`,
-          "transform-origin": `${transformOriginX}px ${transformOriginY}px`,
+          'transform-origin': `${transformOriginX}px ${transformOriginY}px`,
           transform: `translate(${translateX}px, ${translateY}px) scaleX(${hScale}) scaleY(${vScale})`,
         };
       }
@@ -194,17 +183,7 @@ export default {
     },
   },
 
-  props: [
-    "url",
-    "volume",
-    "playerNumber",
-    "crop",
-    "quality",
-    "opacity",
-    "width",
-    "height",
-    "aspectratio",
-  ],
+  props: ['url', 'volume', 'playerNumber', 'crop', 'quality', 'opacity', 'width', 'height', 'aspectratio'],
 
   data() {
     return {

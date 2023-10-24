@@ -193,3 +193,12 @@ body.graphic::-webkit-scrollbar {
   color: white;
   line-height: 1.2;
 }
+
+.pga-box {
+  overflow: hidden;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: #0071a4;
+  background: linear-gradient(135deg, rgba(0, 113, 164, 0.6) 0%, rgba(3, 30, 47, 0.6) 80%);
+}
