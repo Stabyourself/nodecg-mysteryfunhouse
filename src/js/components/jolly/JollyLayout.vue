@@ -1,14 +1,7 @@
 <template>
   <v-app>
-    <swipe
-      :delay="0.5"
-      :visible="visible"
-      class="match-round"
-      style="top: 10px"
-    >
-      <img
-        src="https://www.games2jolly.com/templates/joyfulgames/images/logo.png"
-      />
+    <swipe :delay="0.5" :visible="visible" class="match-round" style="top: 10px">
+      <img src="https://www.games2jolly.com/templates/joyfulgames/images/logo.png" />
     </swipe>
 
     <player-name
@@ -16,8 +9,7 @@
       pronoun-h="40"
       name-h="95"
       style="top: 15px; left: 20px; width: 775px; height: 135px"
-      class="player-name"
-    >
+      class="player-name">
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="up" :delay="0.5">
           <span class="jolly-font">{{ player0pronouns }}</span>
@@ -37,8 +29,7 @@
       class="right"
       pronoun-h="40"
       name-h="95"
-      style="top: 15px; right: 15px; width: 775px; height: 135px"
-    >
+      style="top: 15px; right: 15px; width: 775px; height: 135px">
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="up" :delay="0.5">
           <span class="jolly-font">
@@ -55,15 +46,7 @@
       </template>
     </player-name>
 
-    <div
-      style="
-        position: absolute;
-        top: 150px;
-        left: 15px;
-        width: 930px;
-        height: 698px;
-      "
-    >
+    <div style="position: absolute; top: 150px; left: 15px; width: 930px; height: 698px">
       <twitch-player
         :opacity="player0streamHidden ? 0 : 1"
         :playerNumber="0"
@@ -73,19 +56,10 @@
         :crop="player0crop"
         :aspectratio="player0aspectratio"
         :width="930"
-        :height="698"
-      ></twitch-player>
+        :height="698"></twitch-player>
     </div>
 
-    <div
-      style="
-        position: absolute;
-        top: 150px;
-        left: 975px;
-        width: 930px;
-        height: 698px;
-      "
-    >
+    <div style="position: absolute; top: 150px; left: 975px; width: 930px; height: 698px">
       <twitch-player
         :opacity="player1streamHidden ? 0 : 1"
         :playerNumber="1"
@@ -95,32 +69,24 @@
         :crop="player1crop"
         :aspectratio="player1aspectratio"
         :width="930"
-        :height="698"
-      ></twitch-player>
+        :height="698"></twitch-player>
     </div>
 
     <player-done-slider
       style="top: 848px; left: 15px; width: 930px"
       :state="player0raceState"
-      :finalTime="player0finalTime"
-    >
+      :finalTime="player0finalTime">
     </player-done-slider>
 
     <player-done-slider
       style="top: 848px; left: 975px; width: 930px"
       :state="player1raceState"
-      :finalTime="player1finalTime"
-    >
+      :finalTime="player1finalTime">
     </player-done-slider>
 
-    <game-box style="top: 865px; left: 15px">
+    <mt16-game-box style="top: 865px; left: 15px">
       <template v-slot:boxart>
-        <swipe
-          :visible="visible"
-          dir="right"
-          class="boxart"
-          v-if="currentBoxart"
-        >
+        <swipe :visible="visible" dir="right" class="boxart" v-if="currentBoxart">
           <div class="d-flex align-center" style="height: 100%">
             <img :src="currentBoxart.url" />
           </div>
@@ -130,7 +96,7 @@
       <template v-slot:text>
         <swipe :visible="visible" dir="up" :delay="1" class="game">
           <fit-text :max="1" :min="0.1">
-            <span>
+            <span class="jolly-font">
               {{ game }}
               <span v-if="!!platform"> ({{ platform }})</span>
             </span>
@@ -146,27 +112,27 @@
         </swipe>
         <!-- <div class="submitter">Submitted by {{ submitter }}</div> -->
       </template>
-    </game-box>
+    </mt16-game-box>
 
     <!-- <rainwave
             v-if="showRainwave"
             style="top: 975px; left: 1521px; width: 444px; height: 124px">
         </rainwave> -->
 
-    <timer style="top: 848px" :class="{ active: timer.state == 'playing' }">
+    <mt16-timer style="top: 848px" :class="{ active: timer.state == 'playing' }">
       <swipe dir="down" :visible="visible">
         {{ timerText }}
       </swipe>
-    </timer>
+    </mt16-timer>
   </v-app>
 </template>
 
 <style lang="scss" scoped>
-@import url("https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@900&display=swap');
 
 .jolly-font {
   text-transform: uppercase;
-  font-family: "Inknut Antiqua", serif;
+  font-family: 'Inknut Antiqua', serif;
 
   background: #920232;
   background: linear-gradient(to top, #f67a01 0%, #fadc00 100%);
@@ -202,21 +168,21 @@
 </style>
 
 <script>
-import { bindReplicant, formatTimer } from "../../util.js";
+import { bindReplicant, formatTimer } from '../../util.js';
 
 export default {
   created() {
-    bindReplicant.call(this, "game");
-    bindReplicant.call(this, "goal");
-    bindReplicant.call(this, "platform");
-    bindReplicant.call(this, "submitter");
-    bindReplicant.call(this, "currentBoxart");
+    bindReplicant.call(this, 'game');
+    bindReplicant.call(this, 'goal');
+    bindReplicant.call(this, 'platform');
+    bindReplicant.call(this, 'submitter');
+    bindReplicant.call(this, 'currentBoxart');
 
-    bindReplicant.call(this, "timer");
+    bindReplicant.call(this, 'timer');
 
-    bindReplicant.call(this, "showRainwave");
+    bindReplicant.call(this, 'showRainwave');
 
-    bindReplicant.call(this, "round", "match1round");
+    bindReplicant.call(this, 'round', 'match1round');
 
     for (let i = 0; i < 2; i++) {
       bindReplicant.call(this, `player${i}name`);
@@ -234,21 +200,17 @@ export default {
       bindReplicant.call(this, `player${i}crop`);
     }
 
-    if (
-      window.obsstudio &&
-      window.obsstudio.getControlLevel &&
-      window.obsstudio.getControlLevel != 0
-    ) {
+    if (window.obsstudio && window.obsstudio.getControlLevel && window.obsstudio.getControlLevel != 0) {
       window.obsstudio.getCurrentScene((scene) => {
-        console.log("Start scene: " + scene.name);
-        if (scene.name == "2 Player") {
+        console.log('Start scene: ' + scene.name);
+        if (scene.name == '2 Player') {
           this.visible = true;
         }
       });
 
-      window.addEventListener("obsSceneChanged", (event) => {
-        console.log("Switched to scene " + event.detail.name);
-        if (event.detail.name == "2 Player") {
+      window.addEventListener('obsSceneChanged', (event) => {
+        console.log('Switched to scene ' + event.detail.name);
+        if (event.detail.name == '2 Player') {
           this.visible = true;
         } else {
           this.visible = false;
@@ -260,8 +222,8 @@ export default {
         this.visible = true;
       }, 0);
 
-      document.addEventListener("keyup", (e) => {
-        if (e.key === "Enter") {
+      document.addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') {
           this.visible = !this.visible;
         }
       });
@@ -276,38 +238,38 @@ export default {
 
   data() {
     return {
-      game: "",
-      goal: "",
-      platform: "",
-      submitter: "",
-      currentBoxart: "",
+      game: '',
+      goal: '',
+      platform: '',
+      submitter: '',
+      currentBoxart: '',
 
-      round: "",
+      round: '',
 
-      player0name: "",
-      player0pronouns: "",
+      player0name: '',
+      player0pronouns: '',
 
-      player0twitch: "",
+      player0twitch: '',
       player0quality: null,
       player0volume: 0,
       player0streamHidden: false,
 
-      player0raceState: "none",
-      player0finalTime: "",
+      player0raceState: 'none',
+      player0finalTime: '',
 
       player0crop: [0, 0, 0, 0],
       player0aspectratio: false,
 
-      player1name: "",
-      player1pronouns: "",
+      player1name: '',
+      player1pronouns: '',
 
-      player1twitch: "",
+      player1twitch: '',
       player1quality: null,
       player1volume: 0,
       player1streamHidden: false,
 
-      player1raceState: "none",
-      player1finalTime: "",
+      player1raceState: 'none',
+      player1finalTime: '',
 
       player1crop: [0, 0, 0, 0],
       player1aspectratio: false,
