@@ -1,5 +1,5 @@
 <template>
-  <div class="player-backdrop">
+  <div class="player-backdrop" :style="{ width: width + 'px', height: height + 'px' }">
     <div class="player-wrapper" :style="cropStyles" ref="player"></div>
     <div class="popover-holder">
       <img :class="{ active: popoverVisible }" :src="popover" />
@@ -12,6 +12,10 @@
   // background-color: black;
   overflow: hidden;
   position: relative;
+}
+
+.player-wrapper {
+  position: absolute;
 }
 
 .popover-holder {
