@@ -39,6 +39,7 @@
     &.swing-left {
       transform-origin: 140%;
       transform: rotateY(90deg);
+      opacity: 0;
     }
   }
 
@@ -47,7 +48,8 @@
   }
 
   &.visible .swipe-inner {
-    transition: transform 1s;
+    opacity: 1;
+    transition: transform 1s ease-in-out, opacity 0.5s ease-in-out;
     transform: none;
   }
 }

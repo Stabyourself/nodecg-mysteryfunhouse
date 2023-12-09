@@ -52,7 +52,7 @@ let twitchOptions = {
   channel: null,
   autoplay: true,
   muted: false,
-  parent: ['nodecg.guegan.de'],
+  parent: ['nodecg.mysteryfun.house'],
   quality: 'auto',
 };
 

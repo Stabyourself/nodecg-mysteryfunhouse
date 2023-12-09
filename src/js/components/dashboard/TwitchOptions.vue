@@ -2,33 +2,18 @@
   <v-app>
     <v-main>
       <v-container>
-        <v-textarea
-          v-model="twitchTemplate"
-          label="Stream Title Template"
-          rows="3"
-        >
-        </v-textarea>
+        <v-textarea v-model="twitchTemplate" label="Stream Title Template" rows="3"> </v-textarea>
 
         <v-row>
           <v-col>
-            <v-btn
-              class="mb-3"
-              color="error"
-              small
-              block
-              @click="resetTemplate"
-            >
+            <v-btn class="mb-3" color="error" small block @click="resetTemplate">
               Reset
-              <v-icon right dark>
-                mdi-undo
-              </v-icon>
+              <v-icon right dark> mdi-undo </v-icon>
             </v-btn>
           </v-col>
 
           <v-col>
-            <v-btn small block outlined color="info" @click="toggleHelp">
-              Help <v-icon>mdi-help</v-icon>
-            </v-btn>
+            <v-btn small block outlined color="info" @click="toggleHelp"> Help <v-icon>mdi-help</v-icon> </v-btn>
           </v-col>
         </v-row>
 
@@ -44,15 +29,7 @@
           </ul>
         </div>
 
-        <v-btn
-          class="mb-3"
-          color="primary"
-          block
-          @click="updateTwitch"
-          :loading="updating"
-        >
-          Apply Stream Title
-        </v-btn>
+        <v-btn class="mb-3" color="primary" block @click="updateTwitch" :loading="updating"> Apply Stream Title </v-btn>
 
         <span v-if="error" class="error--text">{{ error }}</span>
 
@@ -61,9 +38,7 @@
           <v-card-text style="white-space: pre-line">
             <div><v-icon>mdi-format-title</v-icon> {{ success.title }}</div>
 
-            <div>
-              <v-icon>mdi-controller-classic</v-icon> {{ success.game }}
-            </div>
+            <div><v-icon>mdi-controller-classic</v-icon> {{ success.game }}</div>
           </v-card-text>
         </v-card>
       </v-container>
@@ -72,23 +47,23 @@
 </template>
 
 <script>
-import { bindReplicant } from "../../util.js";
+import { bindReplicant } from '../../util.js';
 
 export default {
   created() {
-    bindReplicant.call(this, "twitchTemplate");
+    bindReplicant.call(this, 'twitchTemplate');
   },
 
   methods: {
     resetTemplate() {
-      this.twitchTemplate = "Mystery Tournament 16! {player1} vs. {player2}";
+      this.twitchTemplate = 'Mystery Tournament 18! {player1} vs. {player2}';
     },
 
     updateTwitch() {
       this.updating = true;
 
       nodecg
-        .sendMessage("updateTwitch")
+        .sendMessage('updateTwitch')
         .then((result) => {
           this.updating = false;
 
@@ -113,7 +88,7 @@ export default {
       updating: false,
       error: null,
       success: null,
-      twitchTemplate: "",
+      twitchTemplate: '',
       helpVisible: false,
     };
   },

@@ -167,6 +167,11 @@
         "height": 1080
       },
       {
+        "file": "mt18/4player.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
         "file": "mt18/coming_up.html",
         "width": 1920,
         "height": 1080
@@ -272,6 +277,7 @@
     "discord.js": "^13.3.1",
     "google-spreadsheet": "^3.2.0",
     "lodash": "^4.17.21",
+    "mariadb": "^3.2.2",
     "markdown-it-vue": "^1.0.9",
     "node-fetch": "^2.6.7",
     "request": "^2.88.2",

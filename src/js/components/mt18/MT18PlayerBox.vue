@@ -87,7 +87,7 @@ $whiteBoxFont: 'Arvo', serif;
       width: 40px;
 
       i {
-        font-size: 40px;
+        font-size: 2.5em;
       }
     }
   }
@@ -100,7 +100,7 @@ $whiteBoxFont: 'Arvo', serif;
 
 .playerinfo-box .done-holder .done-slider {
   display: flex;
-  font-size: 3rem;
+  font-size: 3em;
   color: #333;
   align-items: center;
 
@@ -162,6 +162,27 @@ $whiteBoxFont: 'Arvo', serif;
     transform: translateX(101%);
     flex-direction: row-reverse;
     padding-left: 0px;
+  }
+}
+
+.playerinfo-box.compact {
+  font-size: 0.6em;
+  .player-name {
+    width: 400px;
+  }
+
+  .name-box {
+    height: 30px;
+  }
+
+  .done-slider {
+    .left {
+      width: 50px;
+    }
+
+    .right {
+      padding: 0 10px;
+    }
   }
 }
 </style>

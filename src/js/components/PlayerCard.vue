@@ -4,12 +4,12 @@
 
 <script>
 function getNumberWithOrdinal(n) {
-  var s = ["th", "st", "nd", "rd"],
+  var s = ['th', 'st', 'nd', 'rd'],
     v = n % 100;
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
 
-var gen = require("random-seed");
+var gen = require('random-seed');
 
 export default {
   methods: {
@@ -19,7 +19,7 @@ export default {
       if (this.info) {
         // set card color and attribute
 
-        let rand = gen.create(this.info.contact["Challonge Username"]);
+        let rand = gen.create(this.info.contact['id']);
         this.cardColor = rand.range(this.cardFronts.length);
         this.attribute = rand.range(6);
 
@@ -28,8 +28,8 @@ export default {
         }
 
         // Draw name
-        this.ctx.font = "110px MatrixRegularSmallCaps";
-        this.ctx.fillStyle = "#1b1515";
+        this.ctx.font = '110px MatrixRegularSmallCaps';
+        this.ctx.fillStyle = '#1b1515';
 
         // see if we need to scale the name
         let name = this.info.name;
@@ -46,17 +46,7 @@ export default {
           let x = this.attribute % 3;
           let y = Math.floor(this.attribute / 3);
 
-          this.ctx.drawImage(
-            this.cardAttributes,
-            x * 80,
-            y * 80,
-            80,
-            80,
-            665,
-            56,
-            80,
-            80
-          );
+          this.ctx.drawImage(this.cardAttributes, x * 80, y * 80, 80, 80, 665, 56, 80, 80);
         }
 
         // Stat stuff
@@ -64,7 +54,7 @@ export default {
         let mtCount = 0;
         let winPercentage = null;
         let bestPlacement = null;
-        let bestPlacementMt = "";
+        let bestPlacementMt = '';
         let firstJoined = null;
         let firstJoinedPlacement = null;
         let mtsWon = [];
@@ -74,7 +64,7 @@ export default {
           // get highest placement and first MT
 
           function checkPlacement(str, mt) {
-            let placement = parseInt(str.substring(0, 3).replace(/\./g, ""));
+            let placement = parseInt(str.substring(0, 3).replace(/\./g, ''));
 
             if (!firstJoined) {
               firstJoined = mt;
@@ -96,26 +86,23 @@ export default {
           }
 
           let i = 1;
-          let mtName = "MT1";
+          let mtName = 'MT1';
 
           while (mtName in this.info.career) {
-            if (
-              this.info.career[mtName] &&
-              String(this.info.career[mtName]).length > 0
-            ) {
+            if (this.info.career[mtName] && String(this.info.career[mtName]).length > 0) {
               checkPlacement(this.info.career[mtName], mtName);
             }
 
             i++;
 
-            mtName = "MT" + i;
+            mtName = 'MT' + i;
             if (i == 10) {
-              mtName = "MTX";
+              mtName = 'MTX';
             }
           }
 
-          winPercentage = Math.round(this.info.career["%"]);
-          mtCount = parseInt(this.info.career["MT Count"]);
+          winPercentage = Math.round(this.info.career['%']);
+          mtCount = parseInt(this.info.career['MT Count']);
         }
 
         // Draw stars
@@ -132,50 +119,44 @@ export default {
         }
 
         // Draw edition
-        this.ctx.font = "bold 23px StoneSerifRegular";
-        this.ctx.fillText(
-          `${getNumberWithOrdinal(mtCount + 1)} Edition`,
-          90,
-          873
-        );
+        this.ctx.font = 'bold 23px StoneSerifRegular';
+        this.ctx.fillText(`${getNumberWithOrdinal(mtCount + 1)} Edition`, 90, 873);
 
         // Draw serial number
-        this.ctx.textAlign = "right";
-        let seed = "????";
+        this.ctx.textAlign = 'right';
+        let seed = '????';
 
         if (this.info.challonge) {
           seed = String(this.info.challonge.seed);
         }
 
-        this.ctx.fillText(`MT17-${seed.padStart(4, "0")}`, 727, 873);
-        this.ctx.textAlign = "left";
+        this.ctx.fillText(`MT18-${seed.padStart(4, '0')}`, 727, 873);
+        this.ctx.textAlign = 'left';
 
         // Draw class or whatever this is
-        this.ctx.font = "bold 40px ITCStoneSerifSmallCapsBold";
+        this.ctx.font = 'bold 40px ITCStoneSerifSmallCapsBold';
 
-        let classes = ["Racer"];
+        let classes = ['Racer'];
 
         if (bestPlacement == 1) {
-          classes.push("Champion");
+          classes.push('Champion');
         }
         if (this.info.challonge && this.info.challonge.seed <= 16) {
-          classes.push("Seeded");
+          classes.push('Seeded');
         }
-        if (firstJoined == "MT1") {
-          classes.push("OG");
+        if (firstJoined == 'MT1') {
+          classes.push('OG');
         }
-        this.ctx.fillText(`[${classes.join("/")}]`, 72, 925);
+        this.ctx.fillText(`[${classes.join('/')}]`, 72, 925);
 
         // Draw ~lore~
-        this.ctx.font = "bold 23px StoneSerifRegular";
+        this.ctx.font = 'bold 23px StoneSerifRegular';
 
         let lines = [];
 
         if (this.info.career) {
           // Win rate
-          lines.push(
-            `Has a win rate of ${winPercentage}% across all Mystery Tournaments.`
-          );
+          lines.push(`Has a win rate of ${winPercentage}% across all Mystery Tournaments.`);
 
           // Best performance(s)
           if (mtsWon.length > 0) {
@@ -184,34 +165,22 @@ export default {
             if (mtsWon.length > 1) {
               let mtsWonCopy = [...mtsWon];
               let last = mtsWonCopy.pop();
-              list = mtsWonCopy.join(", ") + " and " + last;
+              list = mtsWonCopy.join(', ') + ' and ' + last;
             } else {
-              list = mtsWon.join(", ");
+              list = mtsWon.join(', ');
             }
             lines.push(`Won ${list}.`);
           }
 
           if (mtCount == 1) {
             // only joined 1 MT
-            lines.push(
-              `Joined in ${firstJoined} and finished ${getNumberWithOrdinal(
-                firstJoinedPlacement
-              )}.`
-            );
+            lines.push(`Joined in ${firstJoined} and finished ${getNumberWithOrdinal(firstJoinedPlacement)}.`);
           } else if (bestPlacement != firstJoinedPlacement) {
             // best placement was not their first
-            lines.push(
-              `First joined in ${firstJoined} and finished ${getNumberWithOrdinal(
-                firstJoinedPlacement
-              )}.`
-            );
+            lines.push(`First joined in ${firstJoined} and finished ${getNumberWithOrdinal(firstJoinedPlacement)}.`);
 
             if (mtsWon.length == 0) {
-              lines.push(
-                `Got a best placement of ${getNumberWithOrdinal(
-                  bestPlacement
-                )} during ${bestPlacementMt}.`
-              );
+              lines.push(`Got a best placement of ${getNumberWithOrdinal(bestPlacement)} during ${bestPlacementMt}.`);
             }
           } else {
             // best placement was their first
@@ -220,8 +189,8 @@ export default {
             } else {
               lines.push(
                 `First joined in ${firstJoined} and finished ${getNumberWithOrdinal(
-                  firstJoinedPlacement
-                )}, their best placement.`
+                  firstJoinedPlacement,
+                )}, their best placement.`,
               );
             }
           }
@@ -239,10 +208,10 @@ export default {
         // Draw flavor
         this.ctx.font = "bold italic 23px 'Times New Roman'";
 
-        let flavor = "";
+        let flavor = '';
 
-        if (this.info.contact && this.info.contact["Flavor text"]) {
-          flavor = this.info.contact["Flavor text"] ?? "";
+        if (this.info.contact && this.info.contact['flavor']) {
+          flavor = this.info.contact['flavor'] ?? '';
         }
         let flavorWidth = this.ctx.measureText(flavor).width;
 
@@ -264,38 +233,34 @@ export default {
         // wins = String(wins).padStart(4, ' ')
         // losses = String(losses).padStart(4, ' ')
 
-        this.ctx.font = "bold 38px MatrixBoldSmallCaps";
-        this.ctx.textAlign = "right";
+        this.ctx.font = 'bold 38px MatrixBoldSmallCaps';
+        this.ctx.textAlign = 'right';
         this.ctx.fillText(`WIN/${wins}  LOSE/${losses}`, 740, 1107);
 
         //passcode
-        this.ctx.font = "bold 23px StoneSerifRegular";
-        this.ctx.textAlign = "left";
+        this.ctx.font = 'bold 23px StoneSerifRegular';
+        this.ctx.textAlign = 'left';
         this.ctx.fillText(`5318008`, 30, 1150);
 
         // copyright
-        this.ctx.textAlign = "right";
+        this.ctx.textAlign = 'right';
         let year = new Date().getFullYear();
         this.ctx.fillText(`©${year} MAURICE`, 740, 1150);
-        this.ctx.textAlign = "left";
+        this.ctx.textAlign = 'left';
       }
 
-      this.$emit("update");
+      this.$emit('update');
     },
 
     loadAvatar() {
-      if (
-        this.info &&
-        this.info.avatar &&
-        this.info.avatar.search("embed") == -1
-      ) {
+      if (this.info && this.info.avatar && this.info.avatar.search('embed') == -1) {
         this.img.src = this.info.avatar;
-        this.img.crossOrigin = "Anonymous";
+        this.img.crossOrigin = 'Anonymous';
 
         this.img.onload = this.render;
       } else {
         this.img = new Image();
-        this.img.crossOrigin = "Anonymous";
+        this.img.crossOrigin = 'Anonymous';
         this.render();
       }
     },
@@ -304,8 +269,8 @@ export default {
   mounted() {
     if (!this.useCtx) {
       this.canvas = this.$el;
-      this.canvas.style.height = "100%";
-      this.ctx = this.canvas.getContext("2d");
+      this.canvas.style.height = '100%';
+      this.ctx = this.canvas.getContext('2d');
     } else {
       this.ctx = this.useCtx;
     }
@@ -313,7 +278,7 @@ export default {
     this.ctx.canvas.width = 813;
     this.ctx.canvas.height = 1185;
 
-    let colors = ["blue", "brown", "pink", "purple", "teal", "yellow"];
+    let colors = ['blue', 'brown', 'pink', 'purple', 'teal', 'yellow'];
 
     for (const color of colors) {
       let img = new Image();
@@ -324,16 +289,14 @@ export default {
     }
 
     this.cardStar.onload = this.render;
-    this.cardStar.src =
-      "/bundles/nodecg-mysteryfunhouse/dist/img/card_star.png";
+    this.cardStar.src = '/bundles/nodecg-mysteryfunhouse/dist/img/card_star.png';
 
     this.cardAttributes.onload = this.render;
-    this.cardAttributes.src =
-      "/bundles/nodecg-mysteryfunhouse/dist/img/card_attributes.png";
+    this.cardAttributes.src = '/bundles/nodecg-mysteryfunhouse/dist/img/card_attributes.png';
 
     var f = new FontFace(
-      "MatrixRegularSmallCaps",
-      'url("/bundles/nodecg-mysteryfunhouse/dist/font/MatrixRegularSmallCaps.woff2") format("woff2")'
+      'MatrixRegularSmallCaps',
+      'url("/bundles/nodecg-mysteryfunhouse/dist/font/MatrixRegularSmallCaps.woff2") format("woff2")',
     );
     f.load().then((font) => {
       document.fonts.add(font);
@@ -341,8 +304,8 @@ export default {
     });
 
     f = new FontFace(
-      "ITCStoneSerifSmallCapsBold",
-      'url("/bundles/nodecg-mysteryfunhouse/dist/font/ITCStoneSerifSmallCapsBold.woff2") format("woff2")'
+      'ITCStoneSerifSmallCapsBold',
+      'url("/bundles/nodecg-mysteryfunhouse/dist/font/ITCStoneSerifSmallCapsBold.woff2") format("woff2")',
     );
     f.load().then((font) => {
       document.fonts.add(font);
@@ -350,8 +313,8 @@ export default {
     });
 
     f = new FontFace(
-      "StoneSerifRegular",
-      'url("/bundles/nodecg-mysteryfunhouse/dist/font/StoneSerifRegular.woff2") format("woff2")'
+      'StoneSerifRegular',
+      'url("/bundles/nodecg-mysteryfunhouse/dist/font/StoneSerifRegular.woff2") format("woff2")',
     );
     f.load().then((font) => {
       document.fonts.add(font);
@@ -359,8 +322,8 @@ export default {
     });
 
     f = new FontFace(
-      "MatrixBoldSmallCaps",
-      'url("/bundles/nodecg-mysteryfunhouse/dist/font/MatrixBoldSmallCaps.woff2") format("woff2")'
+      'MatrixBoldSmallCaps',
+      'url("/bundles/nodecg-mysteryfunhouse/dist/font/MatrixBoldSmallCaps.woff2") format("woff2")',
     );
     f.load().then((font) => {
       document.fonts.add(font);
@@ -376,7 +339,7 @@ export default {
     },
   },
 
-  props: ["useCtx", "info"],
+  props: ['useCtx', 'info'],
 
   data() {
     return {

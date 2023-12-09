@@ -5,46 +5,25 @@
         Enter a challonge match ID to import those players.
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-icon color="primary" dark v-bind="attrs" v-on="on">
-              mdi-help-circle
-            </v-icon>
+            <v-icon color="primary" dark v-bind="attrs" v-on="on"> mdi-help-circle </v-icon>
           </template>
           <span>The match ID of any race is the tiny number left of it!</span>
         </v-tooltip>
       </p>
 
-      <p class="warning--text mt-2">
-        This will override the selected players!
-      </p>
+      <p class="warning--text mt-2">This will override the selected players!</p>
 
       <v-row class="mx-auto">
         <v-col>
-          <v-text-field
-            v-model="matchId"
-            label="Match ID"
-            @keydown.enter="loadMatch"
-          >
-          </v-text-field>
+          <v-text-field v-model="matchId" label="Match ID" @keydown.enter="loadMatch"> </v-text-field>
         </v-col>
 
         <v-col>
-          <v-select
-            v-model="matchNumber"
-            :items="matchSelectOptions"
-            label="Which match"
-          >
-          </v-select>
+          <v-select v-model="matchNumber" :items="matchSelectOptions" label="Which match"> </v-select>
         </v-col>
 
         <v-col>
-          <v-btn
-            color="green"
-            class="mt-3"
-            block
-            @click="loadMatch"
-            :loading="loading"
-            >Load Match</v-btn
-          >
+          <v-btn color="green" class="mt-3" block @click="loadMatch" :loading="loading">Load Match</v-btn>
         </v-col>
       </v-row>
 
@@ -72,7 +51,7 @@ export default {
         };
 
         nodecg
-          .sendMessage("loadMatch", options)
+          .sendMessage('loadMatch', options)
           .then((matchup) => {
             this.loading = false;
             this.success = `Success! ${matchup}`;
@@ -81,22 +60,26 @@ export default {
             this.loading = false;
             this.error = error.message;
           });
+
+        setTimeout(() => {
+          this.loading = false;
+        }, 5000);
       } else {
-        this.error = "Invalid Match ID. It should be 1-3 digits long.";
+        this.error = 'Invalid Match ID. It should be 1-3 digits long.';
       }
     },
   },
 
   data() {
     return {
-      matchId: "",
+      matchId: '',
       loading: false,
       error: null,
       success: null,
       matchNumber: 1,
       matchSelectOptions: [
-        { text: "Match 1", value: 1 },
-        { text: "Match 2", value: 2 },
+        { text: 'Match 1', value: 1 },
+        { text: 'Match 2', value: 2 },
       ],
     };
   },

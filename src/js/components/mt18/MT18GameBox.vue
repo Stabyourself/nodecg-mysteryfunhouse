@@ -41,12 +41,13 @@ $whiteBoxFont: 'Arvo', serif;
 
 #game-boxart {
   height: 100%;
+  flex-shrink: 0;
 
   img {
     display: block;
     margin: 0 auto;
-    max-height: 100%;
-    max-width: 325px;
+    max-height: 200px;
+    max-width: 300px;
   }
 }
 
@@ -76,6 +77,7 @@ $whiteBoxFont: 'Arvo', serif;
   flex-direction: column;
   justify-content: center;
   padding-right: 100px;
+  padding: 1em 0;
 }
 
 #goal {
@@ -89,6 +91,24 @@ $whiteBoxFont: 'Arvo', serif;
   font-size: 1.5em;
   line-height: 1;
   font-weight: 300;
+}
+
+#game-box.compact {
+  #game-info-body {
+    padding-right: 0;
+  }
+
+  #game {
+    font-size: 2em;
+  }
+
+  #goal {
+    font-size: 1.5em;
+  }
+
+  #submitter {
+    font-size: 1em;
+  }
 }
 </style>
 

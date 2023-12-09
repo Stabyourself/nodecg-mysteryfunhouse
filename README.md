@@ -13,13 +13,16 @@ The following properties are needed for full functionality in the [bundle config
   "discordKey": "...", // Discord Bot Secret
   "discordGuild": "...", // Discord Server ID
   "googleApiKey": "...", // Google API key
-  "contactSheet": "...", // Contact sheet ID
   "careerSheet": "...", // Career sheet ID
   "scheduleSheet": "...", // Scheduling sheet
   "playedGamesSheet": "...", // Played games sheet
   "twitchClientId": "...", // Id of the twitch App
   "twitchClientSecret": "...", // Secret of the App
   "twitchChannel": "..." // Twitch channel ID (not the name, it's numerical)
+  "dbHost": "...", // contact database data
+  "dbUser": "...",
+  "dbPass": "...",
+  "dbName": "..."
 }
 ```
 
