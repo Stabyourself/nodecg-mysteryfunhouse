@@ -283,9 +283,9 @@ nodecg.listenFor('loadMatch', function (options, ack) {
 
         // format round
         if (rawMatch.round > 0) {
-          match.round = 'Winners ' + rawMatch.round;
+          match.round = 'Front ' + rawMatch.round;
         } else {
-          match.round = 'Losers ' + -rawMatch.round;
+          match.round = 'Back ' + -rawMatch.round;
         }
 
         if (rawMatch.winner_id == match.players[0].id) {
