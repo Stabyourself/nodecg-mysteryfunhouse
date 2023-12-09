@@ -76,8 +76,9 @@ $whiteBoxFont: 'Arvo', serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-top: 1em;
+  padding-bottom: 1em;
   padding-right: 100px;
-  padding: 1em 0;
 }
 
 #goal {
