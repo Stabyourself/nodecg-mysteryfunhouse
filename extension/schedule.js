@@ -28,9 +28,9 @@ function updateSchedule() {
 
       if (roundSplit.length === 2) {
         if (roundSplit[0] === 'W' || roundSplit[0] === 'Winners') {
-          round = 'Front ' + round[1];
+          round = 'Front ' + roundSplit[1];
         } else if (roundSplit[0] === 'L' || roundSplit[0] === 'Losers') {
-          round = 'Back ' + round[1];
+          round = 'Back ' + roundSplit[1];
         }
       }
 
