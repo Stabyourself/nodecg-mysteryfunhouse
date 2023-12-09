@@ -43,7 +43,7 @@
       </div>
     </div>
 
-    <rainwave v-if="showRainwave" style="top: 975px; left: 1521px; width: 444px; height: 124px" />
+    <!-- <rainwave v-if="showRainwave" style="top: 975px; left: 1521px; width: 444px; height: 124px" /> -->
 
     <AchievementManager />
   </v-app>
