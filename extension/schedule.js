@@ -24,9 +24,16 @@ function updateSchedule() {
 
       // format round
       let round = row['Round'] ?? '';
-      let roundSplit = round.split(' ');
 
-      if (roundSplit.length === 2) {
+      if (round.length === 2) {
+        if (round[0] == 'W') {
+          round = 'Front ' + round[1];
+        } else if (round[0] == 'L') {
+          round = 'Back ' + round[1];
+        }
+      } else {
+        let roundSplit = round.split(' ');
+
         if (roundSplit[0] === 'W' || roundSplit[0] === 'Winners') {
           round = 'Front ' + roundSplit[1];
         } else if (roundSplit[0] === 'L' || roundSplit[0] === 'Losers') {
