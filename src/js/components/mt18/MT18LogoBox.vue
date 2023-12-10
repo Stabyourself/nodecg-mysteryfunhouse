@@ -1,6 +1,6 @@
 <template>
   <div id="logo-box">
-    <div>
+    <div v-if="timer || round">
       <div id="round">
         <swipe dir="left" :visible="visible" :delay="0.8">
           <span>{{ round }}</span>

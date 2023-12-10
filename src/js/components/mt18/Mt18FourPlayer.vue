@@ -10,18 +10,19 @@
     </div> -->
 
       <div class="info-holder">
-        <mt18-logo-box :round="round" :timer="timerText" :logo="currentEventLogo" :visible="visible"></mt18-logo-box>
+        <mt18-logo-box :logo="currentEventLogo" :visible="visible"></mt18-logo-box>
+        <mt18-game-box
+          :game="game"
+          :goal="goal"
+          :submitter="submitter"
+          :visible="visible"
+          :boxart="currentBoxart"
+          style="min-height: 200px"
+          class="compact" />
 
-        <div class="game-box-holder">
-          <mt18-game-box
-            :game="game"
-            :goal="goal"
-            :submitter="submitter"
-            :visible="visible"
-            :boxart="currentBoxart"
-            style="min-height: 200px"
-            class="compact" />
-        </div>
+        <div class="timer">{{ timerText }}</div>
+
+        <div class="game-box-holder"></div>
       </div>
 
       <div id="main-section">
@@ -88,7 +89,7 @@
     </div>
 
     <AchievementManager></AchievementManager>
-    <!-- <Telestrator /> -->
+    <Telestrator />
   </v-app>
 </template>
 
@@ -145,6 +146,17 @@
   position: relative;
   height: 100%;
   width: 598px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  align-items: center;
+
+  .timer {
+    font-size: 4em;
+    line-height: 0.9;
+    font-weight: 700;
+  }
 }
 
 .game-box-holder {
