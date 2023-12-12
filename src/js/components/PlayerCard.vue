@@ -120,7 +120,7 @@ export default {
 
         // Draw edition
         this.ctx.font = 'bold 23px StoneSerifRegular';
-        this.ctx.fillText(`${getNumberWithOrdinal(mtCount + 1)} Edition`, 90, 873);
+        this.ctx.fillText(`${getNumberWithOrdinal(mtCount)} Edition`, 90, 873);
 
         // Draw serial number
         this.ctx.textAlign = 'right';

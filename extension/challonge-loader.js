@@ -164,6 +164,7 @@ function getPlayerInfo(tournament, careerRows, discordMembers, challongeName, co
   }
 
   return {
+    name: contact['username'],
     challonge: challonge ? challonge.participant : null,
     contact: contact,
     rawMatches: rawMatches,
@@ -224,7 +225,6 @@ nodecg.listenFor('loadMatch', function (options, ack) {
         return ack(info[i]);
       }
 
-      info[i].name = info[i].discord.displayName;
       info[i].avatar = getAvatarForMember(info[i].discord);
 
       delete info[i].discord; // evil stuff that crashes my replicant >:(
@@ -252,7 +252,7 @@ nodecg.listenFor('loadMatch', function (options, ack) {
           const contact = getContactForChallongeName(contactRows, challonge.display_name);
 
           let id = challonge.id;
-          let name = challonge.display_name;
+          let name = contact.username;
           let avatar = '../../dist/img/default_avatar.png';
 
           if (contact) {
@@ -262,7 +262,6 @@ nodecg.listenFor('loadMatch', function (options, ack) {
               return ack(new Error(`Couldn't find "${contact['username']}" in the Mystery Discord server.`));
             }
 
-            name = member.displayName;
             avatar = getAvatarForMember(member);
           }
 
