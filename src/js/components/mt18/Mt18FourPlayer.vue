@@ -28,6 +28,7 @@
       <div id="main-section">
         <div class="main-row">
           <mt18-player-box :player="player0" :visible="visible" side="left" class="compact" />
+          <div class="round">{{ round1 }}</div>
           <mt18-player-box :player="player1" :visible="visible" side="right" class="compact" />
         </div>
 
@@ -83,6 +84,7 @@
 
         <div class="main-row">
           <mt18-player-box :player="player2" :visible="visible" side="left" class="compact" />
+          <div class="round">{{ round2 }}</div>
           <mt18-player-box :player="player3" :visible="visible" side="right" class="compact" />
         </div>
       </div>
@@ -116,8 +118,11 @@
 }
 
 .main-row {
+  position: relative;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .boxart {
@@ -174,6 +179,19 @@
   #game-box {
     width: 100%;
   }
+}
+
+.round {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 </style>
 
