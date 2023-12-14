@@ -154,7 +154,7 @@ export default {
 
         let lines = [];
 
-        if (this.info.career) {
+        if (this.info.career && mtCount > 1) {
           // Win rate
           lines.push(`Has a win rate of ${winPercentage}% across all Mystery Tournaments.`);
 
