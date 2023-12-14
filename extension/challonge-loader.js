@@ -159,7 +159,7 @@ function getPlayerInfo(tournament, careerRows, discordMembers, challongeName, co
   let career;
   if (SRLName) {
     career = careerRows.find((row) => {
-      return row['Competitor'].toLowerCase() == SRLName.toLowerCase();
+      return row['SRL Name'].toLowerCase() == SRLName.toLowerCase();
     });
   }
 
