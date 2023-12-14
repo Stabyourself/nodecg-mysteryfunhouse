@@ -98,7 +98,7 @@ export default {
     bindReplicant.call(this, 'showRainwave');
 
     bindReplicant.call(this, 'currentEventLogo');
-    bindReplicant.call(this, 'round1', `match${1 + iadd / 2}round`);
+    bindReplicant.call(this, 'round', `match${1 + iadd / 2}round`);
 
     for (let i = 0; i < 2; i++) {
       bindReplicant.call(this, `player${i}name`, `player${i + iadd}name`);

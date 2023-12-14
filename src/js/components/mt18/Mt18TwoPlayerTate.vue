@@ -20,7 +20,7 @@
       <div id="main-section">
         <div class="main-row">
           <mt18-player-box :player="player0" :visible="visible" side="left" class="compact" />
-          <div class="round">{{ round1 }}</div>
+          <div class="round">{{ round }}</div>
           <mt18-player-box :player="player1" :visible="visible" side="right" class="compact" />
         </div>
 
@@ -171,7 +171,7 @@ export default {
     bindReplicant.call(this, 'timer');
 
     bindReplicant.call(this, 'currentEventLogo');
-    bindReplicant.call(this, 'round1', `match${1 + iadd / 2}round`);
+    bindReplicant.call(this, 'round', `match${1 + iadd / 2}round`);
 
     for (let i = 0; i < 2; i++) {
       bindReplicant.call(this, `player${i}name`, `player${i + iadd}name`);
@@ -266,7 +266,7 @@ export default {
       currentBoxart: '',
 
       currentEventLogo: {},
-      round1: '',
+      round: '',
 
       player0name: '',
       player0pronouns: '',
