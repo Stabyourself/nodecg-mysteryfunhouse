@@ -127,7 +127,7 @@ export default {
 
       window.addEventListener('obsSceneChanged', (event) => {
         console.log('Switched to scene ' + event.detail.name);
-        if (event.detail.name == '2 Player' || scene.name == '2 Player (Match 2)') {
+        if (event.detail.name == '2 Player' || event.detail.name == '2 Player (Match 2)') {
           this.visible = true;
         } else {
           this.visible = false;
