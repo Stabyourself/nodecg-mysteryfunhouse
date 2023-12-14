@@ -1,14 +1,6 @@
 <template>
   <v-app>
     <div id="section-wrapper">
-      <!-- <div style="position: absolute; top: 0px; right: 10px; width: 1322px" class="round pixel-font">
-      {{ round1 }}
-    </div>
-
-    <div style="position: absolute; top: 1037px; right: 10px; width: 1322px" class="round pixel-font">
-      {{ round2 }}
-    </div> -->
-
       <div class="info-holder">
         <mt18-logo-box :logo="currentEventLogo" :visible="visible"></mt18-logo-box>
         <mt18-game-box
@@ -28,6 +20,7 @@
       <div id="main-section">
         <div class="main-row">
           <mt18-player-box :player="player0" :visible="visible" side="left" class="compact" />
+          <div class="round">{{ round1 }}</div>
           <mt18-player-box :player="player1" :visible="visible" side="right" class="compact" />
         </div>
 
@@ -81,8 +74,11 @@
 }
 
 .main-row {
+  position: relative;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .boxart {
@@ -140,10 +136,29 @@
     width: 100%;
   }
 }
+
+.round {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
 </style>
 
 <script>
 import { bindReplicant, formatTimer } from '../../util.js';
+
+let iadd = 0;
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('match2') != null) {
+  iadd = 2;
+}
 
 export default {
   created() {
@@ -156,37 +171,36 @@ export default {
     bindReplicant.call(this, 'timer');
 
     bindReplicant.call(this, 'currentEventLogo');
-    bindReplicant.call(this, 'round1', 'match1round');
-    bindReplicant.call(this, 'round2', 'match2round');
+    bindReplicant.call(this, 'round1', `match${1 + iadd / 2}round`);
 
     for (let i = 0; i < 2; i++) {
-      bindReplicant.call(this, `player${i}name`);
-      bindReplicant.call(this, `player${i}pronouns`);
-      bindReplicant.call(this, `player${i}flag`);
+      bindReplicant.call(this, `player${i}name`, `player${i + iadd}name`);
+      bindReplicant.call(this, `player${i}pronouns`, `player${i + iadd}pronouns`);
+      bindReplicant.call(this, `player${i}flag`, `player${i + iadd}flag`);
 
-      bindReplicant.call(this, `player${i}twitch`);
-      // bindReplicant.call(this, `player${i}quality`)
-      bindReplicant.call(this, `player${i}volume`);
-      bindReplicant.call(this, `player${i}streamHidden`);
+      bindReplicant.call(this, `player${i}twitch`, `player${i + iadd}twitch`);
+      // bindReplicant.call(this, `player${i}quality`, `player${i + iadd}quality`)
+      bindReplicant.call(this, `player${i}volume`, `player${i + iadd}volume`);
+      bindReplicant.call(this, `player${i}streamHidden`, `player${i + iadd}streamHidden`);
 
-      bindReplicant.call(this, `player${i}raceState`);
-      bindReplicant.call(this, `player${i}finalTime`);
+      bindReplicant.call(this, `player${i}raceState`, `player${i + iadd}raceState`);
+      bindReplicant.call(this, `player${i}finalTime`, `player${i + iadd}finalTime`);
 
-      bindReplicant.call(this, `player${i}crop`);
-      bindReplicant.call(this, `player${i}aspectratio`);
+      bindReplicant.call(this, `player${i}crop`, `player${i + iadd}crop`);
+      bindReplicant.call(this, `player${i}aspectratio`, `player${i + iadd}aspectratio`);
     }
 
     if (window.obsstudio && window.obsstudio.getControlLevel && window.obsstudio.getControlLevel != 0) {
       window.obsstudio.getCurrentScene((scene) => {
         console.log('Start scene: ' + scene.name);
-        if (scene.name == '2 Player Tate') {
+        if (scene.name == '2 Player Tate' || scene.name == '2 Player Tate (Match 2)') {
           this.visible = true;
         }
       });
 
       window.addEventListener('obsSceneChanged', (event) => {
         console.log('Switched to scene ' + event.detail.name);
-        if (event.detail.name == '2 Player Tate') {
+        if (event.detail.name == '2 Player Tate' || scene.name == '2 Player Tate (Match 2)') {
           this.visible = true;
         } else {
           this.visible = false;
@@ -253,7 +267,6 @@ export default {
 
       currentEventLogo: {},
       round1: '',
-      round2: '',
 
       player0name: '',
       player0pronouns: '',
