@@ -172,7 +172,7 @@ export default {
             lines.push(`Won ${list}.`);
           }
 
-          if (mtCount == 1) {
+          if (mtCount == 2) {
             // only joined 1 MT
             lines.push(`Joined in ${firstJoined} and finished ${getNumberWithOrdinal(firstJoinedPlacement)}.`);
           } else if (bestPlacement != firstJoinedPlacement) {
