@@ -89,7 +89,7 @@ export default {
           let mtName = 'MT1';
 
           while (mtName in this.info.career) {
-            if (this.info.career[mtName] && String(this.info.career[mtName]).length > 0) {
+            if (this.info.career[mtName] && String(this.info.career[mtName]).length > 3) {
               checkPlacement(this.info.career[mtName], mtName);
             }
 
