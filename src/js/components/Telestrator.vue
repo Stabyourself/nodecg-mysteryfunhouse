@@ -1,6 +1,6 @@
 <template>
   <div>
-    <canvas id="telestrator" @mousedown="mouseDown" @mouseup="mouseUp" @mousemove="mouseMove"></canvas>
+    <canvas id="telestrator" @mousedown="mouseDown" @mouseup="mouseUp" @mousemove="mouseMove" v-if="!hidden"></canvas>
 
     <div class="telestrator-controls" @click.stop>
       <v-btn v-for="c in colors" :key="c" :color="c" @click="color = c">
@@ -10,6 +10,7 @@
         <v-slider v-model="thickness" min="1" max="50" step="1" thumb-label :thumb-size="thickness"></v-slider>
       </div>
       <v-btn style="margin-left: 2em" @click="clearBtn">Clear</v-btn>
+      <v-btn style="margin-left: 2em" @click="toggleHide">Hide</v-btn>
     </div>
   </div>
 </template>
@@ -66,6 +67,10 @@ export default {
     nodecg.listenFor('clearTelestrator', this.clear);
   },
   methods: {
+    toggleHide() {
+      this.hidden = !this.hidden;
+    },
+
     mouseDown(e) {
       this.isMouseDown = true;
       this.lastPos = {
@@ -154,6 +159,7 @@ export default {
       },
       color: '#ffff00',
       thickness: 5,
+      hidden: false,
     };
   },
 };
