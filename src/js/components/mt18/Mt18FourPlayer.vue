@@ -1,14 +1,6 @@
 <template>
   <v-app>
     <div id="section-wrapper">
-      <!-- <div style="position: absolute; top: 0px; right: 10px; width: 1322px" class="round pixel-font">
-      {{ round1 }}
-    </div>
-
-    <div style="position: absolute; top: 1037px; right: 10px; width: 1322px" class="round pixel-font">
-      {{ round2 }}
-    </div> -->
-
       <div class="info-holder">
         <mt18-logo-box :logo="currentEventLogo" :visible="visible"></mt18-logo-box>
         <mt18-game-box

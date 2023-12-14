@@ -79,6 +79,12 @@ $whiteBoxFont: 'Arvo', serif;
 <script>
 import { bindReplicant, formatTimer } from '../../util.js';
 
+let iadd = 0;
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('match2') != null) {
+  iadd = 2;
+}
+
 export default {
   created() {
     bindReplicant.call(this, 'game');
@@ -92,36 +98,36 @@ export default {
     bindReplicant.call(this, 'showRainwave');
 
     bindReplicant.call(this, 'currentEventLogo');
-    bindReplicant.call(this, 'round', 'match1round');
+    bindReplicant.call(this, 'round1', `match${1 + iadd / 2}round`);
 
     for (let i = 0; i < 2; i++) {
-      bindReplicant.call(this, `player${i}name`);
-      bindReplicant.call(this, `player${i}pronouns`);
-      bindReplicant.call(this, `player${i}flag`);
+      bindReplicant.call(this, `player${i}name`, `player${i + iadd}name`);
+      bindReplicant.call(this, `player${i}pronouns`, `player${i + iadd}pronouns`);
+      bindReplicant.call(this, `player${i}flag`, `player${i + iadd}flag`);
 
-      bindReplicant.call(this, `player${i}twitch`);
-      // bindReplicant.call(this, `player${i}quality`)
-      bindReplicant.call(this, `player${i}volume`);
-      bindReplicant.call(this, `player${i}streamHidden`);
-      bindReplicant.call(this, `player${i}aspectratio`);
+      bindReplicant.call(this, `player${i}twitch`, `player${i + iadd}twitch`);
+      // bindReplicant.call(this, `player${i}quality`, `player${i + iadd}quality`)
+      bindReplicant.call(this, `player${i}volume`, `player${i + iadd}volume`);
+      bindReplicant.call(this, `player${i}streamHidden`, `player${i + iadd}streamHidden`);
 
-      bindReplicant.call(this, `player${i}raceState`);
-      bindReplicant.call(this, `player${i}finalTime`);
+      bindReplicant.call(this, `player${i}raceState`, `player${i + iadd}raceState`);
+      bindReplicant.call(this, `player${i}finalTime`, `player${i + iadd}finalTime`);
 
-      bindReplicant.call(this, `player${i}crop`);
+      bindReplicant.call(this, `player${i}crop`, `player${i + iadd}crop`);
+      bindReplicant.call(this, `player${i}aspectratio`, `player${i + iadd}aspectratio`);
     }
 
     if (window.obsstudio && window.obsstudio.getControlLevel && window.obsstudio.getControlLevel != 0) {
       window.obsstudio.getCurrentScene((scene) => {
         console.log('Start scene: ' + scene.name);
-        if (scene.name == '2 Player') {
+        if (scene.name == '2 Player' || scene.name == '2 Player (Match 2)') {
           this.visible = true;
         }
       });
 
       window.addEventListener('obsSceneChanged', (event) => {
         console.log('Switched to scene ' + event.detail.name);
-        if (event.detail.name == '2 Player') {
+        if (event.detail.name == '2 Player' || scene.name == '2 Player (Match 2)') {
           this.visible = true;
         } else {
           this.visible = false;
