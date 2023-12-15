@@ -1,6 +1,6 @@
 <template>
   <div>
-    <canvas id="telestrator" @mousedown="mouseDown" @mouseup="mouseUp" @mousemove="mouseMove" v-if="!hidden"></canvas>
+    <canvas id="telestrator" @mousedown="mouseDown" @mouseup="mouseUp" @mousemove="mouseMove" v-show="!hidden"></canvas>
 
     <div class="telestrator-controls" @click.stop>
       <v-btn v-for="c in colors" :key="c" :color="c" @click="color = c">
