@@ -51,7 +51,7 @@ export default {
 
         // Stat stuff
 
-        let mtCount = 0;
+        let mtCount = 1;
         let winPercentage = null;
         let bestPlacement = null;
         let bestPlacementMt = '';
@@ -226,8 +226,8 @@ export default {
         let losses = 0;
 
         if (this.info.career) {
-          wins = this.info.career["W's"];
-          losses = this.info.career["L's"];
+          wins = this.info.career["W's"] != '' ? this.info.career["W's"] : 0;
+          losses = this.info.career["L's"] != '' ? this.info.career["L's"] : 0;
         }
 
         // wins = String(wins).padStart(4, ' ')
