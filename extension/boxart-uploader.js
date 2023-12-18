@@ -28,15 +28,15 @@ const download = (url, dest, cb) => {
   const sendReq = request.get({
     url: url,
     headers: {
-      'user-agent': 'curl/7.84.0',
+      'user-agent': 'curl/8.1.1',
       accept: '*/*',
     },
   });
 
   // verify response code
   sendReq.on('response', (response) => {
-    console.log(response.statusCode);
     if (response.statusCode !== 200) {
+      console.log(`Download failed: ${response.statusCode}`);
       file.close(cb);
       fs.unlink(dest, () => cb());
       return cb('Response status was ' + response.statusCode);
