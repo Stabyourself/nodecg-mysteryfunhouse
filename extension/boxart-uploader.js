@@ -25,7 +25,13 @@ var fs = require('fs');
 
 const download = (url, dest, cb) => {
   const file = fs.createWriteStream(dest);
-  const sendReq = request.get(url);
+  const sendReq = request.get({
+    url: url,
+    headers: {
+      'user-agent': 'curl/7.84.0',
+      accept: '*/*',
+    },
+  });
 
   // verify response code
   sendReq.on('response', (response) => {
