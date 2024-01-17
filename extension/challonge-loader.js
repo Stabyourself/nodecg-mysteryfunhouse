@@ -59,6 +59,7 @@ for (let prop in props) {
 }
 
 function getChallongeForId(tournament, id) {
+  console.log(id);
   return tournament.participants.find((participant) => {
     return participant.participant.id == id;
   }).participant;
