@@ -8,7 +8,7 @@ careerDoc.useApiKey(nodecg.bundleConfig.googleApiKey);
 
 let careerSheet;
 careerDoc.loadInfo().then(function () {
-  careerSheet = careerDoc.sheetsByIndex[0];
+  careerSheet = careerDoc.sheetsByTitle["MT Career"];
 });
 
 const scheduleDoc = new GoogleSpreadsheet(nodecg.bundleConfig.scheduleSheet);
