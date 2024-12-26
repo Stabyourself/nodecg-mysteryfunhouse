@@ -5,7 +5,7 @@
       height="94"
       frameBorder="0"
       scrolling="no"
-      :src="`https://rainwave.cc/widget/widget?sid=${rainwaveId}&layout=art_right&text_align=right&anim_in=to_bottom&anim_out=to_right&art_size=70px&font_size=15pt&max_width=360px&np_header=no&ad=0&show_artist=true&delay=3`"
+      :src="`https://rainwave.cc/widget/widget?sid=${rainwaveId}&layout=art_right&text_align=right&anim_in=to_bottom&anim_out=to_right&art_size=70px&font_size=15pt&max_width=360px&np_header=no&show_artist=true&delay=3&ad=0`"
     ></iframe>
   </div>
 </template>
@@ -17,11 +17,11 @@
 </style>
 
 <script>
-import { bindReplicant } from "../util.js";
+import { bindReplicant } from '../util.js';
 
 export default {
   created() {
-    bindReplicant.call(this, "rainwaveId");
+    bindReplicant.call(this, 'rainwaveId');
   },
 
   data() {
