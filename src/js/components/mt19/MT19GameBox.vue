@@ -1,0 +1,129 @@
+<template>
+  <div id="game-box" class="dungeon-box">
+    <swipe :visible="visible" dir="right" id="game-boxart" v-if="boxart" :delay="0">
+      <div class="d-flex align-center" style="height: 100%">
+        <img :src="boxart.url" />
+      </div>
+    </swipe>
+
+    <div id="game-info">
+      <swipe :visible="visible" dir="right" :delay="0.8">
+        <div id="game">
+          <fit-text :max="1" :min="0.1">
+            {{ game }}
+          </fit-text>
+        </div>
+      </swipe>
+
+      <div id="game-info-body">
+        <swipe :visible="visible" dir="right" :delay="0.9">
+          <div id="goal">
+            {{ goal }}
+          </div>
+        </swipe>
+
+        <swipe :visible="visible" dir="right" :delay="1" v-if="submitter != ''">
+          <div id="submitter">
+            <fit-text :max="1" :min="0.1"> Submitted by {{ submitter }} </fit-text>
+          </div>
+        </swipe>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+$whiteBoxFont: 'Arvo', serif;
+#game-box {
+  display: flex;
+  max-width: 1300px;
+  background-image: url('../../dist/img/mt19_gameboxback.png');
+  background-size: auto 100%;
+  background-position: right;
+}
+
+#game-boxart {
+  height: 100%;
+  flex-shrink: 0;
+
+  img {
+    display: block;
+    margin: 0 auto;
+    max-height: 200px;
+    max-width: 300px;
+  }
+}
+
+#game-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#game {
+  width: 100%;
+  text-transform: none;
+  // background-color: #f6c189;
+  font-family: 'DRAGON HUNTER', serif;
+  letter-spacing: 3px;
+  // color: #333;
+  padding: 1rem;
+  padding-bottom: 0;
+  line-height: 1.4;
+  font-size: 3em;
+  display: flex;
+  align-items: center;
+}
+
+#game-info-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 1em;
+  padding-right: 100px;
+}
+
+#goal {
+  padding: 0.1em 1rem !important;
+  font-size: 2em;
+  line-height: 1;
+}
+
+#submitter {
+  padding: 0.1em 1rem !important;
+  font-size: 1.5em;
+  line-height: 1;
+  font-weight: 300;
+}
+
+#game-box.compact {
+  #game-info-body {
+    padding-right: 0;
+  }
+
+  #game {
+    font-size: 2em;
+  }
+
+  #goal {
+    font-size: 1.5em;
+  }
+
+  #submitter {
+    font-size: 1em;
+  }
+}
+</style>
+
+<script>
+export default {
+  props: {
+    visible: Boolean,
+    game: String,
+    goal: String,
+    submitter: String,
+    boxart: Object,
+  },
+};
+</script>

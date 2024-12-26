@@ -9,7 +9,7 @@ const clientId = nodecg.bundleConfig.twitchClientId;
 const clientSecret = nodecg.bundleConfig.twitchClientSecret;
 
 const twitchTemplate = nodecg.Replicant("twitchTemplate", {
-  defaultValue: "Mystery Tournament 0017! {player1} vs. {player2}",
+  defaultValue: "Mystery Tournament 19! {player1} vs. {player2}",
 });
 
 //--------- USERS ---------

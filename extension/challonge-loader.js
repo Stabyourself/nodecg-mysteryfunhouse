@@ -343,9 +343,9 @@ nodecg.listenFor('loadMatch', function (options, ack) {
     let round = match.match['round'];
 
     if (round > 0) {
-      round = 'Front ' + round;
+      round = 'Wizards ' + round;
     } else {
-      round = 'Back ' + -round;
+      round = 'Lizards ' + -round;
     }
 
     replicants[`match${options.matchNumber}round`].value = round;

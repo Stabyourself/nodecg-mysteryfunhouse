@@ -47,11 +47,22 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'DRAGON HUNTER';
+  src: url('../../dist/font/DRAGON_HUNTER.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .mt-font {
   color: white;
   line-height: 1.2;
   font-family: 'Regen';
-  text-shadow: -2px 0 1px #000000, 0 2px 1px #000000, 2px 0 1px #000000, 0 -2px 1px #000000;
+  text-shadow:
+    -2px 0 1px #000000,
+    0 2px 1px #000000,
+    2px 0 1px #000000,
+    0 -2px 1px #000000;
 }
 
 .pixel-font {
@@ -227,4 +238,13 @@ body {
   text-transform: uppercase;
   background: rgb(0, 113, 164);
   background: linear-gradient(135deg, rgba(0, 113, 164, 0.6) 0%, rgba(3, 30, 47, 0.6) 80%);
+}
+
+.dungeon-box {
+  overflow: hidden;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: rgb(0, 113, 164);
+  background: linear-gradient(135deg, rgba(86, 36, 0, 0.6) 0%, rgba(148, 57, 0, 0.6) 80%);
 }

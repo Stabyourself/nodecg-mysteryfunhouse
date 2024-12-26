@@ -180,6 +180,21 @@
         "file": "mt18/coming_up.html",
         "width": 1920,
         "height": 1080
+      },
+      {
+        "file": "mt19/2player.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "mt19/2player_tate.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "mt19/4player.html",
+        "width": 1920,
+        "height": 1080
       }
     ],
     "soundCues": [
