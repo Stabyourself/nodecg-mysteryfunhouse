@@ -105,7 +105,7 @@ async function getContacts() {
   try {
     conn = await pool.getConnection();
     const rows = await conn.query(
-      'SELECT users.*, flavor FROM `users`, `signups` WHERE `users`.`id` = `signups`.`user_id` AND `signups`.`event_id` = 2',
+      'SELECT users.*, flavor FROM `users`, `signups` WHERE `users`.`id` = `signups`.`user_id` AND `signups`.`event_id` = 3',
     );
     return rows;
   } catch (err) {
