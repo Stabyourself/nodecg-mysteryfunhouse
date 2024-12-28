@@ -92,15 +92,15 @@ function getAvatarForMember(member) {
   return avatar;
 }
 
-async function getContacts() {
-  const pool = mariadb.createPool({
-    host: nodecg.bundleConfig.dbHost,
-    user: nodecg.bundleConfig.dbUser,
-    password: nodecg.bundleConfig.dbPass,
-    database: nodecg.bundleConfig.dbName,
-    connectionLimit: 5,
-  });
+const pool = mariadb.createPool({
+  host: nodecg.bundleConfig.dbHost,
+  user: nodecg.bundleConfig.dbUser,
+  password: nodecg.bundleConfig.dbPass,
+  database: nodecg.bundleConfig.dbName,
+  connectionLimit: 5,
+});
 
+async function getContacts() {
   let conn;
   try {
     conn = await pool.getConnection();
