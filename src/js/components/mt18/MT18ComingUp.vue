@@ -22,6 +22,7 @@
                 new Date(match.time)
                   .toLocaleString('en-US', {
                     timeZone: 'America/New_York',
+                    timeZoneName: 'short',
                   })
                   .replace(':00 ', ' ')
               }}
