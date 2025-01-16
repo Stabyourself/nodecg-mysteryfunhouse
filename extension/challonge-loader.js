@@ -282,9 +282,9 @@ nodecg.listenFor('loadMatch', function (options, ack) {
 
         // format round
         if (rawMatch.round > 0) {
-          match.round = 'Front ' + rawMatch.round;
+          match.round = 'Wizards ' + rawMatch.round;
         } else {
-          match.round = 'Back ' + -rawMatch.round;
+          match.round = 'Lizards ' + -rawMatch.round;
         }
 
         if (rawMatch.winner_id == match.players[0].id) {
