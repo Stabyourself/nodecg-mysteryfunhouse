@@ -4,12 +4,6 @@
   </span>
 </template>
 
-<style scoped lang="scss">
-span {
-  line-break: anywhere;
-}
-</style>
-
 <script>
 export default {
   props: {
