@@ -17,16 +17,6 @@
           <div class="select-img-border"></div>
         </div>
 
-        <div class="d-flex">
-          <v-text-field
-            v-model="boxartUrl"
-            label="URL"
-            filled
-            dense
-          ></v-text-field>
-          <v-btn @click="uploadBoxart" color="primary">Upload</v-btn>
-        </div>
-
         <v-text-field v-model="goal" label="Goal"></v-text-field>
 
         <v-text-field v-model="platform" label="Platform"></v-text-field>
@@ -39,6 +29,23 @@
 
 <script>
 import { bindReplicant } from "../../util.js";
+
+document.onpaste = function (event) {
+    var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+    console.log(JSON.stringify(items)); // might give you mime types
+    for (var index in items) {
+        var item = items[index];
+        if (item.kind === 'file') {
+            var blob = item.getAsFile();
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                console.log("arrayBuffer: ", event.target.result); // data url!
+                nodecg.sendMessage("uploadBoxart", event.target.result);
+            };
+            reader.readAsDataURL(blob);
+        }
+    }
+};
 
 export default {
   created() {
@@ -58,12 +65,6 @@ export default {
       currentBoxart: {},
       boxartUrl: "",
     };
-  },
-
-  methods: {
-    uploadBoxart() {
-      nodecg.sendMessage("uploadBoxart", this.boxartUrl);
-    },
   },
 };
 </script>
