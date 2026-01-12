@@ -1,1 +1,225 @@
-@font-face{font-family:Regen;font-style:normal;font-weight:400;src:url(../../dist/font/Regen.woff2) format("woff2")}@font-face{font-family:Edit Undo BRK;font-style:normal;font-weight:400;src:url(../../dist/font/edit-undo.brk.woff2) format("woff2")}@font-face{font-family:Digital-7 Mono;font-style:normal;font-weight:400;src:url(../../dist/font/Digital-7Mono.woff2) format("woff2")}@font-face{font-family:ImpactLabel-lVYZ;font-style:normal;font-weight:400;src:url(../../dist/font/ImpactLabel-lVYZ.woff2) format("woff2")}@font-face{font-family:ImpactLabelReversed-nDMR;font-style:normal;font-weight:400;src:url(../../dist/font/ImpactLabelReversed-nDMR.woff2) format("woff2")}@font-face{font-family:VCR_OSD_MONO_1\.001;font-style:normal;font-weight:400;src:url(../../dist/font/VCR_OSD_MONO_1.001.woff2) format("woff2")}@font-face{font-family:Arvo;font-style:normal;font-weight:400;src:url(../../dist/font/Arvo.woff2) format("woff2")}@font-face{font-family:DRAGON HUNTER;font-style:normal;font-weight:400;src:url(../../dist/font/DragonHunter-9Ynxj.woff) format("woff")}.mt-font{color:#fff;font-family:Regen;line-height:1.2;text-shadow:-2px 0 1px #000,0 2px 1px #000,2px 0 1px #000,0 -2px 1px #000}.pixel-font{-webkit-text-fill-color:transparent;background:#ef5b00;background:linear-gradient(180deg,#ef5b00 0,#fed3b1);-webkit-background-clip:text;background-clip:text;color:#fff;filter:drop-shadow(0 4px #b10005);font-family:Edit Undo BRK!important;line-height:1;text-shadow:none}.pixel-font.pixel-font-alt{-webkit-text-fill-color:transparent;background:#efefef;background:linear-gradient(180deg,#008ac0 0,#00e2de);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 4px #050a87)}html.graphic{overflow:hidden!important}body{margin:0}body.graphic{-ms-interpolation-mode:nearest-neighbor;-ms-overflow-style:none;background-repeat:no-repeat;background-size:1920px 1080px;height:1080px;image-rendering:-moz-crisp-edges;image-rendering:pixelated;overflow:hidden;scrollbar-width:none;width:1920px}body.graphic::-webkit-scrollbar{display:none}#app{image-rendering:auto}.v-application--wrap{min-height:auto!important}.select-img-wrap{align-items:center;display:flex;height:200px;justify-content:center;margin:0 auto;position:relative;width:200px}.select-img-wrap:hover{cursor:pointer}.select-img-wrap:hover .select-img-border{border-color:#fff;border-width:1px}.select-img-wrap.active .select-img-border{border-color:#00bebe;border-width:4px}.select-img-border{border:1px solid hsla(0,0%,100%,.7);height:100%;left:0;position:absolute;top:0;transition:all .1s;width:100%}.select-img{display:block;max-height:200px;max-width:200px}.theme--dark.v-tabs-items{background-color:transparent!important}.checkerboard{background:#eee url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill-opacity=".25"><path d="M8 0h8v8H8zM0 8h8v8H0z"/></svg>')!important;background-size:16px 16px!important}.timer.theme--dark.v-input input{color:#999;transition:color .3s}.timer.theme--dark.v-input.active input{color:#fff}.top-text{font-size:5em;left:0;opacity:0;padding:0 30px;position:absolute;text-align:center;top:0;transition:opacity .3s;width:100%}.top-text.active{opacity:1}.match-round{font-size:3em;left:0;position:absolute;text-align:center;width:100%}.label-font{background:#000;color:#ccc;font-family:ImpactLabelReversed-nDMR;font-size:36px;text-transform:uppercase}.flex-center{display:flex;justify-content:center;width:100%}.lcd-font{color:#fff;font-family:VCR_OSD_MONO_1\.001;line-height:1.2;text-transform:uppercase}.pga-box{background:#0071a4;background:linear-gradient(135deg,rgba(0,113,164,.6),rgba(3,30,47,.6) 80%)}.dungeon-box,.pga-box{color:#fff;font-weight:700;overflow:hidden;text-transform:uppercase}.dungeon-box{background:#0071a4;background:linear-gradient(135deg,rgba(86,36,0,.6),rgba(148,57,0,.6) 80%)}
+@font-face {
+  font-family: "Regen";
+  src: url("../../dist/font/Regen.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Edit Undo BRK";
+  src: url("../../dist/font/edit-undo.brk.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Digital-7 Mono";
+  src: url("../../dist/font/Digital-7Mono.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "ImpactLabel-lVYZ";
+  src: url("../../dist/font/ImpactLabel-lVYZ.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "ImpactLabelReversed-nDMR";
+  src: url("../../dist/font/ImpactLabelReversed-nDMR.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "VCR_OSD_MONO_1.001";
+  src: url("../../dist/font/VCR_OSD_MONO_1.001.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Arvo";
+  src: url("../../dist/font/Arvo.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "DRAGON HUNTER";
+  src: url("../../dist/font/DragonHunter-9Ynxj.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+.mt-font {
+  color: white;
+  line-height: 1.2;
+  font-family: "Regen";
+  text-shadow: -2px 0 1px #000000, 0 2px 1px #000000, 2px 0 1px #000000, 0 -2px 1px #000000;
+}
+
+.pixel-font {
+  color: white;
+  line-height: 1;
+  font-family: "Edit Undo BRK" !important;
+  background: #ef5b00;
+  background: linear-gradient(to bottom, #ef5b00 0%, #fed3b1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0px 4px #b10005);
+}
+.pixel-font.pixel-font-alt {
+  background: #efefef;
+  background: linear-gradient(to bottom, #008ac0 0%, #00e2de 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0px 4px #050a87);
+}
+
+html.graphic {
+  overflow: hidden !important;
+}
+
+body {
+  margin: 0;
+}
+body.graphic {
+  background-repeat: no-repeat;
+  -ms-interpolation-mode: nearest-neighbor;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: pixelated;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background-size: 1920px 1080px;
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
+  scrollbar-width: none;
+  /* Firefox */
+}
+body.graphic::-webkit-scrollbar {
+  display: none;
+  /* Safari and Chrome */
+}
+
+#app {
+  image-rendering: auto;
+}
+
+.v-application--wrap {
+  min-height: auto !important;
+}
+
+.select-img-wrap {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+.select-img-wrap:hover {
+  cursor: pointer;
+}
+.select-img-wrap:hover .select-img-border {
+  border-width: 1px;
+  border-color: white;
+}
+.select-img-wrap.active .select-img-border {
+  border-width: 4px;
+  border-color: #00bebe;
+}
+
+.select-img-border {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  transition: all 0.1s;
+}
+
+.select-img {
+  max-height: 200px;
+  max-width: 200px;
+  display: block;
+}
+
+.theme--dark.v-tabs-items {
+  background-color: transparent !important;
+}
+
+.checkerboard {
+  background: #eee url('data:image/svg+xml,    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"         fill-opacity=".25" >             <rect x="8" width="8" height="8" />             <rect y="8" width="8" height="8" />             </svg>') !important;
+  background-size: 16px 16px !important;
+}
+
+.timer.theme--dark.v-input input {
+  color: #999;
+  transition: color 0.3s;
+}
+.timer.theme--dark.v-input.active input {
+  color: #fff;
+}
+
+.top-text {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  font-size: 5em;
+  opacity: 0;
+  transition: opacity 0.3s;
+  padding: 0 30px;
+}
+.top-text.active {
+  opacity: 1;
+}
+
+.match-round {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  left: 0px;
+  font-size: 3em;
+}
+
+.label-font {
+  font-family: "ImpactLabelReversed-nDMR";
+  font-size: 36px;
+  text-transform: uppercase;
+  color: #ccc;
+  background: black;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.lcd-font {
+  font-family: "VCR_OSD_MONO_1.001";
+  text-transform: uppercase;
+  color: white;
+  line-height: 1.2;
+}
+
+.pga-box {
+  overflow: hidden;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: #0071a4;
+  background: linear-gradient(135deg, rgba(0, 113, 164, 0.6) 0%, rgba(3, 30, 47, 0.6) 80%);
+}
+
+.dungeon-box {
+  overflow: hidden;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: #0071a4;
+  background: linear-gradient(135deg, rgba(86, 36, 0, 0.6) 0%, rgba(148, 57, 0, 0.6) 80%);
+}
