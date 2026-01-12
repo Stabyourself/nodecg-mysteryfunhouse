@@ -82,15 +82,15 @@ $whiteBoxFont: 'Arvo', serif;
 
   .top {
     background: url('/bundles/nodecg-mysteryfunhouse/dist/img/mt20/coming_soon_scroll_top.png') repeat-x;
-    height: 280px;
     width: 100%;
+    height: 320px;
     animation: scroll-bg 60s linear infinite;
   }
 
   .bottom {
     background: url('/bundles/nodecg-mysteryfunhouse/dist/img/mt20/coming_soon_scroll_bottom.png') repeat-x;
-    height: 280px;
-    width: 100%;
+    width: 7680px;
+    height: 240px;
     animation: scroll-bg 30s linear infinite;
   }
 
@@ -102,7 +102,7 @@ $whiteBoxFont: 'Arvo', serif;
 
 #megaman-walking {
   position: absolute;
-  top: 165px;
+  top: 205px;
   left: 70%;
   transform: translateX(-50%);
   z-index: 1;
