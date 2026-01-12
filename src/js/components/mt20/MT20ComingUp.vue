@@ -1,7 +1,14 @@
 <template>
   <v-app>
     <div id="scene">
-      <div id="megaman-scroll"></div>
+      <div id="megaman-scroll">
+        <div class="top"></div>
+        <div class="bottom"></div>
+      </div>
+
+      <div id="megaman-walking">
+        <img src="/bundles/nodecg-mysteryfunhouse/dist/img/mt20/megaman_walking.gif" />
+      </div>
 
       <swipe :visible="visible" dir="down">
         <div class="logo-container">
@@ -9,37 +16,39 @@
         </div>
       </swipe>
 
-      <div class="matches">
-        <div v-for="(match, i) in slicedSchedule" :key="match.match" class="match">
-          <swipe :delay="i * 0.3 + 1" :visible="visible" dir="right">
-            <div class="top">
-              <div class="left">
-                {{ match.round }}
-              </div>
-              <div class="right">
-                {{
-                  new Date(match.time)
-                    .toLocaleString('en-US', {
-                      timeZone: 'America/New_York',
-                      timeZoneName: 'short',
-                    })
-                    .replace(':00 ', ' ')
-                }}
-              </div>
-            </div>
-
-            <div class="bottom">
-              <div>
-                {{ match.player1 }}
-                <span class="vs">vs.</span>
-                {{ match.player2 }}
+      <div class="black-area">
+        <div class="matches">
+          <div v-for="(match, i) in slicedSchedule" :key="match.match" class="match">
+            <swipe :delay="i * 0.3 + 1" :visible="visible" dir="right">
+              <div class="top">
+                <div class="left">
+                  {{ match.round }}
+                </div>
+                <div class="right">
+                  {{
+                    new Date(match.time)
+                      .toLocaleString('en-US', {
+                        timeZone: 'America/New_York',
+                        timeZoneName: 'short',
+                      })
+                      .replace(':00 ', ' ')
+                  }}
+                </div>
               </div>
 
-              <div class="round">
-                {{ getRelativeTime(match.time) }}
+              <div class="bottom">
+                <div>
+                  {{ match.player1 }}
+                  <span class="vs">vs.</span>
+                  {{ match.player2 }}
+                </div>
+
+                <div class="round">
+                  {{ getRelativeTime(match.time) }}
+                </div>
               </div>
-            </div>
-          </swipe>
+            </swipe>
+          </div>
         </div>
       </div>
     </div>
@@ -67,14 +76,42 @@ $whiteBoxFont: 'Arvo', serif;
   left: 0;
   width: 100%;
   height: 560px;
-  background: url('/bundles/nodecg-mysteryfunhouse/dist/img/mt20/coming_soon_scroll.png') repeat-x;
 
   image-rendering: crisp-edges;
   image-rendering: pixelated;
 
-  animation: scroll-bg 60s linear infinite;
-  background-size: cover;
-  z-index: 0;
+  .top {
+    background: url('/bundles/nodecg-mysteryfunhouse/dist/img/mt20/coming_soon_scroll_top.png') repeat-x;
+    height: 280px;
+    width: 100%;
+    animation: scroll-bg 60s linear infinite;
+  }
+
+  .bottom {
+    background: url('/bundles/nodecg-mysteryfunhouse/dist/img/mt20/coming_soon_scroll_bottom.png') repeat-x;
+    height: 280px;
+    width: 100%;
+    animation: scroll-bg 30s linear infinite;
+  }
+
+  .top, .bottom {
+    background-size: cover;
+    z-index: 0;
+  }
+}
+
+#megaman-walking {
+  position: absolute;
+  top: 165px;
+  left: 70%;
+  transform: translateX(-50%);
+  z-index: 1;
+
+  img {
+    width: 125px;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+  }
 }
 
 @keyframes scroll-bg {
@@ -98,11 +135,21 @@ $whiteBoxFont: 'Arvo', serif;
   }
 }
 
+.black-area {
+  position: absolute;
+  top: 560px;
+  width: 100%;
+  bottom: 0px;
+  padding: 20px;
+}
+
 .match {
   margin: 0 auto;
   width: 1200px;
   margin-bottom: 25px;
   color: #f58038;
+  z-index: 2;
+  position: relative;
 
   .top {
     background-color: white;
