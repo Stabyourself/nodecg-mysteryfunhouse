@@ -205,6 +205,11 @@
         "file": "mt20/coming_up.html",
         "width": 1920,
         "height": 1080
+      },
+      {
+        "file": "mt20/waitscreen.html",
+        "width": 1920,
+        "height": 1080
       }
     ],
     "soundCues": [
@@ -258,6 +263,14 @@
       {
         "name": "droneShots",
         "title": "Drone Shots",
+        "allowedTypes": [
+          "webm",
+          "mp4"
+        ]
+      },
+      {
+        "name": "ghostGames",
+        "title": "Ghost Gameplay",
         "allowedTypes": [
           "webm",
           "mp4"

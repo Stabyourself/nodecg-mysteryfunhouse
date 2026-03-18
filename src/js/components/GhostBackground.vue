@@ -10,7 +10,7 @@ import {
   toGhost,
   spin,
   toPaths,
-} from "./threejs/scene.js";
+} from "./waterghostscene/scene.js";
 
 export default {
   props: ["playerCardCtx", "state"],
