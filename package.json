@@ -295,13 +295,12 @@
     "css-loader": "^6.5.1",
     "deepmerge": "^4.2.2",
     "laravel-mix": "^6.0.39",
-    "node-sass": "^8.0.0",
     "random-seed": "^0.3.0",
     "resolve-url-loader": "^4.0.0",
     "sass": "~1.32",
     "sass-loader": "^12.3.0",
     "style-loader": "^3.3.1",
-    "three": "^0.135.0",
+    "three": "^0.183.2",
     "vue": "^2.6.14",
     "vue-drag-resize": "^1.5.4",
     "vue-loader": "^15.9.8",
@@ -325,5 +324,6 @@
     "node-fetch": "^2.6.7",
     "request": "^2.88.2",
     "timer-node": "^5.0.5"
-  }
+  },
+  "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
 }

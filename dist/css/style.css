@@ -83,9 +83,7 @@ body {
 }
 body.graphic {
   background-repeat: no-repeat;
-  -ms-interpolation-mode: nearest-neighbor;
-      image-rendering: -moz-crisp-edges;
-      image-rendering: pixelated;
+  image-rendering: pixelated;
   width: 1920px;
   height: 1080px;
   overflow: hidden;

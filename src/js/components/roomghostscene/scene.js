@@ -34,8 +34,11 @@ function init(container) {
   let fan;
 
   const loader = new GLTFLoader();
-  loader.load('/bundles/nodecg-mysteryfunhouse/dist/model/20/room.glb', (gltf) => {
-    const room = gltf.scene;
+  loader.load('/bundles/nodecg-mysteryfunhouse/dist/model/20/room.glb', (glb) => {
+    const room = glb.scene;
+    let skinnedMeshes = glb.scene.getObjectsByProperty('isSkinnedMesh', true)
+    console.log(skinnedMeshes);
+
     room.traverse((child) => {
       if (["CENTER_TABLE", "Console_controller", "Ceiling_fan_flaps", "Ceiling_fan_base", "DESK", "DESK_STOOL",].includes(child.name)) {
         child.castShadow = true;
@@ -66,9 +69,6 @@ function init(container) {
         light.shadow.mapSize.height = 1024;
         light.shadow.bias = -0.0001;
         light.position.set(child.position.x, child.position.y + 0.5, child.position.z + 0.1);
-        // create shadow
-
-
 
         const target = new THREE.Object3D();
         target.position.set(light.position.x, light.position.y, light.position.z + 1);
@@ -99,7 +99,16 @@ function init(container) {
     }
     );
 
+    // play armature animation
+    // let mixer = new THREE.AnimationMixer();
+    // let clip = mixer.clipAction(glb.animations[0], glb.scene);
+    // clip.play();
+
+    // mixer.update(1)
+
     scene.add(room);
+
+    console.log(glb.scene);
   });
 
   // spotlight for city outside the window

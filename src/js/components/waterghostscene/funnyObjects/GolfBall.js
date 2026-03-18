@@ -1,8 +1,6 @@
 import FunnyObject from "./FunnyObject";
-import { GLTFLoader } from "../GLTFLoader";
-import * as THREE from "three/build/three.module.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils.js";
-import { init } from "../scene";
 
 let gltf;
 

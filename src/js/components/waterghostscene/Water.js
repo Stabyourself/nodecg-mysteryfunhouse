@@ -14,7 +14,7 @@ import {
   Vector3,
   Vector4,
   WebGLRenderTarget,
-} from "three/build/three.module.js";
+} from "three";
 
 /**
  * Work based on :
@@ -234,7 +234,7 @@ class Water extends Mesh {
 
     scope.material = material;
 
-    scope.onBeforeRender = function(renderer, scene, camera) {
+    scope.onBeforeRender = function (renderer, scene, camera) {
       mirrorWorldPosition.setFromMatrixPosition(scope.matrixWorld);
       cameraWorldPosition.setFromMatrixPosition(camera.matrixWorld);
 

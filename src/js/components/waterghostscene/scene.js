@@ -1,6 +1,6 @@
-import * as THREE from 'three/build/three.module.js';
+import * as THREE from 'three';
 import { Easing, Tween } from '@tweenjs/tween.js';
-import { GLTFLoader } from './GLTFLoader';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 import { FancyWater } from './FancyWater.js';
 import { Sky } from './Sky.js';
@@ -221,7 +221,7 @@ export function init(container, playerCards) {
   // Stars
   var texLoader = new THREE.TextureLoader();
   texLoader.load('/bundles/nodecg-mysteryfunhouse/dist/img/sky.png', (texture) => {
-    var geometry = new THREE.PlaneBufferGeometry(3000, 3000);
+    var geometry = new THREE.PlaneGeometry(3000, 3000);
     geometry.translate(0, 300, -1000);
 
     starMaterial = new THREE.MeshStandardMaterial({
