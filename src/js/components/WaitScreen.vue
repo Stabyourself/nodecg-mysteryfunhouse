@@ -7,6 +7,8 @@
 
     <player-card :use-ctx="playerCardCtx[0]" @update="canvasUpdated" :info="leftPlayerInfo"></player-card>
     <player-card :use-ctx="playerCardCtx[1]" @update="canvasUpdated" :info="rightPlayerInfo"></player-card>
+    <player-card :use-ctx="playerCardCtx[2]" @update="canvasUpdated" :info="rightPlayerInfo"></player-card>
+    <player-card :use-ctx="playerCardCtx[3]" @update="canvasUpdated" :info="rightPlayerInfo"></player-card>
 
     <player-path :class="{ active: waitScreenState == 'paths1' }" :info="this.playerInfo[0]"></player-path>
     <player-path
@@ -60,26 +62,10 @@ export default {
     canvasUpdated() {
       this.$refs.scene.update();
     },
-
-    updatePlayerCard() {
-      if (this.waitScreenState == 'cards1' || this.waitScreenState == 'paths1') {
-        this.leftPlayerInfo = this.playerInfo[0];
-        this.rightPlayerInfo = this.playerInfo[1];
-      } else if (this.waitScreenState == 'cards2' || this.waitScreenState == 'paths2') {
-        this.leftPlayerInfo = this.playerInfo[2];
-        this.rightPlayerInfo = this.playerInfo[3];
-      }
-    },
   },
 
   watch: {
-    playerInfo() {
-      this.updatePlayerCard();
-    },
 
-    waitScreenState() {
-      this.updatePlayerCard();
-    },
   },
 
   data() {

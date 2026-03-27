@@ -4,7 +4,8 @@
 
 <script>
 import {
-  init
+  init,
+  playerCardUpdated,
 } from "../roomghostscene/scene.js";
 
 export default {
@@ -12,13 +13,12 @@ export default {
 
   methods: {
     update() {
-      // playerCardUpdated();
-      // spin();
+      playerCardUpdated();
     },
   },
 
   mounted() {
-    init(this.$el);
+    init(this.$el, this.playerCardCtx);
   },
 
   watch: {

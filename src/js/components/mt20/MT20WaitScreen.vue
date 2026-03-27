@@ -5,10 +5,10 @@
         </video> -->
     <room-background ref="scene" :playerCardCtx="playerCardCtx" :state="waitScreenState"></room-background>
     <video id="video" ref="video" muted autoplay width="800" height="600" :src="currentVideo" type="video/webm" style="display: none;"></video>
-    <!----
     <player-card :use-ctx="playerCardCtx[0]" @update="canvasUpdated" :info="leftPlayerInfo"></player-card>
     <player-card :use-ctx="playerCardCtx[1]" @update="canvasUpdated" :info="rightPlayerInfo"></player-card>
 
+    <!----
     <player-path :class="{ active: waitScreenState == 'paths1' }" :info="this.playerInfo[0]"></player-path>
     <player-path
       class="right"
@@ -81,6 +81,7 @@ export default {
     },
 
     canvasUpdated() {
+      console.log("CANVAS UPDATED")
       this.$refs.scene.update();
     },
 
