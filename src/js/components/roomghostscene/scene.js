@@ -204,24 +204,22 @@ function init(container, playerCards) {
     // scene.add(curveObject);
 
     // corkboard
-    setTimeout(() => {
-      playerCardTextures[0] = new THREE.CanvasTexture(playerCards[0].canvas);
-      room.getObjectByName("CARD1").material = new THREE.MeshBasicMaterial({
-        map: playerCardTextures[0],
-        transparent: true,
-      });
+    playerCardTextures[0] = new THREE.CanvasTexture(playerCards[0].canvas);
+    room.getObjectByName("CARD1").material = new THREE.MeshBasicMaterial({
+      map: playerCardTextures[0],
+      transparent: true,
+    });
 
-      playerCardTextures[1] = new THREE.CanvasTexture(playerCards[1].canvas);
-      room.getObjectByName("CARD2").material = new THREE.MeshBasicMaterial({
-        map: playerCardTextures[1],
-        transparent: true,
-      });
+    playerCardTextures[1] = new THREE.CanvasTexture(playerCards[1].canvas);
+    room.getObjectByName("CARD2").material = new THREE.MeshBasicMaterial({
+      map: playerCardTextures[1],
+      transparent: true,
+    });
 
-      console.log(playerCards)
+    console.log(playerCards)
 
-      playerCardTextures[0].needsUpdate = true;
-      playerCardTextures[1].needsUpdate = true;
-    }, 1000);
+    playerCardTextures[0].needsUpdate = true;
+    playerCardTextures[1].needsUpdate = true;
   });
 
   const onKeyDown = function (event) {

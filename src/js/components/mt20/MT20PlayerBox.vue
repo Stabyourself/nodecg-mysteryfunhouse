@@ -4,11 +4,11 @@
       {{  player.name.toUpperCase() }}
     </div>
     <div class="player-info">
-      <div class="player-pronouns">{{ player.pronouns }}</div>
+      <div class="player-pronouns" v-if="player.pronouns">{{ player.pronouns }}</div>
       <div class="player-flag">
           <Flag :code="player.flag" /></div>
       <div class="player-health">
-        <div class="health-bar" :style="{ width: width + '%' }"></div>
+        <div class="health-bar" :style="{ width: health*100 + '%' }"></div>
       </div>
     </div>
   </div>
@@ -82,12 +82,7 @@
 <script>
 export default {
   mounted() {
-    setInterval(() => {
-      this.width = 100;
-      setTimeout(() => {
-        this.width = 0;
-      }, 1500);
-    }, 3000);
+
   },
 
   props: {
@@ -95,6 +90,7 @@ export default {
     visible: Boolean,
     side: String,
     width: Number,
+    health: Number,
   },
 
   computed: {

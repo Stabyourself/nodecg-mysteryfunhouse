@@ -2,9 +2,9 @@
   <v-app>
     <div class="twoplayers">
     <div id="top-section">
-      <mt20-player-box :player="player0" :visible="visible" side="left" />
+      <mt20-player-box :player="player0" :visible="visible" side="left" :health="player0health" />
       <img class="logo" :src="currentEventLogo.url" style="height: 147px"/>
-      <mt20-player-box :player="player1" :visible="visible" side="right" />
+      <mt20-player-box :player="player1" :visible="visible" side="right" :health="player1health" />
     </div>
 
     <div id="player-section">
@@ -186,6 +186,40 @@ export default {
         finalTime: this.player1finalTime,
       };
     },
+
+    player0health() {
+      if (this.timer.ms == 0) {
+        return 0;
+      }
+
+      let hp = 1;
+      if (this.round.includes("loser")) {
+        hp = 0.5;
+      }
+
+      if (this.player1raceState == "winner" || this.player0raceState == "forfeit") {
+        hp -= 0.5;
+      }
+
+      return hp;
+    },
+
+    player1health() {
+      if (this.timer.ms == 0) {
+        return 0;
+      }
+
+      let hp = 1;
+      if (this.round.includes("loser")) {
+        hp = 0.5;
+      }
+
+      if (this.player0raceState == "winner" || this.player1raceState == "forfeit") {
+        hp -= 0.5;
+      }
+
+      return hp;
+    }
   },
 
   data() {
