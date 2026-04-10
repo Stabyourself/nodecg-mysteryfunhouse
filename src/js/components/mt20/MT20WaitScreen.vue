@@ -95,7 +95,7 @@ export default {
     },
 
     updatePlayerCard() {
-      if (this.waitScreenState == 'cards1' || this.waitScreenState == 'paths1') {
+      if (this.waitScreenState == 'cards1' || this.waitScreenState == 'paths1' || this.waitScreenState == 'ghost') {
         this.leftPlayerInfo = this.playerInfo[0];
         this.rightPlayerInfo = this.playerInfo[1];
       } else if (this.waitScreenState == 'cards2' || this.waitScreenState == 'paths2') {
