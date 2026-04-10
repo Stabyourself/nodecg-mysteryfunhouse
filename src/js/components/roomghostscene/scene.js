@@ -1,8 +1,11 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { PointerLockControls } from './PointerLockControls';
+import { CRTShader } from './CRTShader';
 
 const playerCardTextures = [];
+let cameraMovement, beziers;
+let cameraAt = "idle";
 
 // 1. Scene Setup
 function init(container, playerCards) {
@@ -33,7 +36,7 @@ function init(container, playerCards) {
 
   // load room
 
-  let beziers, fan, ghostMixer, camera, controls, tvLight;
+  let fan, ghostMixer, camera, controls, tvLight, crtUniforms;
 
   const loader = new GLTFLoader();
   loader.load('/bundles/nodecg-mysteryfunhouse/dist/model/20/room.glb', (glb) => {
@@ -97,8 +100,12 @@ function init(container, playerCards) {
     //Create your video texture:
     const videoTexture = new THREE.VideoTexture(video);
     videoTexture.needsUpdate = true;
-    const videoMaterial = new THREE.MeshBasicMaterial({
-      map: videoTexture,
+    crtUniforms = THREE.UniformsUtils.clone(CRTShader.uniforms);
+    crtUniforms.tDiffuse.value = videoTexture;
+    const videoMaterial = new THREE.ShaderMaterial({
+      uniforms: crtUniforms,
+      vertexShader: CRTShader.vertexShader,
+      fragmentShader: CRTShader.fragmentShader,
       side: THREE.FrontSide,
       toneMapped: false,
     });
@@ -140,6 +147,11 @@ function init(container, playerCards) {
 
     // 4. Camera Setup
     camera = glb.cameras[0]
+
+    if (cameraAt === "corkboard") {
+      camera.position.copy(room.getObjectByName("CAMERA_END").position);
+      camera.rotation.copy(room.getObjectByName("CAMERA_END").rotation);
+    }
 
     controls = new PointerLockControls(camera, document.body);
 
@@ -192,12 +204,24 @@ function init(container, playerCards) {
     // scene.add(curveObject);
 
     // corkboard
-    playerCardTextures[0] = new THREE.CanvasTexture(playerCards[0].canvas);
-    room.getObjectByName("CORKBOARD_INFO").material = new THREE.MeshBasicMaterial({
-      map: playerCardTextures[0],
-      transparent: true,
-    });
-    room.getObjectByName("CORKBOARD_INFO").position.z -= 1
+    setTimeout(() => {
+      playerCardTextures[0] = new THREE.CanvasTexture(playerCards[0].canvas);
+      room.getObjectByName("CARD1").material = new THREE.MeshBasicMaterial({
+        map: playerCardTextures[0],
+        transparent: true,
+      });
+
+      playerCardTextures[1] = new THREE.CanvasTexture(playerCards[1].canvas);
+      room.getObjectByName("CARD2").material = new THREE.MeshBasicMaterial({
+        map: playerCardTextures[1],
+        transparent: true,
+      });
+
+      console.log(playerCards)
+
+      playerCardTextures[0].needsUpdate = true;
+      playerCardTextures[1].needsUpdate = true;
+    }, 1000);
   });
 
   const onKeyDown = function (event) {
@@ -228,14 +252,6 @@ function init(container, playerCards) {
 
       case 'Space':
         moveUp = true;
-        break;
-
-      case 'KeyC':
-        cameraMovement(beziers.idleToCards, 2000);
-        break;
-
-      case 'KeyV':
-        cameraMovement(beziers.cardsToIdle, 2000);
         break;
     }
   };
@@ -286,7 +302,7 @@ function init(container, playerCards) {
 
   let clock = new THREE.Clock();
 
-  function cameraMovement(path, duration) {
+  cameraMovement = function (path, duration) {
     let startTime = null;
     function animateCamera(time) {
       if (!startTime) startTime = time;
@@ -349,6 +365,12 @@ function init(container, playerCards) {
       ghostMixer.update(delta);
     }
 
+    if (crtUniforms) {
+      const elapsedTime = clock.elapsedTime;
+      crtUniforms.time.value = elapsedTime;
+      // crtUniforms.yOffset.value = (elapsedTime * 0.03) % 1;
+    }
+
     renderer.render(scene, camera);
 
     tvLight.power = 8 + perlinNoise(Date.now(), 0.008) * 3;
@@ -397,7 +419,7 @@ function perlinNoise(x, scale) {
   return y;
 }
 
-export function playerCardUpdated() {
+function playerCardUpdated() {
   for (let i = 0; i < 2; i++) {
     if (playerCardTextures && playerCardTextures[i]) {
       playerCardTextures[i].needsUpdate = true;
@@ -405,6 +427,18 @@ export function playerCardUpdated() {
   }
 }
 
-export {
-  init,
+function toCorkboard() {
+  if (beziers) {
+    cameraMovement(beziers.idleToCards, 2000);
+  }
+  cameraAt = "corkboard";
 }
+
+function toIdle() {
+  if (beziers) {
+    cameraMovement(beziers.cardsToIdle, 2000);
+  }
+  cameraAt = "idle";
+}
+
+export { init, playerCardUpdated, toCorkboard, toIdle };

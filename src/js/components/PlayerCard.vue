@@ -247,9 +247,13 @@ export default {
         let year = new Date().getFullYear();
         this.ctx.fillText(`©${year} MAURICE`, 740, 1150);
         this.ctx.textAlign = 'left';
+
+        console.log("rendered player card for " + this.info.name);
+        this.$emit('update');
+      } else {
+        console.log('no info');
       }
 
-      this.$emit('update');
     },
 
     loadAvatar() {
@@ -258,6 +262,7 @@ export default {
         this.img.crossOrigin = 'Anonymous';
 
         this.img.onload = this.render;
+        this.img.onerror = this.render;
       } else {
         this.img = new Image();
         this.img.crossOrigin = 'Anonymous';

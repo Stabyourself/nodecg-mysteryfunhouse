@@ -6,6 +6,8 @@
 import {
   init,
   playerCardUpdated,
+  toCorkboard,
+  toIdle
 } from "../roomghostscene/scene.js";
 
 export default {
@@ -22,15 +24,13 @@ export default {
   },
 
   watch: {
-    // state(newState, oldState) {
-    //   if (newState == "ghost") {
-    //     toGhost();
-    //   } else if (newState == "cards1" || newState == "cards2") {
-    //     toPlayerCards();
-    //   } else if (newState == "paths1" || newState == "paths2") {
-    //     toPaths();
-    //   }
-    // },
+    state(newState, oldState) {
+      if (newState == "cards1" || newState == "cards2") {
+        toCorkboard();
+      } else if (newState == "ghost") {
+        toIdle();
+      }
+    },
   },
 
   data() {

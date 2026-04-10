@@ -210,6 +210,11 @@
         "file": "mt20/waitscreen.html",
         "width": 1920,
         "height": 1080
+      },
+      {
+        "file": "mt20/2player.html",
+        "width": 1920,
+        "height": 1080
       }
     ],
     "soundCues": [

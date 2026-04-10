@@ -16,6 +16,10 @@
 
 .player-wrapper {
   position: absolute;
+  width: 400px;
+  height: 300px;
+  visibility: visible;
+  display: block;
 }
 
 .popover-holder {

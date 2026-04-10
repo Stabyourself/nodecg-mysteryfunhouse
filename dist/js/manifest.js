@@ -149,6 +149,7 @@
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
 /******/ 			"/dist/js/manifest": 0,
+/******/ 			"dist/css/mt20": 0,
 /******/ 			"dist/css/style": 0
 /******/ 		};
 /******/ 		

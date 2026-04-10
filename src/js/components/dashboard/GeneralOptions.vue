@@ -86,7 +86,7 @@ export default {
       waitScreenState: false,
       showRainwave: false,
       waitScreenStateOptions: [
-        { text: "Spinning Ghost", value: "ghost" },
+        { text: "Idle", value: "ghost" },
         { text: "Player Cards Match 1", value: "cards1" },
         { text: "Player Cards Match 2", value: "cards2" },
         { text: "Tournament Paths Match 1", value: "paths1" },

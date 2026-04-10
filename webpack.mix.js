@@ -5,6 +5,7 @@ mix
   .js("src/js/main.js", "dist/js")
   .extract()
   .sass("src/scss/style.scss", "dist/css")
+  .sass("src/scss/mt20.scss", "dist/css")
 
   .sourceMaps(false)
   .vuetify("vuetify-loader", "src/scss/vuetify-variables.scss")

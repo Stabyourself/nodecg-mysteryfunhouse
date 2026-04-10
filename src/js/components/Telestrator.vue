@@ -46,6 +46,11 @@ canvas {
   button i {
     text-shadow: 0 0 3px black;
   }
+
+  button {
+
+    margin-right: 3px;
+  }
 }
 </style>
 
@@ -66,6 +71,13 @@ export default {
     nodecg.listenFor('addTelestratorLine', this.telestratorLineAdded);
     nodecg.listenFor('clearTelestrator', this.clear);
   },
+
+  watch: {
+    lines() {
+      this.drawEverything();
+    },
+  },
+
   methods: {
     toggleHide() {
       this.hidden = !this.hidden;
@@ -119,16 +131,34 @@ export default {
     },
 
     clear() {
+      this.lines = [];
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     },
 
     telestratorLineAdded(line) {
-      this.ctx.beginPath();
-      this.ctx.strokeStyle = line.c;
-      this.ctx.lineWidth = line.t;
-      this.ctx.moveTo(line.s.x, line.s.y);
-      this.ctx.lineTo(line.e.x, line.e.y);
-      this.ctx.stroke();
+      this.lines.push(line);
+    },
+
+    drawEverything() {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+      for (const line of this.lines) {
+        this.ctx.strokeStyle = '#000000';
+        this.ctx.lineWidth = line.t;
+        this.ctx.beginPath();
+        this.ctx.moveTo(line.s.x+5, line.s.y);
+        this.ctx.lineTo(line.e.x+5, line.e.y);
+        this.ctx.stroke();
+      }
+
+      for (const line of this.lines) {
+        this.ctx.strokeStyle = line.c;
+        this.ctx.lineWidth = line.t;
+        this.ctx.beginPath();
+        this.ctx.moveTo(line.s.x, line.s.y);
+        this.ctx.lineTo(line.e.x, line.e.y);
+        this.ctx.stroke();
+      }
     },
   },
 

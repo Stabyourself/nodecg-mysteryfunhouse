@@ -23,11 +23,11 @@
     <div class="mt-font top-text" :class="{ active: true }">
       <markdown-it-vue :content="topText"></markdown-it-vue>
     </div>
+  -->
 
     <rainwave v-if="showRainwave" style="top: 975px; left: 1521px; width: 444px; height: 124px"> </rainwave>
 
     <AchievementManager></AchievementManager>
-  -->
   </v-app>
 </template>
 
@@ -47,13 +47,14 @@ import { bindReplicant } from '../../util.js';
 import MarkdownItVue from 'markdown-it-vue';
 
 const ghostGames = nodecg.Replicant('assets:ghostGames');
+const lastVideos = [];
 
 export default {
   components: {
     MarkdownItVue,
   },
 
-  mounted() {
+  created() {
     bindReplicant.call(this, 'playerInfo');
     bindReplicant.call(this, 'waitScreenState');
     bindReplicant.call(this, 'topText');
@@ -72,16 +73,24 @@ export default {
 
   methods: {
     randomVideo() {
-      const randomIndex = Math.floor(Math.random() * ghostGames.value.length);
+      let randomIndex;
+      do {
+        randomIndex = Math.floor(Math.random() * ghostGames.value.length);
+      } while (ghostGames.value.length > 4 &&lastVideos.includes(ghostGames.value[randomIndex].url));
+
       this.currentVideo = "/bundles/nodecg-mysteryfunhouse/dist/model/20/tv_1.mov";
 
+      lastVideos.push(ghostGames.value[randomIndex].url);
+      if (lastVideos.length > 4) {
+        lastVideos.shift();
+      }
+
       setTimeout(() => {
-      this.currentVideo = ghostGames.value[randomIndex].url;
+        this.currentVideo = ghostGames.value[randomIndex].url
       }, 2000);
     },
 
     canvasUpdated() {
-      console.log("CANVAS UPDATED")
       this.$refs.scene.update();
     },
 
