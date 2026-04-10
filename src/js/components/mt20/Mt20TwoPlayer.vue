@@ -38,7 +38,7 @@
     </div>
 
     <AchievementManager />
-    <!-- <Telestrator /> -->
+    <Telestrator />
   </div>
   </v-app>
 </template>
