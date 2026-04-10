@@ -105,7 +105,7 @@ async function getContacts() {
   try {
     conn = await pool.getConnection();
     const rows = await conn.query(
-      'SELECT users.*, flavor FROM `users`, `signups` WHERE `users`.`id` = `signups`.`user_id` AND `signups`.`event_id` = 3',
+      'SELECT users.*, flavor FROM `users`, `signups` WHERE `users`.`id` = `signups`.`user_id` AND `signups`.`event_id` = 4',
     );
     return rows;
   } catch (err) {
@@ -117,6 +117,7 @@ async function getContacts() {
 
 function getContactForChallongeName(contactRows, challongeName) {
   const contact = contactRows.find((row) => {
+    console.log(row['challonge_username'], challongeName);
     return row['challonge_username'].toLowerCase() == challongeName.toLowerCase();
   });
 

@@ -428,17 +428,17 @@ function playerCardUpdated() {
 }
 
 function toCorkboard() {
-  if (beziers) {
+  if (beziers && cameraAt === "idle") {
     cameraMovement(beziers.idleToCards, 2000);
+    cameraAt = "corkboard";
   }
-  cameraAt = "corkboard";
 }
 
 function toIdle() {
-  if (beziers) {
+  if (beziers && cameraAt === "corkboard") {
     cameraMovement(beziers.cardsToIdle, 2000);
+    cameraAt = "idle";
   }
-  cameraAt = "idle";
 }
 
 export { init, playerCardUpdated, toCorkboard, toIdle };
