@@ -22,8 +22,8 @@ object-assign
  */
 
 /*!
- * Vue.js v2.6.14
- * (c) 2014-2021 Evan You
+ * Vue.js v2.7.16
+ * (c) 2014-2023 Evan You
  * Released under the MIT License.
  */
 
@@ -51,6 +51,8 @@ object-assign
 /*! ../../../mixins/colorable */
 
 /*! ../../../mixins/localable */
+
+/*! ../../../mixins/mouse */
 
 /*! ../../../mixins/themeable */
 
@@ -131,6 +133,8 @@ object-assign
 /*! ../../mixins/menuable */
 
 /*! ../../mixins/mobile */
+
+/*! ../../mixins/mouse */
 
 /*! ../../mixins/overlayable */
 
@@ -578,6 +582,8 @@ object-assign
 
 /*! ./VItem */
 
+/*! ./VItem.sass */
+
 /*! ./VItemGroup */
 
 /*! ./VItemGroup.sass */
@@ -943,8 +949,6 @@ object-assign
 /*! ./mixins/header */
 
 /*! ./monthChange */
-
-/*! ./mouse */
 
 /*! ./mutate */
 
@@ -1545,6 +1549,10 @@ object-assign
 /*!*********************************!*\
   !*** ./src/directives/index.ts ***!
   \*********************************/
+
+/*!***********************************!*\
+  !*** ./src/mixins/mouse/index.ts ***!
+  \***********************************/
 
 /*!***********************************!*\
   !*** ./src/services/goto/util.ts ***!
@@ -2419,6 +2427,10 @@ object-assign
   \**********************************************/
 
 /*!**********************************************!*\
+  !*** ./src/components/VItemGroup/VItem.sass ***!
+  \**********************************************/
+
+/*!**********************************************!*\
   !*** ./src/components/VList/VListGroup.sass ***!
   \**********************************************/
 
@@ -2692,10 +2704,6 @@ object-assign
 
 /*!**************************************************!*\
   !*** ./src/components/VAppBar/VAppBarNavIcon.ts ***!
-  \**************************************************/
-
-/*!**************************************************!*\
-  !*** ./src/components/VCalendar/mixins/mouse.ts ***!
   \**************************************************/
 
 /*!**************************************************!*\
@@ -3216,7 +3224,7 @@ object-assign
 
 /**
  * @license
- * Copyright 2010-2021 Three.js Authors
+ * Copyright 2010-2026 Three.js Authors
  * SPDX-License-Identifier: MIT
  */
 
