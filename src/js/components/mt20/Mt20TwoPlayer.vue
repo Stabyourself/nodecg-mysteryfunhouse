@@ -73,6 +73,7 @@ $whiteBoxFont: 'Arvo', serif;
 #player-section {
   display: flex;
   justify-content: space-between;
+  width: 100%;
 }
 
 #bottom-section {
