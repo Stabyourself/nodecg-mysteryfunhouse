@@ -283,9 +283,9 @@ nodecg.listenFor('loadMatch', function (options, ack) {
 
         // format round
         if (rawMatch.round > 0) {
-          match.round = 'Wizards ' + rawMatch.round;
+          match.round = 'Winners ' + rawMatch.round;
         } else {
-          match.round = 'Lizards ' + -rawMatch.round;
+          match.round = 'Losers ' + -rawMatch.round;
         }
 
         if (rawMatch.winner_id == match.players[0].id) {
@@ -344,9 +344,9 @@ nodecg.listenFor('loadMatch', function (options, ack) {
     let round = match.match['round'];
 
     if (round > 0) {
-      round = 'Wizards ' + round;
+      round = 'Winners ' + round;
     } else {
-      round = 'Lizards ' + -round;
+      round = 'Losers ' + -round;
     }
 
     replicants[`match${options.matchNumber}round`].value = round;
