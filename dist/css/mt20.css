@@ -1,1 +1,24 @@
-@font-face{font-family:VCR OSD Mono;font-style:normal;font-weight:400;src:url(../../dist/font/VCR_OSD_MONO_1.001.woff2) format("woff2")}@font-face{font-family:Pixellari;font-style:normal;font-weight:400;src:url(../../dist/font/Pixellari.woff2) format("woff2")}.megaman-box{-ms-interpolation-mode:nearest-neighbor;border-image-outset:20px;border-image-repeat:repeat;border-image-slice:20 20 20 20;border-image-source:url(../../dist/img/mt20/border.png);border-image-width:20px;image-rendering:pixelated;image-rendering:-moz-crisp-edges;image-rendering:crisp-edges;image-rendering:-webkit-optimize-contrast}
+@font-face {
+  font-family: "VCR OSD Mono";
+  src: url("../../dist/font/VCR_OSD_MONO_1.001.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Pixellari";
+  src: url("../../dist/font/Pixellari.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+.megaman-box {
+  border-image-source: url("../../dist/img/mt20/border.png");
+  border-image-slice: 20 20 20 20;
+  border-image-repeat: repeat;
+  border-image-width: 20px;
+  border-image-outset: 20px;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  -ms-interpolation-mode: nearest-neighbor;
+}
