@@ -115,7 +115,7 @@ export default {
 
         // Draw avatar
         if (this.img.complete) {
-          // this.ctx.drawImage(this.img, 99, 218, 616, 616);
+          this.ctx.drawImage(this.img, 99, 218, 616, 616);
         }
 
         // Draw edition
@@ -130,7 +130,7 @@ export default {
           seed = String(this.info.challonge.seed);
         }
 
-        this.ctx.fillText(`MT19-${seed.padStart(4, '0')}`, 727, 873);
+        this.ctx.fillText(`MTXX-${seed.padStart(4, '0')}`, 727, 873);
         this.ctx.textAlign = 'left';
 
         // Draw class or whatever this is
