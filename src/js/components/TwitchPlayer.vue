@@ -1,6 +1,6 @@
 <template>
   <div class="player-backdrop" :style="{ width: width + 'px', height: height + 'px' }">
-    <div class="player-wrapper" :style="cropStyles" :id="'player' + playerNumber"></div>
+    <div class="player-wrapper" :style="cropStyles" ref="player"></div>
     <div class="popover-holder">
       <img :class="{ active: popoverVisible }" :src="popover" />
     </div>
@@ -16,8 +16,8 @@
 
 .player-wrapper {
   position: absolute;
-  width: 800px;
-  height: 600px;
+  width: 400px;
+  height: 300px;
   visibility: visible;
   display: block;
 }
@@ -60,8 +60,6 @@ let twitchOptions = {
   quality: 'auto',
 };
 
-let player;
-
 let playerWidth = 930;
 let playerHeight = 698;
 
@@ -83,34 +81,28 @@ export default {
   },
 
   unmounted() {
-    if (player) {
-      player.destroy();
-    }
+    this.$refs.player.innerHTML = '';
   },
 
   methods: {
     createPlayer() {
-      let playerElement = document.getElementById(`player${this.playerNumber}`);
-      if (playerElement) {
-        playerElement.innerHTML = '';
+      this.$refs.player.innerHTML = '';
 
+      twitchOptions.channel = this.url;
+      // twitchOptions.video = "1232657574";
+      twitchOptions.width = playerWidth;
+      twitchOptions.height = playerHeight;
 
-        twitchOptions.channel = this.url;
-        // twitchOptions.video = "1232657574";
-        twitchOptions.width = playerWidth;
-        twitchOptions.height = playerHeight;
+      this.player = new Twitch.Player(this.$refs.player, twitchOptions);
 
-        player = new Twitch.Player(playerElement, twitchOptions);
-        document.player = player
+      this.player.addEventListener(Twitch.Player.READY, () => {
+        this.player.setMuted(false);
+        this.player.setVolume(this.volume / 100);
 
-        player.addEventListener(Twitch.Player.READY, () => {
-          player.setMuted(false);
-          player.setVolume(this.volume / 100);
-          // setInterval(() => {
-          //     this.qualities = player.getQualities()
-          // }, 5000)
-        });
-      }
+        // setInterval(() => {
+        //     this.qualities = this.player.getQualities()
+        // }, 5000)
+      });
     },
   },
 
@@ -191,11 +183,11 @@ export default {
     },
 
     volume(newValue) {
-      player.setVolume(newValue / 100);
+      this.player.setVolume(newValue / 100);
     },
 
     quality(newValue) {
-      // player.setQuality(newValue)
+      // this.player.setQuality(newValue)
     },
   },
 
