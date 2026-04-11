@@ -144,6 +144,12 @@
 <script>
 import { bindReplicant, formatTimer } from '../../util.js';
 
+let iadd = 0;
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('match2') != null) {
+  iadd = 2;
+}
+
 export default {
   created() {
     bindReplicant.call(this, 'game');
@@ -156,23 +162,22 @@ export default {
 
     bindReplicant.call(this, 'currentEventLogo');
     bindReplicant.call(this, 'round1', 'match1round');
-    bindReplicant.call(this, 'round2', 'match2round');
 
     for (let i = 0; i < 2; i++) {
-      bindReplicant.call(this, `player${i}name`);
-      bindReplicant.call(this, `player${i}pronouns`);
-      bindReplicant.call(this, `player${i}flag`);
+      bindReplicant.call(this, `player${i + iadd}name`);
+      bindReplicant.call(this, `player${i + iadd}pronouns`);
+      bindReplicant.call(this, `player${i + iadd}flag`);
 
-      bindReplicant.call(this, `player${i}twitch`);
-      // bindReplicant.call(this, `player${i}quality`)
-      bindReplicant.call(this, `player${i}volume`);
-      bindReplicant.call(this, `player${i}streamHidden`);
+      bindReplicant.call(this, `player${i + iadd}twitch`);
+      // bindReplicant.call(this, `player${i + iadd}quality`)
+      bindReplicant.call(this, `player${i + iadd}volume`);
+      bindReplicant.call(this, `player${i + iadd}streamHidden`);
 
-      bindReplicant.call(this, `player${i}raceState`);
-      bindReplicant.call(this, `player${i}finalTime`);
+      bindReplicant.call(this, `player${i + iadd}raceState`);
+      bindReplicant.call(this, `player${i + iadd}finalTime`);
 
-      bindReplicant.call(this, `player${i}crop`);
-      bindReplicant.call(this, `player${i}aspectratio`);
+      bindReplicant.call(this, `player${i + iadd}crop`);
+      bindReplicant.call(this, `player${i + iadd}aspectratio`);
     }
 
     if (window.obsstudio && window.obsstudio.getControlLevel && window.obsstudio.getControlLevel != 0) {
