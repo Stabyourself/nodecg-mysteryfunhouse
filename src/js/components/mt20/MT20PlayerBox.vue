@@ -7,8 +7,9 @@
       <div class="player-pronouns" v-if="player.pronouns">{{ player.pronouns }}</div>
       <div class="player-flag">
           <Flag :code="player.flag" /></div>
-      <div class="player-health">
+      <div class="player-health" :class="raceState">
         <div class="health-bar" :style="{ width: health*100 + '%' }"></div>
+        <div class="health-text">{{ timeAdjusted }}</div>
       </div>
     </div>
   </div>
@@ -64,6 +65,7 @@
       height: 100%;
       width: 355px;
       background: black;
+      position: relative;
 
       .health-bar {
         width: 0%;
@@ -74,6 +76,36 @@
         background-repeat: repeat;
         image-rendering: pixelated;
         transition: width 1s linear;
+
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        height: 100%;
+      }
+
+      $green: #3bd62f;
+      $red: #d21515;
+
+      .health-text {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+
+        padding-top: 4px;
+        font-family: "Press Start 2P";
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5em;
+        color: $green;
+        text-shadow: 2px 2px 0 black, -2px 2px 0 black, 2px -2px 0 black, -2px -2px 0 black, 0px 2px 0 black, 2px 0px 0 black, 0px -2px 0 black, -2px 0px 0 black;
+      }
+
+      &.loser .health-text, &.forfeit .health-text {
+        color: $red;
       }
     }
   }
@@ -81,22 +113,29 @@
 
 <script>
 export default {
-  mounted() {
-
-  },
-
   props: {
     player: Object,
     visible: Boolean,
     side: String,
     width: Number,
     health: Number,
+    time: String,
+    raceState: String,
   },
 
   computed: {
     otherSide() {
       return this.side == 'left' ? 'right' : 'left';
     },
+
+    timeAdjusted() {
+      console.log(this.time)
+      if (this.raceState == 'forfeit') {
+        return this.time + ' (FF)';
+      } else {
+        return this.time;
+      }
+    }
   },
 };
 </script>

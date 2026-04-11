@@ -2,9 +2,9 @@
   <v-app>
     <div class="twoplayers">
     <div id="top-section">
-      <mt20-player-box :player="player0" :visible="visible" side="left" :health="player0health" />
+      <mt20-player-box :player="player0" :visible="visible" side="left" :health="player0health" :time="player0finalTime" :race-state="player0raceState" />
       <img class="logo" :src="currentEventLogo.url" style="height: 147px"/>
-      <mt20-player-box :player="player1" :visible="visible" side="right" :health="player1health" />
+      <mt20-player-box :player="player1" :visible="visible" side="right" :health="player1health" :time="player1finalTime" :race-state="player1raceState" />
     </div>
 
     <div id="player-section">
@@ -36,6 +36,8 @@
     <div id="bottom-section">
       <mt20-game-timer-box :game="game" :goal="goal" :submitter="submitter" :visible="visible" :boxart="currentBoxart" :timer="timerText" :round="round" />
     </div>
+
+    <rainwave v-if="showRainwave" style="top: 975px; left: 1521px; width: 444px; height: 124px"> </rainwave>
 
     <AchievementManager />
     <Telestrator />

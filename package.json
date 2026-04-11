@@ -215,6 +215,16 @@
         "file": "mt20/2player.html",
         "width": 1920,
         "height": 1080
+      },
+      {
+        "file": "mt20/4player.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "mt20/2player_tate.html",
+        "width": 1920,
+        "height": 1080
       }
     ],
     "soundCues": [
