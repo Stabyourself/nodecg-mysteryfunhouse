@@ -9,7 +9,7 @@
       <div id="main-section">
         <div class="main-row">
           <mt20-player-box-small :player="player0" :visible="visible" side="left" :race-state="player0raceState" :time="player0finalTime" />
-          <div class="round">{{ round1 }}</div>
+          <div class="round">{{ round }}</div>
           <mt20-player-box-small :player="player1" :visible="visible" side="right" :race-state="player1raceState" :time="player1finalTime" />
         </div>
 
@@ -161,23 +161,23 @@ export default {
     bindReplicant.call(this, 'timer');
 
     bindReplicant.call(this, 'currentEventLogo');
-    bindReplicant.call(this, 'round1', 'match1round');
+    bindReplicant.call(this, 'round', `match${1 + iadd / 2}round`);
 
     for (let i = 0; i < 2; i++) {
-      bindReplicant.call(this, `player${i + iadd}name`);
-      bindReplicant.call(this, `player${i + iadd}pronouns`);
-      bindReplicant.call(this, `player${i + iadd}flag`);
+      bindReplicant.call(this, `player${i}name`, `player${i + iadd}name`);
+      bindReplicant.call(this, `player${i}pronouns`, `player${i + iadd}pronouns`);
+      bindReplicant.call(this, `player${i}flag`, `player${i + iadd}flag`);
 
-      bindReplicant.call(this, `player${i + iadd}twitch`);
-      // bindReplicant.call(this, `player${i + iadd}quality`)
-      bindReplicant.call(this, `player${i + iadd}volume`);
-      bindReplicant.call(this, `player${i + iadd}streamHidden`);
+      bindReplicant.call(this, `player${i}twitch`, `player${i + iadd}twitch`);
+      // bindReplicant.call(this, `player${i}quality`, `player${i + iadd}quality`)
+      bindReplicant.call(this, `player${i}volume`, `player${i + iadd}volume`);
+      bindReplicant.call(this, `player${i}streamHidden`, `player${i + iadd}streamHidden`);
 
-      bindReplicant.call(this, `player${i + iadd}raceState`);
-      bindReplicant.call(this, `player${i + iadd}finalTime`);
+      bindReplicant.call(this, `player${i}raceState`, `player${i + iadd}raceState`);
+      bindReplicant.call(this, `player${i}finalTime`, `player${i + iadd}finalTime`);
 
-      bindReplicant.call(this, `player${i + iadd}crop`);
-      bindReplicant.call(this, `player${i + iadd}aspectratio`);
+      bindReplicant.call(this, `player${i}crop`, `player${i + iadd}crop`);
+      bindReplicant.call(this, `player${i}aspectratio`, `player${i + iadd}aspectratio`);
     }
 
     if (window.obsstudio && window.obsstudio.getControlLevel && window.obsstudio.getControlLevel != 0) {
@@ -256,8 +256,7 @@ export default {
       currentBoxart: '',
 
       currentEventLogo: {},
-      round1: '',
-      round2: '',
+      round: '',
 
       player0name: '',
       player0pronouns: '',
