@@ -93,9 +93,10 @@ export default {
       twitchOptions.width = playerWidth;
       twitchOptions.height = playerHeight;
 
-      this.player = new Twitch.Player(this.$refs.player, twitchOptions);
+      let embed = new Twitch.Embed(this.$refs.player, twitchOptions);
 
-      this.player.addEventListener(Twitch.Player.READY, () => {
+      embed.addEventListener(Twitch.Embed.READY, () => {
+        this.player = embed.getPlayer();
         this.player.setMuted(false);
         this.player.setVolume(this.volume / 100);
 
