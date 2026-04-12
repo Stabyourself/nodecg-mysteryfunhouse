@@ -58,6 +58,7 @@ let twitchOptions = {
   muted: false,
   parent: ['nodecg.mysteryfun.house'],
   quality: 'auto',
+  layout: 'video'
 };
 
 let playerWidth = 930;
