@@ -44,7 +44,7 @@
     </div>
 
     <AchievementManager></AchievementManager>
-    <!-- <Telestrator /> -->
+    <Telestrator v-if="showTelestrator"/>
   </v-app>
 </template>
 
@@ -152,6 +152,11 @@ if (urlParams.get('match2') != null) {
 
 export default {
   created() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('obs') != null) {
+      this.showTelestrator = false;
+    }
+
     bindReplicant.call(this, 'game');
     bindReplicant.call(this, 'goal');
     bindReplicant.call(this, 'platform');
@@ -293,6 +298,7 @@ export default {
       },
 
       visible: false,
+      showTelestrator: true,
     };
   },
 };

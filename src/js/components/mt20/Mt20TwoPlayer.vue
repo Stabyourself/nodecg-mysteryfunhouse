@@ -40,7 +40,7 @@
     <rainwave v-if="showRainwave" style="top: 975px; left: 1521px; width: 444px; height: 124px"> </rainwave>
 
     <AchievementManager />
-    <Telestrator />
+    <Telestrator v-if="showTelestrator"/>
   </div>
   </v-app>
 </template>
@@ -94,6 +94,11 @@ if (urlParams.get('match2') != null) {
 
 export default {
   created() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('obs') != null) {
+      this.showTelestrator = false;
+    }
+
     bindReplicant.call(this, 'game');
     bindReplicant.call(this, 'goal');
     bindReplicant.call(this, 'platform');
@@ -273,6 +278,7 @@ export default {
       showRainwave: false,
 
       visible: false,
+      showTelestrator: true,
     };
   },
 };

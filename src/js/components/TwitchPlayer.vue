@@ -1,7 +1,7 @@
 <template>
   <div class="player-backdrop" :style="{ width: width + 'px', height: height + 'px' }">
-    <div class="player-wrapper" :style="cropStyles" ref="player"></div>
-    <div class="popover-holder">
+    <div class="player-wrapper" :style="playerPlaying ? cropStyles : {}" ref="player"></div>
+    <div class="popover-holder" v-if="playerPlaying">
       <img :class="{ active: popoverVisible }" :src="popover" />
     </div>
   </div>
@@ -16,8 +16,8 @@
 
 .player-wrapper {
   position: absolute;
-  width: 400px;
-  height: 300px;
+  width: 600px;
+  height: 400px;
   visibility: visible;
   display: block;
 }
@@ -61,8 +61,8 @@ let twitchOptions = {
   layout: 'video'
 };
 
-let playerWidth = 930;
-let playerHeight = 698;
+let playerWidth = 600;
+let playerHeight = 400;
 
 export default {
   created() {
@@ -87,6 +87,7 @@ export default {
 
   methods: {
     createPlayer() {
+      this.playerPlaying = false
       this.$refs.player.innerHTML = '';
 
       twitchOptions.channel = this.url;
@@ -98,12 +99,12 @@ export default {
 
       embed.addEventListener(Twitch.Embed.READY, () => {
         this.player = embed.getPlayer();
-        this.player.setMuted(false);
         this.player.setVolume(this.volume / 100);
+      });
 
-        // setInterval(() => {
-        //     this.qualities = this.player.getQualities()
-        // }, 5000)
+      embed.addEventListener(Twitch.Embed.PLAY, () => {
+        this.playerPlaying = true;
+        this.player.setVolume(this.volume / 100);
       });
     },
   },
@@ -185,11 +186,9 @@ export default {
     },
 
     volume(newValue) {
-      this.player.setVolume(newValue / 100);
-    },
-
-    quality(newValue) {
-      // this.player.setQuality(newValue)
+      if (this.player) {
+        this.player.setVolume(newValue / 100);
+      }
     },
   },
 
@@ -201,6 +200,7 @@ export default {
       qualities: [],
       popover: null,
       popoverVisible: false,
+      playerPlaying: false,
     };
   },
 };
