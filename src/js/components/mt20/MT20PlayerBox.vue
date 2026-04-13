@@ -9,7 +9,7 @@
           <Flag :code="player.flag" /></div>
       <div class="player-health" :class="raceState">
         <div class="health-bar" :style="{ width: health*100 + '%' }"></div>
-        <div class="health-text">{{ timeAdjusted }}</div>
+        <div class="health-text" v-if="raceState != 'none'">{{ timeAdjusted }}</div>
       </div>
     </div>
   </div>
@@ -129,7 +129,6 @@ export default {
     },
 
     timeAdjusted() {
-      console.log(this.time)
       if (this.raceState == 'forfeit') {
         return this.time + ' (FF)';
       } else {
