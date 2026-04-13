@@ -8,7 +8,7 @@
         type="number"
         prepend-inner-icon="mdi-arrow-left"
         min="0"
-        max="930"
+        max="600"
       ></v-text-field>
 
       <v-text-field
@@ -18,7 +18,7 @@
         type="number"
         prepend-inner-icon="mdi-arrow-right"
         min="0"
-        max="930"
+        max="600"
       ></v-text-field>
 
       <v-text-field
@@ -28,7 +28,7 @@
         type="number"
         prepend-inner-icon="mdi-arrow-up"
         min="0"
-        max="698"
+        max="450"
       ></v-text-field>
 
       <v-text-field
@@ -38,7 +38,7 @@
         type="number"
         prepend-inner-icon="mdi-arrow-down"
         min="0"
-        max="698"
+        max="450"
       ></v-text-field>
 
       <v-col cols="3">
@@ -78,18 +78,18 @@
 
     <div class="crop-wrapper">
       <div v-if="assistantActive">
-        <twitch-player :playerNumber="1" :url="url" :volume="0" :width="930" :height="698"></twitch-player>
+        <twitch-player :playerNumber="1" :url="url" :volume="0" :width="600" :height="450"></twitch-player>
 
         <twitch-player
-          style="position: absolute; top: 0px; left: 945px; width: 930px; height: 698px"
+          style="position: absolute; top: 0px; left: 945px; width: 600px; height: 450px"
           class="checkerboard"
           :aspectratio="aspectratio"
           :playerNumber="1"
           :volume="0"
           :url="url"
           :crop="crop"
-          :width="930"
-          :height="698"
+          :width="600"
+          :height="450"
         ></twitch-player>
 
         <div v-if="!interacting" style="width: 100%; height: 100%; position: absolute; top: 0px; left: 0px"></div>
@@ -101,8 +101,8 @@
           :style="{
             left: crop[0] + 'px',
             top: crop[2] + 'px',
-            width: 930 - crop[0] - crop[1] + 'px',
-            height: 698 - crop[2] - crop[3] + 'px',
+            width: 600 - crop[0] - crop[1] + 'px',
+            height: 450 - crop[2] - crop[3] + 'px',
           }"
         >
           <div class="move-arrows" style="left: -48px; top: 50%">
@@ -152,16 +152,16 @@
 
         <vue-drag-resize
           v-if="!interacting"
-          :parentW="930"
-          :parentH="698"
+          :parentW="600"
+          :parentH="450"
           :isActive="true"
           :preventActiveBehavior="true"
           :isDraggable="true"
           :parentLimitation="true"
           :x="crop[0]"
           :y="crop[2]"
-          :w="930 - crop[0] - crop[1]"
-          :h="698 - crop[2] - crop[3]"
+          :w="600 - crop[0] - crop[1]"
+          :h="450 - crop[2] - crop[3]"
           ref="cropper"
           @resizing="cropChanged"
           @dragging="cropChanged"
@@ -169,7 +169,7 @@
         </vue-drag-resize>
       </div>
 
-      <div style="display: flex; align-items: center; justify-content: center; height: 698px">
+      <div style="display: flex; align-items: center; justify-content: center; height: 450px">
         <v-btn v-if="!assistantActive" color="green" @click="assistantActive = true">
           Start cropping
           <v-icon right dark> mdi-arrow-right </v-icon>
@@ -181,7 +181,7 @@
 
 <style lang="scss">
 .crop-input-holder {
-  max-width: 930px;
+  max-width: 600px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -190,7 +190,7 @@
 
 .crop-wrapper {
   width: 1875px;
-  height: 698px;
+  height: 450px;
   margin: 0px auto;
   position: relative;
 }
@@ -263,9 +263,9 @@ export default {
     nudgeCrop(i, diff) {
       let val = this.crop[i] + diff;
       if (i < 2) {
-        val = Math.max(0, Math.min(930, val));
+        val = Math.max(0, Math.min(600, val));
       } else {
-        val = Math.max(0, Math.min(698, val));
+        val = Math.max(0, Math.min(450, val));
       }
 
       this.$set(this.crop, i, val);

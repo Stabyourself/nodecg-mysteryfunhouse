@@ -17,7 +17,7 @@
 .player-wrapper {
   position: absolute;
   width: 600px;
-  height: 400px;
+  height: 450px;
   visibility: visible;
   display: block;
 }
@@ -62,7 +62,7 @@ let twitchOptions = {
 };
 
 let playerWidth = 600;
-let playerHeight = 400;
+let playerHeight = 450;
 
 export default {
   created() {
