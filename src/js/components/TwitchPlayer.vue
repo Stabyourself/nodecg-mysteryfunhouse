@@ -55,7 +55,7 @@ import { bindReplicant } from '../util.js';
 let twitchOptions = {
   channel: null,
   autoplay: true,
-  muted: false,
+  muted: true,
   parent: ['nodecg.mysteryfun.house'],
   quality: 'auto',
   layout: 'video'
@@ -99,11 +99,11 @@ export default {
 
       embed.addEventListener(Twitch.Embed.READY, () => {
         this.player = embed.getPlayer();
-        this.player.setVolume(this.volume / 100);
       });
 
-      embed.addEventListener(Twitch.Embed.PLAY, () => {
+      embed.addEventListener(Twitch.Embed.PLAYING, () => {
         this.playerPlaying = true;
+        this.player.setMuted(false);
         this.player.setVolume(this.volume / 100);
       });
     },
