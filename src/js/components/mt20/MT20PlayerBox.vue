@@ -61,10 +61,11 @@
     img {
       height: 60px;
       padding-top: 5px;
+      margin-bottom: -6px;
 
-    image-rendering: pixelated;
-    image-rendering: -moz-crisp-edges;
-    -ms-interpolation-mode: nearest-neighbor;
+      image-rendering: pixelated;
+      image-rendering: -moz-crisp-edges;
+      -ms-interpolation-mode: nearest-neighbor;
 
     }
   }
