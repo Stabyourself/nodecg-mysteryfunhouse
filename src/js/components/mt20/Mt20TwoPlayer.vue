@@ -40,7 +40,7 @@
     <rainwave v-if="showRainwave" style="top: 975px; left: 1521px; width: 444px; height: 124px"> </rainwave>
 
     <AchievementManager />
-    <!-- <Telestrator v-if="showTelestrator"/> -->
+    <Telestrator v-if="showTelestrator"/>
   </div>
   </v-app>
 </template>
