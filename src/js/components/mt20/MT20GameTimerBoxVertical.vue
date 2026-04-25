@@ -81,8 +81,8 @@
   height: 200px;
 
   img {
+    max-width: 300px;
     height: 100%;
-    aspect-ratio: 1/1;
     object-fit: cover;
   }
 

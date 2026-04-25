@@ -8,7 +8,7 @@
     <player-card :use-ctx="playerCardCtx[0]" @update="canvasUpdated" :info="leftPlayerInfo"></player-card>
     <player-card :use-ctx="playerCardCtx[1]" @update="canvasUpdated" :info="rightPlayerInfo"></player-card>
 
-    <!----
+
     <player-path :class="{ active: waitScreenState == 'paths1' }" :info="this.playerInfo[0]"></player-path>
     <player-path
       class="right"
@@ -19,11 +19,6 @@
       class="right"
       :class="{ active: waitScreenState == 'paths2' }"
       :info="this.playerInfo[3]"></player-path>
-
-    <div class="mt-font top-text" :class="{ active: true }">
-      <markdown-it-vue :content="topText"></markdown-it-vue>
-    </div>
-  -->
 
     <rainwave v-if="showRainwave" style="top: 975px; left: 1521px; width: 444px; height: 124px"> </rainwave>
 
@@ -98,9 +93,11 @@ export default {
       if (this.waitScreenState == 'cards1' || this.waitScreenState == 'paths1' || this.waitScreenState == 'ghost') {
         this.leftPlayerInfo = this.playerInfo[0];
         this.rightPlayerInfo = this.playerInfo[1];
+        this.$refs.scene.update();
       } else if (this.waitScreenState == 'cards2' || this.waitScreenState == 'paths2') {
         this.leftPlayerInfo = this.playerInfo[2];
         this.rightPlayerInfo = this.playerInfo[3];
+        this.$refs.scene.update();
       }
     },
   },

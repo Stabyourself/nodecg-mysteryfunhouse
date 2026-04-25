@@ -82,11 +82,11 @@ $gap: 20px;
 
 .game {
   display: flex;
-  font-size: 2em;
+  font-size: 1.7em;
 
   img {
+    max-width: 300px;
     height: 100%;
-    aspect-ratio: 1/1;
     object-fit: cover;
   }
 

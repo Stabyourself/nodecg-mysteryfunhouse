@@ -40,7 +40,7 @@
     <rainwave v-if="showRainwave" style="top: 975px; left: 1521px; width: 444px; height: 124px"> </rainwave>
 
     <AchievementManager />
-    <Telestrator v-if="showTelestrator"/>
+    <!-- <Telestrator v-if="showTelestrator"/> -->
   </div>
   </v-app>
 </template>
@@ -201,7 +201,7 @@ export default {
       }
 
       let hp = 1;
-      if (this.round.includes("loser")) {
+      if (this.round.toLowerCase().includes("loser")) {
         hp = 0.5;
       }
 
@@ -218,7 +218,7 @@ export default {
       }
 
       let hp = 1;
-      if (this.round.includes("loser")) {
+      if (this.round.toLowerCase().includes("loser")) {
         hp = 0.5;
       }
 

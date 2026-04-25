@@ -2,6 +2,9 @@
   <div class="player-box megaman-box" :class="side">
     <div class="player-name">
       {{  player.name.toUpperCase() }}
+      <div class="audio" v-if="player.volume > 0">
+        <img src="/bundles/nodecg-mysteryfunhouse/dist/img/mt20/audio.png" />
+      </div>
     </div>
     <div class="player-info">
       <div class="player-pronouns" v-if="player.pronouns">{{ player.pronouns }}</div>
@@ -9,7 +12,24 @@
           <Flag :code="player.flag" /></div>
       <div class="player-health" :class="raceState">
         <div class="health-bar" :style="{ width: health*100 + '%' }"></div>
-        <div class="health-text" v-if="raceState != 'none'">{{ timeAdjusted }}</div>
+      </div>
+    </div>
+
+    <div class="player-done-wrap">
+      <div class="player-done megaman-box-small" :class="raceState">
+          <div class="left" :class="player.raceState" v-if="player.raceState == 'winner'">
+            1<span class="small">st</span>
+          </div>
+
+          <div class="left" :class="player.raceState" v-if="player.raceState == 'loser'">
+            2<span class="small">nd</span>
+          </div>
+
+          <div class="left" :class="player.raceState" v-if="player.raceState == 'forfeit'">FF</div>
+
+          <div class="left" :class="player.raceState" v-if="player.raceState == 'none'"></div>
+
+          <div class="right">{{ player.finalTime }}</div>
       </div>
     </div>
   </div>
@@ -24,7 +44,8 @@
     width: 700px;
     line-height: 1.2;
     background: #000b2e;
-    margin: 20px
+    margin: 20px;
+    position: relative;
   }
 
   .player-name {
@@ -32,6 +53,20 @@
     color: white;
     margin-bottom: -10px;
     text-shadow: 5px 5px 0 #146acb, -5px 5px 0 #146acb, 5px -5px 0 #146acb, -5px -5px 0 #146acb, 0px 5px 0 #146acb, 5px 0px 0 #146acb, 0px -5px 0 #146acb, -5px 0px 0 #146acb;
+    display: flex;
+    gap: 10px;
+  }
+
+  .audio {
+    img {
+      height: 60px;
+      padding-top: 5px;
+
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor;
+
+    }
   }
 
   .player-info {
@@ -83,32 +118,52 @@
         height: 100%;
       }
 
-      $green: #3bd62f;
-      $red: #d21515;
-
-      .health-text {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        width: 100%;
-        height: 100%;
-
-        padding-top: 4px;
-        font-family: "Press Start 2P";
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 1.5em;
-        color: $green;
-        text-shadow: 2px 2px 0 black, -2px 2px 0 black, 2px -2px 0 black, -2px -2px 0 black, 0px 2px 0 black, 2px 0px 0 black, 0px -2px 0 black, -2px 0px 0 black;
-      }
-
-      &.loser .health-text, &.forfeit .health-text {
-        color: $red;
-      }
     }
   }
+
+    $doneHeight: 60px;
+    .player-done-wrap {
+      position: absolute;
+      bottom: -$doneHeight;
+      height: $doneHeight;
+      overflow: hidden;
+      z-index: 1000;
+    }
+
+    .player-done {
+      border-top-width: 0px;
+      line-height: 1.3;
+      background: #000b2e;
+      font-size: 3em;
+      color: white;
+      height: $doneHeight;
+      padding-right: 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      transform: translateY(0);
+      transition: transform 0.3s;
+
+      &.none {
+        transform: translateY(-$doneHeight);
+      }
+
+      .left {
+        color: white;
+        background: green;
+        padding: 0 0.1em;
+
+        .small {
+          font-size: 0.5em;
+        }
+
+        &.loser, &.forfeit {
+          background: red;
+        }
+      }
+
+
+    }
 </style>
 
 <script>
@@ -127,14 +182,6 @@ export default {
     otherSide() {
       return this.side == 'left' ? 'right' : 'left';
     },
-
-    timeAdjusted() {
-      if (this.raceState == 'forfeit') {
-        return this.time + ' (FF)';
-      } else {
-        return this.time;
-      }
-    }
   },
 };
 </script>
