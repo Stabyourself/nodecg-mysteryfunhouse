@@ -16,16 +16,11 @@
     "hot": "mix watch --hot",
     "prod": "mix --production"
   },
-  "files": [
-    "dashboard",
-    "graphics",
-    "extension"
-  ],
   "keywords": [
     "nodecg-bundle"
   ],
   "nodecg": {
-    "compatibleRange": "^2.1.11",
+    "compatibleRange": ">=2.1.11",
     "dashboardPanels": [
       {
         "name": "general",
