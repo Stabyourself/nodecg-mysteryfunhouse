@@ -87,7 +87,8 @@ export default {
 
   methods: {
     createPlayer() {
-      this.playerPlaying = false
+      this.playerPlaying = false;
+      this.$emit("playing", false, this.playerNumber);
       this.$refs.player.innerHTML = '';
 
       twitchOptions.channel = this.url;
@@ -105,6 +106,7 @@ export default {
         this.playerPlaying = true;
         this.player.setMuted(false);
         this.player.setVolume(this.volume / 100);
+        this.$emit("playing", true, this.playerNumber);
       });
     },
   },

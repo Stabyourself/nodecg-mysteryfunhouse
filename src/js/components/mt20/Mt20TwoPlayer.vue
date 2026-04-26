@@ -2,9 +2,9 @@
   <v-app>
     <div class="twoplayers">
     <div id="top-section">
-      <mt20-player-box :player="player0" :visible="visible" side="left" :health="player0health" :time="player0finalTime" :race-state="player0raceState" />
+      <mt20-player-box :player="player0" :visible="visible" side="left" :health="player0health" :time="player0finalTime" :race-state="player0raceState" :allow-overlap="player0playing" />
       <img class="logo" :src="currentEventLogo.url" style="height: 147px"/>
-      <mt20-player-box :player="player1" :visible="visible" side="right" :health="player1health" :time="player1finalTime" :race-state="player1raceState" />
+      <mt20-player-box :player="player1" :visible="visible" side="right" :health="player1health" :time="player1finalTime" :race-state="player1raceState" :allow-overlap="player1playing" />
     </div>
 
     <div id="player-section">
@@ -18,6 +18,7 @@
         :aspectratio="player0aspectratio"
         :width="930"
         :height="698"
+        @playing="playerPlaying"
       ></twitch-player>
 
       <twitch-player
@@ -30,6 +31,7 @@
         :aspectratio="player1aspectratio"
         :width="930"
         :height="698"
+        @playing="playerPlaying"
       ></twitch-player>
     </div>
 
@@ -166,6 +168,14 @@ export default {
     playSound(data) {
       nodecg.playSound(data.sound);
     },
+
+    playerPlaying(state, playerNumber) {
+      if (playerNumber == 0) {
+        this.player0playing = state;
+      } else {
+        this.player1playing = state;
+      }
+    }
   },
 
   computed: {
@@ -256,6 +266,8 @@ export default {
       player0crop: [0, 0, 0, 0],
       player0aspectratio: false,
 
+      player0playing: false,
+
       player1name: '',
       player1pronouns: '',
       player1flag: '',
@@ -270,6 +282,8 @@ export default {
 
       player1crop: [0, 0, 0, 0],
       player1aspectratio: false,
+
+      player1playing: false,
 
       timer: {
         ms: 0,
