@@ -117,7 +117,6 @@ async function getContacts() {
 
 function getContactForChallongeName(contactRows, challongeName) {
   const contact = contactRows.find((row) => {
-    console.log(row['challonge_username'], challongeName);
     return row['challonge_username'].toLowerCase() == challongeName.toLowerCase();
   });
 
@@ -156,11 +155,10 @@ function getPlayerInfo(tournament, careerRows, discordMembers, challongeName, co
   }
 
   // Career stuff
-  const SRLName = contact['srl_username'];
   let career;
-  if (SRLName) {
+  if (challongeName) {
     career = careerRows.find((row) => {
-      return row['SRL Name'].toLowerCase() == SRLName.toLowerCase();
+      return row['Competitor/Challonge Name'].toLowerCase() == challongeName.toLowerCase();
     });
   }
 
