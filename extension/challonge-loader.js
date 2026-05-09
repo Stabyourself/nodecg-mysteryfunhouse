@@ -251,10 +251,11 @@ nodecg.listenFor('loadMatch', function (options, ack) {
           const contact = getContactForChallongeName(contactRows, challonge.display_name);
 
           let id = challonge.id;
-          let name = contact.username;
+          let name = "Unknown";
           let avatar = '../../dist/img/default_avatar.png';
 
           if (contact) {
+            name = contact.username;
             let member = getMemberForDiscordId(discordMembers, contact['id']);
 
             if (!member) {
