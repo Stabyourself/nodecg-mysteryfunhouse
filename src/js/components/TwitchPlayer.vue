@@ -87,8 +87,8 @@ export default {
 
   methods: {
     createPlayer() {
-      this.playerPlaying = false;
-      this.$emit("playing", false, this.playerNumber);
+      this.playerPlaying = true;
+      this.$emit("playing", true, this.playerNumber);
       this.$refs.player.innerHTML = '';
 
       twitchOptions.channel = this.url;
