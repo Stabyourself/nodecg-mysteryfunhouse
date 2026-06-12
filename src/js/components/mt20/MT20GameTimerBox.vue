@@ -2,9 +2,9 @@
   <div id="game-timer-box" class="megaman-box">
     <div class="game line-right">
       <img :src="boxart.url" style="height: 100%; margin-right: 20px;" />
-      <div class="game-name">{{ game }}</div>
-      <br />
-      <div class="game-platform">{{ platform }}</div>
+      <div class="game-name">{{ game }}
+        <div class="game-platform">{{ platform }}</div>
+      </div>
     </div>
     <div class="goal-submitter line-right">
       <div class="goal">
