@@ -4,7 +4,8 @@
       <div class="game">
         <img :src="boxart.url" style="height: 100%; margin-right: 20px;" />
         <div class="game-name">{{ game }}</div>
-      <div class="game-platform">{{ platform }}</div>
+        <br />
+        <div class="game-platform">{{ platform }}</div>
       </div>
 
       <div class="goal border-top">
