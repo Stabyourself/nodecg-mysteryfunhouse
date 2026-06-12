@@ -36,7 +36,7 @@
     </div>
 
     <div id="bottom-section">
-      <mt20-game-timer-box :game="game" :goal="goal" :submitter="submitter" :visible="visible" :boxart="currentBoxart" :timer="timerText" :round="round" />
+      <mt20-game-timer-box :game="game" :goal="goal" :submitter="submitter" :visible="visible" :boxart="currentBoxart" :timer="timerText" :round="round" :platform="platform" />
     </div>
 
     <rainwave v-if="showRainwave" style="top: 975px; left: 1521px; width: 444px; height: 124px"> </rainwave>

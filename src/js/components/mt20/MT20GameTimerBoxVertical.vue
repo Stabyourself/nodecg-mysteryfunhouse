@@ -4,6 +4,7 @@
       <div class="game">
         <img :src="boxart.url" style="height: 100%; margin-right: 20px;" />
         <div class="game-name">{{ game }}</div>
+      <div class="game-platform">{{ platform }}</div>
       </div>
 
       <div class="goal border-top">
@@ -89,6 +90,11 @@
   .game-name {
     margin-top: 10px;
   }
+
+  .game-platform {
+    font-size: 0.8em;
+    color: #ccc;
+  }
 }
 
   .goal-text {
@@ -120,6 +126,7 @@ export default {
     boxart: Object,
     timer: String,
     round: String,
+    platform: String,
   },
 };
 </script>

@@ -3,7 +3,7 @@
     <div id="section-wrapper">
       <div class="info-holder">
         <img class="logo" :src="currentEventLogo.url" style="height: 147px"/>
-        <mt20-game-timer-box-vertical :game="game" :goal="goal" :submitter="submitter" :visible="visible" :boxart="currentBoxart" :timer="timerText" />
+        <mt20-game-timer-box-vertical :game="game" :goal="goal" :submitter="submitter" :visible="visible" :boxart="currentBoxart" :timer="timerText" :platform="platform" />
       </div>
 
       <div id="main-section">
