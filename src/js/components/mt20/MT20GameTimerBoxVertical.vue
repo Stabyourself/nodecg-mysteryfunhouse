@@ -68,7 +68,7 @@
     border: 5px solid #82c5fa;
     background: #0959c0;
     color: white;
-    font-size: 0.8rem;
+    font-size: 0.6rem;
     padding: 0.2em 0.4em;
   }
 }

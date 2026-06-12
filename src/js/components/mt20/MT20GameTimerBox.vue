@@ -97,7 +97,7 @@ $gap: 20px;
   }
 
   .game-platform {
-    font-size: 0.8em;
+    font-size: 0.6em;
     color: #ccc;
   }
 }
