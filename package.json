@@ -82,6 +82,12 @@
         "fullbleed": true
       },
       {
+        "name": "players",
+        "title": "Players",
+        "file": "players.html",
+        "fullbleed": true
+      },
+      {
         "name": "boxart-select-dialog",
         "title": "Select Boxart",
         "file": "boxart.html",

@@ -1,8 +1,8 @@
 const challonge = require('./challonge');
 const googlesheet = require('./googlesheet');
 const discord = require('./discord');
+const players = require('./players');
 
-const mariadb = require('mariadb');
 const _ = require('lodash');
 
 const ctx = require('./nodecg');
@@ -92,29 +92,6 @@ function getAvatarForMember(member) {
   return avatar;
 }
 
-const pool = mariadb.createPool({
-  host: nodecg.bundleConfig.dbHost,
-  user: nodecg.bundleConfig.dbUser,
-  password: nodecg.bundleConfig.dbPass,
-  database: nodecg.bundleConfig.dbName,
-  connectionLimit: 5,
-});
-
-async function getContacts() {
-  let conn;
-  try {
-    conn = await pool.getConnection();
-    const rows = await conn.query(
-      'SELECT users.*, flavor FROM `users`, `signups` WHERE `users`.`id` = `signups`.`user_id` AND `signups`.`event_id` = 4',
-    );
-    return rows;
-  } catch (err) {
-    throw err;
-  } finally {
-    if (conn) conn.end();
-  }
-}
-
 function getContactForChallongeName(contactRows, challongeName) {
   const contact = contactRows.find((row) => {
     return row['challonge_username'].toLowerCase() == challongeName.toLowerCase();
@@ -174,11 +151,11 @@ function getPlayerInfo(tournament, careerRows, discordMembers, challongeName, co
 
 nodecg.listenFor('loadMatch', function (options, ack) {
   const promises = [
-    challonge.getTournament(nodecg.bundleConfig.challongeTournament),
+    players.getChallongeTournament().then((tournament) => challonge.getTournament(tournament)),
     googlesheet.getCareerSheet(),
     googlesheet.getPlayedGamesSheet(),
     discord.getMembers(),
-    getContacts(),
+    players.getContacts(),
   ];
 
   Promise.allSettled(promises).then((results) => {

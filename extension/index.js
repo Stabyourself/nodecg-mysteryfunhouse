@@ -4,6 +4,7 @@ module.exports = function (nodecg) {
   ctx.set(nodecg);
 
   require("./timer");
+  require("./players");
   require("./challonge-loader");
   require("./twitch");
   require("./schedule");
