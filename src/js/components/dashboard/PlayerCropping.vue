@@ -81,7 +81,7 @@
         <twitch-player :playerNumber="1" :url="url" :volume="0" :width="600" :height="450"></twitch-player>
 
         <twitch-player
-          style="position: absolute; top: 0px; left: 945px; width: 600px; height: 450px"
+          style="position: absolute; top: 0px; left: 616px; width: 600px; height: 450px"
           class="checkerboard"
           :aspectratio="aspectratio"
           :playerNumber="1"
@@ -169,7 +169,7 @@
         </vue-drag-resize>
       </div>
 
-      <div style="display: flex; align-items: center; justify-content: center; height: 450px">
+      <div style="display: flex; align-items: center; justify-content: center; height: 540px">
         <v-btn v-if="!assistantActive" color="green" @click="assistantActive = true">
           Start cropping
           <v-icon right dark> mdi-arrow-right </v-icon>
@@ -189,8 +189,13 @@
 }
 
 .crop-wrapper {
-  width: 1875px;
-  height: 450px;
+  // 600px player + 16px gutter + 600px player
+  width: 1216px;
+  // The player boxes themselves are only 450px tall, but the crop nudge-arrow controls
+  // sit outside that box (e.g. the bottom arrows at `bottom: -49px`). Since they're
+  // absolutely positioned, they don't add to this element's layout height on their own,
+  // so without this extra room the surrounding tab container's overflow:hidden clips them.
+  height: 540px;
   margin: 0px auto;
   position: relative;
 }

@@ -1,4 +1,5 @@
 var clone = require("clone");
+var debounce = require("lodash/debounce");
 
 export function bindReplicant(
   vueName,
@@ -10,7 +11,7 @@ export function bindReplicant(
   });
   let preventSend = false;
 
-  let sendValue = _.debounce(function (newValue) {
+  let sendValue = debounce(function (newValue) {
     replicant.value = newValue;
   }, debounceWait);
 

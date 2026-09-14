@@ -55,6 +55,8 @@ canvas {
 </style>
 
 <script>
+const throttle = require('lodash/throttle');
+
 export default {
   name: 'Telestrator',
   mounted() {
@@ -104,7 +106,7 @@ export default {
       }
     },
 
-    mouseMove: _.throttle(function (e) {
+    mouseMove: throttle(function (e) {
       const pos = {
         x: e.pageX,
         y: e.pageY,

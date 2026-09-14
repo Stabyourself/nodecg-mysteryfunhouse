@@ -345,7 +345,7 @@ nodecg.listenFor('loadMatch', function (options, ack) {
 
 // nodecg.listenFor('loadAllCards', function (options, ack) {
 //   const promises = [
-//     challonge.getTournament(nodecg.bundleConfig.challongeTournament),
+//     challonge.getTournament(players.getChallongeTournament()),
 //     googlesheet.getCareerSheet(),
 //     discord.getMembers(),
 //   ];
