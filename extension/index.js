@@ -9,6 +9,5 @@ module.exports = function (nodecg) {
   require("./twitch");
   require("./schedule");
   require("./card-api");
-  require("./boxart-uploader");
   require("./telestrator");
 };
