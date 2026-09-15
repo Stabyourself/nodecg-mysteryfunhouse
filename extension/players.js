@@ -16,6 +16,13 @@ const pool = mariadb.createPool({
   password: nodecg.bundleConfig.dbPass,
   database: nodecg.bundleConfig.dbName,
   connectionLimit: 5,
+  // Discord IDs are BIGINT and exceed Number.MAX_SAFE_INTEGER, so the driver returns them
+  // as native BigInt. That can't be JSON.stringify'd (e.g. when stored in a replicant), so
+  // stringify BigInts here instead of converting to Number, which would lose precision.
+  typeCast: (column, next) => {
+    const value = next();
+    return typeof value === 'bigint' ? value.toString() : value;
+  },
 });
 
 // Returns the raw `users` rows (joined with their signup for the given event)

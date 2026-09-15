@@ -3,15 +3,37 @@ const googlesheet = require('./googlesheet');
 const discord = require('./discord');
 const players = require('./players');
 
-const _ = require('lodash');
-
 const ctx = require('./nodecg');
 const nodecg = ctx.get();
+
+const DEFAULT_AVATAR = '/bundles/nodecg-mysteryfunhouse/dist/img/default_avatar.png';
+
+// Bounds how long we'll wait on any single external dependency (Challonge, Google Sheets,
+// Discord, the DB) so a hung/slow one can't leave the dashboard hanging forever.
+const TASK_TIMEOUT_MS = 15000;
 
 function capitalizeWords(str) {
   return str.replace(/\b[a-z]/g, function (txt) {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
   });
+}
+
+function errorMessage(err) {
+  if (err instanceof Error) return err.message;
+  if (typeof err === 'string') return err;
+  try {
+    return JSON.stringify(err);
+  } catch {
+    return String(err);
+  }
+}
+
+function withTimeout(promise, ms, label) {
+  let timer;
+  const timeout = new Promise((_resolve, reject) => {
+    timer = setTimeout(() => reject(new Error(`${label} timed out after ${ms / 1000}s.`)), ms);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
 }
 
 // Replicant stuff
@@ -28,7 +50,6 @@ const playerProps = {
   streamHidden: false,
   raceState: 'none',
   finalTime: '',
-  prediction: 50,
 };
 
 const props = {
@@ -40,7 +61,6 @@ const props = {
   showPlayerCards: false,
   match1round: '',
   match2round: '',
-  prediction: 50,
 };
 
 const replicants = {};
@@ -58,289 +78,264 @@ for (let prop in props) {
   replicants[prop] = nodecg.Replicant(prop, { defaultValue: props[prop] });
 }
 
-function getChallongeForId(tournament, id) {
-  return tournament.participants.find((participant) => {
+function getChallongeParticipant(tournament, id) {
+  const entry = (tournament.participants ?? []).find((participant) => {
     return participant.participant.id == id;
-  }).participant;
+  });
+
+  if (!entry) {
+    throw new Error(`Couldn't find a Challonge participant with id "${id}" in the tournament.`);
+  }
+
+  return entry.participant;
 }
 
 function getMemberForDiscordId(members, discordId) {
-  let member = members.find((member) => {
+  const member = members.find((member) => {
     return member.user.id == discordId;
   });
 
-  // fallback for when the user is not found
-  if (!member) {
-    member = {
-      displayName: 'Unknown',
-      displayAvatarURL() {
-        return '/bundles/nodecg-mysteryfunhouse/dist/img/default_avatar.png';
-      },
-    };
-  }
+  if (member) return member;
 
-  return member;
+  // fallback for when the user is not found
+  return {
+    displayName: 'Unknown',
+    displayAvatarURL() {
+      return DEFAULT_AVATAR;
+    },
+  };
 }
 
 function getAvatarForMember(member) {
-  let avatar = member.displayAvatarURL({ size: 1024 });
-
-  if (avatar.search('embed') != -1) {
-    avatar = '/bundles/nodecg-mysteryfunhouse/dist/img/default_avatar.png';
-  }
-
-  return avatar;
+  const avatar = member.displayAvatarURL({ size: 1024 });
+  return avatar.includes('embed') ? DEFAULT_AVATAR : avatar;
 }
 
 function getContactForChallongeName(contactRows, challongeName) {
-  const contact = contactRows.find((row) => {
-    return row['challonge_username'].toLowerCase() == challongeName.toLowerCase();
+  return contactRows.find((row) => {
+    return row['challonge_username']?.toLowerCase() == challongeName.toLowerCase();
   });
-
-  return contact;
 }
 
 function getPlayerInfo(tournament, careerRows, discordMembers, challongeName, contactRows) {
-  // Challonge stuff
-  const challonge = tournament.participants.find((participant) => {
+  const challongeEntry = (tournament.participants ?? []).find((participant) => {
     return participant.participant.display_name.toLowerCase() == challongeName.toLowerCase();
   });
 
-  if (!challonge) {
-    return Error(`Couldn't find challonge username "${challongeName}" in tournament.`);
+  if (!challongeEntry) {
+    throw new Error(`Couldn't find challonge username "${challongeName}" in the tournament.`);
   }
 
-  const rawMatches = tournament.matches.filter((match) => {
+  const contact = getContactForChallongeName(contactRows, challongeName);
+
+  if (!contact) {
+    throw new Error(`Couldn't find challonge username "${challongeName}" in the player database. Did they sign up?`);
+  }
+
+  const rawMatches = (tournament.matches ?? []).filter((match) => {
     return (
-      (match.match.player1_id == challonge.participant.id || match.match.player2_id == challonge.participant.id) &&
+      (match.match.player1_id == challongeEntry.participant.id ||
+        match.match.player2_id == challongeEntry.participant.id) &&
       match.match.state == 'complete'
     );
   });
 
-  // Contact stuff
-  const contact = getContactForChallongeName(contactRows, challongeName);
-
-  if (!contact) {
-    return Error(`Couldn't find challonge username "${challongeName}" in Database.`);
-  }
-
-  // Discord stuff
-  const member = getMemberForDiscordId(discordMembers, contact['id']);
-
-  if (!member) {
-    return Error(`Couldn't find "${contact['username']}" in the Mystery Discord server.`);
-  }
-
-  // Career stuff
-  let career;
-  if (challongeName) {
-    career = careerRows.find((row) => {
-      return row['Competitor/Challonge Name'].toLowerCase() == challongeName.toLowerCase();
-    });
-  }
+  const career = careerRows.find((row) => {
+    return row['Competitor/Challonge Name']?.toLowerCase() == challongeName.toLowerCase();
+  });
 
   return {
     name: contact['username'],
-    challonge: challonge ? challonge.participant : null,
-    contact: contact,
-    rawMatches: rawMatches,
-    career: career ? Object.assign({}, career, { _sheet: undefined }) : null,
-    discord: member,
+    challonge: challongeEntry.participant,
+    contact,
+    rawMatches,
+    career: career ? { ...career, _sheet: undefined } : null,
+    avatar: getAvatarForMember(getMemberForDiscordId(discordMembers, contact['id'])),
   };
 }
 
-nodecg.listenFor('loadMatch', function (options, ack) {
-  const promises = [
-    players.getChallongeTournament().then((tournament) => challonge.getTournament(tournament)),
-    googlesheet.getCareerSheet(),
-    googlesheet.getPlayedGamesSheet(),
-    discord.getMembers(),
-    players.getContacts(),
-  ];
+function formatMatchHistory(rawMatches, tournament, contactRows, discordMembers, playedGamesRows, currentChallongeId) {
+  const matches = rawMatches.map(({ match: rawMatch }) => {
+    const match = {
+      id: rawMatch.id,
+      score: rawMatch.scores_csv,
+      players: [1, 2].map((n) => {
+        const challongeEntry = getChallongeParticipant(tournament, rawMatch[`player${n}_id`]);
+        const contact = getContactForChallongeName(contactRows, challongeEntry.display_name);
 
-  Promise.allSettled(promises).then((results) => {
-    if (results[0].status == 'rejected') {
-      return ack(new Error(`Challonge API call failed (${results[0].reason}). Try again or tell Maurice.`));
-    }
-    if (results[1].status == 'rejected') {
-      return ack(new Error(`Googlesheet API call failed (${results[1].reason}). Try again or tell Maurice.`));
-    }
-    if (results[2].status == 'rejected') {
-      return ack(new Error(`Googlesheet API call failed (${results[2].reason}). Try again or tell Maurice.`));
-    }
-    if (results[3].status == 'rejected') {
-      return ack(new Error(`Discord API call failed (${results[3].reason}). Try again or tell Maurice.`));
-    }
-    if (results[4].status == 'rejected') {
-      return ack(new Error(`Database call failed (${results[4].reason}). Try again or tell Maurice.`));
+        return {
+          id: challongeEntry.id,
+          name: contact ? contact.username : 'Unknown',
+          avatar: contact ? getAvatarForMember(getMemberForDiscordId(discordMembers, contact['id'])) : DEFAULT_AVATAR,
+        };
+      }),
+    };
+
+    // Make sure the player whose matches we're getting is always players[0]
+    if (currentChallongeId == rawMatch.player2_id) {
+      match.players.reverse();
+      match.score = match.score.split('-').reverse().join('-');
     }
 
-    const tournament = results[0].value;
-    const careerRows = results[1].value;
-    const playedGamesRows = results[2].value;
-    const discordMembers = results[3].value;
-    const contactRows = results[4].value;
+    match.round = rawMatch.round > 0 ? `Winners ${rawMatch.round}` : `Losers ${-rawMatch.round}`;
+    match.winner = rawMatch.winner_id == match.players[0].id ? 0 : 1;
 
-    const info = [];
-
-    // Match stuff
-    const match = tournament.matches.find((match) => {
-      return match.match.suggested_play_order == options.matchId;
-    });
-
-    if (!match) {
-      return ack(new Error("Couldn't find Match ID! Are you sure it was correct?"));
+    const gameRow = playedGamesRows.find((row) => row['Match #'] == rawMatch.suggested_play_order);
+    if (gameRow) {
+      match.game = gameRow['Game Title'];
+      match.platform = gameRow['Platform'];
     }
 
-    for (let i = 0; i < 2; i++) {
-      const challongeName = getChallongeForId(tournament, match.match[`player${i + 1}_id`]).display_name;
-
-      info[i] = getPlayerInfo(tournament, careerRows, discordMembers, challongeName, contactRows);
-
-      if (info[i] instanceof Error) {
-        return ack(info[i]);
-      }
-
-      info[i].avatar = getAvatarForMember(info[i].discord);
-
-      delete info[i].discord; // evil stuff that crashes my replicant >:(
-    }
-
-    for (let i = 0; i < 2; i++) {
-      // Putting it together
-
-      // format matches
-      const matches = [];
-
-      for (rawMatch of info[i].rawMatches) {
-        rawMatch = rawMatch.match;
-
-        let match = {};
-
-        match.id = rawMatch.id;
-        match.players = [];
-        match.score = rawMatch.scores_csv;
-
-        // fetch player info
-        for (let i = 0; i < 2; i++) {
-          const challonge = getChallongeForId(tournament, rawMatch[`player${i + 1}_id`]);
-
-          const contact = getContactForChallongeName(contactRows, challonge.display_name);
-
-          let id = challonge.id;
-          let name = "Unknown";
-          let avatar = '../../dist/img/default_avatar.png';
-
-          if (contact) {
-            name = contact.username;
-            let member = getMemberForDiscordId(discordMembers, contact['id']);
-
-            if (!member) {
-              return ack(new Error(`Couldn't find "${contact['username']}" in the Mystery Discord server.`));
-            }
-
-            avatar = getAvatarForMember(member);
-          }
-
-          match.players.push({
-            id,
-            name,
-            avatar,
-          });
-        }
-
-        // Make sure the player whose matches we're getting is 0
-        if (info[i].challonge.id == rawMatch.player2_id) {
-          match.players = match.players.reverse();
-
-          // turn the score around
-          match.score = match.score.split('-').reverse().join('-');
-        }
-
-        // format round
-        if (rawMatch.round > 0) {
-          match.round = 'Winners ' + rawMatch.round;
-        } else {
-          match.round = 'Losers ' + -rawMatch.round;
-        }
-
-        if (rawMatch.winner_id == match.players[0].id) {
-          match.winner = 0;
-        } else {
-          match.winner = 1;
-        }
-
-        // find the game!
-        const gameRow = playedGamesRows.find((row) => {
-          return row['Match #'] == rawMatch.suggested_play_order;
-        });
-
-        if (gameRow) {
-          match.game = gameRow['Game Title'];
-          // match.genre = gameRow["Genre"];
-          match.platform = gameRow['Platform'];
-        }
-
-        matches.push(match);
-      }
-
-      matches.sort((a, b) => a.id - b.id);
-
-      info[i].matches = matches;
-
-      // set panel fields
-      const playerNumber = i + (options.matchNumber == 2 ? 2 : 0);
-
-      let pronouns = '';
-      let twitch = '';
-      let flag = 'ghost.png';
-
-      if (info[i].contact) {
-        pronouns = info[i].contact['pronouns'];
-        twitch = info[i].contact['twitch'];
-        flag = info[i].contact['flag'];
-      }
-
-      replicants[`player${playerNumber}name`].value = info[i].name;
-      replicants[`player${playerNumber}pronouns`].value = capitalizeWords(pronouns ?? '');
-      replicants[`player${playerNumber}flag`].value = flag;
-      replicants[`player${playerNumber}twitch`].value = twitch;
-      replicants[`player${playerNumber}aspectratio`].value = false;
-
-      replicants[`player${playerNumber}volume`].value = 0;
-      replicants[`player${playerNumber}streamHidden`].value = false;
-      replicants[`player${playerNumber}raceState`].value = 'none';
-      replicants[`player${playerNumber}finalTime`].value = '';
-
-      // Filter data for size reasons maybe?
-      playerInfoRep.value[playerNumber] = info[i];
-    }
-
-    // Match stuff
-    let round = match.match['round'];
-
-    if (round > 0) {
-      round = 'Winners ' + round;
-    } else {
-      round = 'Losers ' + -round;
-    }
-
-    replicants[`match${options.matchNumber}round`].value = round;
-
-    // Predictions
-    let player1votes = match.match['player1_votes'];
-    let player2votes = match.match['player2_votes'];
-    let totalVotes = player1votes + player2votes;
-
-    let leftPlayer = options.matchNumber == 2 ? 2 : 0;
-
-    replicants[`player${leftPlayer}prediction`].value = Math.round((player1votes / totalVotes) * 100);
-    replicants[`player${leftPlayer + 1}prediction`].value = Math.round((player2votes / totalVotes) * 100);
-
-    nodecg.sendMessage('timerReset');
-
-    return ack(null, `${info[0].name}  vs  ${info[1].name}`);
+    return match;
   });
+
+  matches.sort((a, b) => a.id - b.id);
+  return matches;
+}
+
+async function fetchTournament() {
+  let tournamentSlug;
+  try {
+    tournamentSlug = await players.getChallongeTournament();
+  } catch (err) {
+    throw new Error(`Couldn't determine the Challonge tournament for the selected event: ${errorMessage(err)}`);
+  }
+
+  try {
+    return await challonge.getTournament(tournamentSlug);
+  } catch (err) {
+    throw new Error(`Challonge API call failed: ${errorMessage(err)}`);
+  }
+}
+
+async function fetchCareerRows() {
+  try {
+    return await googlesheet.getCareerSheet();
+  } catch (err) {
+    throw new Error(`Couldn't load the career spreadsheet: ${errorMessage(err)}`);
+  }
+}
+
+async function fetchPlayedGamesRows() {
+  try {
+    return await googlesheet.getPlayedGamesSheet();
+  } catch (err) {
+    throw new Error(`Couldn't load the played-games spreadsheet: ${errorMessage(err)}`);
+  }
+}
+
+async function fetchDiscordMembers() {
+  try {
+    return await discord.getMembers();
+  } catch (err) {
+    throw new Error(`Couldn't fetch Discord members: ${errorMessage(err)}`);
+  }
+}
+
+async function fetchContacts() {
+  try {
+    return await players.getContacts();
+  } catch (err) {
+    throw new Error(`Couldn't load player signups from the database: ${errorMessage(err)}`);
+  }
+}
+
+function parseLoadMatchOptions(options) {
+  const matchId = Number(options?.matchId);
+  if (!Number.isInteger(matchId) || matchId <= 0) {
+    throw new Error('Invalid match ID.');
+  }
+
+  const matchNumber = Number(options?.matchNumber);
+  if (matchNumber !== 1 && matchNumber !== 2) {
+    throw new Error('Invalid match number, expected 1 or 2.');
+  }
+
+  return { matchId, matchNumber };
+}
+
+async function loadMatch(rawOptions) {
+  const { matchId, matchNumber } = parseLoadMatchOptions(rawOptions);
+
+  const [tournament, careerRows, playedGamesRows, discordMembers, contactRows] = await Promise.all([
+    withTimeout(fetchTournament(), TASK_TIMEOUT_MS, 'Fetching the Challonge tournament'),
+    withTimeout(fetchCareerRows(), TASK_TIMEOUT_MS, 'Loading the career spreadsheet'),
+    withTimeout(fetchPlayedGamesRows(), TASK_TIMEOUT_MS, 'Loading the played-games spreadsheet'),
+    withTimeout(fetchDiscordMembers(), TASK_TIMEOUT_MS, 'Fetching Discord members'),
+    withTimeout(fetchContacts(), TASK_TIMEOUT_MS, 'Loading player signups from the database'),
+  ]);
+
+  const match = (tournament.matches ?? []).find((match) => match.match.suggested_play_order == matchId);
+
+  if (!match) {
+    throw new Error(`Couldn't find a match with ID ${matchId}. Are you sure it was correct?`);
+  }
+
+  // Do all the lookups and formatting up front, without touching any replicants yet, so that
+  // if anything above fails/throws we haven't left the dashboard in a half-updated state.
+  const info = [1, 2].map((n) => {
+    const challongeName = getChallongeParticipant(tournament, match.match[`player${n}_id`]).display_name;
+    const playerInfo = getPlayerInfo(tournament, careerRows, discordMembers, challongeName, contactRows);
+
+    playerInfo.matches = formatMatchHistory(
+      playerInfo.rawMatches,
+      tournament,
+      contactRows,
+      discordMembers,
+      playedGamesRows,
+      playerInfo.challonge.id,
+    );
+    delete playerInfo.rawMatches;
+
+    return playerInfo;
+  });
+
+  const basePlayerNumber = matchNumber == 2 ? 2 : 0;
+
+  for (let i = 0; i < 2; i++) {
+    const playerNumber = basePlayerNumber + i;
+    const playerInfo = info[i];
+
+    replicants[`player${playerNumber}name`].value = playerInfo.name;
+    replicants[`player${playerNumber}pronouns`].value = capitalizeWords(playerInfo.contact['pronouns'] ?? '');
+    replicants[`player${playerNumber}flag`].value = playerInfo.contact['flag'] || 'ghost.png';
+    replicants[`player${playerNumber}twitch`].value = playerInfo.contact['twitch'] ?? '';
+    replicants[`player${playerNumber}aspectratio`].value = false;
+    replicants[`player${playerNumber}volume`].value = 0;
+    replicants[`player${playerNumber}streamHidden`].value = false;
+    replicants[`player${playerNumber}raceState`].value = 'none';
+    replicants[`player${playerNumber}finalTime`].value = '';
+
+    playerInfoRep.value[playerNumber] = playerInfo;
+  }
+
+  const round = match.match['round'];
+  replicants[`match${matchNumber}round`].value = round > 0 ? `Winners ${round}` : `Losers ${-round}`;
+
+  nodecg.sendMessage('timerReset');
+
+  return `${info[0].name}  vs  ${info[1].name}`;
+}
+
+let loadInProgress = false;
+
+nodecg.listenFor('loadMatch', (rawOptions, ack) => {
+  if (loadInProgress) {
+    ack(new Error('Another match is already being loaded. Please wait for it to finish.'));
+    return;
+  }
+
+  loadInProgress = true;
+
+  loadMatch(rawOptions)
+    .then((message) => ack(null, message))
+    .catch((err) => {
+      nodecg.log.error('Failed to load match:', err);
+      ack(err instanceof Error ? err : new Error(errorMessage(err)));
+    })
+    .finally(() => {
+      loadInProgress = false;
+    });
 });
 
 // nodecg.listenFor('loadAllCards', function (options, ack) {

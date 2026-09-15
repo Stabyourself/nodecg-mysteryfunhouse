@@ -35,7 +35,6 @@ The following properties are needed for full functionality in the [bundle config
 - Racer Cards
 - Racer played matches
 - Player popovers (with upload)
-- Predictions
 - Fancy cropping overlay
 - Semi-automatic twitch stream info updating
 - Players panel to manage the signup roster (add/edit/remove), pick the active event/tournament, and check/autofill against Challonge

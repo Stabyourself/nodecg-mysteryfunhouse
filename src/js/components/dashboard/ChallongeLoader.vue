@@ -11,19 +11,40 @@
         </v-tooltip>
       </p>
 
-      <p class="warning--text mt-2">This will override the selected players!</p>
+      <input
+        v-model="matchId"
+        type="text"
+        inputmode="numeric"
+        pattern="[0-9]*"
+        placeholder="000"
+        class="match-id-field mx-auto d-block"
+        :disabled="loadingMatchNumber !== null"
+        @keydown.enter="loadMatch(1)"
+      />
 
-      <v-row class="mx-auto">
+      <v-row class="mx-auto mt-4" dense>
         <v-col>
-          <v-text-field v-model="matchId" label="Match ID" @keydown.enter="loadMatch"> </v-text-field>
+          <v-btn
+            color="green"
+            block
+            :loading="loadingMatchNumber === 1"
+            :disabled="loadingMatchNumber !== null"
+            @click="loadMatch(1)"
+          >
+            Load into Match 1
+          </v-btn>
         </v-col>
 
         <v-col>
-          <v-select v-model="matchNumber" :items="matchSelectOptions" label="Which match"> </v-select>
-        </v-col>
-
-        <v-col>
-          <v-btn color="green" class="mt-3" block @click="loadMatch" :loading="loading">Load Match</v-btn>
+          <v-btn
+            color="green"
+            block
+            :loading="loadingMatchNumber === 2"
+            :disabled="loadingMatchNumber !== null"
+            @click="loadMatch(2)"
+          >
+            Load into Match 2
+          </v-btn>
         </v-col>
       </v-row>
 
@@ -33,54 +54,92 @@
   </v-app>
 </template>
 
+<style scoped lang="scss">
+.match-id-field {
+  width: 200px;
+  margin-top: 24px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  color: inherit;
+  font-size: 80px;
+  line-height: 1.1;
+  text-align: center;
+  outline: none;
+
+  &:focus {
+    border-bottom-color: currentColor;
+  }
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+</style>
+
 <script>
+// The server bounds every external call it makes (Challonge/Sheets/Discord/DB) to 15s each,
+// running them in parallel, so a successful or clean-failure response always arrives well
+// under this. This is only a last-resort safety net for e.g. a dropped socket connection,
+// where the server's ack would otherwise never reach us and we'd spin forever.
+const RESPONSE_TIMEOUT_MS = 25000;
+
+function timeout(ms, message) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => reject(new Error(message)), ms);
+  });
+}
+
 export default {
   methods: {
-    loadMatch() {
-      let matchIdInt = parseInt(this.matchId);
+    loadMatch(matchNumber) {
+      const matchIdInt = parseInt(this.matchId, 10);
 
       this.error = null;
       this.success = null;
 
-      if (matchIdInt) {
-        this.loading = true;
-
-        const options = {
-          matchId: matchIdInt,
-          matchNumber: this.matchNumber,
-        };
-
-        nodecg
-          .sendMessage('loadMatch', options)
-          .then((matchup) => {
-            this.loading = false;
-            this.success = `Success! ${matchup}`;
-          })
-          .catch((error) => {
-            this.loading = false;
-            this.error = error.message;
-          });
-
-        setTimeout(() => {
-          this.loading = false;
-        }, 5000);
-      } else {
-        this.error = 'Invalid Match ID. It should be 1-3 digits long.';
+      if (!Number.isInteger(matchIdInt) || matchIdInt <= 0) {
+        this.error = 'Invalid Match ID. It should be a positive number.';
+        return;
       }
+
+      this.loadingMatchNumber = matchNumber;
+
+      const options = {
+        matchId: matchIdInt,
+        matchNumber,
+      };
+
+      Promise.race([
+        nodecg.sendMessage('loadMatch', options),
+        timeout(
+          RESPONSE_TIMEOUT_MS,
+          "The server didn't respond in time. It may still be working in the background " +
+            '- check the server logs, or try again in a bit.',
+        ),
+      ])
+        .then((matchup) => {
+          this.success = `Success! ${matchup}`;
+        })
+        .catch((error) => {
+          this.error = error.message;
+        })
+        .finally(() => {
+          this.loadingMatchNumber = null;
+        });
     },
   },
 
   data() {
     return {
       matchId: '',
-      loading: false,
+      loadingMatchNumber: null,
       error: null,
       success: null,
-      matchNumber: 1,
-      matchSelectOptions: [
-        { text: 'Match 1', value: 1 },
-        { text: 'Match 2', value: 2 },
-      ],
     };
   },
 };
