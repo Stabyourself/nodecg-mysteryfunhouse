@@ -20,7 +20,7 @@ export default {
   },
 
   mounted() {
-    init(this.$el, this.playerCardCtx);
+    init(this.$el, this.playerCardCtx, this.state);
   },
 
   watch: {

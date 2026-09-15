@@ -7,8 +7,23 @@ const playerCardTextures = [];
 let cameraMovement, beziers;
 let cameraAt = "idle";
 
+// Reads a named node from the loaded room, warning (instead of throwing) if the
+// artist-authored .glb no longer contains it.
+function getNamed(root, name) {
+  const obj = root.getObjectByName(name);
+  if (!obj) {
+    console.warn(`[RoomBackground] room.glb is missing expected object "${name}"`);
+  }
+  return obj;
+}
+
 // 1. Scene Setup
-function init(container, playerCards) {
+function init(container, playerCards, initialState) {
+  // "ghost" is the only state that shows the idle view; every other known state
+  // (cards1/cards2/paths1/paths2) shows the corkboard, so if we're mounting mid-match
+  // the camera should snap straight there instead of starting from idle.
+  cameraAt = initialState && initialState !== "ghost" ? "corkboard" : "idle";
+
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xeeeeee);
 
@@ -31,12 +46,18 @@ function init(container, playerCards) {
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.shadowMap.enabled = true; // Enable shadow map in renderer
   renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Softer shadows
-  renderer.setPixelRatio(window.devicePixelRatio);
+  // This graphic is always captured at a fixed 1920x1080 (OBS/vMix browser source), so
+  // scaling by devicePixelRatio would only render extra pixels nothing ever sees.
+  renderer.setPixelRatio(1);
   renderer.setSize(1920, 1080);
 
   // load room
 
   let fan, ghostMixer, camera, controls, tvLight, crtUniforms;
+  let tvVideo, tvGlowCtx;
+  let lastGlowSampleTime = 0;
+  let tvGlowLuminance = 0.5;
+  const tvGlowColor = new THREE.Color(0xffffff);
 
   const loader = new GLTFLoader();
   loader.load('/bundles/nodecg-mysteryfunhouse/dist/model/20/room.glb', (glb) => {
@@ -61,57 +82,68 @@ function init(container, playerCards) {
 
     fan = room.getObjectByName("Ceiling_fan_flaps")
 
-    let lamp = room.getObjectByName("LAMP")
+    const lamp = getNamed(room, "LAMP");
+    if (lamp) {
+      // Lamp light
+      const lampLight = new THREE.PointLight(0xffff00, 0.5, 2);
+      lampLight.position.copy(lamp.position);
+      scene.add(lampLight);
+    }
 
-    // Lamp light
-    const lampLight = new THREE.PointLight(0xffff00, 0.5, 2);
-    lampLight.position.set(lamp.position.x, lamp.position.y, lamp.position.z);
-    scene.add(lampLight);
+    const tv = getNamed(room, "TELEVISION");
+    if (tv) {
+      // TV light
+      tvLight = new THREE.SpotLight(0xffffff);
+      tvLight.name = "TV_LIGHT"
+      tvLight.angle = 1.4
+      tvLight.penumbra = 0.2
+      tvLight.power = 10
+      tvLight.decay = 1
 
-    let tv = room.getObjectByName("TELEVISION")
+      tvLight.castShadow = true
+      tvLight.shadow.mapSize.width = 2048;
+      tvLight.shadow.mapSize.height = 2048;
+      tvLight.position.copy(tv.localToWorld(new THREE.Vector3(0, 0.5, -0.2)));
 
-    // TV light
-    tvLight = new THREE.SpotLight(0xffffff);
-    tvLight.name = "TV_LIGHT"
-    tvLight.angle = 1.4
-    tvLight.penumbra = 0.2
-    tvLight.power = 10
-    tvLight.decay = 1
+      const target = new THREE.Object3D();
+      target.position.copy(tv.localToWorld(new THREE.Vector3(0, 0.5, -3)));
+      scene.add(target);
+      tvLight.target = target;
 
-    tvLight.castShadow = true
-    tvLight.shadow.mapSize.width = 2048;
-    tvLight.shadow.mapSize.height = 2048;
-    tvLight.position.copy(tv.localToWorld(new THREE.Vector3(0, 0.5, -0.2)));
+      scene.add(tvLight);
 
-    const target = new THREE.Object3D();
-    target.position.copy(tv.localToWorld(new THREE.Vector3(0, 0.5, -3)));
-    scene.add(target);
-    tvLight.target = target;
+      // replace screen with video
+      const video = document.getElementById("video");
+      video.onloadeddata = function () {
+        video.play();
+      };
+      tvVideo = video;
 
-    scene.add(tvLight);
+      // Tiny offscreen canvas used to sample the video's current frame every render,
+      // so the TV's room light can "project" whatever color/brightness is on screen.
+      const glowCanvas = document.createElement('canvas');
+      glowCanvas.width = 8;
+      glowCanvas.height = 8;
+      tvGlowCtx = glowCanvas.getContext('2d', { willReadFrequently: true });
 
+      //Create your video texture:
+      const videoTexture = new THREE.VideoTexture(video);
+      videoTexture.needsUpdate = true;
+      crtUniforms = THREE.UniformsUtils.clone(CRTShader.uniforms);
+      crtUniforms.tDiffuse.value = videoTexture;
+      const videoMaterial = new THREE.ShaderMaterial({
+        uniforms: crtUniforms,
+        vertexShader: CRTShader.vertexShader,
+        fragmentShader: CRTShader.fragmentShader,
+        side: THREE.FrontSide,
+        toneMapped: false,
+      });
+      videoMaterial.needsUpdate = true;
 
-    // replace screen with video
-    const video = document.getElementById("video");
-    video.onloadeddata = function () {
-      video.play();
-    };
-
-    //Create your video texture:
-    const videoTexture = new THREE.VideoTexture(video);
-    videoTexture.needsUpdate = true;
-    crtUniforms = THREE.UniformsUtils.clone(CRTShader.uniforms);
-    crtUniforms.tDiffuse.value = videoTexture;
-    const videoMaterial = new THREE.ShaderMaterial({
-      uniforms: crtUniforms,
-      vertexShader: CRTShader.vertexShader,
-      fragmentShader: CRTShader.fragmentShader,
-      side: THREE.FrontSide,
-      toneMapped: false,
-    });
-    videoMaterial.needsUpdate = true;
-
-    tv.children[0].material = videoMaterial;
+      if (tv.children[0]) {
+        tv.children[0].material = videoMaterial;
+      }
+    }
 
     // play sitting animation
     let sittingAnimation = glb.animations.find((anim) => anim.name.toLowerCase().includes("sitting"));
@@ -121,7 +153,10 @@ function init(container, playerCards) {
       action.play();
     }
 
-    glb.scene.getObjectByName("GHOST_BODY").visible = false;
+    const ghostBody = getNamed(room, "GHOST_BODY");
+    if (ghostBody) {
+      ghostBody.visible = false;
+    }
     scene.add(room);
 
 
@@ -140,17 +175,28 @@ function init(container, playerCards) {
     scene.add(spotlight);
 
     // tall lamp light
-    const tallLampLight = new THREE.PointLight(0xffff88, 1, 4, 0.1);
-    tallLampLight.position.copy(room.getObjectByName("TALL_LAMP").position).add(new THREE.Vector3(0, 2, 0));
-    scene.add(tallLampLight);
-
+    const tallLamp = getNamed(room, "TALL_LAMP");
+    if (tallLamp) {
+      const tallLampLight = new THREE.PointLight(0xffff88, 1, 4, 0.1);
+      tallLampLight.position.copy(tallLamp.position).add(new THREE.Vector3(0, 2, 0));
+      scene.add(tallLampLight);
+    }
 
     // 4. Camera Setup
     camera = glb.cameras[0]
+    if (!camera) {
+      console.error("[RoomBackground] room.glb has no embedded camera; aborting scene setup");
+      return;
+    }
 
-    if (cameraAt === "corkboard") {
-      camera.position.copy(room.getObjectByName("CAMERA_END").position);
-      camera.rotation.copy(room.getObjectByName("CAMERA_END").rotation);
+    const cameraStart = getNamed(room, "CAMERA_START");
+    const cameraStartHandle = getNamed(room, "CAMERA_START_HANDLE");
+    const cameraEnd = getNamed(room, "CAMERA_END");
+    const cameraEndHandle = getNamed(room, "CAMERA_END_HANDLE");
+
+    if (cameraAt === "corkboard" && cameraEnd) {
+      camera.position.copy(cameraEnd.position);
+      camera.rotation.copy(cameraEnd.rotation);
     }
 
     controls = new PointerLockControls(camera, document.body);
@@ -163,63 +209,66 @@ function init(container, playerCards) {
 
     animate();
 
-    beziers = {
-      idleToCards: {
-        curve: new THREE.CubicBezierCurve3(
-          room.getObjectByName("CAMERA_START").position,
-          room.getObjectByName("CAMERA_START_HANDLE").position,
-          room.getObjectByName("CAMERA_END_HANDLE").position,
-          room.getObjectByName("CAMERA_END").position
-        ),
-        start: room.getObjectByName("CAMERA_START").position,
-        end: room.getObjectByName("CAMERA_END").position,
-        startAngle: room.getObjectByName("CAMERA_START").rotation,
-        endAngle: room.getObjectByName("CAMERA_END").rotation,
-      },
+    if (cameraStart && cameraStartHandle && cameraEnd && cameraEndHandle) {
+      beziers = {
+        idleToCards: {
+          curve: new THREE.CubicBezierCurve3(
+            cameraStart.position,
+            cameraStartHandle.position,
+            cameraEndHandle.position,
+            cameraEnd.position
+          ),
+          start: cameraStart.position,
+          end: cameraEnd.position,
+          startAngle: cameraStart.rotation,
+          endAngle: cameraEnd.rotation,
+        },
 
-      cardsToIdle: {
-        curve: new THREE.CubicBezierCurve3(
-          room.getObjectByName("CAMERA_END").position,
-          room.getObjectByName("CAMERA_END_HANDLE").position,
-          room.getObjectByName("CAMERA_START_HANDLE").position,
-          room.getObjectByName("CAMERA_START").position
-        ),
-        start: room.getObjectByName("CAMERA_END").position,
-        end: room.getObjectByName("CAMERA_START").position,
-        startAngle: room.getObjectByName("CAMERA_END").rotation,
-        endAngle: room.getObjectByName("CAMERA_START").rotation,
+        cardsToIdle: {
+          curve: new THREE.CubicBezierCurve3(
+            cameraEnd.position,
+            cameraEndHandle.position,
+            cameraStartHandle.position,
+            cameraStart.position
+          ),
+          start: cameraEnd.position,
+          end: cameraStart.position,
+          startAngle: cameraEnd.rotation,
+          endAngle: cameraStart.rotation,
+        }
       }
+
+      // hide the handles
+      cameraStart.visible = false;
+      cameraStartHandle.visible = false;
+      cameraEnd.visible = false;
+      cameraEndHandle.visible = false;
+    } else {
+      console.warn("[RoomBackground] camera path markers missing from room.glb; cards/idle camera transitions disabled");
     }
 
-    // hide the handles
-    room.getObjectByName("CAMERA_START").visible = false;
-    room.getObjectByName("CAMERA_START_HANDLE").visible = false;
-    room.getObjectByName("CAMERA_END").visible = false;
-    room.getObjectByName("CAMERA_END_HANDLE").visible = false;
-
-    // const points = beziers.idleToCards.getPoints(50); // Get 50 points for smoothness
-    // const geometry = new THREE.BufferGeometry().setFromPoints(points);
-    // const material = new THREE.LineBasicMaterial({ color: 0xff0000 }); // Red line
-    // const curveObject = new THREE.Line(geometry, material);
-    // scene.add(curveObject);
-
     // corkboard
-    playerCardTextures[0] = new THREE.CanvasTexture(playerCards[0].canvas);
-    room.getObjectByName("CARD1").material = new THREE.MeshBasicMaterial({
-      map: playerCardTextures[0],
-      transparent: true,
-    });
+    const card1 = getNamed(room, "CARD1");
+    if (card1) {
+      playerCardTextures[0] = new THREE.CanvasTexture(playerCards[0].canvas);
+      card1.material = new THREE.MeshBasicMaterial({
+        map: playerCardTextures[0],
+        transparent: true,
+      });
+      playerCardTextures[0].needsUpdate = true;
+    }
 
-    playerCardTextures[1] = new THREE.CanvasTexture(playerCards[1].canvas);
-    room.getObjectByName("CARD2").material = new THREE.MeshBasicMaterial({
-      map: playerCardTextures[1],
-      transparent: true,
-    });
-
-    console.log(playerCards)
-
-    playerCardTextures[0].needsUpdate = true;
-    playerCardTextures[1].needsUpdate = true;
+    const card2 = getNamed(room, "CARD2");
+    if (card2) {
+      playerCardTextures[1] = new THREE.CanvasTexture(playerCards[1].canvas);
+      card2.material = new THREE.MeshBasicMaterial({
+        map: playerCardTextures[1],
+        transparent: true,
+      });
+      playerCardTextures[1].needsUpdate = true;
+    }
+  }, undefined, (error) => {
+    console.error("[RoomBackground] Failed to load room.glb", error);
   });
 
   const onKeyDown = function (event) {
@@ -363,15 +412,50 @@ function init(container, playerCards) {
       ghostMixer.update(delta);
     }
 
-    if (crtUniforms) {
-      const elapsedTime = clock.elapsedTime;
-      crtUniforms.time.value = elapsedTime;
-      // crtUniforms.yOffset.value = (elapsedTime * 0.03) % 1;
-    }
+    // crtUniforms.yOffset.value = (clock.elapsedTime * 0.03) % 1;
 
     renderer.render(scene, camera);
 
-    tvLight.power = 8 + perlinNoise(Date.now(), 0.008) * 3;
+    if (tvLight) {
+      if (tvVideo && tvGlowCtx && tvVideo.readyState >= tvVideo.HAVE_CURRENT_DATA) {
+        // getImageData forces a GPU->CPU readback, which stalls the pipeline - cheap
+        // in data size (8x8) but doing that stall every single frame alongside video
+        // decode was enough to visibly stutter the video. Throttle it; the easing below
+        // still runs every frame, so it still reads as a quick, smooth reaction.
+        if (clock.elapsedTime - lastGlowSampleTime > 0.08) {
+          lastGlowSampleTime = clock.elapsedTime;
+          tvGlowCtx.drawImage(tvVideo, 0, 0, 8, 8);
+          const { data } = tvGlowCtx.getImageData(0, 0, 8, 8);
+          let r = 0, g = 0, b = 0;
+          const pixelCount = data.length / 4;
+          for (let i = 0; i < data.length; i += 4) {
+            r += data[i];
+            g += data[i + 1];
+            b += data[i + 2];
+          }
+          r /= pixelCount * 255;
+          g /= pixelCount * 255;
+          b /= pixelCount * 255;
+
+          tvGlowColor.setRGB(r, g, b, THREE.SRGBColorSpace);
+          // Punch up the saturation so even mildly-tinted footage swings the light
+          // through strong, distinct colors instead of a subtle, washed-out tint.
+          const hsl = { h: 0, s: 0, l: 0 };
+          tvGlowColor.getHSL(hsl);
+          tvGlowColor.setHSL(hsl.h, Math.min(1, hsl.s * 3), hsl.l);
+          // just a touch of white so a fully black frame doesn't kill the light entirely
+          tvGlowColor.lerp(new THREE.Color(0xffffff), 0.05);
+          tvGlowLuminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        }
+
+        // Snap most of the way to the latest sample each frame for a punchy, reactive feel.
+        tvLight.color.lerp(tvGlowColor, 0.6);
+        const targetPower = 3 + tvGlowLuminance * 14;
+        tvLight.power += (targetPower - tvLight.power) * 0.35;
+      } else {
+        tvLight.power = 8;
+      }
+    }
 
     requestAnimationFrame(animate);
   }
@@ -387,35 +471,6 @@ function init(container, playerCards) {
 
 
 
-
-var r = [];
-
-var MAX_VERTICES = 256;
-var MAX_VERTICES_MASK = MAX_VERTICES - 1;
-
-for (var i = 0; i < MAX_VERTICES; ++i) {
-  r.push(Math.random());
-}
-
-var lerp = function (a, b, t) {
-  return a * (1 - t) + b * t;
-};
-
-function perlinNoise(x, scale) {
-
-  var scaledX = x * scale;
-  var xFloor = Math.floor(scaledX);
-  var t = scaledX - xFloor;
-  var tRemapSmoothstep = t * t * (3 - 2 * t);
-
-  /// Modulo using &
-  var xMin = xFloor & MAX_VERTICES_MASK;
-  var xMax = (xMin + 1) & MAX_VERTICES_MASK;
-
-  var y = lerp(r[xMin], r[xMax], tRemapSmoothstep);
-
-  return y;
-}
 
 function playerCardUpdated() {
   for (let i = 0; i < 2; i++) {

@@ -6,18 +6,14 @@ export const CRTShader = {
     tDiffuse: { value: null },
     scanlineIntensity: { value: 0.4 },
     scanlineCount: { value: 128.0 },
-    time: { value: 0.0 },
     yOffset: { value: 0.0 },
     brightness: { value: 1.1 },
     contrast: { value: 1.05 },
     saturation: { value: 1.1 },
     bloomIntensity: { value: 2 },
     bloomThreshold: { value: 0.5 },
-    rgbShift: { value: 0.0 },
     adaptiveIntensity: { value: 0.5 },
-    vignetteStrength: { value: 0.3 },
-    curvature: { value: 0 },
-    flickerStrength: { value: 0 }
+    vignetteStrength: { value: 0.3 }
   },
 
   vertexShader: /* glsl */ `
@@ -39,18 +35,14 @@ export const CRTShader = {
     uniform sampler2D tDiffuse;
     uniform float scanlineIntensity;
     uniform float scanlineCount;
-    uniform float time;
     uniform float yOffset;
     uniform float brightness;
     uniform float contrast;
     uniform float saturation;
     uniform float bloomIntensity;
     uniform float bloomThreshold;
-    uniform float rgbShift;
     uniform float adaptiveIntensity;
     uniform float vignetteStrength;
-    uniform float curvature;
-    uniform float flickerStrength;
 
     varying vec2 vUv;
 
@@ -59,17 +51,6 @@ export const CRTShader = {
     const vec3 LUMA = vec3(0.299, 0.587, 0.114);
     const float BLOOM_THRESHOLD_FACTOR = 0.5;
     const float BLOOM_FACTOR_MULT = 1.5;
-    const float RGB_SHIFT_SCALE = 0.005;
-    const float RGB_SHIFT_INTENSITY = 0.08;
-
-    // Optimized curvature function
-    vec2 curveRemapUV(vec2 uv, float curvature) {
-      vec2 coords = uv * 2.0 - 1.0;
-      float curveAmount = curvature * 0.25; // Reduced from 0.5
-      float dist = dot(coords, coords); // More efficient than x*x + y*y
-      coords = coords * (1.0 + dist * curveAmount);
-      return coords * 0.5 + 0.5;
-    }
 
     // Low-cost symmetric bloom sampling (cross + center, normalized)
     vec4 sampleBloom(sampler2D tex, vec2 uv, float radius, vec4 centerSample) {
@@ -94,15 +75,6 @@ export const CRTShader = {
     void main() {
       vec2 uv = vUv;
 
-      // Apply screen curvature if enabled (early out for out-of-bounds)
-      if (curvature > 0.001) {
-        uv = curveRemapUV(uv, curvature);
-        if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) {
-          gl_FragColor = vec4(0.0);
-          return;
-        }
-      }
-
       // Get the original pixel color
       vec4 pixel = texture2D(tDiffuse, uv);
 
@@ -120,13 +92,6 @@ export const CRTShader = {
         }
       }
 
-      // Apply RGB shift only if significant (skip for minimal values)
-      if (rgbShift > 0.005) {
-        float shift = rgbShift * RGB_SHIFT_SCALE;
-        pixel.r += texture2D(tDiffuse, vec2(uv.x + shift, uv.y)).r * RGB_SHIFT_INTENSITY;
-        pixel.b += texture2D(tDiffuse, vec2(uv.x - shift, uv.y)).b * RGB_SHIFT_INTENSITY;
-      }
-
       // Apply brightness
       pixel.rgb *= brightness;
 
@@ -135,7 +100,7 @@ export const CRTShader = {
       pixel.rgb = (pixel.rgb - 0.5) * contrast + 0.5;
       pixel.rgb = mix(vec3(luminance), pixel.rgb, saturation);
 
-      // Calculate combined lighting mask (scanlines, flicker, vignette)
+      // Calculate combined lighting mask (scanlines, vignette)
       float lightingMask = 1.0;
 
       // Calculate scanlines (skip if disabled)
@@ -151,11 +116,6 @@ export const CRTShader = {
         }
 
         lightingMask *= 1.0 - scanlinePattern * scanlineIntensity * adaptiveFactor;
-      }
-
-      // Apply flicker effect
-      if (flickerStrength > 0.001) {
-        lightingMask *= 1.0 + sin(time * 110.0) * flickerStrength;
       }
 
       // Apply vignette (skip if disabled)
