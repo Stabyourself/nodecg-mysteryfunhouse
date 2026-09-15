@@ -11,12 +11,68 @@
           Load from match ID
         </v-btn>
 
-        <v-select
-          label="Wait Screen state"
-          v-model="waitScreenState"
-          :items="waitScreenStateOptions"
+        <label class="v-label v-label--active theme--dark" style="font-size: 12px">Wait Screen state</label>
+
+        <v-btn
+          color="grey"
+          block
+          small
+          class="mt-2 mb-2"
+          :outlined="waitScreenState !== 'ghost'"
+          @click="waitScreenState = 'ghost'"
         >
-        </v-select>
+          Idle
+        </v-btn>
+
+        <v-row dense class="mb-1">
+          <v-col>
+            <v-btn
+              color="blue"
+              block
+              small
+              :outlined="waitScreenState !== 'cards1'"
+              @click="waitScreenState = 'cards1'"
+            >
+              Player Cards 1
+            </v-btn>
+          </v-col>
+          <v-col>
+            <v-btn
+              color="blue"
+              block
+              small
+              :outlined="waitScreenState !== 'cards2'"
+              @click="waitScreenState = 'cards2'"
+            >
+              Player Cards 2
+            </v-btn>
+          </v-col>
+        </v-row>
+
+        <v-row dense class="mb-3">
+          <v-col>
+            <v-btn
+              color="purple"
+              block
+              small
+              :outlined="waitScreenState !== 'paths1'"
+              @click="waitScreenState = 'paths1'"
+            >
+              Tournament Paths 1
+            </v-btn>
+          </v-col>
+          <v-col>
+            <v-btn
+              color="purple"
+              block
+              small
+              :outlined="waitScreenState !== 'paths2'"
+              @click="waitScreenState = 'paths2'"
+            >
+              Tournament Paths 2
+            </v-btn>
+          </v-col>
+        </v-row>
 
         <v-textarea label="Top text" v-model="topText" rows="3"></v-textarea>
 
@@ -85,13 +141,6 @@ export default {
     return {
       waitScreenState: false,
       showRainwave: false,
-      waitScreenStateOptions: [
-        { text: "Idle", value: "ghost" },
-        { text: "Player Cards Match 1", value: "cards1" },
-        { text: "Player Cards Match 2", value: "cards2" },
-        { text: "Tournament Paths Match 1", value: "paths1" },
-        { text: "Tournament Paths Match 2", value: "paths2" },
-      ],
       playerInfo: [],
       topText: "",
       currentEventLogo: {},
