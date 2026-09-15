@@ -54,13 +54,22 @@ export default {
     bindReplicant.call(this, 'waitScreenState');
     bindReplicant.call(this, 'topText');
     bindReplicant.call(this, 'showRainwave');
+  },
 
+  mounted() {
+    // Attached exactly once, here, instead of inside the replicant's change handler:
+    // ghostGames can emit 'change' many times over a long-running session (asset
+    // syncs, reconnects, etc.), and re-registering an 'ended' listener on every one of
+    // those - without ever removing the old ones - meant a single video finishing
+    // could fire randomVideo() once per accumulated listener, all at once.
+    this.$refs.video.addEventListener('ended', () => {
+      this.randomVideo();
+    });
+
+    let hasPickedFirstVideo = false;
     ghostGames.on('change', () => {
-      if (ghostGames.value.length > 0) {
-        this.$refs.video.addEventListener('ended', () => {
-          this.randomVideo();
-        });
-
+      if (!hasPickedFirstVideo && ghostGames.value.length > 0) {
+        hasPickedFirstVideo = true;
         this.randomVideo();
       }
     });

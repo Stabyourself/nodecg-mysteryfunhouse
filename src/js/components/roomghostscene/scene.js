@@ -448,10 +448,15 @@ function init(container, playerCards, initialState) {
           tvGlowLuminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
         }
 
-        // Snap most of the way to the latest sample each frame for a punchy, reactive feel.
-        tvLight.color.lerp(tvGlowColor, 0.6);
+        // Ease toward the latest sample - slow enough to read as a glow, not a snap.
+        // Framerate-independent: a fixed lerp fraction applied once per rendered frame
+        // would converge over a fixed number of frames, not a fixed amount of time, so
+        // the glow would visibly react faster at 60fps than at 30fps. Converting a
+        // "rate" (how many times per second it closes the remaining gap) through
+        // 1 - exp(-rate * delta) gives the same real-time speed at any framerate.
+        tvLight.color.lerp(tvGlowColor, 1 - Math.exp(-10 * delta));
         const targetPower = 3 + tvGlowLuminance * 14;
-        tvLight.power += (targetPower - tvLight.power) * 0.35;
+        tvLight.power += (targetPower - tvLight.power) * (1 - Math.exp(-5 * delta));
       } else {
         tvLight.power = 8;
       }
