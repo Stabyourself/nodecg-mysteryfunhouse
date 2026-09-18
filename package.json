@@ -62,13 +62,6 @@
         "headerColor": "#9146FF"
       },
       {
-        "name": "rainwave",
-        "title": "Rainwave",
-        "width": 2,
-        "file": "rainwave.html",
-        "headerColor": "#F7941E"
-      },
-      {
         "name": "achievements",
         "title": "Achievements",
         "width": 2,

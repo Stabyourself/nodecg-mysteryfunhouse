@@ -39,7 +39,6 @@
       <mt20-game-timer-box :game="game" :goal="goal" :submitter="submitter" :visible="visible" :boxart="currentBoxart" :timer="timerText" :round="round" :platform="platform" />
     </div>
 
-    <rainwave v-if="showRainwave" style="top: 975px; left: 1521px; width: 444px; height: 124px"> </rainwave>
 
     <AchievementManager />
     <Telestrator v-if="showTelestrator"/>
@@ -108,8 +107,6 @@ export default {
     bindReplicant.call(this, 'currentBoxart');
 
     bindReplicant.call(this, 'timer');
-
-    bindReplicant.call(this, 'showRainwave');
 
     bindReplicant.call(this, 'currentEventLogo');
     bindReplicant.call(this, 'round', `match${1 + iadd / 2}round`);
@@ -288,8 +285,6 @@ export default {
       timer: {
         ms: 0,
       },
-
-      showRainwave: false,
 
       visible: false,
       showTelestrator: true,

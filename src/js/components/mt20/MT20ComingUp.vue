@@ -53,8 +53,6 @@
       </div>
     </div>
 
-    <!-- <rainwave v-if="showRainwave" style="top: 975px; left: 1521px; width: 444px; height: 124px" /> -->
-
     <AchievementManager />
   </v-app>
 </template>
@@ -228,7 +226,6 @@ export default {
   created() {
     bindReplicant.call(this, 'currentEventLogo');
     bindReplicant.call(this, 'schedule');
-    bindReplicant.call(this, 'showRainwave');
 
     if (window.obsstudio && window.obsstudio.getControlLevel && window.obsstudio.getControlLevel != 0) {
       window.obsstudio.getCurrentScene((scene) => {
@@ -270,7 +267,6 @@ export default {
     return {
       schedule: [],
       visible: false,
-      showRainwave: false,
       currentEventLogo: {},
     };
   },

@@ -95,8 +95,6 @@ export default {
 
     bindReplicant.call(this, 'timer');
 
-    bindReplicant.call(this, 'showRainwave');
-
     bindReplicant.call(this, 'currentEventLogo');
     bindReplicant.call(this, 'round', `match${1 + iadd / 2}round`);
 
@@ -228,8 +226,6 @@ export default {
       timer: {
         ms: 0,
       },
-
-      showRainwave: false,
 
       visible: false,
     };

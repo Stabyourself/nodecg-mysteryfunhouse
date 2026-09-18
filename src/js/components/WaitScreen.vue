@@ -23,8 +23,6 @@
       <markdown-it-vue :content="topText"></markdown-it-vue>
     </div>
 
-    <rainwave v-if="showRainwave" style="top: 975px; left: 1521px; width: 444px; height: 124px"> </rainwave>
-
     <AchievementManager></AchievementManager>
   </v-app>
 </template>
@@ -53,7 +51,6 @@ export default {
     bindReplicant.call(this, 'playerInfo');
     bindReplicant.call(this, 'waitScreenState');
     bindReplicant.call(this, 'topText');
-    bindReplicant.call(this, 'showRainwave');
   },
 
   methods: {
@@ -93,7 +90,6 @@ export default {
 
       leftPlayerInfo: null,
       rightPlayerInfo: null,
-      showRainwave: false,
       topText: '',
     };
   },

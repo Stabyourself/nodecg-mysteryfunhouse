@@ -129,7 +129,6 @@ import { bindReplicant } from "../../util.js";
 export default {
   created() {
     bindReplicant.call(this, "waitScreenState", "waitScreenState", 0);
-    bindReplicant.call(this, "showRainwave", "showRainwave", 0);
     bindReplicant.call(this, "topText");
     bindReplicant.call(this, "playerInfo");
     bindReplicant.call(this, "currentEventLogo");
@@ -140,7 +139,6 @@ export default {
   data() {
     return {
       waitScreenState: false,
-      showRainwave: false,
       playerInfo: [],
       topText: "",
       currentEventLogo: {},

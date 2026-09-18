@@ -20,8 +20,6 @@
       :class="{ active: waitScreenState == 'paths2' }"
       :info="this.playerInfo[3]"></player-path>
 
-    <rainwave v-if="showRainwave" style="top: 975px; left: 1521px; width: 444px; height: 124px"> </rainwave>
-
     <AchievementManager></AchievementManager>
   </v-app>
 </template>
@@ -53,7 +51,6 @@ export default {
     bindReplicant.call(this, 'playerInfo');
     bindReplicant.call(this, 'waitScreenState');
     bindReplicant.call(this, 'topText');
-    bindReplicant.call(this, 'showRainwave');
   },
 
   mounted() {
@@ -136,7 +133,6 @@ export default {
 
       leftPlayerInfo: null,
       rightPlayerInfo: null,
-      showRainwave: false,
       topText: '',
       currentVideo: "",
     };

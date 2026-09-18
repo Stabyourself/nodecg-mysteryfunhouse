@@ -114,11 +114,6 @@
       </template>
     </mt16-game-box>
 
-    <!-- <rainwave
-            v-if="showRainwave"
-            style="top: 975px; left: 1521px; width: 444px; height: 124px">
-        </rainwave> -->
-
     <mt16-timer style="top: 848px" :class="{ active: timer.state == 'playing' }">
       <swipe dir="down" :visible="visible">
         {{ timerText }}
@@ -179,8 +174,6 @@ export default {
     bindReplicant.call(this, 'currentBoxart');
 
     bindReplicant.call(this, 'timer');
-
-    bindReplicant.call(this, 'showRainwave');
 
     bindReplicant.call(this, 'round', 'match1round');
 
@@ -277,8 +270,6 @@ export default {
       timer: {
         ms: 0,
       },
-
-      showRainwave: false,
 
       visible: false,
     };
