@@ -20,6 +20,7 @@
         class="match-id-field mx-auto d-block"
         :disabled="loadingMatchNumber !== null"
         @keydown.enter="loadMatch(1)"
+        @focus="$event.target.select()"
       />
 
       <v-row class="mx-auto mt-4" dense>
