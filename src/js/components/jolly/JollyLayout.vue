@@ -119,6 +119,8 @@
         {{ timerText }}
       </swipe>
     </mt16-timer>
+
+    <Telestrator v-if="showTelestrator"/>
   </v-app>
 </template>
 
@@ -167,6 +169,11 @@ import { bindReplicant, formatTimer } from '../../util.js';
 
 export default {
   created() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('obs') != null) {
+      this.showTelestrator = false;
+    }
+
     bindReplicant.call(this, 'game');
     bindReplicant.call(this, 'goal');
     bindReplicant.call(this, 'platform');
@@ -231,6 +238,7 @@ export default {
 
   data() {
     return {
+      showTelestrator: true,
       game: '',
       goal: '',
       platform: '',
