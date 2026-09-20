@@ -142,6 +142,8 @@
 }
 
 .player-name {
+  overflow: hidden;
+
   img {
     margin-left: 0.3em;
     margin-right: 0.3em;
@@ -149,6 +151,12 @@
     height: 0.8em;
     vertical-align: text-top;
   }
+}
+
+.match-round img {
+  display: block;
+  margin: 0 auto;
+  max-height: 135px;
 }
 
 .boxart {
