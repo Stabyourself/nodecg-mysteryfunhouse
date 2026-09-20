@@ -64,6 +64,10 @@ let twitchOptions = {
 let playerWidth = 600;
 let playerHeight = 450;
 
+const debugParams = new URLSearchParams(window.location.search);
+const skipUnmute = debugParams.get('nounmute') != null;
+const unmuteDelay = Number(debugParams.get('unmutedelay') ?? 0);
+
 export default {
   created() {
     nodecg.listenFor(`stream${this.playerNumber}reload`, () => {
@@ -98,14 +102,34 @@ export default {
 
       let embed = new Twitch.Embed(this.$refs.player, twitchOptions);
 
+      for (const event of Object.values(Twitch.Embed)) {
+        if (typeof event !== 'string') continue;
+
+        embed.addEventListener(event, () => {
+          const p = this.player;
+          console.log(
+            `[twitch ${this.playerNumber}] ${event} t=${(performance.now() / 1000).toFixed(2)}` +
+              (p ? ` paused=${p.isPaused()} muted=${p.getMuted()} volume=${p.getVolume()}` : '') +
+              ` visibility=${document.visibilityState}`
+          );
+        });
+      }
+
       embed.addEventListener(Twitch.Embed.READY, () => {
         this.player = embed.getPlayer();
       });
 
       embed.addEventListener(Twitch.Embed.PLAYING, () => {
         this.playerPlaying = true;
-        this.player.setMuted(false);
-        this.player.setVolume(this.volume / 100);
+
+        if (!skipUnmute) {
+          setTimeout(() => {
+            console.log(`[twitch ${this.playerNumber}] unmuting`);
+            this.player.setMuted(false);
+            this.player.setVolume(this.volume / 100);
+          }, unmuteDelay);
+        }
+
         this.$emit("playing", true, this.playerNumber);
       });
     },
