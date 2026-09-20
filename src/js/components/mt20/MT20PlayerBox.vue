@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div v-if="allowOverlap" class="player-done-wrap">
+    <div class="player-done-wrap">
       <div class="player-done megaman-box-small" :class="raceState">
           <div class="left" :class="player.raceState" v-if="player.raceState == 'winner'">
             1<span class="small">st</span>
@@ -177,7 +177,6 @@ export default {
     health: Number,
     time: String,
     raceState: String,
-    allowOverlap: Boolean,
   },
 
   computed: {

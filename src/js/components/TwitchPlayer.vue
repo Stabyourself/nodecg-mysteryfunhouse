@@ -1,7 +1,7 @@
 <template>
   <div class="player-backdrop" :style="{ width: width + 'px', height: height + 'px' }">
-    <div class="player-wrapper" :style="playerPlaying && !noCrop ? cropStyles : {}" ref="player"></div>
-    <div class="popover-holder" v-if="playerPlaying && !noPopover">
+    <div class="player-wrapper" :style="cropStyles" ref="player"></div>
+    <div class="popover-holder">
       <img :class="{ active: popoverVisible }" :src="popover" />
     </div>
   </div>
@@ -64,10 +64,6 @@ let twitchOptions = {
 let playerWidth = 600;
 let playerHeight = 450;
 
-const debugParams = new URLSearchParams(window.location.search);
-const skipUnmute = debugParams.get('nounmute') != null;
-const unmuteDelay = Number(debugParams.get('unmutedelay') ?? 0);
-
 export default {
   created() {
     nodecg.listenFor(`stream${this.playerNumber}reload`, () => {
@@ -91,7 +87,6 @@ export default {
 
   methods: {
     createPlayer() {
-      this.playerPlaying = false;
       this.$emit("playing", false, this.playerNumber);
       this.$refs.player.innerHTML = '';
 
@@ -102,34 +97,13 @@ export default {
 
       let embed = new Twitch.Embed(this.$refs.player, twitchOptions);
 
-      for (const event of Object.values(Twitch.Embed)) {
-        if (typeof event !== 'string') continue;
-
-        embed.addEventListener(event, () => {
-          const p = this.player;
-          console.error(
-            `[twitch ${this.playerNumber}] ${event} t=${(performance.now() / 1000).toFixed(2)}` +
-              (p ? ` paused=${p.isPaused()} muted=${p.getMuted()} volume=${p.getVolume()}` : '') +
-              ` visibility=${document.visibilityState}`
-          );
-        });
-      }
-
       embed.addEventListener(Twitch.Embed.READY, () => {
         this.player = embed.getPlayer();
       });
 
       embed.addEventListener(Twitch.Embed.PLAYING, () => {
-        this.playerPlaying = true;
-
-        if (!skipUnmute) {
-          setTimeout(() => {
-            console.error(`[twitch ${this.playerNumber}] unmuting`);
-            this.player.setMuted(false);
-            this.player.setVolume(this.volume / 100);
-          }, unmuteDelay);
-        }
-
+        this.player.setMuted(false);
+        this.player.setVolume(this.volume / 100);
         this.$emit("playing", true, this.playerNumber);
       });
     },
@@ -226,9 +200,6 @@ export default {
       qualities: [],
       popover: null,
       popoverVisible: false,
-      playerPlaying: false,
-      noCrop: debugParams.get('nocrop') != null,
-      noPopover: debugParams.get('nopopover') != null,
     };
   },
 };
