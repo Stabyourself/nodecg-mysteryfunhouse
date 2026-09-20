@@ -1,7 +1,7 @@
 <template>
   <div class="player-backdrop" :style="{ width: width + 'px', height: height + 'px' }">
-    <div class="player-wrapper" :style="playerPlaying ? cropStyles : {}" ref="player"></div>
-    <div class="popover-holder" v-if="playerPlaying">
+    <div class="player-wrapper" :style="playerPlaying && !noCrop ? cropStyles : {}" ref="player"></div>
+    <div class="popover-holder" v-if="playerPlaying && !noPopover">
       <img :class="{ active: popoverVisible }" :src="popover" />
     </div>
   </div>
@@ -227,6 +227,8 @@ export default {
       popover: null,
       popoverVisible: false,
       playerPlaying: false,
+      noCrop: debugParams.get('nocrop') != null,
+      noPopover: debugParams.get('nopopover') != null,
     };
   },
 };
