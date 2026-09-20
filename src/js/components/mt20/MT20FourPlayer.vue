@@ -218,6 +218,11 @@ export default {
 
     if (window.obsstudio && window.obsstudio.getControlLevel && window.obsstudio.getControlLevel != 0) {
       window.obsstudio.getCurrentScene((scene) => {
+        if (!scene) {
+          this.visible = true;
+          return;
+        }
+
         console.log('Start scene: ' + scene.name);
         if (scene.name == '4 Player') {
           this.visible = true;
@@ -225,6 +230,8 @@ export default {
       });
 
       window.addEventListener('obsSceneChanged', (event) => {
+        if (!event.detail) return;
+
         console.log('Switched to scene ' + event.detail.name);
         if (event.detail.name == '4 Player') {
           this.visible = true;

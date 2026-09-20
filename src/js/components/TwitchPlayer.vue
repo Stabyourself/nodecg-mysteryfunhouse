@@ -107,7 +107,7 @@ export default {
 
         embed.addEventListener(event, () => {
           const p = this.player;
-          console.log(
+          console.error(
             `[twitch ${this.playerNumber}] ${event} t=${(performance.now() / 1000).toFixed(2)}` +
               (p ? ` paused=${p.isPaused()} muted=${p.getMuted()} volume=${p.getVolume()}` : '') +
               ` visibility=${document.visibilityState}`
@@ -124,7 +124,7 @@ export default {
 
         if (!skipUnmute) {
           setTimeout(() => {
-            console.log(`[twitch ${this.playerNumber}] unmuting`);
+            console.error(`[twitch ${this.playerNumber}] unmuting`);
             this.player.setMuted(false);
             this.player.setVolume(this.volume / 100);
           }, unmuteDelay);

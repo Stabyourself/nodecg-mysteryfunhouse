@@ -187,6 +187,11 @@ export default {
 
     if (window.obsstudio && window.obsstudio.getControlLevel && window.obsstudio.getControlLevel != 0) {
       window.obsstudio.getCurrentScene((scene) => {
+        if (!scene) {
+          this.visible = true;
+          return;
+        }
+
         console.log('Start scene: ' + scene.name);
         if (scene.name == '2 Player Tate' || scene.name == '2 Player Tate (Match 2)') {
           this.visible = true;
@@ -194,6 +199,8 @@ export default {
       });
 
       window.addEventListener('obsSceneChanged', (event) => {
+        if (!event.detail) return;
+
         console.log('Switched to scene ' + event.detail.name);
         if (event.detail.name == '2 Player Tate' || event.detail.name == '2 Player Tate (Match 2)') {
           this.visible = true;
