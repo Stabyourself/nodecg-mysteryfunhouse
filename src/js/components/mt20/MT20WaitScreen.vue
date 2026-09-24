@@ -21,6 +21,7 @@
       :info="this.playerInfo[3]"></player-path>
 
     <AchievementManager></AchievementManager>
+    <Telestrator v-if="showTelestrator" />
   </v-app>
 </template>
 
@@ -125,6 +126,10 @@ export default {
   data() {
     return {
       playerInfo: [],
+
+      // in obs the telestrator is its own source
+      showTelestrator: !window.obsstudio,
+
       playerCardCtx: [
         document.createElement('canvas').getContext('2d'),
         document.createElement('canvas').getContext('2d'),

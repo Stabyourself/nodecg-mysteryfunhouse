@@ -54,6 +54,7 @@
     </div>
 
     <AchievementManager />
+    <Telestrator v-if="showTelestrator" />
   </v-app>
 </template>
 
@@ -275,6 +276,9 @@ export default {
       schedule: [],
       visible: false,
       currentEventLogo: {},
+
+      // in obs the telestrator is its own source
+      showTelestrator: !window.obsstudio,
     };
   },
 };
