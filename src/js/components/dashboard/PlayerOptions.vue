@@ -27,20 +27,6 @@
         ></v-select>
         -->
 
-    <v-slider v-model="volume" label="Volume" min="0" max="100">
-      <template v-slot:append>
-        <v-text-field
-          v-model="volume"
-          class="mt-0 pt-0"
-          type="number"
-          style="width: 45px"
-          min="0"
-          max="100"
-          step="1"
-          dense></v-text-field>
-      </template>
-    </v-slider>
-
     <v-row>
       <v-col>
         <v-btn v-if="!streamHidden" color="green" block class="mb-3" small @click="streamHidden = true">
@@ -133,7 +119,6 @@ export default {
     bindReplicant.call(this, 'twitch', this.makeName('twitch'));
     // bindReplicant.call(this, "qualities", this.makeName("qualities"))
     //bindReplicant.call(this, "quality", this.makeName("quality"))
-    bindReplicant.call(this, 'volume', this.makeName('volume'));
     bindReplicant.call(this, 'streamHidden', this.makeName('streamHidden'), 0);
     bindReplicant.call(this, 'aspectratioRep', this.makeName('aspectratio'));
 
@@ -263,7 +248,6 @@ export default {
       twitch: '',
       // qualities: [],
       //quality: null,
-      volume: 0,
       streamHidden: false,
       refreshing: false,
       aspectratio: false,

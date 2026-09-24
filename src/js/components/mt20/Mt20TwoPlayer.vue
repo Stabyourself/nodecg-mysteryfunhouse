@@ -2,35 +2,15 @@
   <v-app>
     <div class="twoplayers">
     <div id="top-section">
-      <mt20-player-box :player="player0" :visible="visible" side="left" :health="player0health" :time="player0finalTime" :race-state="player0raceState" />
+      <mt20-player-box :player="players[0]" :visible="visible" side="left" :health="health[0]" :time="players[0].finalTime" :race-state="players[0].raceState" />
       <img class="logo" :src="currentEventLogo.url" style="height: 147px"/>
-      <mt20-player-box :player="player1" :visible="visible" side="right" :health="player1health" :time="player1finalTime" :race-state="player1raceState" />
+      <mt20-player-box :player="players[1]" :visible="visible" side="right" :health="health[1]" :time="players[1].finalTime" :race-state="players[1].raceState" />
     </div>
 
     <div id="player-section">
-      <twitch-player
-        :opacity="player0streamHidden ? 0 : 1"
-        :playerNumber="0"
-        :url="player0twitch"
-        :quality="player0quality ? player0quality : 'auto'"
-        :volume="player0streamHidden || !visible ? 0 : player0volume"
-        :crop="player0crop"
-        :aspectratio="player0aspectratio"
-        :width="930"
-        :height="698"
-      ></twitch-player>
+      <obs-video :player="players[0].number" :width="930" :height="698"></obs-video>
 
-      <twitch-player
-        :opacity="player1streamHidden ? 0 : 1"
-        :playerNumber="1"
-        :url="player1twitch"
-        :quality="player1quality ? player1quality : 'auto'"
-        :volume="player1streamHidden || !visible ? 0 : player1volume"
-        :crop="player1crop"
-        :aspectratio="player1aspectratio"
-        :width="930"
-        :height="698"
-      ></twitch-player>
+      <obs-video :player="players[1].number" :width="930" :height="698"></obs-video>
     </div>
 
     <div id="bottom-section">
@@ -83,204 +63,37 @@ $whiteBoxFont: 'Arvo', serif;
 </style>
 
 <script>
-import { bindReplicant, formatTimer } from '../../util.js';
-
-let iadd = 0;
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get('match2') != null) {
-  iadd = 2;
-}
+import { bindReplicant } from '../../util.js';
+import { layoutMixin } from '../../layout.js';
 
 export default {
+  mixins: [layoutMixin(2)],
+
   created() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('obs') != null) {
-      this.showTelestrator = false;
-    }
-
-    bindReplicant.call(this, 'game');
-    bindReplicant.call(this, 'goal');
-    bindReplicant.call(this, 'platform');
-    bindReplicant.call(this, 'submitter');
-    bindReplicant.call(this, 'currentBoxart');
-
-    bindReplicant.call(this, 'timer');
-
-    bindReplicant.call(this, 'currentEventLogo');
-    bindReplicant.call(this, 'round', `match${1 + iadd / 2}round`);
-
-    for (let i = 0; i < 2; i++) {
-      bindReplicant.call(this, `player${i}name`, `player${i + iadd}name`);
-      bindReplicant.call(this, `player${i}pronouns`, `player${i + iadd}pronouns`);
-      bindReplicant.call(this, `player${i}flag`, `player${i + iadd}flag`);
-
-      bindReplicant.call(this, `player${i}twitch`, `player${i + iadd}twitch`);
-      // bindReplicant.call(this, `player${i}quality`, `player${i + iadd}quality`)
-      bindReplicant.call(this, `player${i}volume`, `player${i + iadd}volume`);
-      bindReplicant.call(this, `player${i}streamHidden`, `player${i + iadd}streamHidden`);
-
-      bindReplicant.call(this, `player${i}raceState`, `player${i + iadd}raceState`);
-      bindReplicant.call(this, `player${i}finalTime`, `player${i + iadd}finalTime`);
-
-      bindReplicant.call(this, `player${i}crop`, `player${i + iadd}crop`);
-      bindReplicant.call(this, `player${i}aspectratio`, `player${i + iadd}aspectratio`);
-    }
-
-    if (window.obsstudio && window.obsstudio.getControlLevel && window.obsstudio.getControlLevel != 0) {
-      window.obsstudio.getCurrentScene((scene) => {
-        if (!scene) {
-          this.visible = true;
-          return;
-        }
-
-        console.log('Start scene: ' + scene.name);
-        if (scene.name == '2 Player' || scene.name == '2 Player (Match 2)') {
-          this.visible = true;
-        }
-      });
-
-      window.addEventListener('obsSceneChanged', (event) => {
-        if (!event.detail) return;
-
-        console.log('Switched to scene ' + event.detail.name);
-        if (event.detail.name == '2 Player' || event.detail.name == '2 Player (Match 2)') {
-          this.visible = true;
-        } else {
-          this.visible = false;
-        }
-      });
-    } else {
-      this.visible = false;
-      setTimeout(() => {
-        this.visible = true;
-      }, 0);
-    }
-
-    document.addEventListener('keyup', (e) => {
-      if (e.key === 'Enter') {
-        this.visible = !this.visible;
-      }
-    });
-
-    let vue = this;
-    nodecg.listenFor('playSound', vue.playSound);
-  },
-
-  methods: {
-    playSound(data) {
-      nodecg.playSound(data.sound);
-    },
+    bindReplicant.call(this, 'round', `match${1 + this.playerOffset / 2}round`);
   },
 
   computed: {
-    timerText() {
-      return formatTimer(this.timer.ms, false, false);
+    // half a heart gone in losers, and half when the other player wins or you forfeit
+    health() {
+      return this.players.map((player, i) => {
+        if (this.timer.ms == 0) return 0;
+
+        const opponent = this.players[1 - i];
+        let hp = this.round.toLowerCase().includes('loser') ? 0.5 : 1;
+
+        if (opponent.raceState == 'winner' || player.raceState == 'forfeit') {
+          hp -= 0.5;
+        }
+
+        return hp;
+      });
     },
-
-    player0() {
-      return {
-        name: this.player0name,
-        pronouns: this.player0pronouns,
-        flag: this.player0flag,
-        volume: this.player0volume,
-        raceState: this.player0raceState,
-        finalTime: this.player0finalTime,
-      };
-    },
-
-    player1() {
-      return {
-        name: this.player1name,
-        pronouns: this.player1pronouns,
-        flag: this.player1flag,
-        volume: this.player1volume,
-        raceState: this.player1raceState,
-        finalTime: this.player1finalTime,
-      };
-    },
-
-    player0health() {
-      if (this.timer.ms == 0) {
-        return 0;
-      }
-
-      let hp = 1;
-      if (this.round.toLowerCase().includes("loser")) {
-        hp = 0.5;
-      }
-
-      if (this.player1raceState == "winner" || this.player0raceState == "forfeit") {
-        hp -= 0.5;
-      }
-
-      return hp;
-    },
-
-    player1health() {
-      if (this.timer.ms == 0) {
-        return 0;
-      }
-
-      let hp = 1;
-      if (this.round.toLowerCase().includes("loser")) {
-        hp = 0.5;
-      }
-
-      if (this.player0raceState == "winner" || this.player1raceState == "forfeit") {
-        hp -= 0.5;
-      }
-
-      return hp;
-    }
   },
 
   data() {
     return {
-      game: '',
-      goal: '',
-      platform: '',
-      submitter: '',
-      currentBoxart: {},
-
-      currentEventLogo: {},
       round: '',
-
-      player0name: '',
-      player0pronouns: '',
-      player0flag: '',
-
-      player0twitch: '',
-      player0quality: null,
-      player0volume: 0,
-      player0streamHidden: false,
-
-      player0raceState: 'none',
-      player0finalTime: '',
-
-      player0crop: [0, 0, 0, 0],
-      player0aspectratio: false,
-
-      player1name: '',
-      player1pronouns: '',
-      player1flag: '',
-
-      player1twitch: '',
-      player1quality: null,
-      player1volume: 0,
-      player1streamHidden: false,
-
-      player1raceState: 'none',
-      player1finalTime: '',
-
-      player1crop: [0, 0, 0, 0],
-      player1aspectratio: false,
-
-      timer: {
-        ms: 0,
-      },
-
-      visible: false,
-      showTelestrator: true,
     };
   },
 };

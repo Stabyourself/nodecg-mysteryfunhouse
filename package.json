@@ -121,6 +121,21 @@
         "height": 1080
       },
       {
+        "file": "player.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "replay-dock.html",
+        "width": 400,
+        "height": 400
+      },
+      {
+        "file": "replay-overlay.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
         "file": "jolly/2player.html",
         "width": 1920,
         "height": 1080

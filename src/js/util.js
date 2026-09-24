@@ -1,41 +1,74 @@
 var clone = require("clone");
-var debounce = require("lodash/debounce");
+var throttle = require("lodash/throttle");
 
-export function bindReplicant(
-  vueName,
-  replicantName = vueName,
-  debounceWait = 1000
-) {
+// how long we wait for our own write to come back
+const IN_FLIGHT_TIMEOUT = 5000;
+
+// two-way binding between a vue property and a replicant
+// writes go out right away. every value we send is remembered until it comes back, so
+// an old echo ("t" arriving after we already sent "test") doesn't overwrite what you typed
+// throttleWait only limits streams of changes (dragging), the last value always goes out
+export function bindReplicant(vueName, replicantName = vueName, throttleWait = 100) {
   const replicant = nodecg.Replicant(replicantName, {
     defaultValue: this[vueName],
   });
-  let preventSend = false;
 
-  let sendValue = debounce(function (newValue) {
-    replicant.value = newValue;
-  }, debounceWait);
+  let lastSeen;
+  let inFlight = new Map();
 
-  let readValue = (newValue) => {
+  const forget = (serialized) => {
+    const timer = inFlight.get(serialized);
+    if (timer) clearTimeout(timer);
+    inFlight.delete(serialized);
+  };
+
+  const send = (newValue) => {
+    const serialized = JSON.stringify(newValue);
+    if (serialized === lastSeen) return;
+
+    lastSeen = serialized;
+
+    // never came back, stop waiting for it
+    forget(serialized);
+    inFlight.set(
+      serialized,
+      setTimeout(() => inFlight.delete(serialized), IN_FLIGHT_TIMEOUT)
+    );
+
+    replicant.value = clone(newValue);
+  };
+
+  const sendThrottled = throttleWait
+    ? throttle(send, throttleWait, { leading: true, trailing: true })
+    : send;
+
+  const read = (newValue) => {
+    const serialized = JSON.stringify(newValue);
+
+    if (serialized === lastSeen) {
+      forget(serialized);
+      return;
+    }
+
+    // an old write of ours coming back, ignore
+    if (inFlight.has(serialized)) {
+      forget(serialized);
+      return;
+    }
+
+    // change from somewhere else, but ours is newer and still on its way
+    if (inFlight.size) return;
+
+    lastSeen = serialized;
     this[vueName] = clone(newValue);
-
-    preventSend = true;
-    this.$nextTick(() => {
-      preventSend = false;
-    });
   };
 
   NodeCG.waitForReplicants(replicant).then(() => {
-    readValue(replicant.value);
+    read(replicant.value);
 
-    replicant.on("change", (newValue) => {
-      readValue(newValue);
-    });
+    replicant.on("change", read);
 
-    this.$watch(vueName, (newValue) => {
-      if (!preventSend) {
-        sendValue(newValue);
-      }
-    });
+    this.$watch(vueName, sendThrottled);
   });
 }
 

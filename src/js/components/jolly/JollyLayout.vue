@@ -46,31 +46,29 @@
       </template>
     </player-name>
 
-    <div style="position: absolute; top: 150px; left: 15px; width: 930px; height: 698px">
-      <twitch-player
-        :opacity="player0streamHidden ? 0 : 1"
-        :playerNumber="0"
-        :url="player0twitch"
-        :quality="player0quality ? player0quality : 'auto'"
-        :volume="player0streamHidden || !visible ? 0 : player0volume"
-        :crop="player0crop"
-        :aspectratio="player0aspectratio"
-        :width="930"
-        :height="698"></twitch-player>
-    </div>
+    <obs-video
+      scene="Player 1 Video"
+      :player="0"
+      :x="15"
+      :y="150"
+      :width="930"
+      :height="698"
+      :crop="player0crop"
+      :aspectratio="player0aspectratio"
+      :visible="!player0streamHidden"
+    ></obs-video>
 
-    <div style="position: absolute; top: 150px; left: 975px; width: 930px; height: 698px">
-      <twitch-player
-        :opacity="player1streamHidden ? 0 : 1"
-        :playerNumber="1"
-        :url="player1twitch"
-        :quality="player1quality ? player1quality : 'auto'"
-        :volume="player1streamHidden || !visible ? 0 : player1volume"
-        :crop="player1crop"
-        :aspectratio="player1aspectratio"
-        :width="930"
-        :height="698"></twitch-player>
-    </div>
+    <obs-video
+      scene="Player 2 Video"
+      :player="1"
+      :x="975"
+      :y="150"
+      :width="930"
+      :height="698"
+      :crop="player1crop"
+      :aspectratio="player1aspectratio"
+      :visible="!player1streamHidden"
+    ></obs-video>
 
     <player-done-slider
       style="top: 848px; left: 15px; width: 930px"
@@ -177,8 +175,8 @@ import { bindReplicant, formatTimer } from '../../util.js';
 
 export default {
   created() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('obs') != null) {
+    // in obs the telestrator is its own source
+    if (window.obsstudio) {
       this.showTelestrator = false;
     }
 

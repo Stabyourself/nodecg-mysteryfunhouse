@@ -16,8 +16,8 @@
 
 .player-wrapper {
   position: absolute;
-  width: 600px;
-  height: 450px;
+  width: 1920px;
+  height: 1080px;
   visibility: visible;
   display: block;
 }
@@ -56,13 +56,13 @@ let twitchOptions = {
   channel: null,
   autoplay: true,
   muted: true,
-  parent: ['nodecg.mysteryfun.house'],
+  parent: ['nodecg.mysteryfun.house', 'localhost'],
   quality: 'auto',
   layout: 'video'
 };
 
-let playerWidth = 600;
-let playerHeight = 450;
+let playerWidth = 1920;
+let playerHeight = 1080;
 
 export default {
   created() {
@@ -113,11 +113,9 @@ export default {
     cropStyles() {
       let styles = {};
 
-      if (this.crop) {
-        let left = this.crop[0];
-        let right = this.crop[1];
-        let top = this.crop[2];
-        let bottom = this.crop[3];
+      {
+        // always scale, the player is bigger than the box even without a crop
+        let [left, right, top, bottom] = this.crop ?? [0, 0, 0, 0];
 
         let width = playerWidth - left - right;
         let height = playerHeight - top - bottom;

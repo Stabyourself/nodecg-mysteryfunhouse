@@ -2,7 +2,7 @@
   <div class="player-box megaman-box" :class="side">
     <div class="player-name">
       {{  player.name.toUpperCase() }}
-      <div class="audio" v-if="player.volume > 0">
+      <div class="audio" v-if="player.audible">
         <img src="/bundles/nodecg-mysteryfunhouse/dist/img/mt20/audio.png" />
       </div>
     </div>

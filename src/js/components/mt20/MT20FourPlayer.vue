@@ -8,69 +8,29 @@
 
       <div id="main-section">
         <div class="main-row">
-          <mt20-player-box-small :player="player0" :visible="visible" side="left" :race-state="player0raceState" :time="player0finalTime" />
+          <mt20-player-box-small :player="players[0]" :visible="visible" side="left" :race-state="players[0].raceState" :time="players[0].finalTime" />
           <div class="round">{{ round1 }}</div>
-          <mt20-player-box-small :player="player1" :visible="visible" side="right" :race-state="player1raceState" :time="player1finalTime" />
+          <mt20-player-box-small :player="players[1]" :visible="visible" side="right" :race-state="players[1].raceState" :time="players[1].finalTime" />
         </div>
 
         <div class="main-row">
-          <twitch-player
-            :opacity="player0streamHidden ? 0 : 1"
-            :playerNumber="0"
-            :url="player0twitch"
-            :quality="player0quality ? player0quality : 'auto'"
-            :volume="player0streamHidden || !visible ? 0 : player0volume"
-            :crop="player0crop"
-            :aspectratio="player0aspectratio"
-            :width="656"
-            :height="492"
-          ></twitch-player>
+          <obs-video :player="players[0].number" :width="656" :height="492"></obs-video>
 
-          <twitch-player
-            :opacity="player1streamHidden ? 0 : 1"
-            :playerNumber="1"
-            :url="player1twitch"
-            :quality="player1quality ? player1quality : 'auto'"
-            :volume="player1streamHidden || !visible ? 0 : player1volume"
-            :crop="player1crop"
-            :aspectratio="player1aspectratio"
-            :width="656"
-            :height="492"
-          ></twitch-player>
+          <obs-video :player="players[1].number" :width="656" :height="492"></obs-video>
         </div>
 
         <div class="spacer"></div>
 
         <div class="main-row">
-          <twitch-player
-            :opacity="player2streamHidden ? 0 : 1"
-            :playerNumber="2"
-            :url="player2twitch"
-            :quality="player2quality ? player2quality : 'auto'"
-            :volume="player2streamHidden || !visible ? 0 : player2volume"
-            :crop="player2crop"
-            :aspectratio="player2aspectratio"
-            :width="656"
-            :height="492"
-          ></twitch-player>
+          <obs-video :player="players[2].number" :width="656" :height="492"></obs-video>
 
-          <twitch-player
-            :opacity="player3streamHidden ? 0 : 1"
-            :playerNumber="3"
-            :url="player3twitch"
-            :quality="player3quality ? player3quality : 'auto'"
-            :volume="player3streamHidden || !visible ? 0 : player3volume"
-            :crop="player3crop"
-            :aspectratio="player3aspectratio"
-            :width="656"
-            :height="492"
-          ></twitch-player>
+          <obs-video :player="players[3].number" :width="656" :height="492"></obs-video>
         </div>
 
         <div class="main-row">
-          <mt20-player-box-small :player="player2" :visible="visible" side="left" :race-state="player2raceState" :time="player2finalTime" />
+          <mt20-player-box-small :player="players[2]" :visible="visible" side="left" :race-state="players[2].raceState" :time="players[2].finalTime" />
           <div class="round">{{ round2 }}</div>
-          <mt20-player-box-small :player="player3" :visible="visible" side="right" :race-state="player3raceState" :time="player3finalTime" />
+          <mt20-player-box-small :player="players[3]" :visible="visible" side="right" :race-state="players[3].raceState" :time="players[3].finalTime" />
         </div>
       </div>
     </div>
@@ -178,218 +138,21 @@
 </style>
 
 <script>
-import { bindReplicant, formatTimer } from '../../util.js';
+import { bindReplicant } from '../../util.js';
+import { layoutMixin } from '../../layout.js';
 
 export default {
+  mixins: [layoutMixin(4)],
+
   created() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('obs') != null) {
-      this.showTelestrator = false;
-    }
-
-    bindReplicant.call(this, 'game');
-    bindReplicant.call(this, 'goal');
-    bindReplicant.call(this, 'platform');
-    bindReplicant.call(this, 'submitter');
-    bindReplicant.call(this, 'currentBoxart');
-
-    bindReplicant.call(this, 'timer');
-
-    bindReplicant.call(this, 'currentEventLogo');
     bindReplicant.call(this, 'round1', 'match1round');
     bindReplicant.call(this, 'round2', 'match2round');
-
-    for (let i = 0; i < 4; i++) {
-      bindReplicant.call(this, `player${i}name`);
-      bindReplicant.call(this, `player${i}pronouns`);
-      bindReplicant.call(this, `player${i}flag`);
-
-      bindReplicant.call(this, `player${i}twitch`);
-      // bindReplicant.call(this, `player${i}quality`)
-      bindReplicant.call(this, `player${i}volume`);
-      bindReplicant.call(this, `player${i}streamHidden`);
-
-      bindReplicant.call(this, `player${i}raceState`);
-      bindReplicant.call(this, `player${i}finalTime`);
-
-      bindReplicant.call(this, `player${i}crop`);
-      bindReplicant.call(this, `player${i}aspectratio`);
-    }
-
-    if (window.obsstudio && window.obsstudio.getControlLevel && window.obsstudio.getControlLevel != 0) {
-      window.obsstudio.getCurrentScene((scene) => {
-        if (!scene) {
-          this.visible = true;
-          return;
-        }
-
-        console.log('Start scene: ' + scene.name);
-        if (scene.name == '4 Player') {
-          this.visible = true;
-        }
-      });
-
-      window.addEventListener('obsSceneChanged', (event) => {
-        if (!event.detail) return;
-
-        console.log('Switched to scene ' + event.detail.name);
-        if (event.detail.name == '4 Player') {
-          this.visible = true;
-        } else {
-          this.visible = false;
-        }
-      });
-    } else {
-      this.visible = false;
-      setTimeout(() => {
-        this.visible = true;
-      }, 0);
-    }
-
-    document.addEventListener('keyup', (e) => {
-      if (e.key === 'Enter') {
-        this.visible = !this.visible;
-      }
-    });
-
-    let vue = this;
-    nodecg.listenFor('playSound', vue.playSound);
-  },
-
-  methods: {
-    playSound(data) {
-      nodecg.playSound(data.sound);
-    },
-  },
-
-  computed: {
-    timerText() {
-      return formatTimer(this.timer.ms, false, false);
-    },
-
-    player0() {
-      return {
-        name: this.player0name,
-        pronouns: this.player0pronouns,
-        flag: this.player0flag,
-        volume: this.player0volume,
-        raceState: this.player0raceState,
-        finalTime: this.player0finalTime,
-      };
-    },
-
-    player1() {
-      return {
-        name: this.player1name,
-        pronouns: this.player1pronouns,
-        flag: this.player1flag,
-        volume: this.player1volume,
-        raceState: this.player1raceState,
-        finalTime: this.player1finalTime,
-      };
-    },
-
-    player2() {
-      return {
-        name: this.player2name,
-        pronouns: this.player2pronouns,
-        flag: this.player2flag,
-        volume: this.player2volume,
-        raceState: this.player2raceState,
-        finalTime: this.player2finalTime,
-      };
-    },
-
-    player3() {
-      return {
-        name: this.player3name,
-        pronouns: this.player3pronouns,
-        flag: this.player3flag,
-        volume: this.player3volume,
-        raceState: this.player3raceState,
-        finalTime: this.player3finalTime,
-      };
-    },
   },
 
   data() {
     return {
-      game: '',
-      goal: '',
-      platform: '',
-      submitter: '',
-      currentBoxart: '',
-
-      currentEventLogo: {},
       round1: '',
       round2: '',
-
-      player0name: '',
-      player0pronouns: '',
-      player0flag: '',
-
-      player0twitch: '',
-      player0quality: null,
-      player0volume: 0,
-      player0streamHidden: false,
-
-      player0raceState: 'none',
-      player0finalTime: '',
-
-      player0crop: [0, 0, 0, 0],
-      player0aspectratio: false,
-
-      player1name: '',
-      player1pronouns: '',
-      player1flag: '',
-
-      player1twitch: '',
-      player1quality: null,
-      player1volume: 0,
-      player1streamHidden: false,
-
-      player1raceState: 'none',
-      player1finalTime: '',
-
-      player1crop: [0, 0, 0, 0],
-      player1aspectratio: false,
-
-      player2name: '',
-      player2pronouns: '',
-      player2flag: '',
-
-      player2twitch: '',
-      player2quality: null,
-      player2volume: 0,
-      player2streamHidden: false,
-
-      player2raceState: 'none',
-      player2finalTime: '',
-
-      player2crop: [0, 0, 0, 0],
-      player2aspectratio: false,
-
-      player3name: '',
-      player3pronouns: '',
-      player3flag: '',
-
-      player3twitch: '',
-      player3quality: null,
-      player3volume: 0,
-      player3streamHidden: false,
-
-      player3raceState: 'none',
-      player3finalTime: '',
-
-      player3crop: [0, 0, 0, 0],
-      player3aspectratio: false,
-
-      timer: {
-        ms: 0,
-      },
-
-      visible: false,
-      showTelestrator: true,
     };
   },
 };

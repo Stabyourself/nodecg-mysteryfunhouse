@@ -10,4 +10,5 @@ module.exports = function (nodecg) {
   require("./schedule");
   require("./card-api");
   require("./telestrator");
+  require("./replay");
 };
