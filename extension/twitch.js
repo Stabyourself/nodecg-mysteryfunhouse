@@ -81,4 +81,9 @@ fs.readFile(__dirname + "/twitch_token.json", "UTF-8").then((str) => {
         });
     });
   });
-});
+})
+  // without a token file there's no stream info updating, but everything else in the
+  // bundle has to keep working
+  .catch((err) => {
+    nodecg.log.error("twitch setup failed, stream info updating is off:", err.message);
+  });
