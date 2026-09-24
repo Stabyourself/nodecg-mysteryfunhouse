@@ -201,9 +201,9 @@ function init(container, playerCards, initialState) {
 
     controls = new PointerLockControls(camera, document.body);
 
-    document.addEventListener('click', function () {
-      controls.lock();
-    });
+    // document.addEventListener('click', function () {
+    //   controls.lock();
+    // });
 
     scene.add(controls.getObject());
 
