@@ -78,12 +78,16 @@ const BORDER_FADE = 300;
 // end events right after starting are from the last replay
 const END_GRACE = 1000;
 
-// LIVE/REPLAY borders, has to be above the videos
+const PARAMS = new URLSearchParams(window.location.search);
+
+// LIVE/REPLAY borders, has to be above the videos. same nodecg key as this page, in
+// case the server wants one
 const OVERLAY_NAME = 'Replay Overlay';
-const OVERLAY_PATH = '/bundles/nodecg-mysteryfunhouse/graphics/replay-overlay.html';
+const OVERLAY_KEY = PARAMS.get('key') ? `?key=${encodeURIComponent(PARAMS.get('key'))}` : '';
+const OVERLAY_PATH = `/bundles/nodecg-mysteryfunhouse/graphics/replay-overlay.html${OVERLAY_KEY}`;
 
 // &obsscene=... in the url, so layouts don't move each other's videos
-const OWN_SCENES = new URLSearchParams(window.location.search).getAll('obsscene');
+const OWN_SCENES = PARAMS.getAll('obsscene');
 
 // so two videos don't both create the overlay
 let overlayQueue = Promise.resolve();
