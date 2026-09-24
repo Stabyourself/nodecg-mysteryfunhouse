@@ -56,7 +56,7 @@ let twitchOptions = {
   channel: null,
   autoplay: true,
   muted: true,
-  parent: ['nodecg.mysteryfun.house', 'localhost'],
+  parent: ['nodecg-new.mysteryfun.house', 'nodecg.mysteryfun.house', 'localhost'],
   quality: 'auto',
   layout: 'video'
 };
