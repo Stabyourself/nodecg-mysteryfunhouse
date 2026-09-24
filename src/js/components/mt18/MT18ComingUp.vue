@@ -44,7 +44,6 @@
       </div>
     </div>
 
-    <AchievementManager />
   </v-app>
 </template>
 

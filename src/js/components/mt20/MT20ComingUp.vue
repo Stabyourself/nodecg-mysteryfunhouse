@@ -53,7 +53,6 @@
       </div>
     </div>
 
-    <AchievementManager />
     <Telestrator v-if="showTelestrator" />
   </v-app>
 </template>
@@ -196,6 +195,7 @@ $whiteBoxFont: 'Arvo', serif;
 
 <script>
 import { bindReplicant } from '../../util.js';
+import { onAir } from '../../layout.js';
 
 export default {
   methods: {
@@ -228,28 +228,14 @@ export default {
     bindReplicant.call(this, 'currentEventLogo');
     bindReplicant.call(this, 'schedule');
 
-    if (window.obsstudio && window.obsstudio.getControlLevel && window.obsstudio.getControlLevel != 0) {
+    // animate in when one of the &obsscene=... scenes goes on air, like the layouts
+    if (window.obsstudio && window.obsstudio.getCurrentScene) {
       window.obsstudio.getCurrentScene((scene) => {
-        if (!scene) {
-          this.visible = true;
-          return;
-        }
-
-        console.log('Start scene: ' + scene.name);
-        if (scene.name == 'Coming Up') {
-          this.visible = true;
-        }
+        this.visible = !scene || onAir(scene.name);
       });
 
       window.addEventListener('obsSceneChanged', (event) => {
-        if (!event.detail) return;
-
-        console.log('Switched to scene ' + event.detail.name);
-        if (event.detail.name == 'Coming Up') {
-          this.visible = true;
-        } else {
-          this.visible = false;
-        }
+        if (event.detail) this.visible = onAir(event.detail.name);
       });
     } else {
       this.visible = false;

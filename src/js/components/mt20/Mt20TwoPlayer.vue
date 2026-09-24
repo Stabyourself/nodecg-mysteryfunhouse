@@ -18,7 +18,6 @@
     </div>
 
 
-    <AchievementManager />
     <Telestrator v-if="showTelestrator"/>
   </div>
   </v-app>

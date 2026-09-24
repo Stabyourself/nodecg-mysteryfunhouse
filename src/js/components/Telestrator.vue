@@ -81,7 +81,8 @@
           </button>
         </div>
       </div>
-      <div class="handle"></div>
+      <!-- would show on stream, the toolbar still opens on hover in obs' interact window -->
+      <div v-if="!inObs" class="handle"></div>
     </div>
   </div>
 </template>
@@ -614,6 +615,8 @@ export default {
 
   data() {
     return {
+      // obs' browser source always defines this
+      inObs: !!window.obsstudio,
       colors: [
         '#ffff00',
         '#ff0000',

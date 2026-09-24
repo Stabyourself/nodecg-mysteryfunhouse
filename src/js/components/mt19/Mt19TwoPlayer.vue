@@ -37,7 +37,6 @@
       <mt19-logo-box :round="round" :timer="timerText" :logo="currentEventLogo" :visible="visible" />
     </div>
 
-    <AchievementManager />
     <Telestrator />
   </v-app>
 </template>

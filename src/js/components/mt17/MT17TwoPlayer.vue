@@ -142,7 +142,6 @@
       </span>
     </mt17-timer>
 
-    <AchievementManager></AchievementManager>
     <Telestrator></Telestrator>
   </v-app>
 </template>

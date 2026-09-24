@@ -23,7 +23,6 @@
       </div>
     </div>
 
-    <AchievementManager></AchievementManager>
     <Telestrator v-if="showTelestrator"/>
   </v-app>
 </template>

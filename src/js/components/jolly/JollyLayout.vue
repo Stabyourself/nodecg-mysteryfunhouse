@@ -46,29 +46,9 @@
       </template>
     </player-name>
 
-    <obs-video
-      scene="Player 1 Video"
-      :player="0"
-      :x="15"
-      :y="150"
-      :width="930"
-      :height="698"
-      :crop="player0crop"
-      :aspectratio="player0aspectratio"
-      :visible="!player0streamHidden"
-    ></obs-video>
+    <obs-video :player="players[0].number" :x="15" :y="150" :width="930" :height="698"></obs-video>
 
-    <obs-video
-      scene="Player 2 Video"
-      :player="1"
-      :x="975"
-      :y="150"
-      :width="930"
-      :height="698"
-      :crop="player1crop"
-      :aspectratio="player1aspectratio"
-      :visible="!player1streamHidden"
-    ></obs-video>
+    <obs-video :player="players[1].number" :x="975" :y="150" :width="930" :height="698"></obs-video>
 
     <player-done-slider
       style="top: 848px; left: 15px; width: 930px"
@@ -171,129 +151,9 @@
 </style>
 
 <script>
-import { bindReplicant, formatTimer } from '../../util.js';
+import { layoutMixin } from '../../layout.js';
 
 export default {
-  created() {
-    // in obs the telestrator is its own source
-    if (window.obsstudio) {
-      this.showTelestrator = false;
-    }
-
-    bindReplicant.call(this, 'game');
-    bindReplicant.call(this, 'goal');
-    bindReplicant.call(this, 'platform');
-    bindReplicant.call(this, 'submitter');
-    bindReplicant.call(this, 'currentBoxart');
-
-    bindReplicant.call(this, 'timer');
-
-    bindReplicant.call(this, 'round', 'match1round');
-
-    for (let i = 0; i < 2; i++) {
-      bindReplicant.call(this, `player${i}name`);
-      bindReplicant.call(this, `player${i}pronouns`);
-
-      bindReplicant.call(this, `player${i}twitch`);
-      // bindReplicant.call(this, `player${i}quality`)
-      bindReplicant.call(this, `player${i}volume`);
-      bindReplicant.call(this, `player${i}streamHidden`);
-      bindReplicant.call(this, `player${i}aspectratio`);
-
-      bindReplicant.call(this, `player${i}raceState`);
-      bindReplicant.call(this, `player${i}finalTime`);
-
-      bindReplicant.call(this, `player${i}crop`);
-    }
-
-    if (window.obsstudio && window.obsstudio.getControlLevel && window.obsstudio.getControlLevel != 0) {
-      window.obsstudio.getCurrentScene((scene) => {
-        if (!scene) {
-          this.visible = true;
-          return;
-        }
-
-        console.log('Start scene: ' + scene.name);
-        if (scene.name == '2 Player') {
-          this.visible = true;
-        }
-      });
-
-      window.addEventListener('obsSceneChanged', (event) => {
-        if (!event.detail) return;
-
-        console.log('Switched to scene ' + event.detail.name);
-        if (event.detail.name == '2 Player') {
-          this.visible = true;
-        } else {
-          this.visible = false;
-        }
-      });
-    } else {
-      this.visible = false;
-      setTimeout(() => {
-        this.visible = true;
-      }, 0);
-
-      document.addEventListener('keyup', (e) => {
-        if (e.key === 'Enter') {
-          this.visible = !this.visible;
-        }
-      });
-    }
-  },
-
-  computed: {
-    timerText() {
-      return formatTimer(this.timer.ms, false, false);
-    },
-  },
-
-  data() {
-    return {
-      showTelestrator: true,
-      game: '',
-      goal: '',
-      platform: '',
-      submitter: '',
-      currentBoxart: '',
-
-      round: '',
-
-      player0name: '',
-      player0pronouns: '',
-
-      player0twitch: '',
-      player0quality: null,
-      player0volume: 0,
-      player0streamHidden: false,
-
-      player0raceState: 'none',
-      player0finalTime: '',
-
-      player0crop: [0, 0, 0, 0],
-      player0aspectratio: false,
-
-      player1name: '',
-      player1pronouns: '',
-
-      player1twitch: '',
-      player1quality: null,
-      player1volume: 0,
-      player1streamHidden: false,
-
-      player1raceState: 'none',
-      player1finalTime: '',
-
-      player1crop: [0, 0, 0, 0],
-      player1aspectratio: false,
-
-      timer: {
-        ms: 0,
-      },
-
-      visible: false,
-    };
-  },
+  mixins: [layoutMixin(2)],
 };
 </script>

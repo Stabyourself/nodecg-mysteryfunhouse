@@ -82,7 +82,6 @@
       </div>
     </div>
 
-    <AchievementManager></AchievementManager>
     <Telestrator />
   </v-app>
 </template>

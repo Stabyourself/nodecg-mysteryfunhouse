@@ -20,7 +20,7 @@ const PLAYER_FIELDS = {
   finalTime: '',
 };
 
-function onAir(sceneName) {
+export function onAir(sceneName) {
   return !ownScenes.length || ownScenes.includes(sceneName);
 }
 

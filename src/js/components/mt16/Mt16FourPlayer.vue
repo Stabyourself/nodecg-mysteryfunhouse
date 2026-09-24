@@ -203,7 +203,6 @@
       </mt16-timer>
     </div>
 
-    <AchievementManager></AchievementManager>
   </v-app>
 </template>
 

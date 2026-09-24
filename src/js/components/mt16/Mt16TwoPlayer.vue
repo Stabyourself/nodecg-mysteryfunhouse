@@ -164,7 +164,6 @@
       </swipe>
     </mt16-timer>
 
-    <AchievementManager></AchievementManager>
   </v-app>
 </template>
 

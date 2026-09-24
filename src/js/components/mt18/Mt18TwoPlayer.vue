@@ -35,7 +35,6 @@
       <mt18-logo-box :round="round" :timer="timerText" :logo="currentEventLogo" :visible="visible"></mt18-logo-box>
     </div>
 
-    <AchievementManager />
     <Telestrator />
   </v-app>
 </template>

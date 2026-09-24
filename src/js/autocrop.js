@@ -83,21 +83,22 @@ function gradientProfiles(imageData) {
   const columns = new Float32Array(width);
   const rows = new Float32Array(height);
 
+  // columns[x] is the step between pixel x-1 and x, so a line's pos is exactly the crop value
+  // that cuts there (as an inset from the left/top, or as the right/bottom edge's coordinate)
   for (let y = LINE_SAMPLE_STEP; y < height - LINE_SAMPLE_STEP; y += LINE_SAMPLE_STEP) {
     const row = y * width;
 
-    for (let x = 1; x < width - 1; x++) {
-      columns[x] += gray[row + x + 1] - gray[row + x - 1];
+    for (let x = 1; x < width; x++) {
+      columns[x] += gray[row + x] - gray[row + x - 1];
     }
   }
 
-  for (let y = 1; y < height - 1; y++) {
+  for (let y = 1; y < height; y++) {
     const row = y * width;
     const prev = (y - 1) * width;
-    const next = (y + 1) * width;
 
     for (let x = LINE_SAMPLE_STEP; x < width - LINE_SAMPLE_STEP; x += LINE_SAMPLE_STEP) {
-      rows[y] += gray[next + x] - gray[prev + x];
+      rows[y] += gray[row + x] - gray[prev + x];
     }
   }
 

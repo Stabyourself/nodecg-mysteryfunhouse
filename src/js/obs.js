@@ -153,3 +153,23 @@ export function onObsReady(handler) {
 export function obsIdentified() {
   return identified;
 }
+
+// for requests that come in right as the page loads, before identify is done
+export function waitForObs(timeout) {
+  if (identified) return Promise.resolve();
+
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      readyHandlers.delete(ready);
+      reject(new Error(`obs-websocket not connected after ${timeout / 1000}s`));
+    }, timeout);
+
+    const ready = () => {
+      clearTimeout(timer);
+      readyHandlers.delete(ready);
+      resolve();
+    };
+
+    readyHandlers.add(ready);
+  });
+}

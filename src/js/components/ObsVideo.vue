@@ -122,9 +122,6 @@ export default {
     this.offReady = onObsReady(() => this.findTargets());
     this.offEvent = onObsEvent(this.onEvent);
 
-    // cropping dashboard needs a screenshot
-    nodecg.listenFor('requestPlayerFrame', this.sendFrame);
-
     this.follow(`player${n}replayBuffer`, this.onBuffer);
     this.follow(`player${n}replay`, this.onReplay);
 
@@ -153,7 +150,6 @@ export default {
     clearInterval(this.measureTimer);
     window.removeEventListener('load', this.measure);
     clearTimeout(this.endTimer);
-    nodecg.unlisten('requestPlayerFrame', this.sendFrame);
     nodecg.unlisten('requestVideoRects', this.announceRects);
 
     for (const [replicant, handler] of this.followed) {
@@ -204,23 +200,6 @@ export default {
         Date.now() - this.replayShownAt > END_GRACE
       ) {
         nodecg.sendMessage('replayEnded', { player: this.player, id: this.replayId });
-      }
-    },
-
-    async sendFrame(request) {
-      if (!this.inObs || request.player !== this.player) return;
-
-      try {
-        const { imageData } = await obsRequest('GetSourceScreenshot', {
-          sourceName: this.sceneName,
-          imageFormat: 'jpg',
-          imageCompressionQuality: 85,
-        });
-
-        nodecg.sendMessage('playerFrame', { player: this.player, imageData });
-      } catch (e) {
-        console.error(`[obs-video] ${this.sceneName} screenshot: ${e.message}`);
-        nodecg.sendMessage('playerFrame', { player: this.player, error: e.message });
       }
     },
 

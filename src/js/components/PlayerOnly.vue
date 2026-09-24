@@ -23,7 +23,14 @@
 
 <script>
 import { bindReplicant } from '../util.js';
-import { obsConnect, obsRequest, onObsEvent, onObsReady, OBS_INPUT_ACTIVE_EVENTS } from '../obs.js';
+import { obsConnect, obsRequest, onObsEvent, onObsReady, waitForObs, OBS_INPUT_ACTIVE_EVENTS } from '../obs.js';
+
+// obs says "not ready" while loading a scene collection
+const FIND_RETRIES = 10;
+const FIND_RETRY_DELAY = 1000;
+
+// less than the dashboard's 5s timeout
+const FRAME_CONNECT_WAIT = 4000;
 
 const twitchOptions = {
   channel: null,
@@ -50,6 +57,7 @@ export default {
     if (window.obsstudio) {
       obsConnect(OBS_INPUT_ACTIVE_EVENTS);
       onObsReady(this.findOwnSource);
+      nodecg.listenFor('requestPlayerFrame', this.sendFrame);
       onObsEvent((type, data) => {
         if (type === 'InputActiveStateChanged' && data.inputName === this.sourceName) {
           this.onAir = data.videoActive;
@@ -116,7 +124,36 @@ export default {
 
         console.error(`[player] no browser source in obs shows player.html?n=${this.playerNumber}`);
       } catch (e) {
+        // obs answers "not ready" while it's still loading the scene collection
+        if (e.message.includes('not ready') && this.findRetries++ < FIND_RETRIES) {
+          setTimeout(this.findOwnSource, FIND_RETRY_DELAY);
+          return;
+        }
+
         console.error(`[player] finding own source: ${e.message}`);
+      }
+    },
+
+    // the cropping dashboard needs a screenshot, and unlike the layouts we're loaded and
+    // connected even when obs starts on a scene without players in it
+    async sendFrame(request) {
+      if (request.player !== this.playerNumber) return;
+
+      try {
+        await waitForObs(FRAME_CONNECT_WAIT);
+        if (!this.sourceName) await this.findOwnSource();
+        if (!this.sourceName) throw new Error('could not find own browser source');
+
+        const { imageData } = await obsRequest('GetSourceScreenshot', {
+          sourceName: this.sourceName,
+          imageFormat: 'jpg',
+          imageCompressionQuality: 85,
+        });
+
+        nodecg.sendMessage('playerFrame', { player: this.playerNumber, imageData });
+      } catch (e) {
+        console.error(`[player] screenshot: ${e.message}`);
+        nodecg.sendMessage('playerFrame', { player: this.playerNumber, error: e.message });
       }
     },
 
@@ -145,6 +182,7 @@ export default {
       onAir: true,
       obsMuted: false,
       sourceName: null,
+      findRetries: 0,
     };
   },
 };

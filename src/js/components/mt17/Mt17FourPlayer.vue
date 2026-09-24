@@ -245,7 +245,6 @@
       </mt17-timer>
     </div>
 
-    <AchievementManager></AchievementManager>
   </v-app>
 </template>
 

@@ -23,7 +23,6 @@
       <markdown-it-vue :content="topText"></markdown-it-vue>
     </div>
 
-    <AchievementManager></AchievementManager>
   </v-app>
 </template>
 
