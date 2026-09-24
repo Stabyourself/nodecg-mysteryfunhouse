@@ -364,6 +364,10 @@ export default {
       for (const target of targets) {
         let overlayItemId;
 
+        // an overlays scene in here brings its own, then it is up to that scene to sit
+        // above the videos
+        if (await this.overlayIsNested(target.sceneName)) continue;
+
         try {
           ({ sceneItemId: overlayItemId } = await obsRequest('GetSceneItemId', {
             sceneName: target.sceneName,
@@ -396,6 +400,28 @@ export default {
 
         await this.placeByLive(target, overlayItemId, true);
       }
+    },
+
+    // is the overlay in one of the scenes nested in this one
+    async overlayIsNested(sceneName) {
+      try {
+        const { sceneItems } = await obsRequest('GetSceneItemList', { sceneName });
+
+        for (const item of sceneItems) {
+          if (item.sourceType !== 'OBS_SOURCE_TYPE_SCENE' || item.isGroup) continue;
+
+          try {
+            await obsRequest('GetSceneItemId', { sceneName: item.sourceName, sourceName: OVERLAY_NAME });
+            return true;
+          } catch (e) {
+            // not in this one
+          }
+        }
+      } catch (e) {
+        console.error(`[obs-video] looking through ${sceneName}: ${e.message}`);
+      }
+
+      return false;
     },
 
     // put an item right above/below the live video
