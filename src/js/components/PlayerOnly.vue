@@ -32,6 +32,10 @@ const FIND_RETRY_DELAY = 1000;
 // less than the dashboard's 5s timeout
 const FRAME_CONNECT_WAIT = 4000;
 
+// obs hides the page while the source isn't shown anywhere, twitch pauses then and doesn't
+// start again by itself
+const RESUME_CHECK = 2000;
+
 const twitchOptions = {
   channel: null,
   autoplay: true,
@@ -80,9 +84,24 @@ export default {
     if (this.url) {
       this.createPlayer();
     }
+
+    window.addEventListener('obsSourceVisibleChanged', this.resume);
+    document.addEventListener('visibilitychange', this.resume);
+    this.resumeTimer = setInterval(this.resume, RESUME_CHECK);
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('obsSourceVisibleChanged', this.resume);
+    document.removeEventListener('visibilitychange', this.resume);
+    clearInterval(this.resumeTimer);
   },
 
   methods: {
+    resume() {
+      if (document.hidden || !this.player) return;
+      if (this.player.isPaused() && !this.player.getEnded()) this.player.play();
+    },
+
     createPlayer() {
       if (!this.url) return;
 

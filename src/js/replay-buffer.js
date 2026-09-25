@@ -40,6 +40,9 @@ function sync() {
   // runs again once connected
   if (!obsIdentified()) return;
 
+  // pages with only some buffers loaded would set a shorter one and restart it again
+  if (buffers.filter((buffer) => buffer != null).length < PLAYERS) return;
+
   const seconds = Math.ceil(Math.max(1, ...buffers.filter((buffer) => buffer > 0))) + EXTRA_SECONDS;
 
   queue = queue
