@@ -46,8 +46,8 @@ function password() {
   return stored('obsWsPassword', 'obspw') || '';
 }
 
-// 4 = Scenes, 8 = Inputs, 128 = SceneItems, 256 = MediaInputs, 512 = Vendors
-const SUBSCRIPTIONS = 4 | 8 | 128 | 256 | 512;
+// 4 = Scenes, 8 = Inputs, 64 = Outputs, 128 = SceneItems, 256 = MediaInputs, 512 = Vendors
+const SUBSCRIPTIONS = 4 | 8 | 64 | 128 | 256 | 512;
 
 // high volume events have to be asked for, see obsConnect
 let extraSubscriptions = 0;

@@ -43,22 +43,13 @@
 
 <script>
 import { obsConnect, obsRequest, onObsEvent, onObsReady } from '../obs.js';
+import { saveReplay, startReplayBuffer } from '../replay-buffer.js';
 
 // player pages are 1080p, same as the crop values
 const SOURCE_WIDTH = 1920;
 const SOURCE_HEIGHT = 1080;
 const CROP_SPACE_WIDTH = 1920;
 const CROP_SPACE_HEIGHT = 1080;
-
-// replay buffer is a source record filter on the player's browser source
-const SOURCE_RECORD_VENDOR = 'source-record';
-const SOURCE_RECORD_FILTER = 'source_record_filter';
-const RECORD_MODE_NONE = 0;
-
-// source record doesn't tell us when or where it saved, so every replay gets its own file
-// (reusing a name doesn't work, obs keeps the old file around until the new one is done)
-// mp4 because mkv never reports a length
-const REPLAY_FORMAT = 'mp4';
 
 const OPEN_TIMEOUT = 6000;
 const OPEN_POLL = 100;
@@ -118,11 +109,12 @@ export default {
     }
 
     obsConnect();
+    startReplayBuffer();
 
     this.offReady = onObsReady(() => this.findTargets());
     this.offEvent = onObsEvent(this.onEvent);
 
-    this.follow(`player${n}replayBuffer`, this.onBuffer);
+    this.follow(`player${n}replayBuffer`, (value) => (this.replayBuffer = Number(value) || 1));
     this.follow(`player${n}replay`, this.onReplay);
 
     // see publishAudible
@@ -244,14 +236,15 @@ export default {
 
         this.liveInput = await this.findLiveInput();
         this.targets = targets;
+        ({ baseWidth: this.baseWidth, baseHeight: this.baseHeight } = await obsRequest('GetVideoSettings'));
         const { currentProgramSceneName } = await obsRequest('GetCurrentProgramScene');
         this.setProgramScene(currentProgramSceneName);
         await this.readAudio();
+        await this.removeSourceRecord();
         await this.ensureReplay(targets);
         await (overlayQueue = overlayQueue.then(() => this.ensureOverlay(targets)));
 
         this.targets = targets;
-        await this.syncBuffer();
         await this.apply();
       } catch (e) {
         console.error(`[obs-video] ${this.sceneName} lookup: ${e.message}`);
@@ -265,7 +258,7 @@ export default {
         const browser = sceneItems.find((item) => item.inputKind === 'browser_source');
 
         if (!browser) {
-          console.error(`[obs-video] ${this.sceneName} has no browser source in it, so it cannot be replayed`);
+          console.error(`[obs-video] ${this.sceneName} has no browser source in it, so its audio can't be read`);
           return null;
         }
 
@@ -278,7 +271,7 @@ export default {
 
     // add the replay to every scene the video is in, hidden and right below the video
     async ensureReplay(targets) {
-      if (!targets.length || !this.liveInput) return;
+      if (!targets.length) return;
 
       let exists = true;
       try {
@@ -442,7 +435,7 @@ export default {
         height: transform.boundsHeight,
       });
 
-      const replay = this.replayShown && this.pip === 1 && !this.bordersGone ? rect(this.transform) : null;
+      const replay = this.replayShown && this.pip === 1 && !this.bordersGone ? rect(this.replayTransform) : null;
       this.announcedReplay = !!replay;
 
       nodecg.sendMessage('videoRects', {
@@ -452,75 +445,16 @@ export default {
       });
     },
 
-    bufferSettings() {
-      return {
-        record_mode: RECORD_MODE_NONE,
-        replay_buffer: true,
-        replay_duration: this.replayBuffer,
-        path: this.recordDirectory,
-        rec_format: REPLAY_FORMAT,
-        // file name is set per replay
-      };
-    },
-
-    // only when something changed, changing the duration restarts the buffer
-    async syncBuffer() {
-      if (!this.liveInput || !this.targets.some((target) => target.replayItemId != null)) return;
+    // replays used to come from a source record filter on the player, which keeps encoding
+    // as long as it's there
+    async removeSourceRecord() {
+      if (!this.liveInput) return;
 
       try {
-        // same folder as obs recordings
-        if (!this.recordDirectory) {
-          ({ recordDirectory: this.recordDirectory } = await obsRequest('GetRecordDirectory'));
-        }
-
-        const filterSettings = this.bufferSettings();
-        const serialized = JSON.stringify(filterSettings);
-        if (serialized === this.syncedBuffer) return;
-
-        let current;
-        try {
-          current = await obsRequest('GetSourceFilter', { sourceName: this.liveInput, filterName: this.bufferName });
-        } catch (e) {
-          current = null;
-        }
-
-        if (current) {
-          // source record only reads these when the buffer starts, so restart it
-          const restart = ['rec_format', 'path'].some((key) => current.filterSettings[key] !== filterSettings[key]);
-
-          if (restart) {
-            await obsRequest('SetSourceFilterSettings', {
-              sourceName: this.liveInput,
-              filterName: this.bufferName,
-              filterSettings: { ...filterSettings, replay_buffer: false },
-            });
-          }
-
-          await obsRequest('SetSourceFilterSettings', {
-            sourceName: this.liveInput,
-            filterName: this.bufferName,
-            filterSettings,
-          });
-        } else {
-          await obsRequest('CreateSourceFilter', {
-            sourceName: this.liveInput,
-            filterName: this.bufferName,
-            filterKind: SOURCE_RECORD_FILTER,
-            filterSettings,
-          });
-        }
-
-        this.syncedBuffer = serialized;
+        await obsRequest('RemoveSourceFilter', { sourceName: this.liveInput, filterName: this.bufferName });
       } catch (e) {
-        console.error(
-          `[obs-video] ${this.bufferName} on ${this.liveInput} (is the Source Record plugin installed?): ${e.message}`
-        );
+        // already gone
       }
-    },
-
-    onBuffer(value) {
-      this.replayBuffer = Number(value) || 1;
-      this.syncBuffer();
     },
 
     async mediaAction(action) {
@@ -530,8 +464,9 @@ export default {
       });
     },
 
-    // keep trying until the file is there and complete, then pause it at the start
-    async playFromStart(file, savedAt) {
+    // keep trying until the file is open, then pause it at the last `length` ms
+    // (obs keeps the longest buffer of all players), returns how long it will play
+    async openLast(file, savedAt, length) {
       let retryAt = Date.now() + OPEN_RETRY;
       let retries = 0;
       let status = {};
@@ -541,9 +476,10 @@ export default {
         const { mediaState, mediaDuration } = status;
 
         if (mediaState === 'OBS_MEDIA_STATE_PLAYING' && mediaDuration > 0) {
+          const start = Math.max(0, mediaDuration - length);
           await this.mediaAction('PAUSE');
-          await obsRequest('SetMediaInputCursor', { inputName: this.replayName, mediaCursor: 0 });
-          return mediaDuration;
+          await obsRequest('SetMediaInputCursor', { inputName: this.replayName, mediaCursor: start });
+          return mediaDuration - start;
         }
 
         // retry if it failed or opened a half written file (playing but no length)
@@ -598,25 +534,12 @@ export default {
         // take down a replay that's still showing
         if (this.replayShown) await this.showReplay(false);
 
-        // new file for every replay
-        const fileName = `${this.replayName} ${replay.id}`;
-        const file = `${this.recordDirectory}/${fileName}.${REPLAY_FORMAT}`;
-        await obsRequest('SetSourceFilterSettings', {
-          sourceName: this.liveInput,
-          filterName: this.bufferName,
-          filterSettings: { replay_filename_formatting: fileName },
-        });
+        // the recording is the whole program, remember where the video was on it
+        this.replayRect = this.transform;
 
+        const file = await saveReplay();
         const savedAt = Date.now();
-        const { responseData } = await obsRequest('CallVendorRequest', {
-          vendorName: SOURCE_RECORD_VENDOR,
-          requestType: 'replay_buffer_save',
-          requestData: { source: this.liveInput, filter: this.bufferName },
-        });
-
-        if (!responseData.success) {
-          throw new Error(`${this.bufferName} did not save${responseData.error ? `: ${responseData.error}` : ''}`);
-        }
+        if (this.replayId !== replay.id) return;
 
         // reset speed in case it's still on slowmo from before
         await obsRequest('SetInputSettings', {
@@ -628,8 +551,12 @@ export default {
         await this.showReplay(true);
 
         // still hidden under the live at this point
-        const playTime = await this.playFromStart(file, savedAt);
+        const playTime = await this.openLast(file, savedAt, this.replayBuffer * 1000);
         if (this.replayId !== replay.id) return;
+
+        // the file can be smaller than the canvas (output scaling), crop to match
+        await this.readReplaySize();
+        await this.placeReplay();
 
         // give the replay a moment to show up before moving the live away
         await sleep(REPLAY_SETTLE);
@@ -676,23 +603,52 @@ export default {
       await this.showReplay(false);
     },
 
+    async readReplaySize() {
+      const target = this.targets.find((target) => target.replayItemId != null);
+      if (!target) return;
+
+      try {
+        const { sceneItemTransform } = await obsRequest('GetSceneItemTransform', {
+          sceneName: target.sceneName,
+          sceneItemId: target.replayItemId,
+        });
+
+        if (sceneItemTransform.sourceWidth > 0 && sceneItemTransform.sourceHeight > 0) {
+          this.replayWidth = sceneItemTransform.sourceWidth;
+          this.replayHeight = sceneItemTransform.sourceHeight;
+        }
+      } catch (e) {
+        console.error(`[obs-video] ${this.replayName} size: ${e.message}`);
+      }
+    },
+
+    async placeReplay() {
+      for (const target of this.targets) {
+        if (target.replayItemId == null) continue;
+
+        try {
+          await obsRequest('SetSceneItemTransform', {
+            sceneName: target.sceneName,
+            sceneItemId: target.replayItemId,
+            sceneItemTransform: this.replayTransform,
+          });
+        } catch (e) {
+          console.error(`[obs-video] ${this.replayName} in ${target.sceneName}: ${e.message}`);
+        }
+      }
+    },
+
     async showReplay(shown) {
       this.replayShown = shown;
       if (shown) this.replayShownAt = Date.now();
       this.announceRects();
 
+      if (shown) await this.placeReplay();
+
       for (const target of this.targets) {
         if (target.replayItemId == null) continue;
 
         try {
-          if (shown) {
-            await obsRequest('SetSceneItemTransform', {
-              sceneName: target.sceneName,
-              sceneItemId: target.replayItemId,
-              sceneItemTransform: this.transform,
-            });
-          }
-
           await obsRequest('SetSceneItemEnabled', {
             sceneName: target.sceneName,
             sceneItemId: target.replayItemId,
@@ -732,7 +688,7 @@ export default {
       if (this.audibleRep.value !== audible) this.audibleRep.value = audible;
     },
 
-    // no replay audio for now, source record 0.4.8 records silence anyway
+    // no replay audio, the recording has the whole program mix in it
     // (obs monitors muted sources too, so turn monitoring off as well)
     async muteReplay() {
       try {
@@ -818,7 +774,7 @@ export default {
             await obsRequest('SetSceneItemTransform', {
               sceneName: target.sceneName,
               sceneItemId: target.replayItemId,
-              sceneItemTransform: this.transform,
+              sceneItemTransform: this.replayTransform,
             });
 
             await obsRequest('SetSceneItemEnabled', {
@@ -929,6 +885,29 @@ export default {
       };
     },
 
+    // the replay file is the whole program, cut out where the live was when it was saved
+    replayTransform() {
+      const rect = this.replayRect || this.transform;
+      const baseWidth = this.baseWidth || SOURCE_WIDTH;
+      const baseHeight = this.baseHeight || SOURCE_HEIGHT;
+      const toFileX = (this.replayWidth || baseWidth) / baseWidth;
+      const toFileY = (this.replayHeight || baseHeight) / baseHeight;
+      const crop = (value, scale) => Math.max(0, Math.round(value * scale));
+
+      return {
+        positionX: rect.positionX,
+        positionY: rect.positionY,
+        boundsType: 'OBS_BOUNDS_STRETCH',
+        boundsAlignment: 0,
+        boundsWidth: rect.boundsWidth,
+        boundsHeight: rect.boundsHeight,
+        cropLeft: crop(rect.positionX, toFileX),
+        cropRight: crop(baseWidth - rect.positionX - rect.boundsWidth, toFileX),
+        cropTop: crop(rect.positionY, toFileY),
+        cropBottom: crop(baseHeight - rect.positionY - rect.boundsHeight, toFileY),
+      };
+    },
+
     // live goes to the bottom corner of the slot that's closer to the middle of the screen
     liveTransform() {
       const full = this.transform;
@@ -1007,7 +986,11 @@ export default {
       measuredX: 0,
       measuredY: 0,
       liveInput: null,
-      recordDirectory: null,
+      baseWidth: 0,
+      baseHeight: 0,
+      replayRect: null,
+      replayWidth: 0,
+      replayHeight: 0,
       replayBuffer: 15,
       replayId: 0,
       replayShown: false,
