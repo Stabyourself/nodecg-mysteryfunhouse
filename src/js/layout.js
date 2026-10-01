@@ -52,7 +52,7 @@ export function layoutMixin(playerCount) {
       nodecg.listenFor('playSound', this.playSound);
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
       window.removeEventListener('obsSceneChanged', this.onSceneChanged);
       document.removeEventListener('keyup', this.onKey);
       nodecg.unlisten('playSound', this.playSound);

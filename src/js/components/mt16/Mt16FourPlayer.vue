@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <graphic-app>
     <player-name
       :visible="visible"
       pronoun-h="40"
@@ -203,7 +203,7 @@
       </mt16-timer>
     </div>
 
-  </v-app>
+  </graphic-app>
 </template>
 
 <style lang="scss" scoped>

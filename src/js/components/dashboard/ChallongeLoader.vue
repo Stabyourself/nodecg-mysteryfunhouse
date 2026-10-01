@@ -3,9 +3,9 @@
     <v-container>
       <p>
         Enter a challonge match ID to import those players.
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon color="primary" dark v-bind="attrs" v-on="on"> mdi-help-circle </v-icon>
+        <v-tooltip location="bottom">
+          <template v-slot:activator="{ props }">
+            <v-icon color="primary" icon="mdi-help-circle" v-bind="props"></v-icon>
           </template>
           <span>The match ID of any race is the tiny number left of it!</span>
         </v-tooltip>
@@ -23,7 +23,7 @@
         @focus="$event.target.select()"
       />
 
-      <v-row class="mx-auto mt-4" dense>
+      <v-row class="mx-auto mt-4" density="compact">
         <v-col>
           <v-btn
             color="green"
@@ -49,8 +49,8 @@
         </v-col>
       </v-row>
 
-      <span v-if="error" class="error--text">{{ error }}</span>
-      <span v-if="success" class="success--text">{{ success }}</span>
+      <span v-if="error" class="text-error">{{ error }}</span>
+      <span v-if="success" class="text-success">{{ success }}</span>
     </v-container>
   </v-app>
 </template>

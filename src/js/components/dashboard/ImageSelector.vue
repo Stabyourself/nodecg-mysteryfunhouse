@@ -2,16 +2,15 @@
   <v-item-group
     :key="itemGroup"
     v-model="selected"
-    @change="select"
-    active-class="active"
+    @update:model-value="select"
   >
-    <v-container>
-      <v-row align="center">
+    <v-container fluid>
+      <v-row class="align-center">
         <v-col v-for="image in imagesReversed" :key="image.url">
-          <v-item v-slot="{ active, toggle }">
-            <div class="select-img-wrap" @click="toggle">
+          <v-item v-slot="{ isSelected, toggle }">
+            <div class="select-img-wrap" :class="{ active: isSelected }" @click="toggle">
               <img
-                :class="{ active: active }"
+                :class="{ active: isSelected }"
                 class="select-img"
                 :src="image.url"
               />
@@ -46,21 +45,22 @@ export default {
   },
 
   computed: {
+    // newest first. a copy, the list itself belongs to the assets replicant
     imagesReversed() {
-      return this.images.reverse();
+      return [...this.images].reverse();
     },
   },
 
   methods: {
     select() {
-      this.value = this.images[this.selected];
+      this.value = this.imagesReversed[this.selected];
     },
 
     updateSelection() {
       this.itemGroup++; // vuetify bug workaround
 
       if (this.value != null) {
-        for (let [i, image] of this.images.entries()) {
+        for (let [i, image] of this.imagesReversed.entries()) {
           if (image.url == this.value.url) {
             this.selected = i;
             return;

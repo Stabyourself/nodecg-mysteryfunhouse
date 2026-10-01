@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <graphic-app>
     <!-- <video width="1920" autoplay loop muted>
             <source src="video/waiting_screen_back.mp4">
         </video> -->
@@ -25,29 +25,29 @@
         <div class="vcr-osd-layer vcr-osd-base">
           <div class="vcr-osd-play"></div>
           <div class="vcr-osd-text">
-            <markdown-it-vue
+            <markdown-text
               v-for="(line, i) in topTextLines"
               :key="i"
               class="vcr-osd-line"
-              :content="line"></markdown-it-vue>
+              :content="line"></markdown-text>
           </div>
         </div>
         <!-- copy of the text that is only visible inside the rolling distortion band -->
         <div class="vcr-osd-layer vcr-osd-glitch" aria-hidden="true">
           <div class="vcr-osd-play"></div>
           <div class="vcr-osd-text">
-            <markdown-it-vue
+            <markdown-text
               v-for="(line, i) in topTextLines"
               :key="i"
               class="vcr-osd-line"
-              :content="line"></markdown-it-vue>
+              :content="line"></markdown-text>
           </div>
         </div>
       </div>
     </transition>
 
     <Telestrator v-if="showTelestrator" />
-  </v-app>
+  </graphic-app>
 </template>
 
 <style lang="scss">
@@ -207,7 +207,7 @@
 .vcr-osd-leave-active {
   transition: opacity 0.15s steps(3);
 }
-.vcr-osd-enter,
+.vcr-osd-enter-from,
 .vcr-osd-leave-to {
   opacity: 0;
 }
@@ -215,16 +215,11 @@
 
 <script>
 import { bindReplicant } from '../../util.js';
-import MarkdownItVue from 'markdown-it-vue';
 
 const ghostGames = nodecg.Replicant('assets:ghostGames');
 const lastVideos = [];
 
 export default {
-  components: {
-    MarkdownItVue,
-  },
-
   computed: {
     // every newline in the dashboard field is its own line element, rendered as
     // inline markdown on its own

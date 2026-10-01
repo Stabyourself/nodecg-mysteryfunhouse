@@ -50,6 +50,7 @@
 </style>
 
 <script>
+import { markRaw } from 'vue';
 import { bindReplicant } from '../util.js';
 
 let twitchOptions = {
@@ -81,7 +82,7 @@ export default {
     }
   },
 
-  unmounted() {
+  beforeUnmount() {
     this.$refs.player.innerHTML = '';
   },
 
@@ -98,7 +99,8 @@ export default {
       let embed = new Twitch.Embed(this.$refs.player, twitchOptions);
 
       embed.addEventListener(Twitch.Embed.READY, () => {
-        this.player = embed.getPlayer();
+        // twitch's own object, vue must not wrap it
+        this.player = markRaw(embed.getPlayer());
       });
 
       embed.addEventListener(Twitch.Embed.PLAYING, () => {
@@ -191,6 +193,8 @@ export default {
   },
 
   props: ['url', 'volume', 'playerNumber', 'crop', 'quality', 'opacity', 'width', 'height', 'aspectratio'],
+
+  emits: ['playing'],
 
   data() {
     return {

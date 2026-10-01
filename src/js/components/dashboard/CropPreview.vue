@@ -6,8 +6,16 @@
         {{ name || `Player ${player + 1}` }}
       </span>
 
-      <v-btn icon x-small :loading="waitingForFrame" title="New frame" @click.stop="requestFrame">
-        <v-icon small>mdi-camera</v-icon>
+      <v-btn
+        icon
+        size="x-small"
+        density="compact"
+        variant="text"
+        :loading="waitingForFrame"
+        title="New frame"
+        @click.stop="requestFrame"
+      >
+        <v-icon size="16" icon="mdi-camera"></v-icon>
       </v-btn>
     </div>
 
@@ -19,10 +27,10 @@
     </div>
 
     <div class="crop-preview-values">
-      <span><v-icon x-small>mdi-arrow-left</v-icon>{{ crop[0] }}</span>
-      <span><v-icon x-small>mdi-arrow-right</v-icon>{{ crop[1] }}</span>
-      <span><v-icon x-small>mdi-arrow-up</v-icon>{{ crop[2] }}</span>
-      <span><v-icon x-small>mdi-arrow-down</v-icon>{{ crop[3] }}</span>
+      <span><v-icon size="12" icon="mdi-arrow-left"></v-icon>{{ crop[0] }}</span>
+      <span><v-icon size="12" icon="mdi-arrow-right"></v-icon>{{ crop[1] }}</span>
+      <span><v-icon size="12" icon="mdi-arrow-up"></v-icon>{{ crop[2] }}</span>
+      <span><v-icon size="12" icon="mdi-arrow-down"></v-icon>{{ crop[3] }}</span>
     </div>
   </div>
 </template>
@@ -42,8 +50,8 @@
 
   &.selected {
     cursor: default;
-    border-color: #00bebe;
-    background: rgba(0, 190, 190, 0.08);
+    border-color: rgb(var(--v-theme-primary));
+    background: rgba(var(--v-theme-primary), 0.08);
   }
 }
 
@@ -77,7 +85,7 @@
   background: rgba(255, 255, 255, 0.15);
 
   .selected & {
-    background: #00bebe;
+    background: rgb(var(--v-theme-primary));
     color: #000;
   }
 }
@@ -114,7 +122,7 @@
 // so everything inside it is exactly what stays visible
 .crop-preview-box {
   position: absolute;
-  box-shadow: 0 0 0 2px #00bebe, 0 0 0 3px rgba(0, 0, 0, 0.7), 0 0 0 9999px rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 2px rgb(var(--v-theme-primary)), 0 0 0 3px rgba(0, 0, 0, 0.7), 0 0 0 9999px rgba(255, 255, 255, 0.6);
   pointer-events: none;
 }
 
@@ -137,6 +145,8 @@ const FRAME_TIMEOUT = 5000;
 export default {
   props: ['player', 'selected'],
 
+  emits: ['select'],
+
   created() {
     bindReplicant.call(this, 'crop', `player${this.player}crop`);
     bindReplicant.call(this, 'name', `player${this.player}name`);
@@ -149,7 +159,7 @@ export default {
     this.requestFrame();
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     nodecg.unlisten('playerFrame', this.frameReceived);
     clearTimeout(this.frameTimer);
   },

@@ -18,7 +18,7 @@
           </div>
 
           <div class="audio">
-            <v-icon v-if="player.volume > 0"> mdi-volume-high </v-icon>
+            <i v-if="player.volume > 0" aria-hidden="true" class="v-icon notranslate mdi mdi-volume-high theme--dark"></i>
           </div>
         </div>
       </swipe>
@@ -64,7 +64,7 @@ $whiteBoxFont: 'Arvo', serif;
       0px 0px 3px black,
       0px 0px 3px black,
       0px 0px 3px black;
-    background-image: url('../../dist/img/mt19_rope.png');
+    background-image: url('/bundles/nodecg-mysteryfunhouse/dist/img/mt19_rope.png');
     background-repeat: repeat-x;
     background-size: auto 100%;
     transform: translateY(3px);
@@ -78,7 +78,7 @@ $whiteBoxFont: 'Arvo', serif;
   }
 
   .name-box {
-    background-image: url('../../dist/img/mt19_nameback.jpg');
+    background-image: url('/bundles/nodecg-mysteryfunhouse/dist/img/mt19_nameback.jpg');
     background-repeat: repeat-x;
     background-size: auto 100%;
     display: flex;

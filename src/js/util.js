@@ -1,5 +1,5 @@
-var clone = require("clone");
-var throttle = require("lodash/throttle");
+import clone from "clone";
+import throttle from "lodash/throttle";
 
 // how long we wait for our own write to come back
 const IN_FLIGHT_TIMEOUT = 5000;
@@ -9,8 +9,9 @@ const IN_FLIGHT_TIMEOUT = 5000;
 // an old echo ("t" arriving after we already sent "test") doesn't overwrite what you typed
 // throttleWait only limits streams of changes (dragging), the last value always goes out
 export function bindReplicant(vueName, replicantName = vueName, throttleWait = 100) {
+  // clone: nodecg gets plain values, never vue's reactive proxies
   const replicant = nodecg.Replicant(replicantName, {
-    defaultValue: this[vueName],
+    defaultValue: clone(this[vueName]),
   });
 
   let lastSeen;
@@ -68,7 +69,8 @@ export function bindReplicant(vueName, replicantName = vueName, throttleWait = 1
 
     replicant.on("change", read);
 
-    this.$watch(vueName, sendThrottled);
+    // deep, so changing an array/object in place (crop[i] = ...) goes out too
+    this.$watch(vueName, sendThrottled, { deep: true });
   });
 }
 

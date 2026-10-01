@@ -11,26 +11,26 @@
           Load from match ID
         </v-btn>
 
-        <label class="v-label v-label--active theme--dark" style="font-size: 12px">Wait Screen state</label>
+        <label class="field-label">Wait Screen state</label>
 
         <v-btn
           color="grey"
           block
-          small
+          size="small"
           class="mt-2 mb-2"
-          :outlined="waitScreenState !== 'ghost'"
+          :variant="waitScreenState !== 'ghost' ? 'outlined' : 'elevated'"
           @click="waitScreenState = 'ghost'"
         >
           Idle
         </v-btn>
 
-        <v-row dense class="mb-1">
+        <v-row density="compact" class="mb-1">
           <v-col>
             <v-btn
               color="blue"
               block
-              small
-              :outlined="waitScreenState !== 'cards1'"
+              size="small"
+              :variant="waitScreenState !== 'cards1' ? 'outlined' : 'elevated'"
               @click="waitScreenState = 'cards1'"
             >
               Player Cards 1
@@ -40,8 +40,8 @@
             <v-btn
               color="blue"
               block
-              small
-              :outlined="waitScreenState !== 'cards2'"
+              size="small"
+              :variant="waitScreenState !== 'cards2' ? 'outlined' : 'elevated'"
               @click="waitScreenState = 'cards2'"
             >
               Player Cards 2
@@ -49,13 +49,13 @@
           </v-col>
         </v-row>
 
-        <v-row dense class="mb-3">
+        <v-row density="compact" class="mb-3">
           <v-col>
             <v-btn
               color="purple"
               block
-              small
-              :outlined="waitScreenState !== 'paths1'"
+              size="small"
+              :variant="waitScreenState !== 'paths1' ? 'outlined' : 'elevated'"
               @click="waitScreenState = 'paths1'"
             >
               Tournament Paths 1
@@ -65,8 +65,8 @@
             <v-btn
               color="purple"
               block
-              small
-              :outlined="waitScreenState !== 'paths2'"
+              size="small"
+              :variant="waitScreenState !== 'paths2' ? 'outlined' : 'elevated'"
               @click="waitScreenState = 'paths2'"
             >
               Tournament Paths 2
@@ -78,11 +78,7 @@
 
         <v-divider class="my-7"></v-divider>
 
-        <label
-          class="v-label v-label--active theme--dark"
-          style="font-size: 12px"
-          >Event Logo</label
-        >
+        <label class="field-label">Event Logo</label>
         <div
           class="select-img-wrap mb-3"
           nodecg-dialog="event-logo-select-dialog"
@@ -105,11 +101,9 @@
             <li v-for="(player, i) of playerInfo" :key="player.name">
               Player {{ i + 1 }}:
               <strong>{{ player.name }}</strong>
-              <v-tooltip top v-if="!player.career">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-icon color="warning" dark v-bind="attrs" v-on="on">
-                    mdi-alert
-                  </v-icon>
+              <v-tooltip location="top" v-if="!player.career">
+                <template v-slot:activator="{ props }">
+                  <v-icon color="warning" icon="mdi-alert" v-bind="props"></v-icon>
                 </template>
                 <span
                   >No career info! (This is normal for new participants)</span

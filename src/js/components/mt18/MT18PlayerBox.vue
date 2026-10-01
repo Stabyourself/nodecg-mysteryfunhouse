@@ -18,7 +18,7 @@
           </div>
 
           <div class="audio">
-            <v-icon v-if="player.volume > 0"> mdi-volume-high </v-icon>
+            <i v-if="player.volume > 0" aria-hidden="true" class="v-icon notranslate mdi mdi-volume-high theme--dark"></i>
           </div>
         </div>
       </swipe>

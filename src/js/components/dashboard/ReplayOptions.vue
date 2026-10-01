@@ -90,12 +90,19 @@ export default {
 </script>
 
 <style scoped>
+/* not a vuetify panel, so everything it needs is set here */
+.replay-dock,
+.replay-dock * {
+  box-sizing: border-box;
+}
+
 /* colors taken from obs' default yami theme */
 .replay-dock {
   padding: 4px;
   color: #fff;
   font-family: 'Open Sans', 'Segoe UI', sans-serif;
   font-size: 15px;
+  line-height: normal;
 }
 
 .grid {
@@ -111,6 +118,7 @@ export default {
 
 .obs-button {
   height: 48px;
+  padding: 0;
   border: 1px solid transparent;
   border-radius: 4px;
   background: #3c404b;
@@ -172,6 +180,7 @@ export default {
 .obs-input input {
   flex: 1;
   min-width: 0;
+  padding: 0;
   border: none;
   outline: none;
   background: transparent;

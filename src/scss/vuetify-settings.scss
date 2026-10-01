@@ -1,0 +1,13 @@
+// Sass settings for Vuetify (dashboard only), see vite.config.mjs
+@use 'vuetify/settings' with (
+  // the panels are narrow, half of Vuetify's default spacing
+  $grid-gutter: 12px,
+  $container-padding-x: 12px,
+  // row density steps are 8px each, scaled down to fit the smaller gutter:
+  // default 12px, comfortable 10px, compact 8px
+  $grid-density: (
+    'default': 0,
+    'comfortable': -0.25,
+    'compact': -0.5,
+  )
+);

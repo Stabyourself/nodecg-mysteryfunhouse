@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <graphic-app>
     <swipe :delay="0.5" :visible="visible" class="match-round" style="top: 10px">
       <img src="https://www.games2jolly.com/templates/joyfulgames/images/logo.png" />
     </swipe>
@@ -99,7 +99,7 @@
     </mt16-timer>
 
     <Telestrator v-if="showTelestrator"/>
-  </v-app>
+  </graphic-app>
 </template>
 
 <style lang="scss" scoped>

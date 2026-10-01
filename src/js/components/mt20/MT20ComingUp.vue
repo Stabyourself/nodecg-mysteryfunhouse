@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <graphic-app>
     <div id="scene">
       <div id="megaman-scroll">
         <div class="top"></div>
@@ -54,7 +54,7 @@
     </div>
 
     <Telestrator v-if="showTelestrator" />
-  </v-app>
+  </graphic-app>
 </template>
 
 <style scoped lang="scss">

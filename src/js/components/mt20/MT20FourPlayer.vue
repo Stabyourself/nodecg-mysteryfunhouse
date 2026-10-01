@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <graphic-app>
     <div id="section-wrapper">
       <div class="info-holder">
         <img class="logo" :src="currentEventLogo.url" style="height: 147px"/>
@@ -36,7 +36,7 @@
     </div>
 
     <Telestrator v-if="showTelestrator"/>
-  </v-app>
+  </graphic-app>
 </template>
 
 <style lang="scss" scoped>

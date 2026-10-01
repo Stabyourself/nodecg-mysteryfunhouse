@@ -106,7 +106,7 @@
       .health-bar {
         width: 0%;
         height: 100%;
-        background-image: url('../../dist/img/mt20/healthbar.png');
+        background-image: url('/bundles/nodecg-mysteryfunhouse/dist/img/mt20/healthbar.png');
         background-size: auto 100%;
         background-position: left;
         background-repeat: repeat;

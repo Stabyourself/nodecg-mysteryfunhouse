@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <graphic-app>
     <swipe
       :delay="0.5"
       :visible="visible"
@@ -129,13 +129,13 @@
       <template v-slot:text>
         <swipe :visible="visible" dir="up" :delay="1" class="game">
           <fit-text :max="1" :min="0.1">
-            <v-icon x-large dark class="mr-3">mdi-controller-classic</v-icon>
+            <i aria-hidden="true" class="v-icon notranslate mr-3 mdi mdi-controller-classic theme--dark" style="font-size: 40px"></i>
             <span class="mt-font">{{ game }}</span>
           </fit-text>
         </swipe>
         <swipe :visible="visible" dir="up" :delay="0.8" class="goal">
           <fit-text :max="1" :min="0.1">
-            <v-icon x-large dark class="mr-3">mdi-trophy-variant</v-icon>
+            <i aria-hidden="true" class="v-icon notranslate mr-3 mdi mdi-trophy-variant theme--dark" style="font-size: 40px"></i>
             <span class="mt-font">{{ goal }}</span>
           </fit-text>
         </swipe>
@@ -148,7 +148,7 @@
         {{ timerText }}
       </swipe>
     </timer>
-  </v-app>
+  </graphic-app>
 </template>
 
 <style lang="scss" scoped>

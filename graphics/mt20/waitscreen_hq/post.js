@@ -143,6 +143,7 @@ export function createPost(renderer, scene, camera, moonDepth, { width, height, 
 
   const volumetric = new VolumetricEffect(camera, moonDepth);
   volumetric.uniforms.get('uSteps').value = high ? 40 : 20;
+  volumetric.uniforms.get('uStepLength').value = high ? 0.1 : 0.2;
   composer.addPass(new EffectPass(camera, volumetric));
 
   const bloom = new BloomEffect({

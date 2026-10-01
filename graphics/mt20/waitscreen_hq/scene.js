@@ -422,7 +422,13 @@ export function createRoomScene(container, options = {}) {
     // hue is just noise
     const hsl = {};
     tvSampleColor.getHSL(hsl);
-    tvSampleColor.setHSL(hsl.h, Math.min(1, hsl.s * 2.2), 0.5);
+    // How coloured the average is for its brightness. Not HSL's own saturation: that
+    // shoots up towards white, so a nearly white picture with a few coloured details
+    // lit the room in the colour of those details at almost full strength.
+    const max = Math.max(tvSampleColor.r, tvSampleColor.g, tvSampleColor.b);
+    const min = Math.min(tvSampleColor.r, tvSampleColor.g, tvSampleColor.b);
+    const sat = max > 0 ? (max - min) / (max + min) : 0;
+    tvSampleColor.setHSL(hsl.h, Math.min(1, sat * 2.2), 0.5);
     tvSampleColor.lerp(TV_NEUTRAL, 0.08 + 0.92 * (1 - THREE.MathUtils.smoothstep(tvLum, 0.02, 0.1)));
   }
 
@@ -597,22 +603,24 @@ export function createRoomScene(container, options = {}) {
       scene.add(beacons);
     }
 
-    // window glass: thin reflective glass instead of (expensive) transmission
-    const glass = new THREE.MeshPhysicalMaterial({
-      color: 0xb8c8ff,
-      metalness: 0,
-      roughness: 0.04,
+    // Window glass: an unlit, barely-there cool tint, instead of the model's (expensive)
+    // transmission material. Unlit on purpose - as real reflective glass it mirrored the
+    // room's lamps and TV as highlights and laid a milky veil over the night sky.
+    const glass = new THREE.MeshBasicMaterial({
+      color: 0x6f86c8,
       transparent: true,
-      opacity: 0.1,
-      envMapIntensity: 2.5,
+      opacity: 0.03,
       depthWrite: false,
-      specularIntensity: 1,
     });
+    // the panes are also the only way moonlight gets in: the light shafts are only
+    // looked for in the air behind them
+    const moonOpening = new THREE.Box3();
     room.traverse((c) => {
       if (c.isMesh && c.material && c.material.name === 'GLASS') {
         c.material = glass;
         c.castShadow = false;
         c.layers.set(LAYER_NO_OCCLUDE);
+        moonOpening.expandByObject(c);
       }
     });
 
@@ -678,6 +686,9 @@ export function createRoomScene(container, options = {}) {
       tallLamp.shadow.normalBias = 0.02;
       tallLamp.shadow.radius = 5;
       tallLamp.shadow.camera.near = 0.03;
+      // rendered once, without the fan (see step): nothing else it sees moves
+      tallLamp.shadow.autoUpdate = false;
+      lampShadows.push(tallLamp);
       scene.add(tallLamp, tallLamp.target);
 
       // No GI, so fake the warm light bouncing back down off the ceiling hot spot.
@@ -868,6 +879,7 @@ export function createRoomScene(container, options = {}) {
 
     post = createPost(renderer, scene, camera, moonDepth, { width: WIDTH, height: HEIGHT, quality });
     if (screenMesh) post.toneMapping.screenCorners = screenCorners(screenMesh);
+    if (!moonOpening.isEmpty()) post.volumetric.setBeamOpening(moonOpening.expandByScalar(0.05));
     const vu = post.volumetric.uniforms;
     vu.get('uTvPos').value.copy(tvPos).addScaledVector(tvNormal, 0.08);
     vu.get('uTvNormal').value.copy(tvNormal);
@@ -1001,8 +1013,14 @@ export function createRoomScene(container, options = {}) {
     if (beacons) beacons.material.uniforms.uTime.value = t;
 
     // Shadow maps are the most expensive part of the frame (CPU-bound draw calls), and
-    // only the ghost's idle sway and the ceiling fan actually move. The torchiere sees
-    // the fan, so it updates every frame; everything else is staggered.
+    // only the ghost's idle sway and the ceiling fan actually move; those are staggered.
+    // The torchiere's shadow is rendered once, with the fan hidden: it needn't cast there.
+    if (frame === 1 && tallLamp) {
+      if (fan) fan.visible = false;
+      tallLamp.shadow.needsUpdate = true;
+      renderer.render(scene, camera);
+      if (fan) fan.visible = true;
+    }
     if (frame % 2 === 0) {
       tvSpot && (tvSpot.shadow.needsUpdate = true);
     } else {
@@ -1014,7 +1032,7 @@ export function createRoomScene(container, options = {}) {
     // Every shadow map has to exist before the first draw, or lit materials render
     // nothing, so the first frame renders them all.
     if (frame === 1) {
-      for (const l of [moon, tvSpot, ...lampShadows]) if (l) l.shadow.needsUpdate = true;
+      for (const l of [moon, tvSpot, ...lampShadows]) if (l && l !== tallLamp) l.shadow.needsUpdate = true;
     }
 
     const tvAir = post.volumetric.uniforms.get('uTvColor').value.copy(tvColor).multiplyScalar(0.012 * tvBright);

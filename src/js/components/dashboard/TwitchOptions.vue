@@ -6,14 +6,15 @@
 
         <v-row>
           <v-col>
-            <v-btn class="mb-3" color="error" small block @click="resetTemplate">
+            <v-btn class="mb-3" color="error" size="small" block append-icon="mdi-undo" @click="resetTemplate">
               Reset
-              <v-icon right dark> mdi-undo </v-icon>
             </v-btn>
           </v-col>
 
           <v-col>
-            <v-btn small block outlined color="info" @click="toggleHelp"> Help <v-icon>mdi-help</v-icon> </v-btn>
+            <v-btn size="small" block variant="outlined" color="info" append-icon="mdi-help" @click="toggleHelp">
+              Help
+            </v-btn>
           </v-col>
         </v-row>
 
@@ -31,14 +32,14 @@
 
         <v-btn class="mb-3" color="primary" block @click="updateTwitch" :loading="updating"> Apply Stream Title </v-btn>
 
-        <span v-if="error" class="error--text">{{ error }}</span>
+        <span v-if="error" class="text-error">{{ error }}</span>
 
         <v-card v-if="success" color="success">
           <v-card-title>Success</v-card-title>
           <v-card-text style="white-space: pre-line">
-            <div><v-icon>mdi-format-title</v-icon> {{ success.title }}</div>
+            <div><v-icon icon="mdi-format-title"></v-icon> {{ success.title }}</div>
 
-            <div><v-icon>mdi-controller-classic</v-icon> {{ success.game }}</div>
+            <div><v-icon icon="mdi-controller-classic"></v-icon> {{ success.game }}</div>
           </v-card-text>
         </v-card>
       </v-container>

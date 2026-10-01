@@ -17,8 +17,8 @@
   grid-column: 1 / -1;
   padding: 8px;
   border-radius: 6px;
-  border: 1px solid #00bebe;
-  background: rgba(0, 190, 190, 0.08);
+  border: 1px solid rgb(var(--v-theme-primary));
+  background: rgba(var(--v-theme-primary), 0.08);
 }
 
 .crop-result-header {
@@ -74,7 +74,7 @@ export default {
     this.resizeObserver.observe(this.$refs.frame);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     nodecg.unlisten('playerFrame', this.frameReceived);
     if (this.resizeObserver) this.resizeObserver.disconnect();
   },

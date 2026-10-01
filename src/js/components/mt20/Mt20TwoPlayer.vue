@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <graphic-app>
     <div class="twoplayers">
     <div id="top-section">
       <mt20-player-box :player="players[0]" :visible="visible" side="left" :health="health[0]" :time="players[0].finalTime" :race-state="players[0].raceState" />
@@ -20,7 +20,7 @@
 
     <Telestrator v-if="showTelestrator"/>
   </div>
-  </v-app>
+  </graphic-app>
 </template>
 
 <style lang="scss" scoped>

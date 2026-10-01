@@ -3,7 +3,7 @@
 // src/js/components/mt20/MT20WaitScreen.vue (plain CSS here, since this page has no build).
 
 const DIST = '/bundles/nodecg-mysteryfunhouse/dist';
-const MARKDOWN_IT = '/bundles/nodecg-mysteryfunhouse/node_modules/markdown-it/dist/markdown-it.min.js';
+const MARKDOWN_IT = '/bundles/nodecg-mysteryfunhouse/node_modules/markdown-it/dist/browser/markdown-it.umd.min.js';
 const TELESTRATOR = '/bundles/nodecg-mysteryfunhouse/graphics/telestrator.html';
 
 const BAND_GAP = 'linear-gradient(to bottom, #000 0%, #000 45%, transparent 47%, transparent 53%, #000 55%, #000 100%)';
@@ -127,7 +127,7 @@ export function createTopText(container) {
     targets.forEach((t) => { t.innerHTML = html; });
   }
 
-  // same settings as the markdown-it-vue component used by the Vue version
+  // same settings as the MarkdownText component used by the Vue version
   loadScript(MARKDOWN_IT)
     .then(() => { md = window.markdownit({ linkify: true }); render(); })
     .catch((e) => console.warn('[overlays] markdown unavailable, top text shown as plain text', e));

@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <graphic-app>
     <div id="section-wrapper">
       <div class="info-holder">
         <mt18-logo-box :logo="currentEventLogo" :visible="visible"></mt18-logo-box>
@@ -83,7 +83,7 @@
     </div>
 
     <Telestrator />
-  </v-app>
+  </graphic-app>
 </template>
 
 <style lang="scss" scoped>

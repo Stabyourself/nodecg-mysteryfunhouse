@@ -9,7 +9,7 @@
 
         <div class="crop-inputs">
           <label v-for="input in inputs" :key="input.index" class="crop-input" :title="input.label + ' crop'">
-            <v-icon small>{{ input.icon }}</v-icon>
+            <v-icon size="16" :icon="input.icon"></v-icon>
             <input v-model.number="crop[input.index]" type="number" min="0" :max="input.max" />
           </label>
         </div>
@@ -17,29 +17,39 @@
         <div class="crop-toolbar-spacer"></div>
 
         <div class="crop-actions">
-          <v-btn class="crop-button" color="primary" depressed :loading="waitingForFrame" @click="requestFrame">
-            <v-icon left>mdi-camera</v-icon>
+          <v-btn
+            class="crop-button"
+            color="primary"
+            variant="flat"
+            prepend-icon="mdi-camera"
+            :loading="waitingForFrame"
+            @click="requestFrame"
+          >
             New frame
           </v-btn>
 
-          <v-btn class="crop-button" outlined :disabled="!frameSrc" @click="autoCrop">
-            <v-icon left>mdi-crop-free</v-icon>
+          <v-btn
+            class="crop-button"
+            variant="outlined"
+            prepend-icon="mdi-crop-free"
+            :disabled="!frameSrc"
+            @click="autoCrop"
+          >
             Auto crop
           </v-btn>
 
           <v-btn
             class="crop-button"
-            outlined
-            :color="snapping ? 'primary' : ''"
+            variant="outlined"
+            :color="snapping ? 'primary' : undefined"
+            :prepend-icon="snapping ? 'mdi-magnet-on' : 'mdi-magnet'"
             :title="snapping ? 'Snapping on' : 'Snapping off'"
             @click="snapping = !snapping"
           >
-            <v-icon left>{{ snapping ? 'mdi-magnet-on' : 'mdi-magnet' }}</v-icon>
             Snap
           </v-btn>
 
-          <v-btn class="crop-button" text color="red lighten-1" @click="resetCrop">
-            <v-icon left>mdi-refresh</v-icon>
+          <v-btn class="crop-button" variant="text" color="red-lighten-1" prepend-icon="mdi-refresh" @click="resetCrop">
             Reset
           </v-btn>
         </div>
@@ -106,38 +116,38 @@
             <!-- stacked across the edge they move. they go inside the box when the edge is too close to the frame.
                  they follow the red box you're dragging, not the snapped one -->
             <div class="move-arrows left" :class="{ inside: arrowsInside.left }">
-              <v-btn @mousedown="nudgeCrop(0, -1)" x-small outlined dark>
-                <v-icon color="primary">mdi-arrow-left</v-icon>
+              <v-btn @mousedown="nudgeCrop(0, -1)" size="x-small" variant="outlined">
+                <v-icon color="primary" icon="mdi-arrow-left"></v-icon>
               </v-btn>
-              <v-btn @mousedown="nudgeCrop(0, 1)" x-small outlined dark>
-                <v-icon color="primary">mdi-arrow-right</v-icon>
+              <v-btn @mousedown="nudgeCrop(0, 1)" size="x-small" variant="outlined">
+                <v-icon color="primary" icon="mdi-arrow-right"></v-icon>
               </v-btn>
             </div>
 
             <div class="move-arrows right" :class="{ inside: arrowsInside.right }">
-              <v-btn @mousedown="nudgeCrop(1, 1)" x-small outlined dark>
-                <v-icon color="primary">mdi-arrow-left</v-icon>
+              <v-btn @mousedown="nudgeCrop(1, 1)" size="x-small" variant="outlined">
+                <v-icon color="primary" icon="mdi-arrow-left"></v-icon>
               </v-btn>
-              <v-btn @mousedown="nudgeCrop(1, -1)" x-small outlined dark>
-                <v-icon color="primary">mdi-arrow-right</v-icon>
+              <v-btn @mousedown="nudgeCrop(1, -1)" size="x-small" variant="outlined">
+                <v-icon color="primary" icon="mdi-arrow-right"></v-icon>
               </v-btn>
             </div>
 
             <div class="move-arrows top" :class="{ inside: arrowsInside.top }">
-              <v-btn @mousedown="nudgeCrop(2, -1)" x-small outlined dark>
-                <v-icon color="primary">mdi-arrow-up</v-icon>
+              <v-btn @mousedown="nudgeCrop(2, -1)" size="x-small" variant="outlined">
+                <v-icon color="primary" icon="mdi-arrow-up"></v-icon>
               </v-btn>
-              <v-btn @mousedown="nudgeCrop(2, 1)" x-small outlined dark>
-                <v-icon color="primary">mdi-arrow-down</v-icon>
+              <v-btn @mousedown="nudgeCrop(2, 1)" size="x-small" variant="outlined">
+                <v-icon color="primary" icon="mdi-arrow-down"></v-icon>
               </v-btn>
             </div>
 
             <div class="move-arrows bottom" :class="{ inside: arrowsInside.bottom }">
-              <v-btn @mousedown="nudgeCrop(3, 1)" x-small outlined dark>
-                <v-icon color="primary">mdi-arrow-up</v-icon>
+              <v-btn @mousedown="nudgeCrop(3, 1)" size="x-small" variant="outlined">
+                <v-icon color="primary" icon="mdi-arrow-up"></v-icon>
               </v-btn>
-              <v-btn @mousedown="nudgeCrop(3, -1)" x-small outlined dark>
-                <v-icon color="primary">mdi-arrow-down</v-icon>
+              <v-btn @mousedown="nudgeCrop(3, -1)" size="x-small" variant="outlined">
+                <v-icon color="primary" icon="mdi-arrow-down"></v-icon>
               </v-btn>
             </div>
           </div>
@@ -204,7 +214,7 @@
   border-radius: 50%;
   text-align: center;
   font-size: 12px;
-  background: #00bebe;
+  background: rgb(var(--v-theme-primary));
   color: #000;
 }
 
@@ -242,7 +252,7 @@
   }
 
   &:focus-within {
-    border-color: #00bebe;
+    border-color: rgb(var(--v-theme-primary));
   }
 
   .v-icon {
@@ -275,8 +285,8 @@
   text-transform: none;
   letter-spacing: normal;
 
-  .v-icon--left {
-    margin-right: 4px;
+  .v-btn__prepend {
+    margin-inline: 0 4px;
   }
 }
 
@@ -519,7 +529,7 @@ export default {
     this.visibilityObserver.observe(this.$el);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     nodecg.unlisten('playerFrame', this.frameReceived);
     clearTimeout(this.frameTimer);
     if (this.resizeObserver) this.resizeObserver.disconnect();
@@ -530,8 +540,12 @@ export default {
   props: ['player'],
 
   watch: {
-    crop() {
-      this.syncCropper();
+    crop: {
+      // the edges are changed one by one (crop[i] = ...)
+      deep: true,
+      handler() {
+        this.syncCropper();
+      },
     },
   },
 
@@ -755,10 +769,10 @@ export default {
       const toCropX = CROP_W / this.frameImage.naturalWidth;
       const toCropY = CROP_H / this.frameImage.naturalHeight;
 
-      this.$set(this.crop, 0, Math.round(box[0] * toCropX));
-      this.$set(this.crop, 1, Math.round(box[1] * toCropX));
-      this.$set(this.crop, 2, Math.round(box[2] * toCropY));
-      this.$set(this.crop, 3, Math.round(box[3] * toCropY));
+      this.crop[0] = Math.round(box[0] * toCropX);
+      this.crop[1] = Math.round(box[1] * toCropX);
+      this.crop[2] = Math.round(box[2] * toCropY);
+      this.crop[3] = Math.round(box[3] * toCropY);
     },
 
     resetCrop() {
@@ -798,7 +812,7 @@ export default {
       this.dragBox = raw;
       this.snapHits = hits;
 
-      for (let i = 0; i < 4; i++) this.$set(this.crop, i, next[i]);
+      for (let i = 0; i < 4; i++) this.crop[i] = next[i];
     },
 
     // box follows the snapped values when you let go
@@ -817,7 +831,7 @@ export default {
         val = Math.max(0, Math.min(CROP_H, val));
       }
 
-      this.$set(this.crop, i, val);
+      this.crop[i] = val;
     },
   },
 

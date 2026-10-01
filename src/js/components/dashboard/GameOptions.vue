@@ -4,7 +4,7 @@
       <v-container>
         <v-text-field v-model="game" label="Game name"></v-text-field>
 
-        <label class="v-label v-label--active theme--dark" style="font-size: 12px">Boxart</label>
+        <label class="field-label">Boxart</label>
         <div
           class="select-img-wrap mb-1"
           :class="{ 'select-img-wrap--drag-over': dragOver }"
@@ -17,7 +17,7 @@
           <div class="select-img-border"></div>
           <div v-if="uploading" class="select-img-upload-overlay">
             <v-progress-circular
-              :value="uploadProgress"
+              :model-value="uploadProgress"
               :indeterminate="uploadProgress === 0"
               color="white"
               size="48"
@@ -28,7 +28,7 @@
         <v-progress-linear
           v-if="uploading"
           class="mb-3"
-          :value="uploadProgress"
+          :model-value="uploadProgress"
           :indeterminate="uploadProgress === 0"
           height="4"
         ></v-progress-linear>
@@ -37,9 +37,9 @@
           v-if="uploadError"
           type="error"
           density="compact"
-          dismissible
+          closable
           class="mb-3"
-          @input="uploadError = ''"
+          @update:model-value="uploadError = ''"
         >
           {{ uploadError }}
         </v-alert>
@@ -74,7 +74,7 @@ export default {
     window.addEventListener('paste', this.onPaste);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('paste', this.onPaste);
   },
 

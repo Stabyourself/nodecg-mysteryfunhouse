@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <graphic-app>
     <swipe :delay="0.5" :visible="visible" style="height: 150px">
       <div class="match-round">
         <div class="match-round-inner">
@@ -164,7 +164,7 @@
       </swipe>
     </mt16-timer>
 
-  </v-app>
+  </graphic-app>
 </template>
 
 <style lang="scss" scoped>

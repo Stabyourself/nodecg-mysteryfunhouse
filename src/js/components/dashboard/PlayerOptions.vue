@@ -15,74 +15,107 @@
 
     <v-divider class="mb-7 mt-4"></v-divider>
 
-    <v-text-field v-model="twitch" label="Twitch" prefix="twitch.tv/" dense></v-text-field>
+    <v-text-field v-model="twitch" label="Twitch" prefix="twitch.tv/" density="compact"></v-text-field>
 
     <!--
         <v-select
             label="Quality"
             v-model="quality"
             :items="qualities"
-            item-text="name"
+            item-title="name"
             item-value="group"
         ></v-select>
         -->
 
     <v-row>
       <v-col>
-        <v-btn v-if="!streamHidden" color="green" block class="mb-3" small @click="streamHidden = true">
+        <v-btn
+          v-if="!streamHidden"
+          color="green"
+          block
+          class="mb-3"
+          size="small"
+          append-icon="mdi-eye"
+          @click="streamHidden = true">
           Visible
-          <v-icon right dark> mdi-eye </v-icon>
         </v-btn>
 
-        <v-btn v-else color="red" block class="mb-3" small @click="streamHidden = false">
+        <v-btn v-else color="red" block class="mb-3" size="small" append-icon="mdi-eye-off" @click="streamHidden = false">
           Hidden
-          <v-icon right dark> mdi-eye-off </v-icon>
         </v-btn>
       </v-col>
 
       <v-col>
-        <v-btn color="primary" block class="mb-3" @click="reloadStream" :loading="refreshing" small>
+        <v-btn
+          color="primary"
+          block
+          class="mb-3"
+          size="small"
+          append-icon="mdi-refresh"
+          :loading="refreshing"
+          @click="reloadStream">
           Reload
-          <v-icon right dark> mdi-refresh </v-icon>
         </v-btn>
       </v-col>
     </v-row>
 
-    <v-combobox :items="aspectratioOptions" v-model="aspectratio" label="Force Aspect Ratio"> </v-combobox>
+    <v-combobox :items="aspectratioOptions" item-title="text" v-model="aspectratio" label="Force Aspect Ratio">
+    </v-combobox>
 
     <v-divider class="mb-7 mt-4"></v-divider>
 
-    <v-btn color="green" block class="mb-3" @click="makeDone" :disabled="raceState != 'none'">
+    <v-btn
+      color="green"
+      block
+      class="mb-3"
+      append-icon="mdi-flag-checkered"
+      :disabled="raceState != 'none'"
+      @click="makeDone">
       .done
-      <v-icon right dark> mdi-flag-checkered </v-icon>
     </v-btn>
 
-    <v-btn color="red" block class="mb-3" @click="makeForfeit" :disabled="raceState != 'none'">
+    <v-btn
+      color="red"
+      block
+      class="mb-3"
+      append-icon="mdi-cancel"
+      :disabled="raceState != 'none'"
+      @click="makeForfeit">
       .forfeit
-      <v-icon right dark> mdi-cancel </v-icon>
     </v-btn>
 
-    <v-btn color="orange" block @click="makeUndone" :disabled="raceState == 'none'">
+    <v-btn color="orange" block append-icon="mdi-undo" :disabled="raceState == 'none'" @click="makeUndone">
       .undone
-      <v-icon right dark> mdi-undo </v-icon>
     </v-btn>
 
     <v-row class="mt-3">
       <v-col cols="6">
-        <v-select v-model="raceState" :items="raceStateOptions" label="State" dense></v-select>
+        <v-select
+          v-model="raceState"
+          :items="raceStateOptions"
+          item-title="text"
+          label="State"
+          density="compact"></v-select>
       </v-col>
       <v-col cols="6">
-        <v-text-field v-model="finalTime" dense label="Final time"></v-text-field>
+        <v-text-field v-model="finalTime" density="compact" label="Final time"></v-text-field>
       </v-col>
     </v-row>
 
     <v-divider class="mb-7 mt-4"></v-divider>
 
-    <v-select :items="popovers" item-text="base" item-value="url" v-model="popover" label="Popover graphic" dense>
+    <v-select
+      :items="popovers"
+      item-title="base"
+      item-value="url"
+      v-model="popover"
+      label="Popover graphic"
+      density="compact">
     </v-select>
     <v-row>
       <v-col cols="3">
-        <v-text-field label="Duration" suffix="s" v-model="popoverDuration" type="number" min="0" dense> </v-text-field>
+        <v-text-field label="Duration" suffix="s" v-model="popoverDuration" type="number" min="0" density="compact">
+        </v-text-field>
       </v-col>
 
       <v-col cols="9">
@@ -94,9 +127,9 @@
 
     <v-progress-linear
       class="no-transition"
-      background-color="primary"
-      color="primary darken-4"
-      :value="popoverBarValue"></v-progress-linear>
+      bg-color="primary"
+      color="primary-darken-4"
+      :model-value="popoverBarValue"></v-progress-linear>
   </div>
 </template>
 
@@ -134,7 +167,12 @@ export default {
 
   watch: {
     aspectratio() {
-      this.aspectratioRep = typeof this.aspectratio == 'object' ? this.aspectratio.value : this.aspectratio;
+      // picking an option gives the option, typing something gives the text. clearing the
+      // field gives null, which is "auto" as well
+      const value =
+        this.aspectratio && typeof this.aspectratio == 'object' ? this.aspectratio.value : this.aspectratio;
+
+      this.aspectratioRep = value || false;
     },
 
     aspectratioRep() {
@@ -144,11 +182,10 @@ export default {
 
   methods: {
     updateAspectRatioField() {
-      this.aspectratio = this.aspectratioOptions.find((x) => x.value == this.aspectratioRep);
+      // the option if there is one for this value, otherwise the value as it was typed
+      const option = this.aspectratioOptions.find((x) => x.value == this.aspectratioRep);
 
-      if (typeof this.aspectratio != 'object' && this.aspectradio !== false) {
-        this.aspectratio = this.aspectratioRep;
-      }
+      this.aspectratio = option ?? this.aspectratioRep;
     },
 
     makeName(name) {

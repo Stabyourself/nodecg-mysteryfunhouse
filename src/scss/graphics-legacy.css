@@ -1,0 +1,445 @@
+/*
+ * The part of Vuetify 2.7.2's stylesheet the graphics were built on: its CSS reset, the
+ * v-application wrapper, the utility/colour classes the layouts use, and the timeline,
+ * avatar and icon styles used by PlayerPath. Extracted from the styles Vuetify injected
+ * into the graphics pages, so the layouts render the same without Vuetify (see
+ * components/GraphicApp.vue). Frozen on purpose - the dashboard uses the real Vuetify.
+ */
+.v-application .transparent {
+    background-color: transparent !important;
+    border-color: transparent !important
+}
+.v-application .red--text {
+    color: #f44336 !important;
+    caret-color: #f44336 !important
+}
+.v-application .green--text {
+    color: #4caf50 !important;
+    caret-color: #4caf50 !important
+}
+html {
+    box-sizing: border-box;
+    overflow-y: scroll;
+    -webkit-text-size-adjust: 100%;
+    word-break: normal;
+    -moz-tab-size: 4;
+    tab-size: 4
+}
+*,::before,::after {
+    background-repeat: no-repeat;
+    box-sizing: inherit
+}
+::before,::after {
+    text-decoration: inherit;
+    vertical-align: inherit
+}
+* {
+    padding: 0;
+    margin: 0
+}
+hr {
+    overflow: visible;
+    height: 0
+}
+details,main {
+    display: block
+}
+summary {
+    display: list-item
+}
+small {
+    font-size: 80%
+}
+[hidden] {
+    display: none
+}
+abbr[title] {
+    border-bottom: none;
+    text-decoration: underline;
+    text-decoration: underline dotted
+}
+a {
+    background-color: transparent
+}
+a:active,a:hover {
+    outline-width: 0
+}
+code,kbd,pre,samp {
+    font-family: monospace,monospace
+}
+pre {
+    font-size: 1em
+}
+b,strong {
+    font-weight: bolder
+}
+sub,sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline
+}
+sub {
+    bottom: -0.25em
+}
+sup {
+    top: -0.5em
+}
+input {
+    border-radius: 0
+}
+[disabled] {
+    cursor: default
+}
+[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button {
+    height: auto
+}
+[type=search] {
+    -webkit-appearance: textfield;
+    outline-offset: -2px
+}
+[type=search]::-webkit-search-cancel-button,[type=search]::-webkit-search-decoration {
+    -webkit-appearance: none
+}
+textarea {
+    overflow: auto;
+    resize: vertical
+}
+button,input,optgroup,select,textarea {
+    font: inherit
+}
+optgroup {
+    font-weight: bold
+}
+button {
+    overflow: visible
+}
+button,select {
+    text-transform: none
+}
+button,[type=button],[type=reset],[type=submit],[role=button] {
+    cursor: pointer;
+    color: inherit
+}
+button::-moz-focus-inner,[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner {
+    border-style: none;
+    padding: 0
+}
+button:-moz-focusring,[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner {
+    outline: 1px dotted ButtonText
+}
+button,html [type=button],[type=reset],[type=submit] {
+    -webkit-appearance: button
+}
+button,input,select,textarea {
+    background-color: transparent;
+    border-style: none
+}
+select {
+    -moz-appearance: none;
+    -webkit-appearance: none
+}
+select::-ms-expand {
+    display: none
+}
+select::-ms-value {
+    color: currentColor
+}
+legend {
+    border: 0;
+    color: inherit;
+    display: table;
+    max-width: 100%;
+    white-space: normal;
+    max-width: 100%
+}
+::-webkit-file-upload-button {
+    -webkit-appearance: button;
+    color: inherit;
+    font: inherit
+}
+img {
+    border-style: none
+}
+progress {
+    vertical-align: baseline
+}
+@media screen {
+    [hidden~=screen] {
+        display: inherit
+    }
+    [hidden~=screen]:not(:active):not(:focus):not(:target) {
+        position: absolute !important;
+        clip: rect(0 0 0 0) !important
+    }
+}
+[aria-busy=true] {
+    cursor: progress
+}
+[aria-controls] {
+    cursor: pointer
+}
+[aria-disabled=true] {
+    cursor: default
+}
+.v-application code,.v-application kbd {
+    border-radius: 3px;
+    font-size: 85%;
+    font-weight: normal
+}
+.v-application code {
+    padding: .2em .4em
+}
+.v-application kbd {
+    padding: .2em .4rem;
+    box-shadow: 0px 3px 1px -2px rgba(0,0,0,.2),0px 2px 2px 0px rgba(0,0,0,.14),0px 1px 5px 0px rgba(0,0,0,.12)
+}
+.theme--light.v-application code {
+    background-color: rgba(0,0,0,.05);
+    color: currentColor
+}
+.theme--light.v-application kbd {
+    background: #212529;
+    color: #fff
+}
+.theme--dark.v-application code {
+    background-color: rgba(255,255,255,.1);
+    color: currentColor
+}
+.theme--dark.v-application kbd {
+    background: #212529;
+    color: #fff
+}
+html {
+    font-size: 16px;
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: rgba(0,0,0,0)
+}
+.v-application {
+    font-family: "Roboto",sans-serif;
+    line-height: 1.5
+}
+.v-application ::-ms-clear,.v-application ::-ms-reveal {
+    display: none
+}
+@supports(-webkit-touch-callout: none) {
+    body {
+        cursor: pointer
+    }
+}
+.v-application .theme--light.heading {
+    color: rgba(0,0,0,.87)
+}
+.v-application .theme--dark.heading {
+    color: #fff
+}
+.v-application ul,.v-application ol {
+    padding-left: 24px
+}
+.v-application p {
+    margin-bottom: 16px
+}
+.v-application .d-flex {
+    display: flex !important
+}
+.v-application .justify-center {
+    justify-content: center !important
+}
+.v-application .align-center {
+    align-items: center !important
+}
+.v-application .mt-10 {
+    margin-top: 40px !important
+}
+.v-application .mr-3 {
+    margin-right: 12px !important
+}
+.v-application .mb-3 {
+    margin-bottom: 12px !important
+}
+.v-application .text-center {
+    text-align: center !important
+}
+.v-avatar {
+    align-items: center;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    line-height: normal;
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
+    overflow: hidden
+}
+.v-avatar img,.v-avatar svg,.v-avatar .v-icon {
+    border-radius: inherit;
+    display: inline-flex;
+    height: inherit;
+    width: inherit
+}
+.theme--light.v-icon {
+    color: rgba(0,0,0,.54)
+}
+.theme--light.v-icon:focus::after {
+    opacity: .12
+}
+.theme--dark.v-icon {
+    color: #fff
+}
+.theme--dark.v-icon:focus::after {
+    opacity: .24
+}
+.v-icon.v-icon {
+    align-items: center;
+    display: inline-flex;
+    font-feature-settings: "liga";
+    font-size: 24px;
+    justify-content: center;
+    letter-spacing: normal;
+    line-height: 1;
+    position: relative;
+    text-indent: 0;
+    transition: .3s cubic-bezier(0.25, 0.8, 0.5, 1),visibility 0s;
+    vertical-align: middle;
+    user-select: none
+}
+.v-icon.v-icon::after {
+    background-color: currentColor;
+    border-radius: 50%;
+    content: "";
+    display: inline-block;
+    height: 100%;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    transform: scale(1.3);
+    width: 100%;
+    transition: opacity .2s cubic-bezier(0.4, 0, 0.6, 1)
+}
+.theme--light.v-timeline::before {
+    background: rgba(0,0,0,.12)
+}
+.theme--light.v-timeline .v-timeline-item__dot {
+    background: #fff
+}
+.theme--dark.v-timeline::before {
+    background: rgba(255,255,255,.12)
+}
+.theme--dark.v-timeline .v-timeline-item__dot {
+    background: #1e1e1e
+}
+.v-timeline {
+    padding-top: 24px;
+    position: relative
+}
+.v-timeline::before {
+    bottom: 0;
+    content: "";
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 2px
+}
+.v-timeline-item {
+    display: flex;
+    padding-bottom: 24px
+}
+.v-timeline-item__body {
+    position: relative;
+    height: 100%;
+    flex: 1 1 auto
+}
+.v-timeline-item__divider {
+    position: relative;
+    min-width: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+.v-timeline-item__dot {
+    z-index: 2;
+    border-radius: 50%;
+    box-shadow: 0px 2px 1px -1px rgba(0,0,0,.2),0px 1px 1px 0px rgba(0,0,0,.14),0px 1px 3px 0px rgba(0,0,0,.12);
+    height: 38px;
+    left: calc(50% - 19px);
+    width: 38px
+}
+.v-timeline-item__dot .v-timeline-item__inner-dot {
+    height: 30px;
+    margin: 4px;
+    width: 30px
+}
+.v-timeline-item__dot--large {
+    height: 52px;
+    left: calc(50% - 26px);
+    width: 52px
+}
+.v-timeline-item__dot--large .v-timeline-item__inner-dot {
+    height: 42px;
+    margin: 5px;
+    width: 42px
+}
+.v-timeline-item__inner-dot {
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+.v-timeline:not(.v-timeline--dense):not(.v-timeline--reverse) .v-timeline-item:nth-child(odd):not(.v-timeline-item--before) {
+    flex-direction: row-reverse
+}
+.v-timeline:not(.v-timeline--dense):not(.v-timeline--reverse) .v-timeline-item:nth-child(odd):not(.v-timeline-item--before) .v-timeline-item__body {
+    max-width: calc(50% - 48px)
+}
+.v-timeline:not(.v-timeline--dense):not(.v-timeline--reverse) .v-timeline-item:nth-child(even):not(.v-timeline-item--after) {
+    flex-direction: row
+}
+.v-timeline:not(.v-timeline--dense):not(.v-timeline--reverse) .v-timeline-item:nth-child(even):not(.v-timeline-item--after) .v-timeline-item__body {
+    max-width: calc(50% - 48px)
+}
+.v-application--is-ltr .v-timeline:not(.v-timeline--dense):not(.v-timeline--reverse)::before {
+    left: calc(50% - 1px);
+    right: initial
+}
+.v-application--is-ltr .v-timeline--dense:not(.v-timeline--reverse)::before {
+    left: calc(48px - 1px);
+    right: initial
+}
+.v-timeline--dense .v-timeline-item {
+    flex-direction: row-reverse !important
+}
+.v-timeline--dense .v-timeline-item__body {
+    max-width: calc(100% - 96px)
+}
+.theme--light.v-application {
+    background: #fff;
+    color: rgba(0,0,0,.87)
+}
+.theme--dark.v-application {
+    background: transparent;
+    color: #fff
+}
+.v-application {
+    display: flex;
+    position: relative
+}
+.v-application a {
+    cursor: pointer
+}
+.v-application--wrap {
+    flex: 1 1 auto;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    max-width: 100%;
+    position: relative
+}
+.v-application a {
+    color: #00bebe;
+}

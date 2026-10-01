@@ -7,7 +7,7 @@
             <v-select
               v-model="eventId"
               :items="events"
-              item-text="name"
+              item-title="name"
               item-value="id"
               label="Event"
               :loading="loadingEvents"
@@ -18,37 +18,29 @@
 
         <v-divider class="my-4"></v-divider>
 
-        <v-row align="center">
+        <v-row class="align-center">
           <v-col cols="auto">
-            <v-btn color="primary" @click="openAddDialog">
-              Add Player
-              <v-icon right dark>mdi-plus</v-icon>
-            </v-btn>
+            <v-btn color="primary" append-icon="mdi-plus" @click="openAddDialog">Add Player</v-btn>
           </v-col>
 
           <v-col cols="auto">
-            <v-btn @click="fetchPlayers" :loading="loading">
-              Refresh
-              <v-icon right dark>mdi-refresh</v-icon>
-            </v-btn>
+            <v-btn append-icon="mdi-refresh" @click="fetchPlayers" :loading="loading">Refresh</v-btn>
           </v-col>
 
           <v-col cols="auto">
-            <v-btn @click="checkIntegrity" :loading="checkingIntegrity">
+            <v-btn append-icon="mdi-shield-search" @click="checkIntegrity" :loading="checkingIntegrity">
               Check Challonge Integrity
-              <v-icon right dark>mdi-shield-search</v-icon>
             </v-btn>
           </v-col>
 
           <v-col cols="auto">
-            <v-btn @click="autofillMissingData" :loading="autofilling">
+            <v-btn append-icon="mdi-auto-fix" @click="autofillMissingData" :loading="autofilling">
               Autofill From Past Tournaments
-              <v-icon right dark>mdi-auto-fix</v-icon>
             </v-btn>
           </v-col>
 
           <v-col>
-            <span v-if="error" class="error--text">{{ error }}</span>
+            <span v-if="error" class="text-error">{{ error }}</span>
             <span v-else-if="autofillSummary">{{ autofillSummary }}</span>
             <span v-else-if="integritySummary">{{ integritySummary }}</span>
           </v-col>
@@ -58,36 +50,38 @@
           :headers="headers"
           :items="tableItems"
           :loading="loading"
-          :item-class="rowClass"
-          item-key="signupId"
-          dense>
+          :row-props="rowProps"
+          item-value="signupId"
+          density="compact">
           <template v-slot:item.username="{ item }">
-            <v-chip v-if="isFieldMissing(item, 'username')" x-small color="error">missing</v-chip>
+            <v-chip v-if="isFieldMissing(item, 'username')" size="x-small" color="error" variant="flat">missing</v-chip>
             <span v-else>{{ item.username }}</span>
           </template>
 
           <template v-slot:item.challongeUsername="{ item }">
-            <v-chip v-if="isFieldMissing(item, 'challongeUsername')" x-small color="error">missing</v-chip>
+            <v-chip v-if="isFieldMissing(item, 'challongeUsername')" size="x-small" color="error" variant="flat">
+              missing
+            </v-chip>
             <span v-else>{{ item.challongeUsername }}</span>
           </template>
 
           <template v-slot:item.twitch="{ item }">
-            <v-chip v-if="isFieldMissing(item, 'twitch')" x-small color="error">missing</v-chip>
+            <v-chip v-if="isFieldMissing(item, 'twitch')" size="x-small" color="error" variant="flat">missing</v-chip>
             <span v-else>{{ item.twitch }}</span>
           </template>
 
           <template v-slot:item.discordId="{ item }">
-            <v-chip v-if="isFieldMissing(item, 'discordId')" x-small color="error">missing</v-chip>
+            <v-chip v-if="isFieldMissing(item, 'discordId')" size="x-small" color="error" variant="flat">missing</v-chip>
             <span v-else>{{ item.discordId }}</span>
           </template>
 
           <template v-slot:item.actions="{ item }">
             <template v-if="item.ghost">
-              <v-icon small @click="openAddDialogFromGhost(item)">mdi-plus</v-icon>
+              <v-icon size="16" icon="mdi-plus" @click="openAddDialogFromGhost(item)"></v-icon>
             </template>
             <template v-else>
-              <v-icon small class="mr-2" @click="openEditDialog(item)">mdi-pencil</v-icon>
-              <v-icon small @click="removePlayer(item)">mdi-delete</v-icon>
+              <v-icon size="16" class="mr-2" icon="mdi-pencil" @click="openEditDialog(item)"></v-icon>
+              <v-icon size="16" icon="mdi-delete" @click="removePlayer(item)"></v-icon>
             </template>
           </template>
         </v-data-table>
@@ -111,13 +105,13 @@
             <v-text-field v-model="form.flag" label="Flag"></v-text-field>
             <v-text-field v-model="form.flavor" label="Flavor text"></v-text-field>
 
-            <span v-if="formError" class="error--text">{{ formError }}</span>
+            <span v-if="formError" class="text-error">{{ formError }}</span>
           </v-card-text>
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text @click="dialog = false">Cancel</v-btn>
-            <v-btn color="primary" @click="savePlayer" :loading="saving">Save</v-btn>
+            <v-btn variant="text" @click="dialog = false">Cancel</v-btn>
+            <v-btn color="primary" variant="elevated" @click="savePlayer" :loading="saving">Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -309,8 +303,8 @@ export default {
       return missingFields ? missingFields.includes(field) : false;
     },
 
-    rowClass(item) {
-      return item.ghost ? 'integrity-ghost-row' : '';
+    rowProps({ item }) {
+      return { class: item.ghost ? 'integrity-ghost-row' : '' };
     },
 
     openAddDialog() {
@@ -406,14 +400,14 @@ export default {
       form: {},
 
       headers: [
-        { text: 'Name', value: 'username' },
-        { text: 'Challonge', value: 'challongeUsername' },
-        { text: 'Twitch', value: 'twitch' },
-        { text: 'Pronouns', value: 'pronouns' },
-        { text: 'Flag', value: 'flag' },
-        { text: 'Flavor', value: 'flavor' },
-        { text: 'Discord ID', value: 'discordId' },
-        { text: '', value: 'actions', sortable: false },
+        { title: 'Name', key: 'username' },
+        { title: 'Challonge', key: 'challongeUsername' },
+        { title: 'Twitch', key: 'twitch' },
+        { title: 'Pronouns', key: 'pronouns' },
+        { title: 'Flag', key: 'flag' },
+        { title: 'Flavor', key: 'flavor' },
+        { title: 'Discord ID', key: 'discordId' },
+        { title: '', key: 'actions', sortable: false },
       ],
     };
   },

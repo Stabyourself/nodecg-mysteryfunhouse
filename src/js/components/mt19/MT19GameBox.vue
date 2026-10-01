@@ -37,7 +37,7 @@ $whiteBoxFont: 'Arvo', serif;
 #game-box {
   display: flex;
   max-width: 1300px;
-  background-image: url('../../dist/img/mt19_gameboxback.png');
+  background-image: url('/bundles/nodecg-mysteryfunhouse/dist/img/mt19_gameboxback.png');
   background-size: auto 100%;
   background-position: right;
 }

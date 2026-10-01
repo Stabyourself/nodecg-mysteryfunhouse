@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <graphic-app>
     <!-- round -->
     <div class="flex-center">
       <div class="label-font">{{ round }}</div>
@@ -143,7 +143,7 @@
     </mt17-timer>
 
     <Telestrator></Telestrator>
-  </v-app>
+  </graphic-app>
 </template>
 
 <style lang="scss" scoped>

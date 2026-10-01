@@ -282,20 +282,20 @@ export default {
 
     if (this.dragHandle) {
       [...this.$el.querySelectorAll(this.dragHandle)].forEach((dragHandle) => {
-        dragHandle.setAttribute("data-drag-handle", this._uid);
+        dragHandle.setAttribute("data-drag-handle", this.$.uid);
       });
     }
 
     if (this.dragCancel) {
       [...this.$el.querySelectorAll(this.dragCancel)].forEach(
         (cancelHandle) => {
-          cancelHandle.setAttribute("data-drag-cancel", this._uid);
+          cancelHandle.setAttribute("data-drag-cancel", this.$.uid);
         }
       );
     }
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     removeEvents(this.domEvents);
   },
 
@@ -377,14 +377,14 @@ export default {
 
       if (
         this.dragHandle &&
-        target.getAttribute("data-drag-handle") !== this._uid.toString()
+        target.getAttribute("data-drag-handle") !== this.$.uid.toString()
       ) {
         return;
       }
 
       if (
         this.dragCancel &&
-        target.getAttribute("data-drag-cancel") === this._uid.toString()
+        target.getAttribute("data-drag-cancel") === this.$.uid.toString()
       ) {
         return;
       }

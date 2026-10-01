@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <graphic-app>
     <DroneShotManager />
 
     <div id="videodimmer" />
@@ -44,7 +44,7 @@
       </div>
     </div>
 
-  </v-app>
+  </graphic-app>
 </template>
 
 <style scoped lang="scss">

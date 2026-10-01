@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <graphic-app>
     <div id="top-section">
       <mt18-player-box :player="player0" :visible="visible" side="left" />
       <mt18-player-box :player="player1" :visible="visible" side="right" />
@@ -36,7 +36,7 @@
     </div>
 
     <Telestrator />
-  </v-app>
+  </graphic-app>
 </template>
 
 <style lang="scss" scoped>

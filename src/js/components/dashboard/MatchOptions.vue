@@ -5,7 +5,7 @@
         <v-text-field
           v-model="round"
           label="Round"
-          dense
+          density="compact"
           class="mt-3"
         ></v-text-field>
 
@@ -30,7 +30,6 @@
 .divider {
   border-right: 1px solid rgba(255, 255, 255, 0.12);
   padding-right: 12px;
-  margin-right: 6px;
 }
 </style>
 

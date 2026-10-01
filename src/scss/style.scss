@@ -125,8 +125,22 @@ body {
   image-rendering: auto;
 }
 
-.v-application--wrap {
+// graphics (GraphicApp) and dashboard (Vuetify's v-app): only as tall as the content, and
+// see-through so the page / nodecg panel background shows
+.v-application--wrap,
+.v-application__wrap {
   min-height: auto !important;
+}
+
+.v-application {
+  background: transparent !important;
+}
+
+// label above something that isn't a vuetify input, looks like their floating labels
+.field-label {
+  font-size: 12px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .select-img-wrap {
@@ -149,7 +163,7 @@ body {
 
   &.active .select-img-border {
     border-width: 4px;
-    border-color: #00bebe;
+    border-color: rgb(var(--v-theme-primary));
   }
 }
 
@@ -171,10 +185,6 @@ body {
   display: block;
 }
 
-.theme--dark.v-tabs-items {
-  background-color: transparent !important;
-}
-
 .checkerboard {
   background: #eee
     url('data:image/svg+xml,\
@@ -185,7 +195,7 @@ body {
   background-size: 16px 16px !important;
 }
 
-.timer.theme--dark.v-input {
+.timer.v-input {
   input {
     color: #999;
     transition: color 0.3s;

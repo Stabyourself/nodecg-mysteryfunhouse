@@ -64,7 +64,7 @@ export default {
       this.observer.observe(this.$el, { subtree: true, characterData: true });
     }
   },
-  beforeDestroy: function () {
+  beforeUnmount: function () {
     // Clean up
     this.observer.disconnect();
   },

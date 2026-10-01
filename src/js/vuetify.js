@@ -1,23 +1,36 @@
-// src/plugins/vuetify.js
+// Vuetify setup for the dashboard (the graphics don't use Vuetify). Only the components
+// used in templates end up in the bundle, vite-plugin-vuetify imports them.
+import 'vuetify/styles';
+import { createVuetify } from 'vuetify';
 
-import Vue from "vue";
-// The bare "vuetify" package resolves to the fully pre-bundled dist build (every
-// component/directive registered, ~80 components). Importing the lean framework core
-// instead lets vuetify-loader's webpack plugin (see webpack.mix.js) tree-shake down to
-// only the Vuetify components actually used in templates.
-import Vuetify from "vuetify/lib/framework";
+const inputs = {
+  variant: 'underlined',
+  color: 'primary',
+};
 
-Vue.use(Vuetify);
-
-const opts = {
+export default createVuetify({
   theme: {
-    dark: true,
+    defaultTheme: 'dark',
+    // primary-darken-1..4, used by the popover timer bar
+    variations: {
+      colors: ['primary'],
+      lighten: 0,
+      darken: 4,
+    },
     themes: {
       dark: {
-        primary: "#00BEBE",
+        colors: {
+          // nodecg's own accent colour
+          primary: '#23C8C0',
+        },
       },
     },
   },
-};
 
-export default new Vuetify(opts);
+  defaults: {
+    VTextField: inputs,
+    VTextarea: inputs,
+    VSelect: inputs,
+    VCombobox: inputs,
+  },
+});

@@ -19,7 +19,8 @@
 
   line-height: 1;
 
-  img {
+  // the boxart comes in through the slot
+  :slotted(img) {
     max-height: 100%;
     padding-right: 10px;
   }

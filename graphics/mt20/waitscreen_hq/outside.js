@@ -154,12 +154,13 @@ export function createCityMaterial() {
 
       void main() {
         vec3 n = normalize(vNormalW);
-        vec3 base = vec3(0.010, 0.007, 0.020);
+        // near-black walls, so the skyline reads as a silhouette against the sky
+        vec3 base = vec3(0.0012, 0.0009, 0.0025);
         // haze: lower floors dissolve into the light pollution
         float haze = smoothstep(2.4, 0.9, vWorld.y);
-        base = mix(base, vec3(0.012, 0.005, 0.011), haze * 0.6);
+        base = mix(base, vec3(0.004, 0.0018, 0.0035), haze * 0.6);
         // roofs catch a bit of sky
-        base += vec3(0.02, 0.02, 0.05) * max(n.y, 0.0);
+        base += vec3(0.004, 0.004, 0.01) * max(n.y, 0.0);
 
         // fit a whole number of window columns into this facade, centred, and count
         // rows down from just under its roof, so no window ever crosses an edge

@@ -48,7 +48,8 @@ export default {
 
   computed: {
     infoSorted() {
-      return this.allInfo.sort((a, b) => {
+      // a copy, sorting in place would write the sorted list back to the replicant
+      return [...this.allInfo].sort((a, b) => {
         return a.name.localeCompare(b.name);
       });
     },

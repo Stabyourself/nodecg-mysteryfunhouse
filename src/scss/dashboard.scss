@@ -1,0 +1,17 @@
+// Dashboard-wide styles on top of Vuetify (imported by dashboard.js). Vuetify's own css
+// sits in cascade layers, so plain rules here win without !important.
+
+.v-application {
+  // browser-default link colours are hard to read on the dark panels
+  a {
+    color: rgb(var(--v-theme-primary));
+  }
+}
+
+// a disabled button with a palette colour (green, red, orange) keeps most of that colour
+// and still looks clickable, grey it out instead
+.v-btn--disabled.v-btn--variant-elevated,
+.v-btn--disabled.v-btn--variant-flat {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.3);
+}

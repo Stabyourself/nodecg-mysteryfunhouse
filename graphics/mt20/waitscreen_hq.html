@@ -16,7 +16,6 @@
   URL params:
     ?quality=low    no AO/MSAA, cheaper shadows and volumetrics
     ?state=cards1   start on the corkboard (only without NodeCG)
-    ?hot=0          don't reload when the page or its modules change on disk
     ?controls=0     hide the panel on the right (always hidden inside OBS; H toggles)
     ?stats=0        hide the frame rate / video smoothness readout in that panel
     ?telestrator=0  don't lay the telestrator over the scene (never shown inside OBS,
@@ -181,17 +180,6 @@
       if (statsParam === '1' || (statsParam !== '0' && panelVisible)) {
         const { createStats } = await import('./waitscreen_hq/stats.js');
         createStats(room, panelVisible ? controls.statsHost : null);
-      }
-
-      // reload on any edit to this page or its modules (?hot=0 to turn off)
-      if (params.get('hot') !== '0') {
-        const { startLiveReload } = await import('./waitscreen_hq/liveReload.js');
-        const modules = ['scene.js', 'crtScreen.js', 'outside.js', 'volumetrics.js', 'post.js',
-          'controls.js', 'stats.js', 'playerCard.js', 'overlays.js', 'cardSwap.js'];
-        startLiveReload([
-          location.pathname,
-          ...modules.map((f) => new URL(`./waitscreen_hq/${f}`, location.href).pathname),
-        ]);
       }
     </script>
   </body>

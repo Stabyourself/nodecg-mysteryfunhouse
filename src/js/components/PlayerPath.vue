@@ -3,34 +3,42 @@
     <h1>{{ apostrophe(info.name) }} matches</h1>
 
     <div class="timeline-wrap" ref="timelineWrap">
-      <v-timeline v-if="info.matches.length > 0" dense light>
-        <v-timeline-item v-for="match of info.matches" :key="match.id" large class="align-center" color="transparent">
-          <template v-slot:icon>
-            <v-avatar>
-              <img :src="match.players[1].avatar" />
-            </v-avatar>
-          </template>
+      <!-- same markup Vuetify 2's v-timeline / v-avatar / v-icon rendered, styled by
+           src/scss/graphics-legacy.css -->
+      <div v-if="info.matches.length > 0" class="v-timeline v-timeline--dense theme--light">
+        <div v-for="match of info.matches" :key="match.id" class="v-timeline-item align-center theme--light">
+          <div class="v-timeline-item__body">
+            <div class="match">
+              <div class="round">{{ match.round }}</div>
+              <div class="opponent">{{ match.players[1].name }}</div>
 
-          <div class="match">
-            <div class="round">{{ match.round }}</div>
-            <div class="opponent">{{ match.players[1].name }}</div>
+              <div
+                class="score"
+                :class="{
+                  'green--text': match.winner == 0,
+                  'red--text': match.winner == 1,
+                }">
+                {{ match.score }}
+              </div>
+            </div>
 
-            <div
-              class="score"
-              :class="{
-                'green--text': match.winner == 0,
-                'red--text': match.winner == 1,
-              }">
-              {{ match.score }}
+            <div class="game">
+              <span class="platform"><i aria-hidden="true" class="v-icon notranslate mdi mdi-gamepad-variant theme--light"></i>{{ match.platform }}</span>
+              {{ match.game ? match.game : 'Unknown' }}
             </div>
           </div>
 
-          <div class="game">
-            <span class="platform"> <v-icon>mdi-gamepad-variant</v-icon>{{ match.platform }}</span>
-            {{ match.game ? match.game : 'Unknown' }}
+          <div class="v-timeline-item__divider">
+            <div class="v-timeline-item__dot v-timeline-item__dot--large">
+              <div class="v-timeline-item__inner-dot transparent">
+                <div class="v-avatar" style="height: 48px; min-width: 48px; width: 48px">
+                  <img :src="match.players[1].avatar" />
+                </div>
+              </div>
+            </div>
           </div>
-        </v-timeline-item>
-      </v-timeline>
+        </div>
+      </div>
 
       <div v-else style="font-size: 1.5em" class="mt-10">No matches yet!</div>
     </div>
@@ -62,7 +70,7 @@ $padding: 100px;
   top: $padding;
   left: $padding;
   height: 1080 - $padding * 2;
-  width: (1920 - $padding * 3) / 2;
+  width: (1920 - $padding * 3) * 0.5;
 
   padding: 20px;
   text-align: center;

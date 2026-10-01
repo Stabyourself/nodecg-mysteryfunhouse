@@ -149,7 +149,7 @@ function getPlayerInfo(tournament, careerRows, discordMembers, challongeName, co
     challonge: challongeEntry.participant,
     contact,
     rawMatches,
-    career: career ? { ...career, _sheet: undefined } : null,
+    career: career ?? null,
     avatar: getAvatarForMember(getMemberForDiscordId(discordMembers, contact['id'])),
   };
 }

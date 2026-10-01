@@ -12,7 +12,7 @@
   width: 100%;
   height: 100%;
 
-  ::v-deep iframe {
+  :deep(iframe) {
     width: 100%;
     height: 100%;
     border: 0;
@@ -22,6 +22,7 @@
 </style>
 
 <script>
+import { markRaw } from 'vue';
 import { bindReplicant } from '../util.js';
 import { obsConnect, obsRequest, onObsEvent, onObsReady, waitForObs, OBS_INPUT_ACTIVE_EVENTS } from '../obs.js';
 
@@ -90,7 +91,7 @@ export default {
     this.resumeTimer = setInterval(this.resume, RESUME_CHECK);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('obsSourceVisibleChanged', this.resume);
     document.removeEventListener('visibilitychange', this.resume);
     clearInterval(this.resumeTimer);
@@ -117,7 +118,8 @@ export default {
       );
 
       embed.addEventListener(Twitch.Embed.READY, () => {
-        this.player = embed.getPlayer();
+        // twitch's own object, vue must not wrap it
+        this.player = markRaw(embed.getPlayer());
       });
 
       embed.addEventListener(Twitch.Embed.PLAYING, this.applyAudio);

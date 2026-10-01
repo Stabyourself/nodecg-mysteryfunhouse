@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <graphic-app>
     <div style="top: -2px; left: 588px; width: 555px; position: absolute">
       <fit-text
         :max="1.6"
@@ -245,7 +245,7 @@
       </mt17-timer>
     </div>
 
-  </v-app>
+  </graphic-app>
 </template>
 
 <style lang="scss" scoped>

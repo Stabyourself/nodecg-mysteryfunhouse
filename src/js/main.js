@@ -1,20 +1,20 @@
 // Graphics entry point. Registers every component EXCEPT the dashboard ones (see
 // dashboard.js) so broadcast graphics pages don't have to load dashboard-only code
-// (Vuetify forms, vue-drag-resize, vue-tilt), and dashboard panels don't have to load
-// graphics-only code (three.js scenes, tween.js, markdown-it-vue).
+// (Vuetify), and dashboard panels don't have to load graphics-only code (three.js
+// scenes, tween.js, markdown-it).
 // Import the individual lodash functions rather than the whole library, so the rest of
 // lodash doesn't end up in the bundle just for these two.
-const upperFirst = require('lodash/upperFirst');
-const camelCase = require('lodash/camelCase');
-import Vue from 'vue';
-import vuetify from './vuetify'; // path to vuetify export
+import upperFirst from 'lodash/upperFirst';
+import camelCase from 'lodash/camelCase';
+import { createApp } from 'vue';
+import '../scss/graphics-legacy.css';
 
-const requireComponent = require.context('./', true, /^(?!.*\/dashboard\/).*\.vue$/i);
+// the root component of each page is the tag inside #app in its html
+const app = createApp({});
 
-requireComponent.keys().forEach((fileName) => {
-  // Get component config
-  const componentConfig = requireComponent(fileName);
+const components = import.meta.glob(['./components/**/*.vue', '!./components/dashboard/**'], { eager: true });
 
+for (const [fileName, component] of Object.entries(components)) {
   // Get PascalCase name of component
   const componentName = upperFirst(
     camelCase(
@@ -27,9 +27,7 @@ requireComponent.keys().forEach((fileName) => {
   );
 
   // Register component globally
-  Vue.component(componentName, componentConfig.default || componentConfig);
-});
+  app.component(componentName, component.default);
+}
 
-new Vue({
-  vuetify,
-}).$mount('#app');
+app.mount('#app');

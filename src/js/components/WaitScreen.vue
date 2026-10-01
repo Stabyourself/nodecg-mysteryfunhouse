@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <graphic-app>
     <!-- <video width="1920" autoplay loop muted>
             <source src="video/waiting_screen_back.mp4">
         </video> -->
@@ -20,10 +20,10 @@
       :info="this.playerInfo[3]"></player-path>
 
     <div class="mt-font top-text" :class="{ active: true }">
-      <markdown-it-vue :content="topText"></markdown-it-vue>
+      <markdown-text :content="topText"></markdown-text>
     </div>
 
-  </v-app>
+  </graphic-app>
 </template>
 
 <style lang="scss">
@@ -39,13 +39,8 @@
 
 <script>
 import { bindReplicant } from '../util.js';
-import MarkdownItVue from 'markdown-it-vue';
 
 export default {
-  components: {
-    MarkdownItVue,
-  },
-
   created() {
     bindReplicant.call(this, 'playerInfo');
     bindReplicant.call(this, 'waitScreenState');

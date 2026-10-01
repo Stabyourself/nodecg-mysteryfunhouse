@@ -77,7 +77,7 @@ $stripe-tile: 28.2843px;
   transition: opacity 0.3s;
 }
 
-.candy-enter,
+.candy-enter-from,
 .candy-leave-to {
   opacity: 0;
 }
@@ -124,13 +124,13 @@ export default {
     nodecg.sendMessage('requestVideoRects');
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     nodecg.unlisten('videoRects', this.onRects);
   },
 
   methods: {
     onRects({ player, live, replay }) {
-      this.$set(this.players, player, { live, replay });
+      this.players[player] = { live, replay };
     },
 
     // rect + border

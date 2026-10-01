@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <graphic-app>
     <div class="logo-container">
       <swipe :visible="visible" dir="down" style="height: 200px">
         <div class="match-round">
@@ -45,7 +45,7 @@
       </div>
     </div>
 
-  </v-app>
+  </graphic-app>
 </template>
 
 <style scoped lang="scss">

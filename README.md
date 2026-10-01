@@ -25,6 +25,20 @@ The following properties are needed for full functionality in the [bundle config
 }
 ```
 
+## Building
+
+Needs Node 22 or newer.
+
+```bash
+yarn install
+yarn prod    # build dist/js and dist/css once
+yarn watch   # rebuild on every change
+```
+
+The graphics (`src/js/main.js`) and the dashboard (`src/js/dashboard.js`) are built into one
+file each with Vite, see `vite.config.mjs` and `build.mjs`. Both are Vue 3; only the
+dashboard uses Vuetify. `dist/` is committed, and also holds the images, fonts and models.
+
 ## Cool Features
 
 - Complete recreation of every element except commentators

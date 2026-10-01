@@ -12,9 +12,9 @@
         >
         </v-text-field>
 
-        <div class="grey--text text-center">
+        <div class="text-grey text-center">
           <span v-if="timer.state == 'paused'"
-            >Press <v-icon color="grey">mdi-play</v-icon> to continue
+            >Press <v-icon color="grey" icon="mdi-play"></v-icon> to continue
             {{ pausedTimerText }}</span
           >
           <span v-else>&nbsp;</span>
@@ -28,7 +28,7 @@
               block
               :disabled="timer.state == 'playing'"
             >
-              <v-icon dark> mdi-play </v-icon>
+              <v-icon icon="mdi-play"></v-icon>
             </v-btn>
           </v-col>
 
@@ -39,27 +39,29 @@
               block
               :disabled="timer.state != 'playing'"
             >
-              <v-icon dark> mdi-pause </v-icon>
+              <v-icon icon="mdi-pause"></v-icon>
             </v-btn>
           </v-col>
 
           <v-col>
             <v-btn color="red" @click="reset" block :disabled="timer.ms == 0">
-              <v-icon dark> mdi-undo </v-icon>
+              <v-icon icon="mdi-undo"></v-icon>
             </v-btn>
           </v-col>
         </v-row>
 
-        <v-switch v-model="stopTimerWhenDone" class="d-inline-block"></v-switch>
-        Halt after
-        <v-select
-          v-model="stopTimerWhenDoneCount"
-          :items="playerCounts"
-          class="d-inline-block"
-          style="width: 45px"
-          dense
-        ></v-select>
-        {{ stopTimerWhenDoneCount == 1 ? "finish" : "finishes" }}
+        <div class="halt-row">
+          <v-switch v-model="stopTimerWhenDone" color="primary" density="compact" hide-details></v-switch>
+          Halt after
+          <v-select
+            v-model="stopTimerWhenDoneCount"
+            :items="playerCounts"
+            class="halt-count"
+            density="compact"
+            hide-details
+          ></v-select>
+          {{ stopTimerWhenDoneCount == 1 ? "finish" : "finishes" }}
+        </div>
       </v-container>
     </v-main>
   </v-app>
@@ -71,10 +73,27 @@
   margin-top: 0;
 
   input {
+    // as big as fits the panel
     font-size: 3.87em;
     font-weight: 700;
-    max-height: none;
+    letter-spacing: normal;
+    min-height: 0;
     padding: 0;
+  }
+}
+
+.halt-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+
+  .v-switch {
+    flex: 0 0 auto;
+  }
+
+  .halt-count {
+    flex: 0 0 60px;
   }
 }
 </style>

@@ -386,7 +386,7 @@ export default {
     window.addEventListener('keydown', this.keyDown);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('pointerup', this.mouseUp);
     window.removeEventListener('blur', this.endStroke);
     window.removeEventListener('keydown', this.keyDown);

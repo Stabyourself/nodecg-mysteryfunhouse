@@ -135,7 +135,7 @@ export default {
     this.measureTimer = setInterval(this.measure, 1000);
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.offReady) this.offReady();
     if (this.offEvent) this.offEvent();
     clearInterval(this.pipTimer);
