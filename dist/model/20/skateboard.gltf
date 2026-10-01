@@ -1,0 +1,272 @@
+{
+ "asset": {
+  "version": "2.0",
+  "generator": "make_skateboard_gltf.py (STUNTBOOST Board model)"
+ },
+ "scene": 0,
+ "scenes": [
+  {
+   "name": "Scene",
+   "nodes": [
+    0
+   ]
+  }
+ ],
+ "nodes": [
+  {
+   "name": "Skateboard",
+   "children": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ]
+  },
+  {
+   "name": "Deck_textured",
+   "mesh": 0
+  },
+  {
+   "name": "Wheels_Retract1",
+   "rotation": [
+    0,
+    -1,
+    0,
+    7.549790126404332e-08
+   ],
+   "mesh": 1
+  },
+  {
+   "name": "Wheels_Retract2",
+   "mesh": 1
+  },
+  {
+   "name": "TailAxis",
+   "translation": [
+    0,
+    0.03410021960735321,
+    0.27317142486572266
+   ]
+  },
+  {
+   "name": "NoseAxis",
+   "translation": [
+    0,
+    0.03410021960735321,
+    -0.27317142486572266
+   ]
+  },
+  {
+   "name": "GrindMin",
+   "translation": [
+    0,
+    0.10991717875003815,
+    0.48203831911087036
+   ]
+  },
+  {
+   "name": "GrindMax",
+   "translation": [
+    0,
+    0.10991717875003815,
+    -0.48087775707244873
+   ]
+  }
+ ],
+ "meshes": [
+  {
+   "name": "deck_textured",
+   "primitives": [
+    {
+     "attributes": {
+      "POSITION": 0,
+      "NORMAL": 1,
+      "TEXCOORD_0": 2
+     },
+     "indices": 3,
+     "material": 0
+    }
+   ]
+  },
+  {
+   "name": "skateboard_1_<_mesh.001",
+   "primitives": [
+    {
+     "attributes": {
+      "POSITION": 4,
+      "NORMAL": 5,
+      "TEXCOORD_0": 6
+     },
+     "indices": 7,
+     "material": 0
+    }
+   ]
+  }
+ ],
+ "accessors": [
+  {
+   "bufferView": 0,
+   "componentType": 5126,
+   "count": 391,
+   "type": "VEC3",
+   "min": [
+    -0.12120746821165085,
+    0.10922287404537201,
+    -0.4833812117576599
+   ],
+   "max": [
+    0.12120746821165085,
+    0.1674102246761322,
+    0.48333457112312317
+   ]
+  },
+  {
+   "bufferView": 1,
+   "componentType": 5126,
+   "count": 391,
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 2,
+   "componentType": 5126,
+   "count": 391,
+   "type": "VEC2"
+  },
+  {
+   "bufferView": 3,
+   "componentType": 5123,
+   "count": 1716,
+   "type": "SCALAR"
+  },
+  {
+   "bufferView": 4,
+   "componentType": 5126,
+   "count": 4381,
+   "type": "VEC3",
+   "min": [
+    -0.13698895275592804,
+    0.0004820972681045532,
+    0.19077566266059875
+   ],
+   "max": [
+    0.136989027261734,
+    0.11213503777980804,
+    0.3138219714164734
+   ]
+  },
+  {
+   "bufferView": 5,
+   "componentType": 5126,
+   "count": 4381,
+   "type": "VEC3"
+  },
+  {
+   "bufferView": 6,
+   "componentType": 5126,
+   "count": 4381,
+   "type": "VEC2"
+  },
+  {
+   "bufferView": 7,
+   "componentType": 5123,
+   "count": 17604,
+   "type": "SCALAR"
+  }
+ ],
+ "bufferViews": [
+  {
+   "buffer": 0,
+   "byteOffset": 0,
+   "byteLength": 4692,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteOffset": 4692,
+   "byteLength": 4692,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteOffset": 9384,
+   "byteLength": 3128,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteOffset": 12512,
+   "byteLength": 3432,
+   "target": 34963
+  },
+  {
+   "buffer": 0,
+   "byteOffset": 15944,
+   "byteLength": 52572,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteOffset": 68516,
+   "byteLength": 52572,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteOffset": 121088,
+   "byteLength": 35048,
+   "target": 34962
+  },
+  {
+   "buffer": 0,
+   "byteOffset": 156136,
+   "byteLength": 35208,
+   "target": 34963
+  }
+ ],
+ "buffers": [
+  {
+   "uri": "skateboard.bin",
+   "byteLength": 191344
+  }
+ ],
+ "samplers": [
+  {
+   "magFilter": 9728,
+   "minFilter": 9728,
+   "wrapS": 33071,
+   "wrapT": 33071
+  }
+ ],
+ "images": [
+  {
+   "name": "deck",
+   "uri": "deck.png",
+   "mimeType": "image/png"
+  }
+ ],
+ "textures": [
+  {
+   "sampler": 0,
+   "source": 0
+  }
+ ],
+ "materials": [
+  {
+   "name": "tape",
+   "doubleSided": true,
+   "pbrMetallicRoughness": {
+    "baseColorTexture": {
+     "index": 0
+    },
+    "metallicFactor": 0,
+    "roughnessFactor": 1.0
+   },
+   "extras": {
+    "gameRoughnessFactor": 0.5
+   }
+  }
+ ]
+}

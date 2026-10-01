@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<!--
+  High-quality version of the MT20 wait screen room. No Vue and no build step: plain ES
+  modules loaded straight from graphics/mt20/waitscreen_hq/.
+
+  Open it through NodeCG (it is a registered graphic, so NodeCG injects its API):
+    http://localhost:9090/bundles/nodecg-mysteryfunhouse/graphics/mt20/waitscreen_hq.html
+  With NodeCG it follows the same replicants as the Vue wait screen:
+    waitScreenState    camera on the room ("ghost") or on the corkboard ("cards1"/"cards2")
+    playerInfo         the two player cards on the corkboard
+    topText            the VCR-style text at the top
+    assets:ghostGames  the clips the TV plays
+  Served any other way (no NodeCG API) the room still renders, but with no clips (the TV
+  stays on static) and no cards / top text / telestrator.
+
+  URL params:
+    ?quality=low    no AO/MSAA, cheaper shadows and volumetrics
+    ?state=cards1   start on the corkboard (only without NodeCG)
+    ?hot=0          don't reload when the page or its modules change on disk
+    ?controls=0     hide the panel on the right (always hidden inside OBS; H toggles)
+    ?stats=0        hide the frame rate / video smoothness readout in that panel
+    ?telestrator=0  don't lay the telestrator over the scene (never shown inside OBS,
+                    where it is its own source)
+    ?debug          check shaders for compile errors (slower startup)
+  In the console, window.room.toCorkboard() / .toIdle() / .playVideo(url) drive it.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MT20 Wait Screen HQ</title>
+    <style>
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+      #stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; }
+      canvas { display: block; }
+    </style>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "/bundles/nodecg-mysteryfunhouse/node_modules/three/build/three.module.js",
+          "three/examples/jsm/": "/bundles/nodecg-mysteryfunhouse/node_modules/three/examples/jsm/",
+          "postprocessing": "/bundles/nodecg-mysteryfunhouse/node_modules/postprocessing/build/index.js",
+          "n8ao": "/bundles/nodecg-mysteryfunhouse/node_modules/n8ao/dist/N8AO.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="stage">
+      <div id="scene"></div>
+    </div>
+
+    <script type="module">
+      import { createRoomScene } from './waitscreen_hq/scene.js';
+      import { createControls } from './waitscreen_hq/controls.js';
+      import { createPlayerCard } from './waitscreen_hq/playerCard.js';
+      import { createTopText, createTelestrator } from './waitscreen_hq/overlays.js';
+
+      const params = new URLSearchParams(location.search);
+      const stage = document.getElementById('stage');
+
+      // ---------- live data ----------
+      // NodeCG only injects its API into registered graphics it serves itself.
+      const live = typeof window.nodecg !== 'undefined' && typeof window.NodeCG !== 'undefined';
+      let reps = null;
+      if (live) {
+        reps = {
+          waitScreenState: nodecg.Replicant('waitScreenState'),
+          playerInfo: nodecg.Replicant('playerInfo'),
+          topText: nodecg.Replicant('topText'),
+          ghostGames: nodecg.Replicant('assets:ghostGames'),
+        };
+        await NodeCG.waitForReplicants(...Object.values(reps));
+      }
+      const currentState = () => (reps && reps.waitScreenState.value) || params.get('state') || 'ghost';
+
+      // ---------- clips ----------
+      // The clips are the ghostGames assets uploaded in NodeCG, nothing else: without
+      // NodeCG (or with none uploaded) the list is empty and the TV stays on static.
+      function clipList() {
+        const assets = reps && Array.isArray(reps.ghostGames.value) ? reps.ghostGames.value : [];
+        // alphabetical, ignoring case (NodeCG hands the assets over in upload order)
+        return assets
+          .map((a) => ({ name: a.base || a.name || a.url, url: a.url }))
+          .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base', numeric: true }));
+      }
+      let videos = clipList();
+
+      const recent = [];
+      let playing = false; // a clip has been put on the TV
+      function play(entry) {
+        playing = true;
+        recent.push(entry.url);
+        if (recent.length > 4) recent.shift();
+        room.playVideo(entry.url);
+        controls.setCurrent(entry);
+      }
+
+      // random clip, never one of the last 4 shown
+      function nextVideo() {
+        if (!videos.length) return;
+        let pick;
+        do {
+          pick = videos[Math.floor(Math.random() * videos.length)];
+        } while (videos.length > 4 && recent.includes(pick.url));
+        play(pick);
+      }
+
+      // ---------- player cards ----------
+      let room = null;
+      const cards = [0, 1].map(() => createPlayerCard(() => room && room.cardsUpdated()));
+      const shownCards = [null, null];
+      let shownPair = null;
+      function updateCards() {
+        // same pairing as the Vue wait screen: the second match's players on cards2/paths2
+        const state = currentState();
+        const pair = state === 'cards2' || state === 'paths2' ? 2 : 0;
+        // redraws whichever cards changed; resolves when they are done (avatars loaded)
+        const redraw = () => {
+          const info = (reps && reps.playerInfo.value) || [];
+          return Promise.all(cards.map((card, i) => {
+            const player = info[pair + i] || null;
+            const key = JSON.stringify(player);
+            if (key === shownCards[i]) return null;
+            shownCards[i] = key;
+            return card.setInfo(player);
+          }));
+        };
+        // switching between the two matches while looking at the corkboard: unpin the
+        // cards, slide them off, and bring the new ones in. Anything else (first load,
+        // data refresh, camera elsewhere) just redraws in place.
+        const switched = shownPair !== null && pair !== shownPair;
+        shownPair = pair;
+        if (switched && room && room.cardsInView()) room.swapCards(redraw);
+        else redraw();
+      }
+
+      // ---------- scene ----------
+      room = createRoomScene(document.getElementById('scene'), {
+        quality: params.get('quality') || 'high',
+        initialState: currentState(),
+        onVideoEnded: nextVideo,
+        cardCanvases: cards.map((c) => c.canvas),
+      });
+      window.room = room;
+      window.cards = cards; // cards[0].setInfo({...}) from the console, for testing
+
+      function applyState(state) {
+        if (state === 'cards1' || state === 'cards2') room.toCorkboard();
+        else if (state === 'ghost') room.toIdle();
+        updateCards();
+      }
+
+      const controls = createControls({ videos, video: room.video, onPlay: play, onNext: nextVideo });
+      nextVideo();
+
+      // ---------- overlays + live updates ----------
+      if (live) {
+        const topText = createTopText(stage);
+        // in OBS the telestrator is its own source
+        if (!window.obsstudio && params.get('telestrator') !== '0') createTelestrator(stage);
+
+        // (change handlers also fire once right away with the current value)
+        reps.topText.on('change', (text) => topText.setText(text || ''));
+        reps.playerInfo.on('change', updateCards);
+        reps.waitScreenState.on('change', applyState);
+        // the camera can only move once the room has loaded; catch up on anything missed
+        room.whenReady(() => applyState(currentState()));
+        reps.ghostGames.on('change', () => {
+          videos = clipList();
+          controls.setVideos(videos);
+          // the first clips arriving after an empty start: put one on
+          if (!playing) nextVideo();
+        });
+      }
+
+      // frame rate / video smoothness readout, at the top of the panel on the right.
+      // On by default for now while playback smoothness is being sorted out; never shown
+      // in OBS unless asked for with ?stats=1.
+      const panelVisible = !(window.obsstudio || params.get('controls') === '0');
+      const statsParam = params.get('stats');
+      if (statsParam === '1' || (statsParam !== '0' && panelVisible)) {
+        const { createStats } = await import('./waitscreen_hq/stats.js');
+        createStats(room, panelVisible ? controls.statsHost : null);
+      }
+
+      // reload on any edit to this page or its modules (?hot=0 to turn off)
+      if (params.get('hot') !== '0') {
+        const { startLiveReload } = await import('./waitscreen_hq/liveReload.js');
+        const modules = ['scene.js', 'crtScreen.js', 'outside.js', 'volumetrics.js', 'post.js',
+          'controls.js', 'stats.js', 'playerCard.js', 'overlays.js', 'cardSwap.js'];
+        startLiveReload([
+          location.pathname,
+          ...modules.map((f) => new URL(`./waitscreen_hq/${f}`, location.href).pathname),
+        ]);
+      }
+    </script>
+  </body>
+</html>

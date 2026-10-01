@@ -5685,6 +5685,11 @@ multicast-dns@^7.2.5:
     dns-packet "^5.2.2"
     thunky "^1.0.2"
 
+n8ao@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/n8ao/-/n8ao-2.0.1.tgz#b533890ab9d3d84ddfad3e3d5b0ce4a3b09a1287"
+  integrity sha512-MoP1QKUdj4/3cKEnhFl917t0eQwWGER1l43ckz5mNOPyYWGRDGQbVoTOQz/VBvy01in6QVNG+AL6Xxx5AjZBYA==
+
 nanoid@^3.3.11:
   version "3.3.11"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.11.tgz#4f4f112cefbe303202f2199838128936266d185b"
@@ -6352,6 +6357,11 @@ postcss@^8.2.15, postcss@^8.4.14, postcss@^8.4.33:
     nanoid "^3.3.11"
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
+
+postprocessing@^6.39.5:
+  version "6.39.5"
+  resolved "https://registry.yarnpkg.com/postprocessing/-/postprocessing-6.39.5.tgz#8979edf3ad672fbc2d41b7c498df26b68d6e7a90"
+  integrity sha512-YmH+t74J2X1lwYjKzK/tgs9C9kqWWPB9JwZiDF5mEf4BdCEAmEFbO8lXBA7NM0/j4g+x6FgD/Tt5/kT7ogbEDA==
 
 "prettier@^1.18.2 || ^2.0.0":
   version "2.8.8"

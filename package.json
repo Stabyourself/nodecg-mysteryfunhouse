@@ -214,6 +214,11 @@
         "height": 1080
       },
       {
+        "file": "mt20/waitscreen_hq.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
         "file": "mt20/2player.html",
         "width": 1920,
         "height": 1080
@@ -332,7 +337,9 @@
     "lodash": "^4.17.21",
     "mariadb": "^3.2.2",
     "markdown-it-vue": "^1.0.9",
+    "n8ao": "^2.0.1",
     "node-fetch": "^2.6.7",
+    "postprocessing": "^6.39.5",
     "request": "^2.88.2",
     "timer-node": "^5.0.5"
   },
