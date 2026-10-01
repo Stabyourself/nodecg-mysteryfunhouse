@@ -13,6 +13,7 @@ module.exports = function (nodecg) {
     "./card-api",
     "./telestrator",
     "./replay",
+    "./boxart-fetch",
   ]) {
     try {
       require(name);

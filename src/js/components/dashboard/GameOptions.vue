@@ -59,6 +59,7 @@ import { bindReplicant } from '../../util.js';
 
 const MAX_UPLOAD_BYTES = 25 * 1024 * 1024; // 25MB
 const UPLOAD_WAIT_TIMEOUT = 15000;
+const FETCH_TIMEOUT = 25000;
 
 export default {
   created() {
@@ -121,9 +122,92 @@ export default {
 
     onDrop(event) {
       this.dragOver = false;
-      const file = event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0];
+      const dt = event.dataTransfer;
+      const file = dt && dt.files && dt.files[0];
       if (file) {
         this.uploadBoxart(file);
+        return;
+      }
+
+      // dragged from another browser window: we only get a url, not a file
+      const url = dt && this.droppedImageUrl(dt);
+      if (url) {
+        this.uploadBoxartFromUrl(url);
+      }
+    },
+
+    droppedImageUrl(dt) {
+      // the img src comes first: when the image is wrapped in a link, uri-list is the link's page, not the image
+      const html = dt.getData('text/html');
+      if (html) {
+        const img = new DOMParser().parseFromString(html, 'text/html').querySelector('img');
+        if (img && img.src) {
+          return img.src;
+        }
+      }
+
+      const list = dt.getData('text/uri-list');
+      const first = list.split(/\r?\n/).find((l) => l && !l.startsWith('#'));
+      if (first) {
+        return first.trim();
+      }
+
+      const text = dt.getData('text/plain').trim();
+      return /^(https?|data|blob):/i.test(text) ? text : '';
+    },
+
+    async uploadBoxartFromUrl(url) {
+      if (this.uploading) {
+        this.uploadError = 'An upload is already in progress. Please wait for it to finish.';
+        return;
+      }
+
+      // try the browser first, falls over on sites without CORS headers
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          const blob = await res.blob();
+          if (blob.type.startsWith('image/')) {
+            const ext = blob.type.split('/')[1].split('+')[0];
+            this.uploadBoxart(new File([blob], `image.${ext}`, { type: blob.type }));
+            return;
+          }
+        }
+      } catch (err) {
+        // fall through to the server
+      }
+
+      if (!/^https?:/i.test(url)) {
+        this.uploadError = 'Could not read the dropped image.';
+        return;
+      }
+
+      this.uploading = true;
+      this.uploadProgress = 0;
+      this.uploadError = '';
+      try {
+        // no ack at all means the server has no listener (extension not restarted)
+        const filename = await new Promise((resolve, reject) => {
+          const timeout = setTimeout(
+            () => reject(new Error('server did not respond (is NodeCG restarted?)')),
+            FETCH_TIMEOUT,
+          );
+          nodecg.sendMessage('fetchBoxartFromUrl', url, (err, name) => {
+            clearTimeout(timeout);
+            err ? reject(err) : resolve(name);
+          });
+        });
+        const asset = await this.waitForBoxart(filename);
+        if (asset) {
+          this.currentBoxart = asset;
+        } else {
+          this.uploadError =
+            'Upload succeeded, but it did not show up in time. Select it manually from the boxart list.';
+        }
+      } catch (err) {
+        this.uploadError = `Upload failed: ${err.message || err}`;
+      } finally {
+        this.uploading = false;
       }
     },
 
