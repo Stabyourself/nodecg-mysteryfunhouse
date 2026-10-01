@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
 import { createCrtScreenMaterial } from './crtScreen.js';
 import { createSkyMaterial, createCityMaterial, prepareCityGeometry, createRoofBeacons } from './outside.js';
@@ -302,7 +303,8 @@ function addGhostRim(material, rimColor) {
 export function createRoomScene(container, options = {}) {
   // cardCanvases: up to two canvases drawn onto the corkboard cards (call cardsUpdated()
   // after redrawing them)
-  const { initialState = 'ghost', quality = 'high', onVideoEnded = null, cardCanvases = null } = options;
+  const { initialState = 'ghost', quality = 'high', onVideoEnded = null, cardCanvases = null, freecam = false } = options;
+  let orbit = null; // freecam: drag to orbit, right-drag to pan, wheel to zoom
   const cardTextures = [];
   const high = quality !== 'low';
 
@@ -833,6 +835,12 @@ export function createRoomScene(container, options = {}) {
     const cameraEndHandle = getNamed(room, 'CAMERA_END_HANDLE');
     camBase.position.copy(camera.position);
     camBase.quaternion.copy(camera.quaternion);
+    if (freecam) {
+      orbit = new OrbitControls(camera, renderer.domElement);
+      orbit.target.copy(camera.position).add(new THREE.Vector3(0, 0, -3).applyQuaternion(camera.quaternion));
+      orbit.enableDamping = true;
+      orbit.update();
+    }
     if (cameraStart && cameraStartHandle && cameraEnd && cameraEndHandle) {
       const qStart = cameraStart.quaternion.clone();
       const qEnd = cameraEnd.quaternion.clone();
@@ -920,6 +928,10 @@ export function createRoomScene(container, options = {}) {
 
   // the camera only moves for the idle <-> corkboard transitions
   function updateCamera(now) {
+    if (freecam) {
+      if (orbit) orbit.update();
+      return;
+    }
     if (cameraMove) {
       let k = Math.min((now - cameraMove.start) / cameraMove.duration, 1);
       k = k * k * k * (k * (k * 6 - 15) + 10); // smootherstep

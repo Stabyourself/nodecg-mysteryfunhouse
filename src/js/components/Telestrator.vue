@@ -306,7 +306,7 @@ button {
 const WIDTH = 1920;
 const HEIGHT = 1080;
 const SHADOW_OFFSET = 5;
-const FLUSH_INTERVAL = 30;
+const FLUSH_INTERVAL = 16;
 const MIN_POINT_DISTANCE = 1.5;
 const ERASER_SCALE = 8;
 const MAX_THICKNESS = 36;
@@ -356,6 +356,7 @@ export default {
 
   created() {
     this.activeStrokes = new Map();
+    this.ownIds = new Set();
     this.strokes = [];
     this.localStroke = null;
     this.pendingPts = [];
@@ -464,7 +465,13 @@ export default {
         t: this.erasing ? thickness * ERASER_SCALE : thickness,
         erase: this.erasing,
         last: [e.pageX, e.pageY],
+        pts: [[e.pageX, e.pageY]],
+        undone: false,
       };
+      // draw locally right away, the server echo of our own strokes is ignored
+      this.ownIds.add(this.localStroke.id);
+      this.activeStrokes.set(this.localStroke.id, this.localStroke);
+      this.requestRender();
       this.pendingPts = [[e.pageX, e.pageY]];
       this.flush();
       this.flushTimer = setInterval(this.flush, FLUSH_INTERVAL);
@@ -497,9 +504,15 @@ export default {
       clearInterval(this.flushTimer);
       this.flushTimer = null;
       this.flush(true);
-      this.undoStack.push(this.localStroke.id);
+      const stroke = this.localStroke;
+      this.undoStack.push(stroke.id);
       this.redoStack = [];
       this.localStroke = null;
+
+      drawStroke(this.committedCtx, stroke);
+      this.strokes.push(stroke);
+      this.activeStrokes.delete(stroke.id);
+      this.requestRender();
     },
 
     undo() {
@@ -537,7 +550,9 @@ export default {
       const last = this.localStroke.last;
       if (Math.hypot(x - last[0], y - last[1]) < MIN_POINT_DISTANCE) return;
       this.localStroke.last = [x, y];
+      this.localStroke.pts.push([x, y]);
       this.pendingPts.push([x, y]);
+      this.requestRender();
     },
 
     flush(done = false) {
@@ -556,6 +571,7 @@ export default {
     },
 
     strokeReceived(msg) {
+      if (this.ownIds.has(msg.id)) return;
       let stroke = this.activeStrokes.get(msg.id);
       if (!stroke) {
         stroke = { id: msg.id, c: msg.c, t: msg.t, erase: msg.erase, pts: [], undone: false };
@@ -577,6 +593,10 @@ export default {
     },
 
     clear() {
+      clearInterval(this.flushTimer);
+      this.flushTimer = null;
+      this.localStroke = null;
+      this.pendingPts = [];
       this.activeStrokes.clear();
       this.strokes = [];
       this.undoStack = [];

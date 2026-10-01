@@ -63,7 +63,7 @@ export default {
   props: ['player'],
 
   created() {
-    bindReplicant.call(this, 'crop', `player${this.player}crop`);
+    bindReplicant.call(this, 'crop', `player${this.player}crop`, 50);
 
     // the previews ask for frames, this just draws whatever shows up
     nodecg.listenFor('playerFrame', this.frameReceived);

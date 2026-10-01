@@ -148,7 +148,7 @@ export default {
   emits: ['select'],
 
   created() {
-    bindReplicant.call(this, 'crop', `player${this.player}crop`);
+    bindReplicant.call(this, 'crop', `player${this.player}crop`, 50);
     bindReplicant.call(this, 'name', `player${this.player}name`);
 
     // frames the editor asks for show up here too

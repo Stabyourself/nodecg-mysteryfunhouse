@@ -6,8 +6,10 @@
   Open it through NodeCG (it is a registered graphic, so NodeCG injects its API):
     http://localhost:9090/bundles/nodecg-mysteryfunhouse/graphics/mt20/waitscreen_hq.html
   With NodeCG it follows the same replicants as the Vue wait screen:
-    waitScreenState    camera on the room ("ghost") or on the corkboard ("cards1"/"cards2")
-    playerInfo         the two player cards on the corkboard
+    waitScreenState    camera on the room ("ghost") or on the corkboard ("cards1"/"cards2"/
+                       "paths1"/"paths2")
+    playerInfo         the two player cards on the corkboard, and the match history
+                       panels ("paths1"/"paths2")
     topText            the VCR-style text at the top
     assets:ghostGames  the clips the TV plays
   Served any other way (no NodeCG API) the room still renders, but with no clips (the TV
@@ -20,6 +22,8 @@
     ?stats=0        hide the frame rate / video smoothness readout in that panel
     ?telestrator=0  don't lay the telestrator over the scene (never shown inside OBS,
                     where it is its own source)
+    ?freecam        move the camera around the room (drag: orbit, right-drag: pan, wheel:
+                    zoom) and leave the telestrator off; the idle/corkboard moves are ignored
     ?debug          check shaders for compile errors (slower startup)
   In the console, window.room.toCorkboard() / .toIdle() / .playVideo(url) drive it.
 -->
@@ -52,10 +56,11 @@
       import { createRoomScene } from './waitscreen_hq/scene.js';
       import { createControls } from './waitscreen_hq/controls.js';
       import { createPlayerCard } from './waitscreen_hq/playerCard.js';
-      import { createTopText, createTelestrator } from './waitscreen_hq/overlays.js';
+      import { createTopText, createTelestrator, createPlayerPaths } from './waitscreen_hq/overlays.js';
 
       const params = new URLSearchParams(location.search);
       const stage = document.getElementById('stage');
+      const freecam = params.has('freecam');
 
       // ---------- live data ----------
       // NodeCG only injects its API into registered graphics it serves itself.
@@ -136,6 +141,7 @@
       // ---------- scene ----------
       room = createRoomScene(document.getElementById('scene'), {
         quality: params.get('quality') || 'high',
+        freecam,
         initialState: currentState(),
         onVideoEnded: nextVideo,
         cardCanvases: cards.map((c) => c.canvas),
@@ -143,10 +149,12 @@
       window.room = room;
       window.cards = cards; // cards[0].setInfo({...}) from the console, for testing
 
+      let paths = null; // match history panels, created with the live data below
       function applyState(state) {
-        if (state === 'cards1' || state === 'cards2') room.toCorkboard();
+        if (state === 'cards1' || state === 'cards2' || state === 'paths1' || state === 'paths2') room.toCorkboard();
         else if (state === 'ghost') room.toIdle();
         updateCards();
+        if (paths) paths.setState(state);
       }
 
       const controls = createControls({ videos, video: room.video, onPlay: play, onNext: nextVideo });
@@ -155,12 +163,16 @@
       // ---------- overlays + live updates ----------
       if (live) {
         const topText = createTopText(stage);
+        paths = createPlayerPaths(stage);
         // in OBS the telestrator is its own source
-        if (!window.obsstudio && params.get('telestrator') !== '0') createTelestrator(stage);
+        if (!window.obsstudio && !freecam && params.get('telestrator') !== '0') createTelestrator(stage);
 
         // (change handlers also fire once right away with the current value)
         reps.topText.on('change', (text) => topText.setText(text || ''));
-        reps.playerInfo.on('change', updateCards);
+        reps.playerInfo.on('change', () => {
+          updateCards();
+          paths.setInfo(reps.playerInfo.value);
+        });
         reps.waitScreenState.on('change', applyState);
         // the camera can only move once the room has loaded; catch up on anything missed
         room.whenReady(() => applyState(currentState()));

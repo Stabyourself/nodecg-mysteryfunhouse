@@ -8,7 +8,7 @@ const IN_FLIGHT_TIMEOUT = 5000;
 // writes go out right away. every value we send is remembered until it comes back, so
 // an old echo ("t" arriving after we already sent "test") doesn't overwrite what you typed
 // throttleWait only limits streams of changes (dragging), the last value always goes out
-export function bindReplicant(vueName, replicantName = vueName, throttleWait = 100) {
+export function bindReplicant(vueName, replicantName = vueName, throttleWait = 0) {
   // clone: nodecg gets plain values, never vue's reactive proxies
   const replicant = nodecg.Replicant(replicantName, {
     defaultValue: clone(this[vueName]),
