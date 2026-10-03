@@ -353,9 +353,30 @@ export function createRoomScene(container, options = {}) {
   };
 
   // every render shows the newest frame of whichever clips are running
+  // Uploading only when the browser reports a new frame (rather than re-uploading the
+  // same frame on every render) keeps the GPU copies down to the clip's own rate; each
+  // one takes a frame from the decoder's pool, and doing it 60-144 times a second for a
+  // clip that only has 60 new frames hurt the decoder on a 60Hz output.
+  const freshFrame = new WeakMap();
+  for (const video of [gameVideo, staticVideo]) {
+    freshFrame.set(video, false);
+    if ('requestVideoFrameCallback' in video) {
+      const onFrame = () => {
+        freshFrame.set(video, true);
+        video.requestVideoFrameCallback(onFrame);
+      };
+      video.requestVideoFrameCallback(onFrame);
+    }
+  }
+  function refreshVideo(video, tex) {
+    if (video.paused || video.readyState < video.HAVE_CURRENT_DATA) return;
+    if ('requestVideoFrameCallback' in video && !freshFrame.get(video)) return;
+    freshFrame.set(video, false);
+    tex.needsUpdate = true;
+  }
   function refreshVideoTextures() {
-    if (!gameVideo.paused && gameVideo.readyState >= gameVideo.HAVE_CURRENT_DATA) gameTex.needsUpdate = true;
-    if (!staticVideo.paused && staticVideo.readyState >= staticVideo.HAVE_CURRENT_DATA) staticTex.needsUpdate = true;
+    refreshVideo(gameVideo, gameTex);
+    refreshVideo(staticVideo, staticTex);
   }
   // a clip that isn't running still has to show the frame it is on: the first one once
   // it has loaded, and the one landed on when scrubbing while paused

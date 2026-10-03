@@ -28,9 +28,18 @@ function eat(data, width, height, horizontal, fromEnd) {
   const length = horizontal ? height : width;
   const limit = Math.floor(length * MAX_EAT);
 
+  let reference = null;
+
   for (let i = 0; i < limit; i++) {
     const index = fromEnd ? length - 1 - i : i;
     if (lineSpread(data, width, index, horizontal) > UNIFORM_TOLERANCE) return i;
+
+    // a border has to be one solid color, a gradient is content
+    const across = horizontal ? width : data.length / 4 / width;
+    const mean = meanWithin(data, width, index, horizontal, 0, across);
+
+    if (reference === null) reference = mean;
+    else if (Math.abs(mean - reference) > UNIFORM_TOLERANCE) return i;
   }
 
   return 0;
@@ -170,121 +179,21 @@ export function detectEdgeLines(imageData, maxLines = 14) {
   };
 }
 
-// --- game inside a layout ---
-// with an overlay around the game the flat border scan finds nothing, so use the snap
-// lines to find the box the game is in and trim the black inside it
-
-const FRAME_EDGE_MARGIN = 0.015; // lines this close to the frame edge are the layout itself
-const MIN_PANEL_FRACTION = 0.12; // a panel smaller than this is not the game
-
-function spreadWithin(data, width, index, horizontal, from, to) {
-  let min = 255;
-  let max = 0;
+function meanWithin(data, width, index, horizontal, from, to) {
+  let sum = 0;
+  let count = 0;
 
   for (let i = from; i < to; i += SAMPLE_STEP) {
     const p = horizontal ? (index * width + i) * 4 : (i * width + index) * 4;
-    const l = (data[p] * 299 + data[p + 1] * 587 + data[p + 2] * 114) / 1000;
-
-    if (l < min) min = l;
-    if (l > max) max = l;
-
-    if (max - min > UNIFORM_TOLERANCE) return max - min;
+    sum += (data[p] * 299 + data[p + 1] * 587 + data[p + 2] * 114) / 1000;
+    count++;
   }
 
-  return max - min;
+  return count ? sum / count : 0;
 }
 
-// trim flat rows/columns inside the box. repeat because trimming one side can make
-// the next row flat
-function trimUniform(imageData, box, passes = 3) {
-  let trimmed = Object.assign({}, box);
-
-  for (let pass = 0; pass < passes; pass++) {
-    const before = trimmed;
-    trimmed = trimUniformOnce(imageData, trimmed);
-
-    if (
-      trimmed.left === before.left &&
-      trimmed.right === before.right &&
-      trimmed.top === before.top &&
-      trimmed.bottom === before.bottom
-    ) {
-      break;
-    }
-  }
-
-  return trimmed;
-}
-
-function trimUniformOnce(imageData, box) {
-  const { data, width } = imageData;
-  const trimmed = Object.assign({}, box);
-
-  while (trimmed.left < trimmed.right - 1 && spreadWithin(data, width, trimmed.left, false, trimmed.top, trimmed.bottom) <= UNIFORM_TOLERANCE) {
-    trimmed.left++;
-  }
-
-  while (trimmed.right > trimmed.left + 1 && spreadWithin(data, width, trimmed.right - 1, false, trimmed.top, trimmed.bottom) <= UNIFORM_TOLERANCE) {
-    trimmed.right--;
-  }
-
-  while (trimmed.top < trimmed.bottom - 1 && spreadWithin(data, width, trimmed.top, true, trimmed.left, trimmed.right) <= UNIFORM_TOLERANCE) {
-    trimmed.top++;
-  }
-
-  while (trimmed.bottom > trimmed.top + 1 && spreadWithin(data, width, trimmed.bottom - 1, true, trimmed.left, trimmed.right) <= UNIFORM_TOLERANCE) {
-    trimmed.bottom--;
-  }
-
-  return trimmed;
-}
-
-function largestInsetBox(lines, width, height) {
-  const inner = (list, size) => {
-    const margin = size * FRAME_EDGE_MARGIN;
-    return list.filter((line) => line.pos > margin && line.pos < size - margin);
-  };
-
-  const verticals = inner(lines.vertical, width);
-  const horizontals = inner(lines.horizontal, height);
-  if (verticals.length < 2 || horizontals.length < 2) return null;
-
-  let best = null;
-
-  for (let a = 0; a < verticals.length - 1; a++) {
-    for (let b = a + 1; b < verticals.length; b++) {
-      for (let c = 0; c < horizontals.length - 1; c++) {
-        for (let d = c + 1; d < horizontals.length; d++) {
-          const box = {
-            left: verticals[a].pos,
-            right: verticals[b].pos,
-            top: horizontals[c].pos,
-            bottom: horizontals[d].pos,
-          };
-
-          const area = (box.right - box.left) * (box.bottom - box.top);
-          if (area < width * height * MIN_PANEL_FRACTION) continue;
-          if (!best || area > best.area) best = { box, area };
-        }
-      }
-    }
-  }
-
-  return best && best.box;
-}
-
-// returns [left, right, top, bottom] in pixels
+// only a solid border gets cropped: if the outside isn't one flat color it is part of the
+// picture (or a layout), so nothing is cut
 export function suggestCrop(imageData) {
-  const { width, height } = imageData;
-
-  // a box inside the frame beats trimming the edges (on a layout the edges are overlay)
-  const panel = largestInsetBox(detectEdgeLines(imageData, 20), width, height);
-
-  if (panel) {
-    const box = trimUniform(imageData, panel);
-    return [box.left, width - box.right, box.top, height - box.bottom];
-  }
-
-  // no box, plain capture: just trim the flat borders
   return detectContentBox(imageData);
 }

@@ -24,7 +24,25 @@
 <script>
 import { markRaw } from 'vue';
 import { bindReplicant } from '../util.js';
-import { obsConnect, obsRequest, onObsEvent, onObsReady, waitForObs, OBS_INPUT_ACTIVE_EVENTS } from '../obs.js';
+import { obsConnect, obsRequest, onObsEvent, onObsReady, waitForObs } from '../obs.js';
+
+// obs only renders a browser source (and twitch only plays) while it is shown somewhere. a
+// scene with every player is nested tiny at the bottom of the overlays scene (which every
+// layout nests) so they always are, which also keeps the cropping screenshots fresh
+const KEEPALIVE_SCENE = 'Player Keepalive';
+const HOST_SCENE = 'Overlays';
+const KEEPALIVE_SCALE = 0.001;
+const KEEPALIVE_STAGGER = 400;
+
+const AIR_EVENTS = [
+  'CurrentProgramSceneChanged',
+  'SceneItemEnableStateChanged',
+  'SceneItemCreated',
+  'SceneItemRemoved',
+  'SceneCreated',
+  'SceneRemoved',
+];
+const AIR_DEPTH = 8;
 
 // obs says "not ready" while loading a scene collection
 const FIND_RETRIES = 10;
@@ -59,14 +77,18 @@ export default {
     nodecg.listenFor(`stream${n}reload`, () => this.createPlayer());
 
     // obs monitors sources that aren't on air (and muted ones), so mute ourselves then
-    if (window.obsstudio) {
-      obsConnect(OBS_INPUT_ACTIVE_EVENTS);
+    if (!window.obsstudio) {
+      this.onAir = true;
+    } else {
+      obsConnect();
       onObsReady(this.findOwnSource);
       nodecg.listenFor('requestPlayerFrame', this.sendFrame);
       onObsEvent((type, data) => {
-        if (type === 'InputActiveStateChanged' && data.inputName === this.sourceName) {
-          this.onAir = data.videoActive;
-          this.applyAudio();
+        // the keepalive scene keeps the source active everywhere, so videoActive says
+        // nothing about being on air, look at the program scene instead
+        if (AIR_EVENTS.includes(type)) {
+          this.checkOnAir();
+          if (type === 'SceneCreated') this.keepAlive();
         }
 
         if (type === 'InputMuteStateChanged' && data.inputName === this.sourceName) {
@@ -136,9 +158,9 @@ export default {
 
           if (url.includes('/graphics/player.html') && new URL(url, window.location.href).searchParams.get('n') == this.playerNumber) {
             this.sourceName = input.inputName;
-            ({ videoActive: this.onAir } = await obsRequest('GetSourceActive', { sourceName: input.inputName }));
             ({ inputMuted: this.obsMuted } = await obsRequest('GetInputMute', { inputName: input.inputName }));
-            this.applyAudio();
+            await this.checkOnAir();
+            this.keepAlive();
             return;
           }
         }
@@ -152,6 +174,112 @@ export default {
         }
 
         console.error(`[player] finding own source: ${e.message}`);
+      }
+    },
+
+    // is the source visible in the program scene, looking through nested scenes and groups
+    async checkOnAir() {
+      if (!this.sourceName) return;
+
+      try {
+        const { currentProgramSceneName } = await obsRequest('GetCurrentProgramScene');
+        this.onAir = await this.sceneHasSource(currentProgramSceneName, new Set(), 0);
+        this.applyAudio();
+      } catch (e) {
+        // obs is busy loading, stay silent until the next event looks again
+        this.onAir = false;
+        this.applyAudio();
+      }
+    },
+
+    async sceneHasSource(sceneName, seen, depth, isGroup = false) {
+      if (seen.has(sceneName) || depth > AIR_DEPTH) return false;
+      seen.add(sceneName);
+
+      const { sceneItems } = await obsRequest(isGroup ? 'GetGroupSceneItemList' : 'GetSceneItemList', { sceneName });
+
+      for (const item of sceneItems) {
+        if (!item.sceneItemEnabled) continue;
+        if (item.sourceName === this.sourceName) return true;
+
+        const nested = item.isGroup || item.sourceType === 'OBS_SOURCE_TYPE_SCENE';
+        if (nested && item.sourceName !== KEEPALIVE_SCENE) {
+          if (await this.sceneHasSource(item.sourceName, seen, depth + 1, item.isGroup)) return true;
+        }
+      }
+
+      return false;
+    },
+
+    // players page one by one so they don't both create the scene or its items
+    keepAlive() {
+      clearTimeout(this.keepAliveTimer);
+      this.keepAliveTimer = setTimeout(async () => {
+        if (this.keeping) {
+          this.keepAlive();
+          return;
+        }
+
+        this.keeping = true;
+        try {
+          await this.ensureKeepalive();
+        } catch (e) {
+          console.error(`[player] keepalive: ${e.message}`);
+        } finally {
+          this.keeping = false;
+        }
+      }, KEEPALIVE_STAGGER * (this.playerNumber + 1));
+    },
+
+    async ensureKeepalive() {
+      const { scenes } = await obsRequest('GetSceneList');
+
+      if (!scenes.some((scene) => scene.sceneName === KEEPALIVE_SCENE)) {
+        try {
+          await obsRequest('CreateScene', { sceneName: KEEPALIVE_SCENE });
+        } catch (e) {
+          // another player made it just now
+        }
+      }
+
+      if (!(await this.hasItem(KEEPALIVE_SCENE, this.sourceName))) {
+        try {
+          await obsRequest('CreateSceneItem', {
+            sceneName: KEEPALIVE_SCENE,
+            sourceName: this.sourceName,
+            sceneItemEnabled: true,
+          });
+        } catch (e) {
+          console.error(`[player] could not add ${this.sourceName} to ${KEEPALIVE_SCENE}: ${e.message}`);
+        }
+      }
+
+      if (!scenes.some((scene) => scene.sceneName === HOST_SCENE) || (await this.hasItem(HOST_SCENE, KEEPALIVE_SCENE))) return;
+
+      try {
+        const { sceneItemId } = await obsRequest('CreateSceneItem', {
+          sceneName: HOST_SCENE,
+          sourceName: KEEPALIVE_SCENE,
+          sceneItemEnabled: true,
+        });
+
+        await obsRequest('SetSceneItemTransform', {
+          sceneName: HOST_SCENE,
+          sceneItemId,
+          sceneItemTransform: { positionX: 0, positionY: 0, scaleX: KEEPALIVE_SCALE, scaleY: KEEPALIVE_SCALE },
+        });
+        await obsRequest('SetSceneItemIndex', { sceneName: HOST_SCENE, sceneItemId, sceneItemIndex: 0 });
+      } catch (e) {
+        console.error(`[player] could not add ${KEEPALIVE_SCENE} to ${HOST_SCENE}: ${e.message}`);
+      }
+    },
+
+    async hasItem(sceneName, sourceName) {
+      try {
+        await obsRequest('GetSceneItemId', { sceneName, sourceName });
+        return true;
+      } catch (e) {
+        return false;
       }
     },
 
@@ -199,8 +327,9 @@ export default {
       playerNumber: 0,
       player: null,
       url: '',
-      // assume on air until obs tells us
-      onAir: true,
+      // silent until obs says this player is in the program scene (outside obs there's no
+      // scene to check, see created)
+      onAir: false,
       obsMuted: false,
       sourceName: null,
       findRetries: 0,
