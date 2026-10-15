@@ -9,7 +9,7 @@ const clientId = nodecg.bundleConfig.twitchClientId;
 const clientSecret = nodecg.bundleConfig.twitchClientSecret;
 
 const twitchTemplate = nodecg.Replicant("twitchTemplate", {
-  defaultValue: "Mystery Tournament 19! {player1} vs. {player2}",
+  defaultValue: "Mystery Tournament 21! {player1} vs. {player2}",
 });
 
 //--------- USERS ---------
@@ -41,7 +41,7 @@ fs.readFile(__dirname + "/twitch_token.json", "UTF-8").then((str) => {
 
   const apiClient = new ApiClient({ authProvider });
 
-  nodecg.listenFor("updateTwitch", function (options, ack) {
+  nodecg.listenFor("updateTwitch", async function (options, ack) {
     const requestedGame = nodecg.readReplicant("game");
 
     // template placeholders
@@ -57,29 +57,27 @@ fs.readFile(__dirname + "/twitch_token.json", "UTF-8").then((str) => {
     // replace all placeholders in twitchTemplate
     let title = twitchTemplate.value;
     for (let [placeholder, val] of Object.entries(placeHolders)) {
-      title = title.replace("{" + placeholder + "}", val);
+      title = title.replaceAll("{" + placeholder + "}", val ?? "");
     }
 
-    apiClient.games.getGameByName(requestedGame).then((game) => {
-      gameId = game ? game.id : "27284"; // default to "Retro" if game not found
-      gameName = game ? game.name : "Retro";
+    try {
+      const game = requestedGame ? await apiClient.games.getGameByName(requestedGame) : null;
+      const gameId = game ? game.id : "27284"; // default to "Retro" if game not found
+      const gameName = game ? game.name : "Retro";
 
-      apiClient.channels
-        .updateChannelInfo(nodecg.bundleConfig.twitchChannel, {
-          title: title,
-          gameId: gameId,
-        })
-        .then(() => {
-          ack(null, {
-            title: title,
-            game: gameName,
-          });
-        })
-        .catch((err) => {
-          console.error(err);
-          ack(new Error("Something went wrong. Try again or tell Maurice."));
-        });
-    });
+      await apiClient.channels.updateChannelInfo(nodecg.bundleConfig.twitchChannel, {
+        title: title,
+        gameId: gameId,
+      });
+
+      ack(null, {
+        title: title,
+        game: gameName,
+      });
+    } catch (err) {
+      nodecg.log.error("updating the stream info failed:", err);
+      ack(new Error("Something went wrong. Try again or tell Maurice."));
+    }
   });
 })
   // without a token file there's no stream info updating, but everything else in the

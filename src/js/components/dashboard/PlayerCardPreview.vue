@@ -3,7 +3,7 @@
     <v-main>
       <v-tabs v-model="tab" align-tabs="center" bg-color="transparent" slider-color="primary" show-arrows>
         <v-tab>Firefox sucks</v-tab>
-        <v-tab v-for="info in playerInfo" :key="info.name">
+        <v-tab v-for="info in players" :key="info.name">
           {{ info.name }}
         </v-tab>
       </v-tabs>
@@ -26,7 +26,7 @@
         >
         <v-tabs-window-item
           class="text-center"
-          v-for="info in playerInfo"
+          v-for="info in players"
           :key="info.name"
         >
           <div class="player-card-preview" v-tilt>
@@ -56,6 +56,13 @@ import { bindReplicant } from "../../util.js";
 export default {
   mounted() {
     bindReplicant.call(this, "playerInfo");
+  },
+
+  computed: {
+    // a match that was never loaded is null
+    players() {
+      return this.playerInfo.filter(Boolean);
+    },
   },
 
   data() {

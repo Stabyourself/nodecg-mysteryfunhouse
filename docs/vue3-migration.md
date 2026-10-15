@@ -33,7 +33,7 @@ If a graphic needs another old utility class, add the rule to `graphics-legacy.c
 - **`bindReplicant` watches deeply.** Vue 3 does not notify a plain watcher when an array is
   changed in place (`crop[i] = ...`), so the watcher in `util.js` is `deep`. The flip side:
   changing a bound array/object in place now always goes to the replicant, so sort or
-  reverse a copy (see `ImageSelector` and `AllCards`).
+  reverse a copy (see `ImageSelector`).
 - **Slotted content is not styled by the host's scoped css** unless the selector is wrapped
   in `:slotted()` (see `MT17GameBox`).
 - **Objects from other libraries go in `markRaw()`** before they are stored in `data`

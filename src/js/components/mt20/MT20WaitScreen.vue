@@ -255,20 +255,26 @@ export default {
 
   methods: {
     randomVideo() {
+      const videos = ghostGames.value || [];
+      // every clip deleted, keep the last one on
+      if (!videos.length) return;
+
       let randomIndex;
       do {
-        randomIndex = Math.floor(Math.random() * ghostGames.value.length);
-      } while (ghostGames.value.length > 4 &&lastVideos.includes(ghostGames.value[randomIndex].url));
+        randomIndex = Math.floor(Math.random() * videos.length);
+      } while (videos.length > 4 && lastVideos.includes(videos[randomIndex].url));
+
+      const url = videos[randomIndex].url;
 
       this.currentVideo = "/bundles/nodecg-mysteryfunhouse/dist/model/20/tv_1.mov";
 
-      lastVideos.push(ghostGames.value[randomIndex].url);
+      lastVideos.push(url);
       if (lastVideos.length > 4) {
         lastVideos.shift();
       }
 
       setTimeout(() => {
-        this.currentVideo = ghostGames.value[randomIndex].url
+        this.currentVideo = url;
       }, 2000);
     },
 
@@ -296,10 +302,6 @@ export default {
 
     waitScreenState() {
       this.updatePlayerCard();
-    },
-
-    ghostGames() {
-      this.currentVideo = ghostGames.value[0].url
     },
   },
 

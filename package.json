@@ -303,19 +303,17 @@
     "@tweenjs/tween.js": "^18.6.4",
     "@vitejs/plugin-vue": "^6",
     "clone": "^2.1.2",
-    "random-seed": "^0.3.0",
     "sass": "^1.105.1",
-    "three": "^0.183.2",
     "vanilla-tilt": "^1.8.1",
     "vite": "^8",
     "vite-plugin-vuetify": "^2",
     "vue": "^3.5",
     "vuetify": "^4"
   },
-  "resolutions": {
-    "webpack": "~5.105.4"
-  },
   "dependencies": {
+    "@fontsource/open-sans": "^5",
+    "@fontsource/roboto": "^5",
+    "@mdi/font": "4.9.95",
     "@twurple/api": "^5.0.9",
     "@twurple/auth": "^5.0.9",
     "discord.js": "^13.3.1",
@@ -325,6 +323,8 @@
     "markdown-it": "^15.0.2",
     "n8ao": "^2.0.1",
     "postprocessing": "^6.39.5",
+    "random-seed": "^0.3.0",
+    "three": "^0.183.2",
     "timer-node": "^5.0.5"
   },
   "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"

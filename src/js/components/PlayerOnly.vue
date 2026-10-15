@@ -25,6 +25,7 @@
 import { markRaw } from 'vue';
 import { bindReplicant } from '../util.js';
 import { obsConnect, obsRequest, onObsEvent, onObsReady, waitForObs } from '../obs.js';
+import { loadTwitchEmbed } from '../twitch-embed.js';
 
 // obs only renders a browser source (and twitch only plays) while it is shown somewhere. a
 // scene with every player is nested tiny at the bottom of the overlays scene (which every
@@ -70,6 +71,7 @@ export default {
   created() {
     const params = new URLSearchParams(window.location.search);
     this.playerNumber = Number(params.get('n') ?? 0);
+    this.createId = 0;
 
     const n = this.playerNumber;
     bindReplicant.call(this, 'url', `player${n}twitch`);
@@ -125,10 +127,21 @@ export default {
       if (this.player.isPaused() && !this.player.getEnded()) this.player.play();
     },
 
-    createPlayer() {
+    async createPlayer() {
       if (!this.url) return;
 
+      const id = ++this.createId;
       this.$refs.player.innerHTML = '';
+
+      try {
+        await loadTwitchEmbed();
+      } catch (e) {
+        console.error(`[player] ${e.message}`);
+        return;
+      }
+
+      // a newer call took over
+      if (id !== this.createId || !this.$refs.player) return;
 
       const embed = new Twitch.Embed(
         this.$refs.player,

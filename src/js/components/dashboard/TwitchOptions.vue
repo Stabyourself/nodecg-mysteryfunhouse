@@ -57,7 +57,7 @@ export default {
 
   methods: {
     resetTemplate() {
-      this.twitchTemplate = 'Mystery Tournament 19! {player1} vs. {player2}';
+      this.twitchTemplate = 'Mystery Tournament 21! {player1} vs. {player2}';
     },
 
     updateTwitch() {

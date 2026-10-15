@@ -98,18 +98,21 @@
           <a href="#" nodecg-dialog="player-card-preview-dialog">Preview</a>
 
           <ul>
-            <li v-for="(player, i) of playerInfo" :key="player.name">
-              Player {{ i + 1 }}:
-              <strong>{{ player.name }}</strong>
-              <v-tooltip location="top" v-if="!player.career">
-                <template v-slot:activator="{ props }">
-                  <v-icon color="warning" icon="mdi-alert" v-bind="props"></v-icon>
-                </template>
-                <span
-                  >No career info! (This is normal for new participants)</span
-                >
-              </v-tooltip>
-            </li>
+            <!-- a match that was never loaded is null -->
+            <template v-for="(player, i) of playerInfo" :key="i">
+              <li v-if="player">
+                Player {{ i + 1 }}:
+                <strong>{{ player.name }}</strong>
+                <v-tooltip location="top" v-if="!player.career">
+                  <template v-slot:activator="{ props }">
+                    <v-icon color="warning" icon="mdi-alert" v-bind="props"></v-icon>
+                  </template>
+                  <span
+                    >No career info! (This is normal for new participants)</span
+                  >
+                </v-tooltip>
+              </li>
+            </template>
           </ul>
         </div>
       </v-container>
@@ -126,8 +129,6 @@ export default {
     bindReplicant.call(this, "topText");
     bindReplicant.call(this, "playerInfo");
     bindReplicant.call(this, "currentEventLogo");
-
-    bindReplicant.call(this, "eventLogo", "assets:eventLogo");
   },
 
   data() {

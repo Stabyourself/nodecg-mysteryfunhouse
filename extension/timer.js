@@ -1,13 +1,23 @@
 const ctx = require("./nodecg");
 const nodecg = ctx.get();
+const { acknowledge } = require("./acks");
 
-const timerRep = nodecg.Replicant("timer");
+// not saved: nodecg starting up starts the timer over anyway, and saving it would be a
+// database write every 100ms while it runs
+const timerRep = nodecg.Replicant("timer", {
+  persistent: false,
+  defaultValue: { ms: 0, pausedMs: 0, state: "stopped" },
+});
 const stopTimerWhenDoneRep = nodecg.Replicant("stopTimerWhenDone", {
   defaultValue: true,
 });
 const stopTimerWhenDoneCountRep = nodecg.Replicant("stopTimerWhenDoneCount", {
   defaultValue: 2,
 });
+
+// everything shows whole seconds, so the replicant only changes when a shown second (or the
+// state) does. ticking more often than that only keeps the change close to the real second
+const TICK = 50;
 
 const { Timer } = require("timer-node");
 let timer = new Timer();
@@ -16,8 +26,9 @@ let state = "stopped";
 let timerObj = {
   ms: 0,
   pausedMs: 0,
-  state: "stopped",
 };
+
+let shown = null;
 
 updateRep();
 
@@ -30,14 +41,25 @@ function play() {
   }
 
   state = "playing";
+  updateRep();
 }
-nodecg.listenFor("timerPlay", play);
+nodecg.listenFor("timerPlay", (data, ack) => {
+  play();
+  acknowledge(ack);
+});
 
 function pause() {
+  // the time it was paused at, not the last tick
+  timerObj.ms = timer.ms();
+  timerObj.pausedMs = timerObj.ms;
+
   state = "paused";
   updateRep();
 }
-nodecg.listenFor("timerPause", pause);
+nodecg.listenFor("timerPause", (data, ack) => {
+  pause();
+  acknowledge(ack);
+});
 
 function reset() {
   timer = new Timer();
@@ -48,25 +70,34 @@ function reset() {
 
   updateRep();
 }
-nodecg.listenFor("timerReset", reset);
+nodecg.listenFor("timerReset", (data, ack) => {
+  reset();
+  acknowledge(ack);
+});
+
+// "h:mm:ss", "mm:ss" or "ss", each with an optional ".fff" (a fraction of a second, so ".5" is
+// half a second). null if it isn't a time
+function parseTime(input) {
+  const match = /^\s*(\d+(?::\d+){0,2})(?:\.(\d+))?\s*$/.exec(String(input ?? ""));
+  if (!match) return null;
+
+  let seconds = 0;
+  for (const part of match[1].split(":")) {
+    seconds = seconds * 60 + Number(part);
+  }
+
+  let ms = seconds * 1000;
+  if (match[2]) ms += Math.round(Number(`0.${match[2]}`) * 1000);
+
+  return ms;
+}
 
 function set(input) {
-  let parts = input.split(":");
-  let parts2 = parts.at(-1).split(".");
+  const subtract = parseTime(input);
 
-  let ms = parts2.length > 1 ? parts2[1] : 0;
-  let s = parts2[0];
-  parts.pop();
-
-  let subtract = 0;
-  subtract += parseInt(ms);
-  subtract += parseInt(s) * 1000;
-
-  let mul = 60000;
-
-  for (let i = parts.length - 1; i >= 0; i--) {
-    subtract += parseInt(parts[i]) * mul;
-    mul *= 60;
+  if (subtract === null) {
+    nodecg.log.warn(`timerSet: "${input}" is not a time`);
+    return;
   }
 
   let timestamp = Date.now() - subtract;
@@ -82,7 +113,10 @@ function set(input) {
 
   updateRep();
 }
-nodecg.listenFor("timerSet", set);
+nodecg.listenFor("timerSet", (input, ack) => {
+  set(input);
+  acknowledge(ack);
+});
 
 const raceStates = [];
 
@@ -127,7 +161,10 @@ function playerRaceStateChanged(data) {
 
   raceStates[player].value = newState;
 }
-nodecg.listenFor("playerRaceStateChanged", playerRaceStateChanged);
+nodecg.listenFor("playerRaceStateChanged", (data, ack) => {
+  playerRaceStateChanged(data);
+  acknowledge(ack);
+});
 
 function tick() {
   if (state == "playing" || state == "paused") {
@@ -139,10 +176,12 @@ function tick() {
     updateRep();
   }
 }
-setInterval(tick, 11);
+setInterval(tick, TICK);
 
 function updateRep() {
-  timerObj.state = state;
+  const key = `${state} ${Math.floor(timerObj.ms / 1000)} ${Math.floor(timerObj.pausedMs / 1000)}`;
+  if (key === shown) return;
+  shown = key;
 
-  timerRep.value = timerObj;
+  timerRep.value = { ms: timerObj.ms, pausedMs: timerObj.pausedMs, state };
 }

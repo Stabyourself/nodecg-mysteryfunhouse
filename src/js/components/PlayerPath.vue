@@ -157,40 +157,53 @@ $padding: 100px;
 <script>
 import { apostrophe } from '../util.js';
 
+// px per second, about what the old 4ms interval did
+const SCROLL_SPEED = 120;
+// how far it keeps going past each end before it turns around, so it rests there a moment
+const SCROLL_OVERSHOOT = 200;
+
 export default {
   props: ['info'],
+
+  beforeUnmount() {
+    this.stopScroll();
+  },
 
   methods: {
     apostrophe,
     animateScroll() {
-      clearInterval(this.interval);
+      this.stopScroll();
 
       setTimeout(() => {
         let el = this.$refs.timelineWrap;
+        if (!el || !el.scrollTo) return;
 
-        if (el.scrollTo) {
-          var height = el.scrollHeight - el.offsetHeight;
+        const height = el.scrollHeight - el.offsetHeight;
+        if (height <= 0) return;
 
-          if (height > 0) {
-            var currentHeight = 0;
-            var bool = true;
-            var step = 0.5;
-            var speed = 1 / 60;
-            this.interval = setInterval(scrollpage, speed);
+        let position = 0;
+        let direction = 1;
+        let last = performance.now();
 
-            function scrollpage() {
-              if (currentHeight < -200 || currentHeight > height + 200) bool = !bool;
-              if (bool) {
-                el.scrollTo(0, (currentHeight += step));
-              } else {
-                // if you don't want to continue scroll
-                // clearInterval(interval) use clearInterval
-                el.scrollTo(0, (currentHeight -= step));
-              }
-            }
-          }
-        }
+        const step = (now) => {
+          // a long gap (page hidden) shouldn't jump
+          const dt = Math.min(now - last, 100) / 1000;
+          last = now;
+
+          position += direction * SCROLL_SPEED * dt;
+          if (position < -SCROLL_OVERSHOOT || position > height + SCROLL_OVERSHOOT) direction = -direction;
+
+          el.scrollTo(0, position);
+          this.scrollFrame = requestAnimationFrame(step);
+        };
+
+        this.scrollFrame = requestAnimationFrame(step);
       }, 0);
+    },
+
+    stopScroll() {
+      cancelAnimationFrame(this.scrollFrame);
+      this.scrollFrame = null;
     },
   },
 
@@ -198,12 +211,6 @@ export default {
     info() {
       this.animateScroll();
     },
-  },
-
-  data() {
-    return {
-      interval: null,
-    };
   },
 };
 </script>

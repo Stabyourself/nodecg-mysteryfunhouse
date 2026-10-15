@@ -30,8 +30,17 @@ nodecg.listenFor("fetchBoxartFromUrl", async (url, ack) => {
     const ext = EXTENSIONS[type];
     if (!ext) throw new Error(`that url is not a supported image (got ${type || "unknown type"} from ${parsed.href})`);
 
-    const buffer = Buffer.from(await res.arrayBuffer());
-    if (buffer.length > MAX_BYTES) throw new Error("image is too large");
+    if (Number(res.headers.get("content-length")) > MAX_BYTES) throw new Error("image is too large");
+
+    // the header can be missing or wrong, so count while reading too (and stop reading)
+    const chunks = [];
+    let size = 0;
+    for await (const chunk of res.body) {
+      size += chunk.length;
+      if (size > MAX_BYTES) throw new Error("image is too large");
+      chunks.push(chunk);
+    }
+    const buffer = Buffer.concat(chunks);
 
     const filename = `paste-${Date.now()}.${ext}`;
     const dir = path.join(process.cwd(), "assets", nodecg.bundleName, "boxarts");

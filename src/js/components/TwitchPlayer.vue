@@ -52,6 +52,7 @@
 <script>
 import { markRaw } from 'vue';
 import { bindReplicant } from '../util.js';
+import { loadTwitchEmbed } from '../twitch-embed.js';
 
 let twitchOptions = {
   channel: null,
@@ -67,6 +68,8 @@ let playerHeight = 1080;
 
 export default {
   created() {
+    this.createId = 0;
+
     nodecg.listenFor(`stream${this.playerNumber}reload`, () => {
       this.createPlayer();
     });
@@ -83,13 +86,26 @@ export default {
   },
 
   beforeUnmount() {
+    this.createId++;
     this.$refs.player.innerHTML = '';
   },
 
   methods: {
-    createPlayer() {
+    async createPlayer() {
+      const id = ++this.createId;
+
       this.$emit("playing", false, this.playerNumber);
       this.$refs.player.innerHTML = '';
+
+      try {
+        await loadTwitchEmbed();
+      } catch (e) {
+        console.error(`[twitch-player] ${e.message}`);
+        return;
+      }
+
+      // a newer call took over, or the player is gone
+      if (id !== this.createId || !this.$refs.player) return;
 
       twitchOptions.channel = this.url;
       // twitchOptions.video = "1232657574";

@@ -103,8 +103,8 @@
 </template>
 
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@900&display=swap');
-
+// the font is linked in graphics/jolly/2player.html: an import here would end up in the
+// shared bundle and every graphic would fetch it from google
 .jolly-font {
   text-transform: uppercase;
   font-family: 'Inknut Antiqua', serif;

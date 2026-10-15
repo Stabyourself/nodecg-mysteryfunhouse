@@ -5,13 +5,12 @@ module.exports = function (nodecg) {
 
   // one broken part (missing token, no db, ...) shouldn't take the rest down with it
   for (const name of [
+    "./acks",
     "./timer",
     "./players",
     "./challonge-loader",
     "./twitch",
     "./schedule",
-    "./card-api",
-    "./telestrator",
     "./replay",
     "./boxart-fetch",
   ]) {

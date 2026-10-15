@@ -244,7 +244,7 @@ export default {
           this.popoverBarValue = 100;
         }, duration);
 
-        if (this.popover.search('player-dead') != -1) {
+        if (this.popover && this.popover.includes('player-dead')) {
           nodecg.sendMessage('playSound', {
             sound: 'Player Dead',
           });

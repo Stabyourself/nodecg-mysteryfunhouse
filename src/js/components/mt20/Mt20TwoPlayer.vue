@@ -73,10 +73,15 @@ export default {
   },
 
   computed: {
+    // only flips once, so health isn't worked out (and the layout redrawn) every timer update
+    started() {
+      return this.timer.ms > 0;
+    },
+
     // half a heart gone in losers, and half when the other player wins or you forfeit
     health() {
       return this.players.map((player, i) => {
-        if (this.timer.ms == 0) return 0;
+        if (!this.started) return 0;
 
         const opponent = this.players[1 - i];
         let hp = this.round.toLowerCase().includes('loser') ? 0.5 : 1;

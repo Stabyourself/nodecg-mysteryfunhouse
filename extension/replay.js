@@ -1,5 +1,6 @@
 const ctx = require("./nodecg");
 const nodecg = ctx.get();
+const { acknowledge } = require("./acks");
 
 // keeps track of which replays are running, the actual replay happens in obs (ObsVideo.vue)
 const PLAYERS = 4;
@@ -42,13 +43,21 @@ function start({ player }) {
   state.endTimer = setTimeout(() => stop({ player }), length);
 }
 
-nodecg.listenFor("replayStart", start);
-nodecg.listenFor("replayStop", stop);
+nodecg.listenFor("replayStart", (data, ack) => {
+  start(data);
+  acknowledge(ack);
+});
+
+nodecg.listenFor("replayStop", (data, ack) => {
+  stop(data);
+  acknowledge(ack);
+});
 
 // obs noticed the replay ended
-nodecg.listenFor("replayEnded", ({ player, id }) => {
+nodecg.listenFor("replayEnded", ({ player, id }, ack) => {
   const state = players[player];
   if (state && state.replay.value && state.replay.value.id === id) {
     stop({ player });
   }
+  acknowledge(ack);
 });

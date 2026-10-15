@@ -2,3 +2,7 @@ node_modules
 coverage
 bower_components
 extension/twitch_token.json
+
+# left behind when nodecg was started with this folder as its root
+db
+logs

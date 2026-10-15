@@ -8,8 +8,8 @@
           "commands": ["node ../.."]
         },
         {
-          "name": "Webpack Watch",
-          "commands": ["npm run watch"]
+          "name": "Vite Watch",
+          "commands": ["yarn watch"]
         }
       ]
     }

@@ -97,7 +97,6 @@ export default {
     },
 
     timeAdjusted() {
-      console.log(this.time)
       if (this.raceState == 'forfeit') {
         return this.time + ' (FF)';
       } else {

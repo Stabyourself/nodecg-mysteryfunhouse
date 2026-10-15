@@ -68,8 +68,9 @@ export function layoutMixin(playerCount) {
         if (event.key === 'Enter') this.visible = !this.visible;
       },
 
+      // obs keeps every layout loaded, only the one that's showing plays it
       playSound(data) {
-        nodecg.playSound(data.sound);
+        if (this.visible && !document.hidden) nodecg.playSound(data.sound);
       },
     },
 

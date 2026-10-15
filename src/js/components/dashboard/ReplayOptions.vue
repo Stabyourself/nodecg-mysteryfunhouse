@@ -19,7 +19,7 @@
         <span class="obs-input">
           <input
             :value="player.buffer"
-            @input="setBuffer(player.number, $event.target.value)"
+            @change="setBuffer(player.number, $event)"
             type="number"
             min="1"
             max="120"
@@ -53,8 +53,16 @@ export default {
       nodecg.sendMessage('replayStop', { player });
     },
 
-    setBuffer(player, value) {
-      this[`player${player}replayBuffer`] = Number(value);
+    // only once the value is done (enter, leaving the field, the arrows): every new length
+    // restarts obs' replay buffer, which throws away what it has recorded so far
+    setBuffer(player, event) {
+      const key = `player${player}replayBuffer`;
+      const seconds = Math.round(Number(event.target.value));
+
+      if (seconds >= 1) this[key] = Math.min(120, seconds);
+
+      // show the length that's actually used (an empty or invalid field goes back)
+      event.target.value = this[key];
     },
   },
 

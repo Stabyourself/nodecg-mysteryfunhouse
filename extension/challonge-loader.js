@@ -37,7 +37,6 @@ function withTimeout(promise, ms, label) {
 }
 
 // Replicant stuff
-const allInfoRep = nodecg.Replicant('allInfo', { defaultValue: [] });
 const playerInfoRep = nodecg.Replicant('playerInfo', { defaultValue: [] });
 
 const playerProps = {
@@ -306,6 +305,8 @@ async function loadMatch(rawOptions) {
     replicants[`player${playerNumber}raceState`].value = 'none';
     replicants[`player${playerNumber}finalTime`].value = '';
 
+    // no holes when match 2 is loaded first, the pages get [null, null, ...] either way
+    while (playerInfoRep.value.length < playerNumber) playerInfoRep.value.push(null);
     playerInfoRep.value[playerNumber] = playerInfo;
   }
 
@@ -337,46 +338,3 @@ nodecg.listenFor('loadMatch', (rawOptions, ack) => {
       loadInProgress = false;
     });
 });
-
-// nodecg.listenFor('loadAllCards', function (options, ack) {
-//   const promises = [
-//     challonge.getTournament(players.getChallongeTournament()),
-//     googlesheet.getCareerSheet(),
-//     discord.getMembers(),
-//   ];
-
-//   Promise.allSettled(promises).then((results) => {
-//     if (results[0].status == 'rejected') {
-//       return ack(new Error(`Challonge API call failed (${results[0].reason}). Try again or tell Maurice.`));
-//     }
-//     if (results[1].status == 'rejected') {
-//       return ack(new Error(`Googlesheet API call failed (${results[1].reason}). Try again or tell Maurice.`));
-//     }
-//     if (results[3].status == 'rejected') {
-//       return ack(new Error(`Discord API call failed (${results[2].reason}). Try again or tell Maurice.`));
-//     }
-
-//     const tournament = results[0].value;
-//     const careerRows = results[1].value;
-//     const discordMembers = results[2].value;
-
-//     const allInfo = [];
-
-//     for (row of contactRows) {
-//       info = getPlayerInfo(tournament, careerRows, discordMembers, String(row['Challonge Username']), contactRows);
-
-//       if (!(info instanceof Error)) {
-//         info.name = info.discord.displayName;
-//         info.avatar = getAvatarForMember(info.discord);
-
-//         delete info.discord; // evil stuff that crashes my replicant >:(
-
-//         allInfo.push(info);
-//       }
-//     }
-
-//     allInfoRep.value = allInfo;
-
-//     return ack();
-//   });
-// });
