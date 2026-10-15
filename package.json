@@ -11,7 +11,8 @@
   "scripts": {
     "start": "node ../..",
     "watch": "node build.mjs --watch",
-    "prod": "node build.mjs"
+    "prod": "node build.mjs",
+    "twitch-auth": "node twitch-auth.js"
   },
   "keywords": [
     "nodecg-bundle"
@@ -71,6 +72,12 @@
         "fullbleed": true
       },
       {
+        "name": "srl-test",
+        "title": "SRL test",
+        "file": "srl-test.html",
+        "fullbleed": true
+      },
+      {
         "name": "boxart-select-dialog",
         "title": "Select Boxart",
         "file": "boxart.html",
@@ -85,16 +92,16 @@
         "dialog": true
       },
       {
-        "name": "load-challonge-dialog",
-        "title": "Import Challonge match",
-        "file": "challonge.html",
+        "name": "load-srl-race-dialog",
+        "title": "Load from SRL race",
+        "file": "srl-race.html",
         "width": 5,
         "dialog": true
       },
       {
-        "name": "player-card-preview-dialog",
-        "title": "Player Card Preview",
-        "file": "playercardpreview.html",
+        "name": "load-challonge-dialog",
+        "title": "Import Challonge match",
+        "file": "challonge.html",
         "width": 5,
         "dialog": true
       }
@@ -304,7 +311,6 @@
     "@vitejs/plugin-vue": "^6",
     "clone": "^2.1.2",
     "sass": "^1.105.1",
-    "vanilla-tilt": "^1.8.1",
     "vite": "^8",
     "vite-plugin-vuetify": "^2",
     "vue": "^3.5",
@@ -314,9 +320,9 @@
     "@fontsource/open-sans": "^5",
     "@fontsource/roboto": "^5",
     "@mdi/font": "4.9.95",
-    "@twurple/api": "^5.0.9",
-    "@twurple/auth": "^5.0.9",
-    "discord.js": "^13.3.1",
+    "@twurple/api": "^8.2.0",
+    "@twurple/auth": "^8.2.0",
+    "discord.js": "^14.27.0",
     "google-spreadsheet": "^5.3.0",
     "lodash": "^4.17.21",
     "mariadb": "^3.2.2",

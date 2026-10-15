@@ -101,6 +101,11 @@
             <v-text-field v-model="form.username" label="Display Name"></v-text-field>
             <v-text-field v-model="form.challongeUsername" label="Challonge Username"></v-text-field>
             <v-text-field v-model="form.twitch" label="Twitch" prefix="twitch.tv/"></v-text-field>
+            <v-text-field
+              v-model="form.srl"
+              label="SRL"
+              hint="Needed to find them in SRL races"
+              persistent-hint></v-text-field>
             <v-text-field v-model="form.pronouns" label="Pronouns"></v-text-field>
             <v-text-field v-model="form.flag" label="Flag"></v-text-field>
             <v-text-field v-model="form.flavor" label="Flavor text"></v-text-field>
@@ -316,6 +321,7 @@ export default {
         username: '',
         challongeUsername: '',
         twitch: '',
+        srl: '',
         pronouns: '',
         flag: '',
         flavor: '',
@@ -403,6 +409,7 @@ export default {
         { title: 'Name', key: 'username' },
         { title: 'Challonge', key: 'challongeUsername' },
         { title: 'Twitch', key: 'twitch' },
+        { title: 'SRL', key: 'srl' },
         { title: 'Pronouns', key: 'pronouns' },
         { title: 'Flag', key: 'flag' },
         { title: 'Flavor', key: 'flavor' },

@@ -48,9 +48,10 @@ nodecg.listenFor("timerPlay", (data, ack) => {
   acknowledge(ack);
 });
 
-function pause() {
+// atMs: stop on that time instead of now (never later than now)
+function pause(atMs) {
   // the time it was paused at, not the last tick
-  timerObj.ms = timer.ms();
+  timerObj.ms = atMs == null ? timer.ms() : Math.min(atMs, timer.ms());
   timerObj.pausedMs = timerObj.ms;
 
   state = "paused";
@@ -126,24 +127,23 @@ for (let i = 0; i < 4; i++) {
   );
 }
 
+// the players in the srl race srl.js follows, null when there's none
+let srlRacers = () => null;
+
+// a race from srl stops once all its racers are done, otherwise after the set number of
+// finishes (if that's on)
+function shouldPause() {
+  const done = (i) => raceStates[i].value != "none";
+  const racers = srlRacers();
+
+  if (racers) return racers.length > 0 && racers.every(done);
+
+  return stopTimerWhenDoneRep.value && [0, 1, 2, 3].filter(done).length >= stopTimerWhenDoneCountRep.value;
+}
+
 function playerRaceStateChanged(data) {
   let player = data.player;
   let raceState = data.state;
-
-  // check if we wanna stop the timer
-  if (stopTimerWhenDoneRep.value) {
-    let donePlayers = 0;
-
-    for (let i = 0; i < raceStates.length; i++) {
-      if (raceStates[i].value != "none" || player == i) {
-        donePlayers++;
-      }
-    }
-
-    if (state == "playing" && donePlayers >= stopTimerWhenDoneCountRep.value) {
-      pause();
-    }
-  }
 
   // check for place (should maybe be part of its own extension script)
   let newState = "none";
@@ -160,11 +160,22 @@ function playerRaceStateChanged(data) {
   }
 
   raceStates[player].value = newState;
+
+  if (state == "playing" && shouldPause()) {
+    pause();
+  }
 }
 nodecg.listenFor("playerRaceStateChanged", (data, ack) => {
   playerRaceStateChanged(data);
   acknowledge(ack);
 });
+
+// running since startMs (a Date.now() timestamp), like it was started right then
+function startAt(startMs) {
+  timer = new Timer({ startTimestamp: startMs });
+  state = "playing";
+  tick();
+}
 
 function tick() {
   if (state == "playing" || state == "paused") {
@@ -185,3 +196,17 @@ function updateRep() {
 
   timerRep.value = { ms: timerObj.ms, pausedMs: timerObj.pausedMs, state };
 }
+
+exports.playerRaceStateChanged = playerRaceStateChanged;
+exports.reset = reset;
+exports.startAt = startAt;
+exports.getState = () => state;
+// fn gives the racing player numbers, or null when it doesn't know
+exports.setRacers = (fn) => {
+  srlRacers = fn;
+};
+// srl.js set the race states itself: pause if that's everyone through, on lastFinishMs (the
+// last finisher's time) when there is one, not when srl was asked
+exports.raceStatesChanged = (lastFinishMs) => {
+  if (state == "playing" && shouldPause()) pause(lastFinishMs);
+};

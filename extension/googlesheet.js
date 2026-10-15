@@ -32,6 +32,12 @@ function lazySheet(name, sheetId, pick) {
 const careerSheet = lazySheet('career', nodecg.bundleConfig.careerSheet, (doc) => doc.sheetsByTitle['MT Career']);
 const scheduleSheet = lazySheet('schedule', nodecg.bundleConfig.scheduleSheet, (doc) => doc.sheetsByIndex[0]);
 const playedGamesSheet = lazySheet('played games', nodecg.bundleConfig.playedGamesSheet, (doc) => doc.sheetsByIndex[0]);
+// every game with its goal, srl code, picture and match, for loading them from srl races
+const gamesSheet = lazySheet(
+  'games',
+  nodecg.bundleConfig.gamesSheet ?? '1ZBXIJGdwalnKNFQn5cNHAIJ_wg8ZzthtVg9Dz6O_yzc',
+  (doc) => doc.sheetsByTitle['Played Games'],
+);
 
 // load them right away so the first match load doesn't wait for it
 for (const [name, sheet] of [
@@ -61,4 +67,21 @@ exports.getScheduleSheet = function () {
 
 exports.getPlayedGamesSheet = function () {
   return getPlainRows(playedGamesSheet);
+};
+
+// a race changing its game asks for these again, so they're kept for a bit. fresh: a game
+// that isn't in them may have been added since
+const GAMES_RECENT_MS = 60000;
+let recentGames = null;
+
+exports.getGamesSheet = function (fresh = false) {
+  if (!fresh && recentGames && Date.now() - recentGames.at < GAMES_RECENT_MS) return recentGames.rows;
+
+  const entry = { at: Date.now(), rows: getPlainRows(gamesSheet) };
+  recentGames = entry;
+  entry.rows.catch(() => {
+    if (recentGames === entry) recentGames = null;
+  });
+
+  return entry.rows;
 };

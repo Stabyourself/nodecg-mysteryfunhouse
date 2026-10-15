@@ -2,6 +2,8 @@
   <v-app>
     <v-main>
       <v-container>
+        <srl-live></srl-live>
+
         <v-text-field v-model="game" label="Game name"></v-text-field>
 
         <label class="field-label">Boxart</label>

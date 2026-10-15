@@ -10,6 +10,7 @@ module.exports = function (nodecg) {
     "./players",
     "./challonge-loader",
     "./twitch",
+    "./srl",
     "./schedule",
     "./replay",
     "./boxart-fetch",

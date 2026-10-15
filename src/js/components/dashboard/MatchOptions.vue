@@ -2,6 +2,8 @@
   <v-app>
     <v-main>
       <v-container>
+        <srl-live :players="[(matchNumber - 1) * 2, (matchNumber - 1) * 2 + 1]"></srl-live>
+
         <v-text-field
           v-model="round"
           label="Round"
@@ -27,6 +29,11 @@
 </template>
 
 <style scoped lang="scss">
+// the columns stay side by side, long text in them is cut off instead (the srl line)
+.v-col {
+  min-width: 0;
+}
+
 .divider {
   border-right: 1px solid rgba(255, 255, 255, 0.12);
   padding-right: 12px;

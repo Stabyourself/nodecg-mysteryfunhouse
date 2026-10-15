@@ -7,29 +7,16 @@
 import upperFirst from 'lodash/upperFirst';
 import camelCase from 'lodash/camelCase';
 import { createApp } from 'vue';
-import VanillaTilt from 'vanilla-tilt';
 import vuetify from './vuetify'; // path to vuetify export
 import '../scss/dashboard.scss';
 
 import TwitchPlayer from './components/TwitchPlayer.vue';
-import PlayerCard from './components/PlayerCard.vue';
 import VueDragResize from './components/vue-drag-resize.vue';
 
 // the root component of each panel is the tag inside #app in its html
 const app = createApp({});
 
 app.use(vuetify);
-
-// v-tilt, tilts the element towards the mouse
-app.directive('tilt', {
-  mounted(el, binding) {
-    VanillaTilt.init(el, binding.value);
-  },
-
-  unmounted(el) {
-    if (el.vanillaTilt) el.vanillaTilt.destroy();
-  },
-});
 
 function registerComponent(fileName, component) {
   // Get PascalCase name of component, regardless of folder depth
@@ -46,7 +33,17 @@ for (const [fileName, component] of Object.entries(dashboardComponents)) {
 
 // Components outside components/dashboard that dashboard panels also use directly.
 registerComponent('TwitchPlayer.vue', TwitchPlayer);
-registerComponent('PlayerCard.vue', PlayerCard);
 registerComponent('VueDragResize.vue', VueDragResize);
 
 app.mount('#app');
+
+// the "SRL test" panel is in package.json for good, so without "srlTest" in the bundle config
+// its tab (and drawer link) is taken off the dashboard around this panel
+if (!nodecg.bundleConfig?.srlTest) {
+  try {
+    const dashboard = window.top.document.querySelector('ncg-dashboard')?.shadowRoot;
+    dashboard?.querySelectorAll('[data-route="fullbleed/srl-test"]').forEach((el) => (el.style.display = 'none'));
+  } catch {
+    // opened on its own, or not in the dashboard
+  }
+}

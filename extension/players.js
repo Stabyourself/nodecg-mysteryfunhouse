@@ -76,6 +76,18 @@ async function getChallongeTournament() {
   return getChallongeTournamentForEvent(signupEventIdRep.value);
 }
 
+// The name of the currently selected event ("Mystery Tournament 21"). Used by twitch.js
+async function getEventName() {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const rows = await conn.query('SELECT `name` FROM `events` WHERE `id` = ?', [signupEventIdRep.value]);
+    return rows[0]?.name ?? '';
+  } finally {
+    if (conn) conn.end();
+  }
+}
+
 nodecg.listenFor('getEvents', async (data, ack) => {
   try {
     const rows = await getEvents();
@@ -108,7 +120,7 @@ nodecg.listenFor('getChallongeParticipants', async (data, ack) => {
 
 // Fields that carry over between a player's signups for different events. `flavor` is
 // per-signup (not per-player) and `id`/`signup_id` are join keys, so neither is autofillable.
-const AUTOFILL_FIELDS = ['username', 'challonge_username', 'twitch', 'pronouns', 'flag'];
+const AUTOFILL_FIELDS = ['username', 'challonge_username', 'twitch', 'srl_username', 'pronouns', 'flag'];
 
 nodecg.listenFor('autofillMissingData', async (data, ack) => {
   let conn;
@@ -240,6 +252,7 @@ function rowToPlayer(row) {
     username: row.username,
     challongeUsername: row.challonge_username,
     twitch: row.twitch,
+    srl: row.srl_username,
     pronouns: row.pronouns,
     flag: row.flag,
     flavor: row.flavor,
@@ -283,7 +296,7 @@ nodecg.listenFor('addPlayer', async (player, ack) => {
         `INSERT INTO \`users\`
           (\`id\`, \`username\`, \`discriminator\`, \`email\`, \`verified\`, \`locale\`, \`mfa_enabled\`, \`slug\`,
            \`challonge_username\`, \`twitch\`, \`pronouns\`, \`timezone\`, \`availability\`, \`srl_username\`, \`flag\`)
-         VALUES (?, ?, '0', '', 0, 'en', 0, ?, ?, ?, ?, '', '', '', ?)`,
+         VALUES (?, ?, '0', '', 0, 'en', 0, ?, ?, ?, ?, '', '', ?, ?)`,
         [
           player.discordId,
           player.username,
@@ -291,16 +304,18 @@ nodecg.listenFor('addPlayer', async (player, ack) => {
           player.challongeUsername,
           player.twitch ?? '',
           player.pronouns ?? '',
+          player.srl ?? '',
           player.flag ?? '',
         ],
       );
     } else {
       await conn.query(
-        'UPDATE `users` SET `username` = ?, `challonge_username` = ?, `twitch` = ?, `pronouns` = ?, `flag` = ? WHERE `id` = ?',
+        'UPDATE `users` SET `username` = ?, `challonge_username` = ?, `twitch` = ?, `srl_username` = ?, `pronouns` = ?, `flag` = ? WHERE `id` = ?',
         [
           player.username,
           player.challongeUsername,
           player.twitch ?? '',
+          player.srl ?? '',
           player.pronouns ?? '',
           player.flag ?? '',
           player.discordId,
@@ -332,11 +347,12 @@ nodecg.listenFor('updatePlayer', async (player, ack) => {
     conn = await pool.getConnection();
 
     await conn.query(
-      'UPDATE `users` SET `username` = ?, `challonge_username` = ?, `twitch` = ?, `pronouns` = ?, `flag` = ? WHERE `id` = ?',
+      'UPDATE `users` SET `username` = ?, `challonge_username` = ?, `twitch` = ?, `srl_username` = ?, `pronouns` = ?, `flag` = ? WHERE `id` = ?',
       [
         player.username,
         player.challongeUsername,
         player.twitch ?? '',
+        player.srl ?? '',
         player.pronouns ?? '',
         player.flag ?? '',
         player.discordId,
@@ -369,3 +385,4 @@ nodecg.listenFor('removePlayer', async (signupId, ack) => {
 exports.signupEventIdRep = signupEventIdRep;
 exports.getContacts = getContacts;
 exports.getChallongeTournament = getChallongeTournament;
+exports.getEventName = getEventName;

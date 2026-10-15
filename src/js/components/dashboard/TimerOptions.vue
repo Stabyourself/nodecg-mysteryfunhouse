@@ -2,6 +2,8 @@
   <v-app>
     <v-main>
       <v-container>
+        <srl-live></srl-live>
+
         <v-text-field
           class="timer"
           :class="{ active: timer.state == 'playing' }"
@@ -50,7 +52,8 @@
           </v-col>
         </v-row>
 
-        <div class="halt-row">
+        <!-- a live race from srl always halts once all its racers are done -->
+        <div v-if="!live" class="halt-row">
           <v-switch v-model="stopTimerWhenDone" color="primary" density="compact" hide-details></v-switch>
           Halt after
           <v-select
@@ -132,6 +135,7 @@ export default {
       "stopTimerWhenDoneCount",
       0
     );
+    bindReplicant.call(this, "srlRace");
   },
 
   computed: {
@@ -147,6 +151,11 @@ export default {
     pausedTimerText() {
       return formatTimer(this.timer.pausedMs, false);
     },
+
+    // the srl watcher is on a race, same as <srl-live>
+    live() {
+      return !!this.srlRace.race && !!this.srlRace.watching;
+    },
   },
 
   data() {
@@ -156,6 +165,7 @@ export default {
       playerCounts: [1, 2, 3, 4],
       stopTimerWhenDone: true,
       stopTimerWhenDoneCount: 2,
+      srlRace: { race: null, slots: [null, null, null, null], watching: false, polled: 0, error: null },
     };
   },
 };

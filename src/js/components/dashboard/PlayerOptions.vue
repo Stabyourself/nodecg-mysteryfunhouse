@@ -15,7 +15,14 @@
 
     <v-divider class="mb-7 mt-4"></v-divider>
 
-    <v-text-field v-model="twitch" label="Twitch" prefix="twitch.tv/" density="compact"></v-text-field>
+    <v-row>
+      <v-col cols="7">
+        <v-text-field v-model="twitch" label="Twitch" prefix="twitch.tv/" density="compact"></v-text-field>
+      </v-col>
+      <v-col cols="5">
+        <v-text-field v-model="srl" label="SRL" density="compact"></v-text-field>
+      </v-col>
+    </v-row>
 
     <!--
         <v-select
@@ -88,6 +95,11 @@
       .undone
     </v-btn>
 
+    <div v-if="srlRace.race" class="srl-line mt-3">
+      <v-icon size="small" :color="srlLine.color" :icon="srlLine.icon"></v-icon>
+      <span :title="srlLine.text">{{ srlLine.text }}</span>
+    </div>
+
     <v-row class="mt-3">
       <v-col cols="6">
         <v-select
@@ -134,6 +146,21 @@
 </template>
 
 <style lang="scss">
+.srl-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+
+  span {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
 .no-transition .v-progress-linear__background,
 .no-transition .v-progress-linear__determinate {
   transition: none !important;
@@ -150,6 +177,8 @@ export default {
     bindReplicant.call(this, 'flag', this.makeName('flag'));
 
     bindReplicant.call(this, 'twitch', this.makeName('twitch'));
+    bindReplicant.call(this, 'srl', this.makeName('srl'));
+    bindReplicant.call(this, 'srlRace');
     // bindReplicant.call(this, "qualities", this.makeName("qualities"))
     //bindReplicant.call(this, "quality", this.makeName("quality"))
     bindReplicant.call(this, 'streamHidden', this.makeName('streamHidden'), 0);
@@ -163,6 +192,46 @@ export default {
     bindReplicant.call(this, 'popoverDuration', this.makeName('popoverDuration'));
     bindReplicant.call(this, 'popoverVisible', this.makeName('popoverVisible'), 0);
     this.updateAspectRatioField();
+  },
+
+  computed: {
+    srlEntrant() {
+      return this.srlRace.slots[this.playerNumber] ?? null;
+    },
+
+    // "done", "forfeit" or null
+    srlResult() {
+      const state = this.srlEntrant?.state;
+      if (state == 'Finished') return 'done';
+      if (state == 'Forfeit' || state == 'Disqualified') return 'forfeit';
+      return null;
+    },
+
+    srlLine() {
+      const entrant = this.srlEntrant;
+
+      if (!entrant) {
+        return { icon: 'mdi-help-circle-outline', color: 'grey', text: 'Not in the SRL race' };
+      }
+
+      const who = `SRL ${entrant.displayname}`;
+
+      if (this.srlResult == 'done') {
+        const time = entrant.time > 0 ? ` ${formatTimer(entrant.time * 1000, false, false)}` : '';
+        return { icon: 'mdi-flag-checkered', color: 'green', text: `${who}: finished${time}` };
+      }
+      if (this.srlResult == 'forfeit') {
+        return { icon: 'mdi-cancel', color: 'red', text: `${who}: ${entrant.state.toLowerCase()}` };
+      }
+
+      const text = `${who}: ${entrant.state.toLowerCase()}`;
+
+      // joined, but not .ready yet: just standing there
+      if (entrant.state == 'Entered') return { icon: 'mdi-human-handsdown', color: 'grey', text };
+      if (entrant.state == 'Ready') return { icon: 'mdi-human-handsup', color: 'blue', text };
+
+      return { icon: 'mdi-run', color: 'blue', text };
+    },
   },
 
   watch: {
@@ -283,6 +352,8 @@ export default {
       flag: '',
 
       twitch: '',
+      srl: '',
+      srlRace: { race: null, slots: [null, null, null, null], polled: 0, error: null },
       // qualities: [],
       //quality: null,
       streamHidden: false,
