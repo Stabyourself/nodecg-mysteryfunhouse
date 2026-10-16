@@ -26,6 +26,7 @@ const PLAYER_DEFAULTS = {
   streamHidden: false,
   raceState: 'none',
   finalTime: '',
+  score: 0,
 };
 
 const GAME_DEFAULTS = {
@@ -36,6 +37,9 @@ const GAME_DEFAULTS = {
   currentBoxart: null,
   match1round: '',
   match2round: '',
+  // the players' scores are on the layout
+  match1showScore: false,
+  match2showScore: false,
 };
 
 function declareReplicants(prefix, defaults) {
@@ -211,7 +215,29 @@ function matchInfos(sources, match) {
   return [match.player1_id, match.player2_id].map((id) => playerInfo(sources, findParticipant(sources, id)));
 }
 
-function applyMatch(match, infos, matchNumber) {
+// Who's on the layout before a load, by name: their score and their match's "show score".
+function scoreboard() {
+  const board = new Map();
+  playerReps.forEach((reps, playerNumber) => {
+    const match = Math.floor(playerNumber / 2) + 1;
+    if (!reps.name.value) return;
+    board.set(reps.name.value.toLowerCase(), {
+      score: reps.score.value,
+      match,
+      showScore: gameReps[`match${match}showScore`].value,
+    });
+  });
+  return board;
+}
+
+// before: a scoreboard() from before the load. When both players were in one match then, their
+// scores and its "show score" stay (the next SRL race of the same racers), else they start over.
+function applyMatch(match, infos, matchNumber, before = null) {
+  const kept = infos.map((info) => before?.get(info.name.toLowerCase()));
+  const same = kept.every((entry) => entry && entry.match == kept[0].match);
+
+  gameReps[`match${matchNumber}showScore`].value = same ? kept[0].showScore : false;
+
   infos.forEach((info, i) => {
     const playerNumber = (matchNumber - 1) * 2 + i;
     const values = {
@@ -220,6 +246,7 @@ function applyMatch(match, infos, matchNumber) {
       flag: info.contact['flag'] || 'ghost.png',
       twitch: info.contact['twitch'],
       srl: info.contact['srl_username'],
+      score: same ? kept[i].score : 0,
     };
 
     for (const [prop, rep] of Object.entries(playerReps[playerNumber])) {
@@ -307,7 +334,10 @@ async function loadSrlRace({ raceId, matchIds }) {
   }
 
   const infos = matches.map((match) => matchInfos(sources, match));
-  const matchups = matches.map((match, i) => `${match.suggested_play_order}: ${applyMatch(match, infos[i], i + 1)}`);
+  const before = scoreboard();
+  const matchups = matches.map(
+    (match, i) => `${match.suggested_play_order}: ${applyMatch(match, infos[i], i + 1, before)}`,
+  );
 
   timer.reset();
   // its game goes on the layout from there, once the room has one

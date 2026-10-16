@@ -4,12 +4,20 @@
       <v-container>
         <srl-live :players="[(matchNumber - 1) * 2, (matchNumber - 1) * 2 + 1]"></srl-live>
 
-        <v-text-field
-          v-model="round"
-          label="Round"
-          density="compact"
-          class="mt-3"
-        ></v-text-field>
+        <div class="round-row mt-3">
+          <v-text-field
+            v-model="round"
+            label="Round"
+            density="compact"
+          ></v-text-field>
+          <v-switch
+            v-model="showScore"
+            label="Show score"
+            color="primary"
+            density="compact"
+            hide-details
+          ></v-switch>
+        </div>
 
         <v-row>
           <v-col class="divider">
@@ -34,6 +42,16 @@
   min-width: 0;
 }
 
+.round-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  .v-switch {
+    flex: none;
+  }
+}
+
 .divider {
   border-right: 1px solid rgba(255, 255, 255, 0.12);
   padding-right: 12px;
@@ -46,6 +64,7 @@ import { bindReplicant } from "../../util.js";
 export default {
   created() {
     bindReplicant.call(this, "round", `match${this.matchNumber}round`);
+    bindReplicant.call(this, "showScore", `match${this.matchNumber}showScore`);
   },
 
   props: ["match-number"],
@@ -53,6 +72,7 @@ export default {
   data() {
     return {
       round: "",
+      showScore: false,
     };
   },
 };

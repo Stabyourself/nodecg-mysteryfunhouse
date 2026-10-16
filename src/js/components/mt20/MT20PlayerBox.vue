@@ -1,7 +1,7 @@
 <template>
   <div class="player-box megaman-box" :class="side">
     <div class="player-name">
-      {{  player.name.toUpperCase() }}
+      {{ nameText }}
       <div class="audio" v-if="player.audible">
         <img src="/bundles/nodecg-mysteryfunhouse/dist/img/mt20/audio.png" />
       </div>
@@ -168,6 +168,8 @@
 </style>
 
 <script>
+import { nameWithScore } from '../../layout.js';
+
 export default {
   props: {
     player: Object,
@@ -182,6 +184,10 @@ export default {
   computed: {
     otherSide() {
       return this.side == 'left' ? 'right' : 'left';
+    },
+
+    nameText() {
+      return nameWithScore(this.player, this.side, this.player.name.toUpperCase());
     },
   },
 };

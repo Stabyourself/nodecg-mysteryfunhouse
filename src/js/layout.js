@@ -18,7 +18,22 @@ const PLAYER_FIELDS = {
   audible: false,
   raceState: 'none',
   finalTime: '',
+  score: 0,
 };
+
+// a player's match, 1 or 2, for its match<n>showScore
+function matchOf(playerNumber) {
+  return Math.floor(playerNumber / 2) + 1;
+}
+
+// the name (as the layout writes it) with the score next to it while the match shows scores:
+// "NAME - 1" on the left, "1 - NAME" on the right
+export function nameWithScore(player, side, name = player.name) {
+  if (!player.showScore) return name;
+
+  const score = player.score || 0;
+  return side == 'right' ? `${score} - ${name}` : `${name} - ${score}`;
+}
 
 export function onAir(sceneName) {
   return !ownScenes.length || ownScenes.includes(sceneName);
@@ -27,7 +42,17 @@ export function onAir(sceneName) {
 export function layoutMixin(playerCount) {
   return {
     created() {
-      for (const name of ['game', 'goal', 'platform', 'submitter', 'currentBoxart', 'timer', 'currentEventLogo']) {
+      for (const name of [
+        'game',
+        'goal',
+        'platform',
+        'submitter',
+        'currentBoxart',
+        'timer',
+        'currentEventLogo',
+        'match1showScore',
+        'match2showScore',
+      ]) {
         bindReplicant.call(this, name);
       }
 
@@ -89,6 +114,7 @@ export function layoutMixin(playerCount) {
           for (const field of Object.keys(PLAYER_FIELDS)) {
             player[field] = this[`player${i}${field}`];
           }
+          player.showScore = this[`match${matchOf(player.number)}showScore`];
 
           players.push(player);
         }
@@ -106,6 +132,8 @@ export function layoutMixin(playerCount) {
         currentBoxart: {},
         timer: { ms: 0 },
         currentEventLogo: {},
+        match1showScore: false,
+        match2showScore: false,
 
         playerOffset,
         visible: false,

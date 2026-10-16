@@ -53,20 +53,22 @@ export default {
     },
   },
   mounted() {
-    setTimeout(this.calculate, 0);
-    setInterval(this.calculate, 1000);
+    this.timeout = setTimeout(this.calculate, 0);
+    this.interval = setInterval(this.calculate, 1000);
 
     if ('MutationObserver' in window && this.observer === null) {
       // Create the observer (and what to do on changes...)
       this.observer = new MutationObserver(this.calculate);
 
-      // Setup the observer
-      this.observer.observe(this.$el, { subtree: true, characterData: true });
+      // Setup the observer. childList: a keyed child that's made anew replaces the old one
+      this.observer.observe(this.$el, { subtree: true, characterData: true, childList: true });
     }
   },
   beforeUnmount: function () {
-    // Clean up
-    this.observer.disconnect();
+    // Clean up, keyed ones come and go with their text
+    clearTimeout(this.timeout);
+    clearInterval(this.interval);
+    this.observer?.disconnect();
   },
 };
 </script>

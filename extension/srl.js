@@ -34,7 +34,6 @@ const raceRep = nodecg.Replicant("srlRace", {
   persistent: false,
   defaultValue: { race: null, slots: [null, null, null, null], watching: false, polled: 0, error: null },
 });
-const timerRep = nodecg.Replicant("timer");
 
 const slots = [];
 for (let i = 0; i < 4; i++) {
@@ -146,31 +145,98 @@ function layoutStates(matched) {
   return states;
 }
 
+// when each entrant's result was first seen, by their key. srl has no time for a forfeit or an
+// .undone, those count from then
+const seenResults = new Map();
+
+function noteResults(race) {
+  const now = Date.now();
+  for (const e of race.entrants) {
+    const r = result(e);
+    if (seenResults.get(e.key)?.result !== r) seenResults.set(e.key, { result: r, at: now });
+  }
+}
+
+// the timer's time at the entrant's finish (srl's, whole seconds since the start) or forfeit
+// (when it was seen), null while racing
+function resultMs(race, entrant) {
+  const r = result(entrant);
+  if (!r) return null;
+  if (r == "done" && entrant.time > 0) return entrant.time * 1000;
+  return seenResults.get(entrant.key).at - race.time * 1000;
+}
+
+// when the entrant's result is on stream: their finish or forfeit, or when they were seen
+// racing again, plus the stream's delay. so a look at srl that's late puts it on right away
+function dueAt(race, entrant) {
+  const ms = resultMs(race, entrant);
+  return (ms == null ? seenResults.get(entrant.key).at : race.time * 1000 + ms) + STREAM_DELAY;
+}
+
+// the entrant as the layout shows them, for one whose change isn't on stream yet
+function asShown(entrant, p) {
+  const state = slots[p].raceState.value;
+  return {
+    ...entrant,
+    state: state == "winner" || state == "loser" ? "Finished" : state == "forfeit" ? "Forfeit" : "In Progress",
+    // finishers already shown came before anyone finishing on stream now
+    place: state == "winner" ? -2 : -1,
+    shown: true,
+  };
+}
+
 // the layout always says what srl says (srl is in charge while a race is followed, a mark made
 // by hand doesn't stay). true when someone's racing again after an .undone or .unforfeit
-function showResults(matched) {
+function showResults(race, matched) {
   let back = false;
 
   layoutStates(matched).forEach((state, p) => {
     if (state == null || slots[p].raceState.value == state) return;
 
-    const entrant = matched[p];
-    if ((state == "winner" || state == "loser") && entrant.time > 0) {
-      slots[p].finalTime.value = formatTime(entrant.time * 1000);
-    } else if (state == "forfeit") {
-      // srl has no time for a forfeit, the timer's is when it was seen
-      slots[p].finalTime.value = formatTime(timerRep.value?.ms ?? 0);
-    } else if (state == "none") {
+    if (state == "none") {
       back = true;
+    } else {
+      const ms = resultMs(race, matched[p]);
+      if (ms != null) slots[p].finalTime.value = formatTime(ms);
     }
 
     slots[p].raceState.value = state;
   });
 
-  // the timer stops on the last finish, srl's times are whole seconds since the start
-  const finishes = matched.filter((e) => result(e) == "done" && e.time > 0).map((e) => e.time * 1000);
-  timer.raceStatesChanged(finishes.length ? Math.max(...finishes) : null);
+  // the timer stops on the last finish or forfeit
+  const ends = matched.filter((e) => e && !e.shown && result(e)).map((e) => resultMs(race, e));
+  timer.raceStatesChanged(ends.length ? Math.max(...ends) : null);
   return back;
+}
+
+let resultsTimeout = null;
+
+// puts on the layout what of srl's last answer is on stream by now, and comes back for the
+// next change
+function showDue() {
+  clearTimeout(resultsTimeout);
+  const race = lastRace;
+  if (!race || !followedSlots || linkRep.value.id != race.id) return;
+
+  const now = Date.now();
+  let next = Infinity;
+  const effective = followedSlots.map((entrant, p) => {
+    if (!entrant) return null;
+
+    const due = dueAt(race, entrant);
+    if (due <= now) return entrant;
+    next = Math.min(next, due);
+    return asShown(entrant, p);
+  });
+
+  // someone .undone or .unforfeit after the timer stopped for everyone being through: it goes
+  // on with the race
+  const back = showResults(race, effective);
+  if (back && race.state == IN_PROGRESS && race.time > 0 && timer.getState() == "paused") {
+    syncTimer(race);
+  }
+
+  if (next < Infinity) resultsTimeout = setTimeout(showDue, next - now);
 }
 
 function syncTimer(race) {
@@ -192,11 +258,13 @@ function follow(race, watching) {
   if (race.id != seenRaceId) {
     seenRaceId = race.id;
     seenRaceState = null;
+    seenResults.clear();
   }
 
   const matched = matchSlots(race);
   followedSlots = matched;
   lastRace = race;
+  noteResults(race);
 
   // the room's game or goal changed: put its game on the layout (once it names one, see games.js)
   const gameKey = `${race.gameAbbrev}|${race.game}|${race.goal}`;
@@ -213,26 +281,12 @@ function follow(race, watching) {
   seenRaceState = race.state;
 
   // what srl says goes on the layout once the stream has caught up to it
-  const pending = setTimeout(() => {
-    pendingResults.delete(pending);
-    if (linkRep.value.id != race.id) return;
-
-    // someone .undone or .unforfeit after the timer stopped for everyone being through: it goes
-    // on with the race
-    const back = showResults(matched);
-    if (back && race.state == IN_PROGRESS && race.time > 0 && timer.getState() == "paused") {
-      syncTimer(race);
-    }
-  }, STREAM_DELAY);
-  pendingResults.add(pending);
+  showDue();
 
   const { entrants, ...info } = race;
 
   raceRep.value = { race: info, slots: matched, watching, polled: Date.now(), error: null };
 }
-
-// looks at the race whose finishes aren't on the layout yet, see follow()
-const pendingResults = new Set();
 
 // srl's open and running races, for picking one
 async function liveRaces() {
@@ -253,8 +307,8 @@ function unlink() {
   followedSlots = null;
   lastRace = null;
   clearTimeout(syncTimeout);
-  pendingResults.forEach(clearTimeout);
-  pendingResults.clear();
+  clearTimeout(resultsTimeout);
+  seenResults.clear();
   raceRep.value = { race: null, slots: [null, null, null, null], watching: false, polled: Date.now(), error: null };
 }
 

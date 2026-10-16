@@ -12,13 +12,13 @@
       class="player-name">
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="up" :delay="0.5">
-          <span class="jolly-font">{{ player0pronouns }}</span>
+          <span class="jolly-font" :key="player0pronouns">{{ player0pronouns }}</span>
         </swipe>
       </template>
       <template v-slot:name>
         <swipe dir="up" :visible="visible">
-          <fit-text :max="2.5" class="jolly-font">
-            {{ player0name }}
+          <fit-text :max="2.5" class="jolly-font" :key="nameWithScore(players[0], 'left')">
+            {{ nameWithScore(players[0], 'left') }}
           </fit-text>
         </swipe>
       </template>
@@ -32,15 +32,15 @@
       style="top: 15px; right: 15px; width: 775px; height: 135px">
       <template v-slot:pronouns>
         <swipe :visible="visible" dir="up" :delay="0.5">
-          <span class="jolly-font">
+          <span class="jolly-font" :key="player1pronouns">
             {{ player1pronouns }}
           </span>
         </swipe>
       </template>
       <template v-slot:name>
         <swipe dir="up" :visible="visible">
-          <fit-text :max="2.5" class="jolly-font">
-            {{ player1name }}
+          <fit-text :max="2.5" class="jolly-font" :key="nameWithScore(players[1], 'right')">
+            {{ nameWithScore(players[1], 'right') }}
           </fit-text>
         </swipe>
       </template>
@@ -74,7 +74,7 @@
       <template v-slot:text>
         <swipe :visible="visible" dir="up" :delay="1" class="game">
           <fit-text :max="1" :min="0.1">
-            <span class="jolly-font">
+            <span class="jolly-font" :key="`${game}|${platform}`">
               {{ game }}
               <span v-if="!!platform"> ({{ platform }})</span>
             </span>
@@ -82,7 +82,7 @@
         </swipe>
         <swipe :visible="visible" dir="up" :delay="0.8" class="goal">
           <fit-text :max="1" :min="0.1">
-            <span class="jolly-font">
+            <span class="jolly-font" :key="`${goal}|${submitter}`">
               {{ goal }}
               <span v-if="!!submitter"> - Subbed by {{ submitter }}</span>
             </span>
@@ -104,7 +104,10 @@
 
 <style lang="scss" scoped>
 // the font is linked in graphics/jolly/2player.html: an import here would end up in the
-// shared bundle and every graphic would fetch it from google
+// shared bundle and every graphic would fetch it from google.
+// obs's browser doesn't repaint this gradient text when it gets text after being empty (the
+// space opens up, nothing shows), so every .jolly-font element is keyed on its text and made
+// anew when it changes
 .jolly-font {
   text-transform: uppercase;
   font-family: 'Inknut Antiqua', serif;
@@ -151,9 +154,13 @@
 </style>
 
 <script>
-import { layoutMixin } from '../../layout.js';
+import { layoutMixin, nameWithScore } from '../../layout.js';
 
 export default {
   mixins: [layoutMixin(2)],
+
+  methods: {
+    nameWithScore,
+  },
 };
 </script>

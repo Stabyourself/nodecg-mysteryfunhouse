@@ -5,7 +5,7 @@
     </div>
 
     <div class="player-name">
-      {{  player.name.toUpperCase() }}
+      {{ nameText }}
     </div>
 
     <div class="player-pronouns" v-if="player.pronouns">{{ player.pronouns }}</div>
@@ -80,6 +80,8 @@
 </style>
 
 <script>
+import { nameWithScore } from '../../layout.js';
+
 export default {
   props: {
     player: Object,
@@ -94,6 +96,10 @@ export default {
   computed: {
     otherSide() {
       return this.side == 'left' ? 'right' : 'left';
+    },
+
+    nameText() {
+      return nameWithScore(this.player, this.side, this.player.name.toUpperCase());
     },
 
     timeAdjusted() {

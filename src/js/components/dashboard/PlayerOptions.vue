@@ -13,6 +13,17 @@
 
     <v-text-field v-model="flag" class="font-weight-bold" label="Flag"></v-text-field>
 
+    <v-text-field
+      v-model.number="score"
+      type="number"
+      min="0"
+      label="Score"
+      density="compact"
+      prepend-icon="mdi-minus"
+      append-icon="mdi-plus"
+      @click:prepend="score = Math.max(0, (Number(score) || 0) - 1)"
+      @click:append="score = (Number(score) || 0) + 1"></v-text-field>
+
     <v-divider class="mb-7 mt-4"></v-divider>
 
     <v-row>
@@ -175,6 +186,7 @@ export default {
     bindReplicant.call(this, 'name', this.makeName('name'));
     bindReplicant.call(this, 'pronouns', this.makeName('pronouns'));
     bindReplicant.call(this, 'flag', this.makeName('flag'));
+    bindReplicant.call(this, 'score', this.makeName('score'));
 
     bindReplicant.call(this, 'twitch', this.makeName('twitch'));
     bindReplicant.call(this, 'srl', this.makeName('srl'));
@@ -350,6 +362,7 @@ export default {
       name: '',
       pronouns: '',
       flag: '',
+      score: 0,
 
       twitch: '',
       srl: '',

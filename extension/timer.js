@@ -205,8 +205,8 @@ exports.getState = () => state;
 exports.setRacers = (fn) => {
   srlRacers = fn;
 };
-// srl.js set the race states itself: pause if that's everyone through, on lastFinishMs (the
-// last finisher's time) when there is one, not when srl was asked
-exports.raceStatesChanged = (lastFinishMs) => {
-  if (state == "playing" && shouldPause()) pause(lastFinishMs);
+// srl.js set the race states itself: pause if that's everyone through, on lastMs (the last
+// finish or forfeit) when there is one, not when srl was asked
+exports.raceStatesChanged = (lastMs) => {
+  if (state == "playing" && shouldPause()) pause(lastMs);
 };
