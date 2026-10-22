@@ -275,10 +275,18 @@ function follow(race, watching) {
     });
   }
 
-  if (race.state == IN_PROGRESS && seenRaceState != IN_PROGRESS && race.time > 0 && timer.getState() != "paused") {
+  // the race starting puts the timer on its time, even one paused by hand. one that's back on
+  // after it was complete (an .undone or .unforfeit) is showDue's
+  const starting = race.state == IN_PROGRESS && (seenRaceState == null || seenRaceState < IN_PROGRESS);
+  if (starting && race.time > 0) {
+    nodecg.log.info(`SRL race ${race.id} started at ${new Date(race.time * 1000).toLocaleTimeString()}, timer was ${timer.getState()}`);
     syncTimer(race);
+  } else if (starting) {
+    nodecg.log.info(`SRL race ${race.id} is in progress without a start time yet, looking again`);
   }
-  seenRaceState = race.state;
+  // srl can say it's going before it has the start time: then it isn't seen going yet, so the
+  // next look starts the timer
+  if (!(starting && race.time <= 0)) seenRaceState = race.state;
 
   // what srl says goes on the layout once the stream has caught up to it
   showDue();
