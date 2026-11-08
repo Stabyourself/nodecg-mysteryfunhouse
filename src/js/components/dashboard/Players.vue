@@ -52,6 +52,8 @@
           :loading="loading"
           :row-props="rowProps"
           item-value="signupId"
+          :items-per-page="-1"
+          hide-default-footer
           density="compact">
           <template v-slot:item.username="{ item }">
             <v-chip v-if="isFieldMissing(item, 'username')" size="x-small" color="error" variant="flat">missing</v-chip>
